@@ -75,8 +75,15 @@
 // <e SL_POWER_MANAGER_QSPI_CLOCK_SWITCH_IN_SLEEP_EN> Enable QSPI clock switch for sleep
 // <i> Enable/Disable the QSPI clock switching when entering sleep.
 // <i> By default the QSPI clock uses a PLL. To further reduce the power consumption in sleep, the QSPI can be switched to a RCO oscillator during the sleep period.
+// <i> Default: 0
+#define SL_POWER_MANAGER_QSPI_CLOCK_SWITCH_IN_SLEEP_EN  0
+// </e>
+
+// <e SL_POWER_MANAGER_SYSCLK_SWITCH_TO_HFXO_IN_SLEEP_EN> Enable SYSCLK on SOCPLL to switch to HFXO for sleep
+// <i> Enable/Disable the SYSCLK switching to HFXO when entering sleep.
+// <i> By default SYSCLK uses a SOCPLL. To further reduce the power consumption in sleep, the SYSCLK can be switched to HFXO during the sleep period.
 // <i> Default: 1
-#define SL_POWER_MANAGER_QSPI_CLOCK_SWITCH_IN_SLEEP_EN  1
+#define SL_POWER_MANAGER_SYSCLK_SWITCH_TO_HFXO_IN_SLEEP_EN  1
 // </e>
 // </h>
 

@@ -7,7 +7,7 @@ category: Bluetooth|Application|Miscellaneous
 metadata:
   sbom:
     license: Zlib
-quality: evaluation
+quality: production
 root_path: app/bluetooth/common/cs_antenna
 include:
   - path: .

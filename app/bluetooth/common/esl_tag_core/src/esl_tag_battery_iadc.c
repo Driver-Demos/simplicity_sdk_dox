@@ -27,6 +27,7 @@
  * 3. This notice may not be removed or altered from any source distribution.
  *
  ******************************************************************************/
+#include "em_iadc.h"
 #include "sl_common.h"
 #include "sl_core.h"
 #include "sl_status.h"

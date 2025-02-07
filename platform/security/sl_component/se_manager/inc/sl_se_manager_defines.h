@@ -219,6 +219,11 @@ extern "C" {
 /// in the SE. See documentation for a list of available keys.
 #define SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE 0x03
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+/// Key is stored in the KSURAM, an internal Key Slot RAM.
+  #define SL_SE_KEY_STORAGE_INTERNAL_KSU      0x04
+#endif
+
 /// List of available internal SE key slots
 #if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
   #define SL_SE_KEY_SLOT_VOLATILE_0 0x00 ///< Internal volatile slot 0
@@ -459,18 +464,28 @@ extern "C" {
 #define SL_SE_TAMPER_FLAG_KEEP_TAMPER_ALIVE_DURING_SLEEP (1UL << 2) /// Tamper is kept alive during sleep (down to EM3)
 
 /// @} (end addtogroup sl_se_manager_util_tamper)
-
 /// @} (end addtogroup sl_se_manager_util)
+
+/// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
+
+#ifdef SL_SUPPRESS_DEPRECATION_WARNINGS_SDK_2025_6
+/// Initial values for CMAC streaming context struct @ref sl_se_cmac_multipart_context_t
+#define SL_SE_CMAC_STREAMING_INIT_DEFAULT    { NULL, { 0 }, { 0 }, 0 }
+
+/// Initial values for AES-GCM streaming context struct @ref sl_se_gcm_multipart_context_t
+#define SL_SE_GCM_STREAMING_INIT_DEFAULT     { NULL, 0, 0, { 0 }, { 0 }, \
+                                               { 0 }, 0, 0 }
+#else
+#define SL_SE_GCM_STREAMING_INIT_DEFAULT _Pragma("GCC warning \"'SL_SE_GCM_STREAMING_INIT_DEFAULT' macro is deprecated as of Simplicity SDK release 2024.12\""){ NULL, 0, 0, { 0 }, { 0 }, \
+                                                                                                                                                                 { 0 }, 0, 0 }
+
+#define SL_SE_CMAC_STREAMING_INIT_DEFAULT _Pragma("GCC warning \"'SL_SE_CMAC_STREAMING_INIT_DEFAULT' macro is deprecated as of Simplicity SDK release 2024.12\"") { NULL, { 0 }, { 0 }, 0 }
+
+#endif
+/// @endcond
 
 /// @addtogroup sl_se_manager_cipher
 /// @{
-
-/// Initial values for CMAC streaming context struct @ref sl_se_cmac_streaming_context_t
-#define SL_SE_CMAC_STREAMING_INIT_DEFAULT    { NULL, { 0 }, { 0 }, 0 }
-
-/// Initial values for AES-GCM streaming context struct @ref sl_se_gcm_streaming_context_t
-#define SL_SE_GCM_STREAMING_INIT_DEFAULT     { NULL, 0, 0, { 0 }, { 0 }, \
-                                               { 0 }, 0, 0 }
 
 /// Block size for the AES
 #define SL_SE_AES_BLOCK_SIZE   (16u)

@@ -461,6 +461,16 @@ void sli_zigbee_af_zll_commissioning_common_stack_status_callback(sl_status_t st
   }
 }
 
+void sl_zigbee_af_zll_unset_factory_new(void)
+{
+  sl_zigbee_tok_type_stack_zll_data_t token;
+  sl_zigbee_zll_get_token_stack_zll_data(&token);
+  if ((token.bitmask & SL_ZIGBEE_ZLL_STATE_FACTORY_NEW)) {
+    token.bitmask &= ~SL_ZIGBEE_ZLL_STATE_FACTORY_NEW;
+    sl_zigbee_zll_set_token_stack_zll_data(&token);
+  }
+}
+
 bool sl_zigbee_af_zll_touch_link_in_progress(void)
 {
   // Returns true if a touch link is in progress or false otherwise.

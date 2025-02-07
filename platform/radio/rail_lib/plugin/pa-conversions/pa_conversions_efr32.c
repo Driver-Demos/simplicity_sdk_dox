@@ -302,25 +302,16 @@ const RAIL_PaPowerSetting_t *RAIL_GetPowerSettingTable(RAIL_Handle_t railHandle,
 #ifdef RAIL_PA_CONVERSIONS_WEAK
 __WEAK
 #endif
-RAIL_TxPowerLevel_t RAIL_ConvertDbmToRaw(RAIL_Handle_t railHandle,
-                                         RAIL_TxPowerMode_t mode,
-                                         RAIL_TxPower_t power)
+RAIL_Status_t RAIL_ConvertDbmToPowerSettingEntry(RAIL_Handle_t railHandle,
+                                                 RAIL_TxPowerMode_t mode,
+                                                 RAIL_TxPower_t power,
+                                                 RAIL_TxPowerSettingEntry_t *powerSettingInfo)
 {
   (void)railHandle;
-  // When a channel dBm limitation greater than or equal to \ref RAIL_TX_POWER_MAX
-  // is converted to raw units, the max RAIL_TxPowerLevel_t will be
-  // returned. When compared to the current power level of the PA,
-  // it will always be greater, indicating that no power coercion
-  // is necessary to comply with channel limitations.
-  if (power >= RAIL_TX_POWER_MAX) {
-    return 255U;
-  }
-
+#if RAIL_SUPPORTS_DBM_POWERSETTING_MAPPING_TABLE
   if ((mode < sizeof(supportedPaIndices))
       && (supportedPaIndices[mode] < RAIL_NUM_PA)) {
     RAIL_PaDescriptor_t const *modeInfo = &powerCurvesState.curves[supportedPaIndices[mode]];
-    uint32_t minPowerLevel = MAX(modeInfo->min, PA_CONVERSION_MINIMUM_PWRLVL);
-#if RAIL_SUPPORTS_DBM_POWERSETTING_MAPPING_TABLE
     if (modeInfo->algorithm == RAIL_PA_ALGORITHM_DBM_POWERSETTING_MAPPING_TABLE) {
       RAIL_TxPower_t minPower = modeInfo->minPowerDbm;
       RAIL_TxPower_t maxPower = modeInfo->maxPowerDbm;
@@ -335,19 +326,67 @@ RAIL_TxPowerLevel_t RAIL_ConvertDbmToRaw(RAIL_Handle_t railHandle,
         // Power level is within bounds (MISRA required else)
       }
 
-      uint32_t powerIndex = (power - minPower) / step;
-      RAIL_SetPaPowerSetting(railHandle, modeInfo->conversion.mappingTable[powerIndex], minPower, maxPower, power);
-#ifdef _SILICON_LABS_32B_SERIES_3
-      // Hack until librail is switched over to enforcing power limits in dBm
-      // This should work on rainier as rainier power table is only based on RAC_TX_PAPOWERSCALOR register,
-      // so the table value is guaranteed to be monotonic.
-      // As sol using a combination of more than a register field, the resulting power table is not guaranteed to be monotonic
-      return (RAIL_TxPowerLevel_t)(modeInfo->conversion.mappingTable[powerIndex]);
-#else
-      return 0U;
-#endif
+      // Calculate indices
+      uint32_t maxIndex = (uint32_t)((maxPower - minPower) / step);
+      uint32_t powerIndex = (uint32_t)((power - minPower) / step);
+
+      // Ensure powerIndex is within bounds
+      if (powerIndex > maxIndex) {
+        powerIndex = maxIndex;
+      }
+
+      RAIL_PaPowerSetting_t powerSetting = modeInfo->conversion.mappingTable[powerIndex];
+
+      while ((powerIndex > 0U)
+             && (powerSetting == (RAIL_PaPowerSetting_t)modeInfo->conversion.mappingTable[powerIndex - 1U])) {
+        powerIndex--;
+      }
+      power = minPower + ((RAIL_TxPower_t)powerIndex * step);
+
+      powerSettingInfo->paPowerSetting = powerSetting;
+      powerSettingInfo->minPaPowerDdbm = minPower;
+      powerSettingInfo->maxPaPowerDdbm = maxPower;
+      powerSettingInfo->currentPaPowerDdbm = power;
+      return RAIL_STATUS_NO_ERROR;
     }
+  }
+  return RAIL_STATUS_INVALID_CALL;
+#else
+  (void) mode;
+  (void) power;
+  (void) powerSettingInfo;
+  return RAIL_STATUS_INVALID_CALL;
+#endif //RAIL_SUPPORTS_DBM_POWERSETTING_MAPPING_TABLE
+}
+
+#ifdef RAIL_PA_CONVERSIONS_WEAK
+__WEAK
 #endif
+RAIL_TxPowerLevel_t RAIL_ConvertDbmToRaw(RAIL_Handle_t railHandle,
+                                         RAIL_TxPowerMode_t mode,
+                                         RAIL_TxPower_t power)
+{
+  (void)railHandle;
+#if RAIL_SUPPORTS_DBM_POWERSETTING_MAPPING_TABLE
+  // Powersetting tables do not have raw powerlevels.
+  // Could use RAIL_ConvertDbmToPowerSettingEntry
+  (void)mode;
+  (void) power;
+#else
+
+  // When a channel dBm limitation greater than or equal to \ref RAIL_TX_POWER_MAX
+  // is converted to raw units, the max RAIL_TxPowerLevel_t will be
+  // returned. When compared to the current power level of the PA,
+  // it will always be greater, indicating that no power coercion
+  // is necessary to comply with channel limitations.
+  if (power >= RAIL_TX_POWER_MAX) {
+    return 255U;
+  }
+
+  if ((mode < sizeof(supportedPaIndices))
+      && (supportedPaIndices[mode] < RAIL_NUM_PA)) {
+    RAIL_PaDescriptor_t const *modeInfo = &powerCurvesState.curves[supportedPaIndices[mode]];
+    uint32_t minPowerLevel = MAX(modeInfo->min, PA_CONVERSION_MINIMUM_PWRLVL);
 
     // If we're in low power mode, just use the simple lookup table
     if (modeInfo->algorithm == RAIL_PA_ALGORITHM_MAPPING_TABLE) {
@@ -450,6 +489,7 @@ RAIL_TxPowerLevel_t RAIL_ConvertDbmToRaw(RAIL_Handle_t railHandle,
 
     return (RAIL_TxPowerLevel_t)powerLevel;
   }
+#endif // RAIL_SUPPORTS_DBM_POWERSETTING_MAPPING_TABLE
   return 0U;
 }
 

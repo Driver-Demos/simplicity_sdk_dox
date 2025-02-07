@@ -363,6 +363,16 @@ void sl_zigbee_af_counter_rollover_cb(
   // Type of Counter
   sl_zigbee_counter_type_t type);
 
+/**
+ * @brief Callback function invoked when an invalid RX channel is detected.
+ *
+ * This function is called when the RX channel changes to an invalid state.
+ *
+ * @param new_rx_channel The new RX channel that has been detected as invalid.
+ * @param old_rx_channel The previous RX channel before the change.
+ */
+void sl_zigbee_af_mux_invalid_rx_cb(uint8_t new_rx_channel, uint8_t old_rx_channel);
+
 /** @brief
  * A callback invoked by the EmberZNet stack when the MAC has finished
  * transmitting a raw message.

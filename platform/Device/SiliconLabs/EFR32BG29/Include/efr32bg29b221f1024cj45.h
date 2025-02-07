@@ -4,7 +4,7 @@
  *        for EFR32BG29B221F1024CJ45
  ******************************************************************************
  * # License
- * <b>Copyright 2024 Silicon Laboratories, Inc. www.silabs.com</b>
+ * <b>Copyright 2025 Silicon Laboratories, Inc. www.silabs.com</b>
  ******************************************************************************
  *
  * SPDX-License-Identifier: Zlib

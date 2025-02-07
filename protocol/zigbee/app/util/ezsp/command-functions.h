@@ -4429,6 +4429,15 @@ static void callbackDispatch(void)
       break;
     }
 
+    case SL_ZIGBEE_EZSP_MUX_INVALID_RX_HANDLER: {
+      uint8_t new_rx_channel;
+      uint8_t old_rx_channel;
+      new_rx_channel = fetchInt8u();
+      old_rx_channel = fetchInt8u();
+      sl_zigbee_ezsp_mux_invalid_rx_handler(new_rx_channel, old_rx_channel);
+      break;
+    }
+
     case SL_ZIGBEE_EZSP_CUSTOM_FRAME_HANDLER: {
       uint8_t payloadLength;
       uint8_t *payload;

@@ -43,6 +43,7 @@
 #include "platform-efr32.h"
 #include "sl_cmsis_os2_common.h"
 #include "sl_component_catalog.h"
+#include "sl_openthread_rtos_config.h"
 #include "sl_ot_init.h"
 #include "sl_ot_rtos_adaptation.h"
 

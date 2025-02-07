@@ -143,6 +143,11 @@ static psa_key_usage_t getPsaKeyUsage(int aKeyUsage)
         aPsaKeyUsage |= PSA_KEY_USAGE_SIGN_HASH;
     }
 
+    if (aKeyUsage & OT_CRYPTO_KEY_USAGE_VERIFY_HASH)
+    {
+        aPsaKeyUsage |= PSA_KEY_USAGE_VERIFY_HASH;
+    }
+
     return aPsaKeyUsage;
 }
 
@@ -202,8 +207,6 @@ static void checkAndWrapKeys(void)
 
 void otPlatCryptoInit(void)
 {
-    (void)sl_sec_man_init();
-
 #if defined(SEMAILBOX_PRESENT) && !defined(SL_TRUSTZONE_NONSECURE)
     if (GET_SECURITY_CAPABILITY() == VAULT_ENABLED)
     {
@@ -738,6 +741,53 @@ otError otPlatCryptoPbkdf2GenerateKey(const uint8_t *aPassword,
     psa_destroy_key(keyId);
     psa_destroy_key(saltKeyId);
     psa_destroy_key(passwordKeyId);
+
+exit:
+    return error;
+}
+
+otError otPlatCryptoEcdsaVerify(const otPlatCryptoEcdsaPublicKey *aPublicKey,
+                                const otPlatCryptoSha256Hash     *aHash,
+                                const otPlatCryptoEcdsaSignature *aSignature)
+{
+    otError        error = OT_ERROR_NONE;
+    psa_status_t   status;
+    bool           aIsHash = true;
+    uint8_t        aByteArray[OT_CRYPTO_ECDSA_PUBLIC_KEY_SIZE + 1];
+    otCryptoKeyRef aKeyId;
+
+    otEXPECT_ACTION(((aPublicKey != NULL) && (aHash != NULL) && (aSignature != NULL)), error = OT_ERROR_INVALID_ARGS);
+
+    // Public key needs a extra byt of encoding header, which has a value of 0x04, to be included for PSA to validate
+    // and process the publc key. Copy the key into a new temp array and append the encoding header to it.
+    aByteArray[0] = 0x04;
+    memcpy(&aByteArray[1], aPublicKey, OT_CRYPTO_ECDSA_PUBLIC_KEY_SIZE);
+
+    // Import the public key into a temp slot.
+    status = sl_sec_man_import_key(&aKeyId,
+                                   PSA_KEY_TYPE_ECC_PUBLIC_KEY(PSA_ECC_FAMILY_SECP_R1),
+                                   PSA_ALG_ECDSA(PSA_ALG_ANY_HASH),
+                                   PSA_KEY_USAGE_VERIFY_HASH,
+                                   PSA_KEY_PERSISTENCE_VOLATILE,
+                                   aByteArray,
+                                   OT_CRYPTO_ECDSA_PUBLIC_KEY_SIZE + 1); // To account for the padded byte.
+
+    // If key import fails, assert, as we cannot proceed
+    OT_ASSERT(status == PSA_SUCCESS);
+
+    // Verify the signature.
+    status = sl_sec_man_verify(aKeyId,
+                               PSA_ALG_ECDSA(PSA_ALG_SHA_256),
+                               aHash->m8,
+                               sizeof(aHash->m8),
+                               aSignature->m8,
+                               sizeof(aSignature->m8),
+                               aIsHash);
+
+    // Destroy the temp key.
+    sl_sec_man_destroy_key(aKeyId);
+
+    otEXPECT_ACTION((status == PSA_SUCCESS), error = OT_ERROR_FAILED);
 
 exit:
     return error;

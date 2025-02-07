@@ -714,6 +714,17 @@ void sli_zigbee_af_counter_rollover(
 {% endfor -%}
 }
 
+{# MUX_INVALID_RX #}
+// mux_invalid_rx
+void sli_zigbee_af_mux_invalid_rx(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+{% for cb in zigbee_stack_callback -%}
+{% if cb['callback_type'] == "mux_invalid_rx" -%}
+{{ cb['function_name'] }}(new_rx_channel, old_rx_channel);
+{% endif -%}
+{% endfor -%}
+}
+
 
 {# RAW_TRANSMIT_COMPLETE #}
 // Raw Transmit Complete

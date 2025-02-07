@@ -849,6 +849,11 @@ RAIL_Status_t RAIL_GetSyncWords(RAIL_Handle_t railHandle,
  * This function will return \ref RAIL_STATUS_INVALID_STATE if called when BLE
  * has been enabled for this railHandle. When changing sync words in BLE mode,
  * use \ref RAIL_BLE_ConfigChannelRadioParams() instead.
+ *
+ * @note If multiple protocols share the same radio configuration, the user
+ *   should not set custom sync words in any of those protocols as these
+ *   sync words could leak into the other protocol sharing the same radio
+ *   configuration.
  **/
 RAIL_Status_t RAIL_ConfigSyncWords(RAIL_Handle_t railHandle,
                                    const RAIL_SyncWordConfig_t *syncWordConfig);
@@ -2879,7 +2884,7 @@ RAIL_TxPowerLevel_t RAIL_GetTxPower(RAIL_Handle_t railHandle);
  * function was called, so it is okay to use either a real protocol handle, or one
  * of the radio-generic ones, such as \ref RAIL_EFR32_HANDLE.
  *
- * Although the definitions of this function may change, the signature
+ * Although the implementation of this function may change, the signature
  * must be as declared here.
  */
 RAIL_TxPower_t RAIL_ConvertRawToDbm(RAIL_Handle_t railHandle,
@@ -2907,12 +2912,42 @@ RAIL_TxPower_t RAIL_ConvertRawToDbm(RAIL_Handle_t railHandle,
  * function was called, so it is okay to use either a real protocol handle, or one
  * of the radio-generic ones, such as \ref RAIL_EFR32_HANDLE.
  *
- * Although the definitions of this function may change, the signature
+ * Although the implementation of this function may change, the signature
  * must be as declared here.
  */
 RAIL_TxPowerLevel_t RAIL_ConvertDbmToRaw(RAIL_Handle_t railHandle,
                                          RAIL_TxPowerMode_t mode,
                                          RAIL_TxPower_t power);
+
+/**
+ * Converts the desired decibel value (in units of deci-dBm)
+ * to a \ref RAIL_TxPowerSettingEntry_t.
+ *
+ * @param[in] railHandle A RAIL instance handle.
+ * @param[in] mode PA mode for which the conversion is to be done.
+ * @param[in] power Desired dBm value in units of deci-dBm.
+ * @param[out] pPowerSettingInfo A non-NULL pointer to the
+ *   \ref RAIL_TxPowerSettingEntry_t structure to be filled in with the
+ *   converted value.
+ * @return Status code indicating success of function call.
+ *
+ * A weak version of this function is provided that is tuned
+ * to provide accurate values for our boards. For a
+ * custom board, the relationship between what is written to the TX amplifier
+ * and the actual output power should be characterized and implemented in an
+ * overriding version of \ref RAIL_ConvertDbmToPowerSettingEntry().
+ * In the weak version provided with the RAIL
+ * library, railHandle is only used to indicate to the user from where the
+ * function was called, so it is okay to use either a real protocol handle, or one
+ * of the radio-generic ones, such as \ref RAIL_EFR32_HANDLE.
+ *
+ * Although the implementation of this function may change, the signature
+ * must be as declared here.
+ */
+RAIL_Status_t RAIL_ConvertDbmToPowerSettingEntry(RAIL_Handle_t railHandle,
+                                                 RAIL_TxPowerMode_t mode,
+                                                 RAIL_TxPower_t power,
+                                                 RAIL_TxPowerSettingEntry_t *pPowerSettingInfo);
 
 struct RAIL_TxPowerCurvesConfigAlt;
 /// Verify the TX Power Curves on modules.
@@ -5277,6 +5312,10 @@ RAIL_Status_t RAIL_CalibrateIrAlt(RAIL_Handle_t railHandle,
  * \ref RAIL_STATUS_INVALID_STATE if it is called and the given railHandle is
  * not active. In that case, the calibration will be automatically performed
  * next time the radio enters receive.
+ *
+ * @note If RX channel hopping is enabled this function may trigger a
+ *   channel hop, which can result in \ref
+ *   RAIL_EVENT_RX_CHANNEL_HOPPING_COMPLETE occuring before it returns.
  */
 RAIL_Status_t RAIL_CalibrateTemp(RAIL_Handle_t railHandle);
 
@@ -5600,6 +5639,21 @@ RAIL_Status_t RAIL_ConfigRxChannelHopping(RAIL_Handle_t railHandle,
 RAIL_Status_t RAIL_EnableRxChannelHopping(RAIL_Handle_t railHandle,
                                           bool enable,
                                           bool reset);
+
+/**
+ * Manually trigger an Rx channel hop.
+ *
+ * @param[in] railHandle A RAIL instance handle.
+ * @return Status code indicating success of the function call.
+ *
+ * This function facilitates a manual hop when using \ref
+ * RAIL_RX_CHANNEL_HOPPING_MODE_MANUAL. (It will also trigger a hop
+ * in other automatic hop modes as well, so use with caution.)
+ *
+ * @note This function may cause \ref RAIL_EVENT_RX_CHANNEL_HOPPING_COMPLETE
+ *   to occur before it returns.
+ */
+RAIL_Status_t RAIL_TriggerRxChannelHop(RAIL_Handle_t railHandle);
 
 /**
  * Get RSSI in deci-dBm of one channel in the channel hopping sequence, during

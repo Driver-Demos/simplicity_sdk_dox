@@ -35,7 +35,8 @@ readme:
 ui_hints:
   highlight: readme.md
 tag:
-  - hardware:component:segment_lcd_driver:cl010-1087-04  
+  - hardware:component:segment_lcd_driver:cl010-1087-04
+  - hardware:component:sensor:si7021
 configuration:
   - name: SL_BOARD_ENABLE_VCOM
     value: 1

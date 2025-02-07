@@ -727,6 +727,10 @@ sl_status_t esl_core_process_opcode(esl_id_t self_id,
   bool        has_notifications = esl_core_has_notifications();
   bool        needs_response    = (has_notifications || (id == self_id));
 
+  // validate data pointers before use, they must never be NULL
+  if (data == NULL || *data == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
   // process only TLVs addressed to this ESL Tag or broadcasted (only over PAwR!)
   if (id == self_id || (id == ESL_BROADCAST_ID && !has_notifications)) {
 #ifdef ESL_TAG_VENDOR_OPCODES_ENABLED

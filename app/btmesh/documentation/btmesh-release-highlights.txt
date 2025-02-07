@@ -1,3 +1,2 @@
-Bluetooth Mesh SDK 8.0.0.0
-- Support added for Micrium and FreeRTOS.
+Bluetooth Mesh SDK 8.0.1.0
 - Bug fixes and minor enhancements.

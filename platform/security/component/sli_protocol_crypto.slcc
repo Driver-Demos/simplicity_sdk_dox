@@ -24,6 +24,7 @@ provides:
 requires:
   - name: device
   - name: status
+  - name: code_classification
   - name: emlib_core
   - name: sli_psec_osal
     condition: [device_has_radioaes]
@@ -34,8 +35,13 @@ conflicts:
 define:
   - name: SLI_RADIOAES_REQUIRES_MASKING
     condition: [device_has_radioaes]
-# Add a component catalog entry to allow build-time detection of protocol crypto presence
+  - name: SL_CODE_COMPONENT_SLI_PROTOCOL_CRYPTO
+    value: sli_protocol_crypto
+
 template_contribution:
+  - name: code_classification_components
+    value: sli_protocol_crypto
+# Add a component catalog entry to allow build-time detection of protocol crypto presence
   - name: component_catalog
     value: sli_protocol_crypto
   - name: event_handler
@@ -54,6 +60,7 @@ template_contribution:
     # PSA crypto core.
     priority: 2
     condition: [device_has_radioaes]
+
 metadata:
   sbom:
     license: Zlib

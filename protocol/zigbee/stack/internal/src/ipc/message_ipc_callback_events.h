@@ -3,7 +3,7 @@
  * @brief callback struct and event handlers for message
  *******************************************************************************
  * # License
- * <b>Copyright 2024 Silicon Laboratories Inc. www.silabs.com</b>
+ * <b>Copyright 2025 Silicon Laboratories Inc. www.silabs.com</b>
  *******************************************************************************
  *
  * The licensor of this software is Silicon Laboratories Inc. Your use of this
@@ -34,7 +34,7 @@ typedef struct {
   uint32_t mic;
   uint8_t proxyTableIndex;
   uint8_t gpdCommandPayloadLength;
-  uint8_t gpdCommandPayload;
+  uint8_t gpdCommandPayload[MAX_IPC_VEC_ARG_CAPACITY];
   sl_zigbee_rx_packet_info_t packetInfo;
 } sli_zigbee_stack_gpep_incoming_message_handler_ipc_event_t;
 
@@ -69,7 +69,7 @@ typedef struct {
 typedef struct {
   sl_zigbee_rx_packet_info_t packetInfo;
   uint8_t relayCount;
-  uint8_t relayList;
+  uint8_t relayList[MAX_IPC_VEC_ARG_CAPACITY];
 } sli_zigbee_stack_incoming_route_record_handler_ipc_event_t;
 
 typedef struct {
@@ -85,7 +85,7 @@ typedef struct {
 typedef struct {
   sl_zigbee_rx_packet_info_t packetInfo;
   uint8_t relayCount;
-  uint8_t relayList;
+  uint8_t relayList[MAX_IPC_VEC_ARG_CAPACITY];
   bool consumed;
 } sli_zigbee_stack_override_incoming_route_record_handler_ipc_event_t;
 

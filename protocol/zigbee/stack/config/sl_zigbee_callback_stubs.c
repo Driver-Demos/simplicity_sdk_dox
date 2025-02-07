@@ -2037,6 +2037,19 @@ SL_WEAK void sl_zigbee_zigbee_key_establishment_handler(
   sl_zigbee_af_pop_network_index();
 }
 
+// Weak implementation of public Callback sl_zigbee_af_mux_invalid_rx_cb
+SL_WEAK void sl_zigbee_af_mux_invalid_rx_cb(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+}
+
+SL_WEAK void sl_zigbee_mux_invalid_rx_handler(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+  sl_zigbee_af_push_callback_network_index();
+  sli_zigbee_af_mux_invalid_rx(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_mux_invalid_rx_cb(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_pop_network_index();
+}
+
 // -----------------------------------------------------------------------------
 // Weak implementation of public Callback sl_zigbee_af_generate_cbke_keys_cb
 SL_WEAK void sl_zigbee_af_generate_cbke_keys_cb(

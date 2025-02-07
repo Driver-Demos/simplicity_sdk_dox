@@ -81,6 +81,8 @@ requires:
     condition: [device_efx]
   - name: "nvm3_optimization"
     condition: [device_efx]
+  - name: "nvm3_secure"
+    condition: [device_series_3]
 recommends:
   - id: "nvm3_optimization_disable"
     condition: [device_series_2]

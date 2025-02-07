@@ -47,7 +47,6 @@ class Sequences(object):
         self.isInternal = isInternal
         self.fileName = dataYml['Name'] + '_internal' if self.isInternal else dataYml['Name']
         self.fileInclude = dataYml.get('FileIncludes')
-        self.alias = dataYml.get('Alias', {})
         self.sequences = {}
         self.regBases = {}
 
@@ -107,6 +106,7 @@ class Sequence(Sequences):
 
         self.baseAddrConfig = self.getConfig(regBaseYml, chip, self.baseAddrConfigName)
         if self.baseAddrConfig is None:
+            # Try with the part name
             self.baseAddrConfig = self.getConfig(regBaseYml, self.part, self.baseAddrConfigName)
             if self.baseAddrConfig is None:
                     raise Exception("{} part is not defined in seqacc_regbases.yml."
@@ -114,10 +114,16 @@ class Sequence(Sequences):
 
         self.basePos = self.getConfig(regBaseYml, chip, self.baseAddrConfigName, 'BasePos')
         if self.basePos is None:
+            # Try with the part name
             self.basePos = self.getConfig(regBaseYml, self.part, self.baseAddrConfigName, 'BasePos')
             if self.basePos is None:
                 raise Exception("BasePos field not found in {}".format(self.baseAddrConfigName))
         self.basePos &= 0x1F
+
+        self.alias = self.getConfig(regBaseYml, chip, self.baseAddrConfigName, 'Alias')
+        if self.alias is None:
+            # Try with the part name
+            self.alias = self.getConfig(regBaseYml, self.part, self.baseAddrConfigName, 'Alias', default={})
 
         self.sequenceCfg = self._encodeCfg()
         self.contWrPos = seqData.get('SequenceCfg', {}).get('CNTWRPOS', 16)

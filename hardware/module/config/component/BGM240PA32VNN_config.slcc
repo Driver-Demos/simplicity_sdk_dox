@@ -21,21 +21,25 @@
       file_id: clock_manager_oscillator_config
     path: BGM240PA32VNN/sl_clock_manager_oscillator_config.h
     unless:
-    - board_config_clock_manager
+    - hardware_board
   - override:
       component: clock_manager
       file_id: clock_manager_tree_config
     path: BGM240PA32VNN/sl_clock_manager_tree_config.h
     unless:
-    - board_config_clock_manager
+    - hardware_board
   - override:
       component: device_init_dcdc
       file_id: device_init_dcdc_config
     path: BGM240PA32VNN/sl_device_init_dcdc_config.h
+    unless:
+    - hardware_board
   - override:
       component: device_init_hfxo
       file_id: device_init_hfxo_config
     path: BGM240PA32VNN/sl_device_init_hfxo_config.h
+    unless:
+    - hardware_board
   - override:
       component: iot_flash
       file_id: iot_flash_cfg

@@ -5460,6 +5460,27 @@
         },
       ],
     },
+    ## MUX_INVALID_RX_HANDLER
+    {
+      value: "0x005D",
+      needGeneratedHandler : "no",
+      commandName: "mux_invalid_rx_handler",
+      description: "This call is fired when mux detects an invalid rx case, 
+      which would be different rx channels for different protocol contexts,
+      when fast cahnnel switching is not enabled",
+      responseArguments: [
+        {
+          type: "uint8_t",
+          name: "new_rx_channel",
+          description: "",
+        },
+        {
+          type: "uint8_t",
+          name: "old_rx_channel",
+          description: "",
+        },
+      ],
+    },
     ## DELAY_TEST
     {
       value: "0x009D",

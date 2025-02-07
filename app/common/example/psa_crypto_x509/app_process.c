@@ -149,6 +149,11 @@ void app_process_action(void)
         if (asymmetric_key_storage_select > KEY_STORAGE_MAX) {
           asymmetric_key_storage_select = VOLATILE_PLAIN_KEY;
         }
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+        if (asymmetric_key_storage_select > PERSISTENT_WRAP_KEY) {
+          asymmetric_key_storage_select = 0;
+        }
+#endif
         printf("  + Current asymmetric key is a %s key.\n",
                asymmetric_key_storage_string[asymmetric_key_storage_select]);
       }
@@ -164,7 +169,13 @@ void app_process_action(void)
           app_state = SELECT_HASH_ALGO;
           break;
         }
-
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+        if (asymmetric_key_storage_select > KEY_STORAGE_PLAIN_MAX) {
+          if (secpr1_key_size_select > SECPR1_256_SIZE) {
+            secpr1_key_size_select = 0;
+          }
+        }
+#endif
         printf("\n  . Current SECPxxxR1 key length is %d-bit (%s).\n",
                secpr1_key_size[secpr1_key_size_select],
                secpr1_key_size_string[secpr1_key_size_select]);
@@ -242,6 +253,7 @@ void app_process_action(void)
 
     case CREATE_ROOT_KEY:
       app_state = PSA_CRYPTO_EXIT;
+#if !defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
       if (asymmetric_key_storage_select > PERSISTENT_WRAP_KEY) {
 #if defined(SEMAILBOX_PRESENT) && (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
         // Use built-in ECC key for root certificate
@@ -249,7 +261,9 @@ void app_process_action(void)
 #endif
         root_cert_key_id = get_key_id();
         app_state = WRAP_ROOT_PSA_KEY;
-      } else {
+      } else
+#endif
+      {
         printf("  + Creating a %s (%d-bit) %s root certificate key... ",
                secpr1_key_size_string[secpr1_key_size_select],
                secpr1_key_size[secpr1_key_size_select],
@@ -749,10 +763,23 @@ static void print_key_storage(void)
     }
   }
 
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+  if (asymmetric_key_storage_select > PERSISTENT_WRAP_KEY) {
+    asymmetric_key_storage_select = 0;
+  }
+#endif
   printf("\n  . Current asymmetric key is a %s key.\n",
          asymmetric_key_storage_string[asymmetric_key_storage_select]);
 
 #if defined(SEMAILBOX_PRESENT) && (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+  printf("  + Press SPACE to select a %s or %s or %s or %s key \n"
+         "      press ENTER to next option.\n",
+         asymmetric_key_storage_string[0],
+         asymmetric_key_storage_string[1],
+         asymmetric_key_storage_string[2],
+         asymmetric_key_storage_string[3]);
+#else
   printf("  + Press SPACE to select a %s or %s or %s or %s or \n"
          "    %s or %s or %s or %s key, press ENTER to next option.\n",
          asymmetric_key_storage_string[0],
@@ -763,6 +790,7 @@ static void print_key_storage(void)
          asymmetric_key_storage_string[5],
          asymmetric_key_storage_string[6],
          asymmetric_key_storage_string[7]);
+#endif
 #else
   printf("  + Press SPACE to select a %s or %s key, press ENTER to next "
          "option.\n", asymmetric_key_storage_string[0],

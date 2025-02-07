@@ -1067,6 +1067,19 @@ const app_cli_entry_t app_settings_entries[] =
   {
     .key = "tx_power",
     .domain = APP_CLI_WISUN_DOMAIN_ID,
+    .value_size = APP_CLI_VALUE_SIZE_UINT8,
+    .input = APP_CLI_INPUT_FLAG_DEFAULT | APP_CLI_INPUT_FLAG_SIGNED,
+    .output = APP_CLI_OUTPUT_FLAG_DEFAULT | APP_CLI_OUTPUT_FLAG_SIGNED,
+    .value = NULL,
+    .input_enum_list = NULL,
+    .output_enum_list = NULL,
+    .set_handler = _app_cli_set_tx_power,
+    .get_handler = _app_cli_get_tx_power,
+    .description = "TX power in dBm [int8]"
+  },
+  {
+    .key = "tx_power_ddbm",
+    .domain = APP_CLI_WISUN_DOMAIN_ID,
     .value_size = APP_CLI_VALUE_SIZE_UINT16,
     .input = APP_CLI_INPUT_FLAG_DEFAULT | APP_CLI_INPUT_FLAG_SIGNED,
     .output = APP_CLI_OUTPUT_FLAG_DEFAULT | APP_CLI_OUTPUT_FLAG_SIGNED,
@@ -1075,7 +1088,7 @@ const app_cli_entry_t app_settings_entries[] =
     .output_enum_list = NULL,
     .set_handler = _app_cli_set_tx_power,
     .get_handler = _app_cli_get_tx_power,
-    .description = "TX power in ddBm [uint16]"
+    .description = "TX power in ddBm [int16]"
   },
   {
     .key = APP_CLI_PHY_PARAM_REG_DOMAIN_STR,
@@ -1775,21 +1788,24 @@ static sl_status_t _app_cli_set_tx_power(const char *value_str,
                                          const char *key_str,
                                          const app_cli_entry_t *entry)
 {
-  sl_status_t res = SL_STATUS_FAIL;
-  int32_t value = 0U;
+  sl_status_t ret = SL_STATUS_FAIL;
+  uint32_t value = 0U;
   (void)key_str;
-  (void)entry;
 
-  res = app_util_get_integer((uint32_t *)&value,
+  ret = app_util_get_integer(&value,
                              value_str,
                              entry->input_enum_list,
                              entry->input & APP_CLI_INPUT_FLAG_SIGNED);
-  if (res == SL_STATUS_OK) {
-    // sets the tx power
-    res = app_wisun_setting_set_tx_power((int16_t *)&value);
+  if (ret == SL_STATUS_OK) {
+    // If entry is in dBm, multiply by 10 to have ddBm
+    if (entry->value_size == APP_SETTINGS_VALUE_SIZE_UINT8) {
+      value = value * 10U;
+    }
+    // Set the tx power
+    ret = app_wisun_setting_set_tx_power((int16_t *)&value);
   }
 
-  return res;
+  return ret;
 }
 
 /* App CLI setting network name */
@@ -1849,19 +1865,26 @@ static sl_status_t _app_cli_get_tx_power(char *value_str,
                                          const char *key_str,
                                          const app_cli_entry_t *entry)
 {
-  sl_status_t res = SL_STATUS_FAIL;
-  int16_t value = 0;
+  sl_status_t ret = SL_STATUS_FAIL;
+  int16_t tx_power_ddbm = 0;
   (void)key_str;
-  (void)entry;
 
-  res = app_wisun_setting_get_tx_power(&value);
-  if (res == SL_STATUS_OK) {
-    snprintf(value_str, APP_CLI_STR_VALUE_LENGTH, "%d ddBm", value);
+  ret = app_wisun_setting_get_tx_power(&tx_power_ddbm);
+  if (ret == SL_STATUS_OK) {
+    if (entry->value_size == APP_SETTINGS_VALUE_SIZE_UINT8) {
+      // If entry is in dBm, print in float format
+      snprintf(value_str, APP_CLI_STR_VALUE_LENGTH, "%d.%d", tx_power_ddbm / 10, abs(tx_power_ddbm % 10));
+    } else if (entry->value_size == APP_SETTINGS_VALUE_SIZE_UINT16) {
+      snprintf(value_str, APP_CLI_STR_VALUE_LENGTH, "%d", tx_power_ddbm);
+    } else {
+      ret = SL_STATUS_FAIL;
+      snprintf(value_str, APP_CLI_STR_VALUE_LENGTH, "N/A");
+    }
   } else {
     snprintf(value_str, APP_CLI_STR_VALUE_LENGTH, "N/A");
   }
 
-  return res;
+  return ret;
 }
 
 static bool _is_param_used(const char *param_str)

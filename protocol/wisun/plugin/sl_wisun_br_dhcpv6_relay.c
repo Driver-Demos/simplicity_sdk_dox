@@ -30,6 +30,7 @@
 
 #include <assert.h>
 #include <cmsis_os2.h>
+#include <string.h>
 #include "sl_memory_manager.h"
 #include "sl_wisun_ip6string.h"
 #include "sl_wisun_br_lwip.h"

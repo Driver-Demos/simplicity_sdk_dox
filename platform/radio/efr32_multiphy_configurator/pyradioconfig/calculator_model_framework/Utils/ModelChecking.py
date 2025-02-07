@@ -85,7 +85,10 @@ class ModelChecking:
         else:
             phy_name = model.phy.name
         #Get the regmap object just once for the part (much more efficient than looping)
-        if model.part_revision == 'ANY' or part_family.upper() in RM_S1_PART_FAMILY_NAMES or part_family.upper() in RM_S2_PART_FAMILY_NAMES:
+        if (model.part_revision == 'ANY'
+                or part_family.upper() in RM_S1_PART_FAMILY_NAMES
+                or part_family.upper() in RM_S2_PART_FAMILY_NAMES
+                or part_family.upper() in ["RAINIER"]):
             regmap_obj = RM_Factory(part_family.upper())()
         else:
             regmap_obj = RM_Factory(part_family.upper(), model.part_revision)()

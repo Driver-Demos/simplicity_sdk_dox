@@ -36,7 +36,7 @@
     instance:
     - vcom
   - id: bootloader_uart_driver
-  - id: mx25_flash_shutdown_usart
+  - id: mx25_flash_shutdown_eusart
   - id: bootloader_spi_controller_usart_driver
 - template_contribution: []
 - define:

@@ -135,6 +135,12 @@ template_contribution:
       function_name: sli_zigbee_af_counter_rollover_callback
   - name: zigbee_stack_callback
     value:
+      callback_type: mux_invalid_rx
+      function_name: sli_zigbee_af_mux_invalid_rx_callback
+    condition:
+      - rail_mux
+  - name: zigbee_stack_callback
+    value:
       callback_type: stack_token_changed
       function_name: sli_zigbee_af_stack_token_changed_callback
   - name: zigbee_stack_callback

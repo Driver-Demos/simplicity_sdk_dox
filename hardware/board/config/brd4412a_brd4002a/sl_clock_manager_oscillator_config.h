@@ -81,13 +81,20 @@
 // <o SL_CLOCK_MANAGER_HFXO_CTUNE> CTUNE <0-255>
 // <d> 140
 #ifndef SL_CLOCK_MANAGER_HFXO_CTUNE
-#define SL_CLOCK_MANAGER_HFXO_CTUNE    140
+#define SL_CLOCK_MANAGER_HFXO_CTUNE    125
 #endif
 
 // <o SL_CLOCK_MANAGER_HFXO_PRECISION> Precision in PPM <0-65535>
 // <d> 50
 #ifndef SL_CLOCK_MANAGER_HFXO_PRECISION
 #define SL_CLOCK_MANAGER_HFXO_PRECISION    50
+#endif
+
+// <q SL_CLOCK_MANAGER_CTUNE_MFG_HFXO_EN> CTUNE HXFO manufacturing
+// <i> Enable to use CTUNE HFXO manufacturing value for calibration
+// <d> 1
+#ifndef SL_CLOCK_MANAGER_CTUNE_MFG_HFXO_EN
+#define SL_CLOCK_MANAGER_CTUNE_MFG_HFXO_EN    1
 #endif
 // </h>
 
@@ -110,7 +117,7 @@
 // <o SL_CLOCK_MANAGER_LFXO_CTUNE> CTUNE <0-127>
 // <d> 63
 #ifndef SL_CLOCK_MANAGER_LFXO_CTUNE
-#define SL_CLOCK_MANAGER_LFXO_CTUNE    63
+#define SL_CLOCK_MANAGER_LFXO_CTUNE    38
 #endif
 
 // <o SL_CLOCK_MANAGER_LFXO_PRECISION> LFXO precision in PPM <0-65535>
@@ -132,6 +139,13 @@
 // <d> LFXO_CFG_TIMEOUT_CYCLES4K
 #ifndef SL_CLOCK_MANAGER_LFXO_TIMEOUT
 #define SL_CLOCK_MANAGER_LFXO_TIMEOUT    LFXO_CFG_TIMEOUT_CYCLES4K
+#endif
+
+// <q SL_CLOCK_MANAGER_CTUNE_MFG_LFXO_EN> CTUNE LXFO manufacturing
+// <i> Enable to use CTUNE LFXO manufacturing value for calibration
+// <d> 1
+#ifndef SL_CLOCK_MANAGER_CTUNE_MFG_LFXO_EN
+#define SL_CLOCK_MANAGER_CTUNE_MFG_LFXO_EN    1
 #endif
 // </e>
 

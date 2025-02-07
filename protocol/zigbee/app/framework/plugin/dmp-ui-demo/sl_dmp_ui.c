@@ -20,7 +20,6 @@
 
 #include "sl_board_control.h"
 #include "sl_simple_button_instances.h"
-#include "em_assert.h"
 #include "glib.h"
 #include "dmd.h"
 #include "app/framework/include/af.h"

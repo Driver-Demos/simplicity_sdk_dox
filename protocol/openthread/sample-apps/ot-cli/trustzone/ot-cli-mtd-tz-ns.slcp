@@ -53,7 +53,11 @@ configuration:
     value: 16384
     condition: [freertos]
   - name: SL_STACK_SIZE
+    value: 5120
+    unless: [freertos]
+  - name: SL_STACK_SIZE
     value: 4608
+    condition: [freertos]
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
   - name: SL_IOSTREAM_USART_VCOM_FLOW_CONTROL_TYPE

@@ -103,7 +103,7 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
         phy.profile_outputs.MODEM_LONGRANGE1_HYSVAL.override = 3
         phy.profile_outputs.MODEM_COH0_COHDYNAMICBBSSEN.override = 1
 
-        LRCHPWR_sens = 29 # target sens is at -105.5 which is between CW CHPWR 27 and 28
+        LRCHPWR_sens = 32 # target sens is at -105.5 which is between CW CHPWR 30 and 31
 
         phy.profile_outputs.MODEM_LONGRANGE2_LRCHPWRTH1.override = LRCHPWR_sens - 6 - 6
         phy.profile_outputs.MODEM_LONGRANGE2_LRCHPWRTH2.override = LRCHPWR_sens - 6 # this is neede dfo cases with strong blocker
@@ -133,9 +133,9 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
         #################
         # DSA settings
         #################
-        LRSPIKETHD = 115 # allowing some false detections to perform better near sensitivity
-        FIXEDCDTHFORIIR = 125 # # choosing a value of LRSPIKETHD that causes no false detections at static BBSS in 10s
-        LRCHPWRSPIKETH = 32  # use fixed DSA threshold till -100dBm
+        LRSPIKETHD = 130 # allowing some false detections to perform better near sensitivity
+        FIXEDCDTHFORIIR = 145 # # choosing a value of LRSPIKETHD that causes no false detections at static BBSS in 10s
+        LRCHPWRSPIKETH = 34  # use fixed DSA threshold till -100dBm
 
         phy.profile_outputs.MODEM_COH3_COHDSAEN.override = 1
         phy.profile_outputs.MODEM_COH3_CDSS.override = 4
@@ -208,7 +208,7 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
         phy.profile_outputs.MODEM_COH0_COHDYNAMICPRETHRESH.override = 1
         phy.profile_outputs.MODEM_COH0_COHDYNAMICSYNCTHRESH.override = 1
 
-        SYNCTHRESH0 = 25
+        SYNCTHRESH0 = 45
         phy.profile_outputs.MODEM_COH1_SYNCTHRESH0.override = SYNCTHRESH0
         phy.profile_outputs.MODEM_COH1_SYNCTHRESH1.override = SYNCTHRESH0 + 5
         phy.profile_outputs.MODEM_COH1_SYNCTHRESH2.override = SYNCTHRESH0 + 5 + 5
@@ -313,6 +313,21 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
         phy.profile_outputs.MODEM_SICORR_CORRTHRESHLOW.override = 56  # 0X38
         phy.profile_outputs.MODEM_SICORR_CORRTHRESHUP.override = 31  # 0X1F
         phy.profile_outputs.MODEM_SICORR_CORRTHRESH2SYMB.override = 219  # 0XDB
+
+
+        # TODO: Add to lpwh72000 and lpwh74000 when available in register map
+        if not (model.part_family.upper() == 'RAINIER' and model.part_revision in ['A0', 'A1', 'A2']):
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_FASTCWDETECTEN.override = 1
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_FASTSUPERCHIPEN.override = 0
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_FASTNARROWPULSEEN.override = 1
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_EYEOPENINGMODE.override = 2
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_CWDETECTSTARTWINDOW.override = 5
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_CWDETECTTHRESHOLD.override = 25
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_SUPERCHIPSTARTWINDOW.override = 9
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_NPULSEFIXEDTHRESHOLD.override = 0
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJEN.override = 5
+            phy.profile_outputs.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJ.override = 3
+
 
     def Enhanced_DSSS_comm_settings(self, model, phy_name=None):
         phy = self._makePhy(model, model.profiles.Base, readable_name='Legacy IEEE 802.15.4 2p4GHz PHY from Jumbo',
@@ -658,6 +673,8 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
 
     def PHY_IEEE802154_2p4GHz_Enhanced_ANTDIV(self, model, phy_name=None):
         phy = self.PHY_IEEE802154_2p4GHz_Enhanced_Scan(model, phy_name=None)
+        phy.profile_inputs.hop_enable.value = model.vars.hop_enable.var_enum.DISABLED
+        phy.profile_inputs.synth_settling_mode.value = model.vars.synth_settling_mode.var_enum.FAST
         phy.profile_inputs.bandwidth_hz.value = 2200000
 
         phy.profile_outputs.MODEM_SYNC2_SYNC2.override = 167
@@ -716,6 +733,7 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
 
     def PHY_IEEE802154_2p4GHz_Enhanced_ANTDIV_Scan(self, model, phy_name=None):
         phy = self.PHY_IEEE802154_2p4GHz_Enhanced_ANTDIV(model, phy_name=None)
+        phy.profile_inputs.hop_enable.value = model.vars.hop_enable.var_enum.ENABLED
 
         phy.profile_outputs.MODEM_PHDMODCTRL_FASTHOPPINGEN.override = 1
         phy.profile_outputs.MODEM_EHDSSSCTRL_DUALDSA.override = 1
@@ -780,11 +798,15 @@ class PhysRailBaseStandardIeee802154Rainier(PhysRAILBaseStandardIEEE802154Bobcat
         phy.profile_outputs.MODEM_COH0_COHCHPWRTH0.override = 216
         phy.profile_outputs.MODEM_COH0_COHCHPWRTH1.override = 0
 
+        phy.profile_outputs.MODEM_SRCCHF_CHMUTETIMER.override = 245      # ZBRX value in sim fast sw SEQACC table
+
         return phy
 
     def PHY_IEEE802154_2p4GHz_Enhanced_DutyCycling(self, model, phy_name=None):
         ### This PHY is used scan two 802154 channels with power duty cycling
         phy = self.PHY_IEEE802154_2p4GHz_Enhanced_Scan(model, phy_name=None)
+        phy.profile_inputs.hop_enable.value = model.vars.hop_enable.var_enum.DISABLED
+        phy.profile_inputs.synth_settling_mode.value = model.vars.synth_settling_mode.var_enum.FAST
 
         phy.profile_outputs.MODEM_COCURRMODE_DSSSDSACHK.override = 25
         phy.profile_outputs.MODEM_EHDSSSCFG2_DSSSDSAQUALEN.override = 1

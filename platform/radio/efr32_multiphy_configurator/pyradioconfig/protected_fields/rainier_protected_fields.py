@@ -131,6 +131,7 @@ class ProtectedFieldsRainier(ProtectedFieldsBase):
         'RAC_CLKMULTEN0_CLKMULTENREFDIV': 'cal',
         'RAC_CLKMULTEN0_CLKMULTENROTDET': 'cal',
         'RAC_CLKMULTCTRL_CLKMULTRESETPHFRQDET': 'cal',
+        'RAC_ADCCTRL0_ADCCTRLRESERVEDLV': 'cal',
     }
 
     # : List of fields found in PTE, but allow radio configurator to override the value

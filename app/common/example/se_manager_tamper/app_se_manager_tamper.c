@@ -219,8 +219,6 @@ void init_tamper_prs(void)
   PRS_ConnectConsumer(SW_RST_TAMPER_PRS_CH, prsTypeAsync,
                       offsetof(PRS_TypeDef, CONSUMER_SETAMPER_TAMPERSRC31));
 #elif defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
-  sl_hal_prs_connect_channel_consumer(TAMPER_CNT_PRS_CH, SL_HAL_PRS_TYPE_ASYNC,
-                                      offsetof(PRS_TypeDef, CONSUMER_SETAMPER_TAMPERSRC28));
   sl_hal_prs_connect_channel_consumer(TAMPER_INT_PRS_CH, SL_HAL_PRS_TYPE_ASYNC,
                                       offsetof(PRS_TypeDef, CONSUMER_SETAMPER_TAMPERSRC29));
   sl_hal_prs_connect_channel_consumer(HW_RST_TAMPER_PRS_CH, SL_HAL_PRS_TYPE_ASYNC,

@@ -663,3 +663,9 @@ void setNextBleTxRepeat(sl_cli_command_arg_t *args)
   txRepeatCount = repeats.iterations;
   responsePrint(command, "RepeatedTxCount:%u", repeats.iterations);
 }
+
+void triggerRxHop(sl_cli_command_arg_t *args)
+{
+  RAIL_Status_t ret = RAIL_TriggerRxChannelHop(railHandle);
+  responsePrint(sl_cli_get_command_string(args, 0), "HopTriggerStatus:%u", ret);
+}

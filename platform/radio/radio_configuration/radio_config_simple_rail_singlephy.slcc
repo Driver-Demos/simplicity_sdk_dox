@@ -48,6 +48,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - device_has_radio_subghz
@@ -131,6 +132,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg28/rf_band_2400/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - device_has_radio_2g4hz
@@ -158,6 +160,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg28/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - device_has_radio_subghz
@@ -183,6 +186,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg28/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - device_has_radio_dualband
@@ -251,6 +255,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_315/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_315
@@ -267,6 +272,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_434/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_434
@@ -283,6 +289,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_470/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_470
@@ -299,6 +306,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_868
@@ -413,6 +421,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg28/rf_band_2400/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_2400
@@ -429,6 +438,7 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg28/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_868

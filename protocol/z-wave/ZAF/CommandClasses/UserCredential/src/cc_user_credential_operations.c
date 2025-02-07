@@ -11,6 +11,57 @@
 #include "zaf_transport_tx.h"
 #include "assert.h"
 
+/****************************************************************************/
+/*                            PRIVATE FUNCTIONS                             */
+/****************************************************************************/
+
+/**
+ * Checks whether the user associated with an incoming credential exists and
+ * sends a report to the initiating node if it does not.
+ *
+ * @param[in] p_credential Pointer to the incoming credential
+ * @param[in] p_rx_options Pointer to the details of the received frame
+ * @return The result of getting the associated user from the database
+ */
+static u3c_db_operation_result check_and_report_nonexistent_user(
+  u3c_credential * p_credential, RECEIVE_OPTIONS_TYPE_EX * p_rx_options)
+{
+  if (!p_credential || !p_rx_options) {
+    assert(false);
+    return U3C_DB_OPERATION_RESULT_ERROR;
+  }
+
+  u3c_db_operation_result get_user_result =
+    CC_UserCredential_get_user(p_credential->metadata.uuid, NULL, NULL);
+  bool user_exists = (get_user_result == U3C_DB_OPERATION_RESULT_SUCCESS);
+
+  /**
+   * Send a report if the specified user does not exist and the request was
+   * initiated by a remote node.
+   */
+  if (!user_exists && !is_rx_frame_initiated_locally(p_rx_options)) {
+    u3c_credential_type next_credential_type = CREDENTIAL_TYPE_NONE;
+    uint16_t next_credential_slot = 0;
+
+    CC_UserCredential_get_next_credential(
+      p_credential->metadata.uuid, p_credential->metadata.type,
+      p_credential->metadata.slot,
+      &next_credential_type, &next_credential_slot);
+
+    p_credential->metadata.modifier_type = MODIFIER_TYPE_DNE;
+
+    CC_UserCredential_CredentialReport_tx(
+      CREDENTIAL_REP_TYPE_WRONG_UUID, p_credential, next_credential_type,
+      next_credential_slot, p_rx_options);
+  }
+
+  return get_user_result;
+}
+
+/****************************************************************************/
+/*                             PUBLIC FUNCTIONS                             */
+/****************************************************************************/
+
 ZW_WEAK void CC_UserCredential_delete_all_credentials_of_type(
   uint16_t uuid, u3c_credential_type filter_type)
 {
@@ -225,46 +276,15 @@ ZW_WEAK u3c_db_operation_result CC_UserCredential_delete_user_and_report(
   return operation_result;
 }
 
-ZW_WEAK u3c_db_operation_result CC_UserCredential_check_and_report_none_existing_user(
-  u3c_credential * p_credential, RECEIVE_OPTIONS_TYPE_EX * p_rx_options)
-{
-  if (!p_credential && !p_rx_options) {
-    assert(false);
-    return U3C_DB_OPERATION_RESULT_ERROR;
-  }
-
-  if (is_rx_frame_initiated_locally(p_rx_options)) {
-    return U3C_DB_OPERATION_RESULT_ERROR;
-  }
-
-  if (U3C_DB_OPERATION_RESULT_FAIL_DNE == CC_UserCredential_get_user(p_credential->metadata.uuid, NULL, NULL)) {
-    u3c_credential_type next_credential_type = CREDENTIAL_TYPE_NONE;
-    uint16_t next_credential_slot = 0;
-
-    CC_UserCredential_get_next_credential(
-      p_credential->metadata.uuid, p_credential->metadata.type,
-      p_credential->metadata.slot,
-      &next_credential_type, &next_credential_slot);
-
-    p_credential->metadata.modifier_type = MODIFIER_TYPE_DNE;
-
-    CC_UserCredential_CredentialReport_tx(
-      CREDENTIAL_REP_TYPE_WRONG_UUID, p_credential, next_credential_type,
-      next_credential_slot, p_rx_options);
-    return U3C_DB_OPERATION_RESULT_ERROR;
-  }
-  return U3C_DB_OPERATION_RESULT_SUCCESS;
-}
-
 ZW_WEAK u3c_db_operation_result CC_UserCredential_add_credential_and_report(
   u3c_credential * p_credential, RECEIVE_OPTIONS_TYPE_EX * p_rx_options)
 {
-  if (!p_credential && !p_rx_options) {
+  if (!p_credential || !p_rx_options) {
     assert(false);
     return U3C_DB_OPERATION_RESULT_ERROR;
   }
 
-  if (U3C_DB_OPERATION_RESULT_SUCCESS != CC_UserCredential_check_and_report_none_existing_user(p_credential, p_rx_options)) {
+  if (U3C_DB_OPERATION_RESULT_SUCCESS != check_and_report_nonexistent_user(p_credential, p_rx_options)) {
     return U3C_DB_OPERATION_RESULT_ERROR;
   }
 
@@ -354,12 +374,12 @@ ZW_WEAK u3c_db_operation_result CC_UserCredential_add_credential_and_report(
 ZW_WEAK u3c_db_operation_result CC_UserCredential_modify_credential_and_report(
   u3c_credential * p_credential, RECEIVE_OPTIONS_TYPE_EX * p_rx_options)
 {
-  if (!p_credential && !p_rx_options) {
+  if (!p_credential || !p_rx_options) {
     assert(false);
     return U3C_DB_OPERATION_RESULT_ERROR;
   }
 
-  if (U3C_DB_OPERATION_RESULT_SUCCESS != CC_UserCredential_check_and_report_none_existing_user(p_credential, p_rx_options)) {
+  if (U3C_DB_OPERATION_RESULT_SUCCESS != check_and_report_nonexistent_user(p_credential, p_rx_options)) {
     return U3C_DB_OPERATION_RESULT_ERROR;
   }
 

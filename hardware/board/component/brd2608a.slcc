@@ -16,6 +16,7 @@
   - name: hardware_board
   - name: hardware_board_stk
   - name: hardware_board_from_stk
+  - name: hardware_board_from_xg26-dk2608a
   - name: hardware_board_has_si70xx
   - name: hardware_board_has_tempsensor
   - name: hardware_board_has_vcom
@@ -47,7 +48,7 @@
     instance:
     - btn0
     - btn1
-  - id: mx25_flash_shutdown_usart
+  - id: mx25_flash_shutdown_eusart
   - id: bootloader_spi_controller_usart_driver
   - id: imu_driver_icm40627
 - template_contribution: []
@@ -55,7 +56,7 @@
   - name: SL_BOARD_NAME
     value: '"BRD2608A"'
   - name: SL_BOARD_REV
-    value: '"A03"'
+    value: '"A04"'
   - name: HFXO_FREQ
     value: 39000000
   - name: HARDWARE_BOARD_SUPPORTS_RF_BAND_2400
@@ -64,7 +65,7 @@
 - tag:
   - board:pn:BRD2608
   - board:variant:A
-  - board:revision:A03
+  - board:revision:A04
   - board:device:efr32mg26b510f3200im68
   - hardware:has:vcom
   - hardware:has:pti

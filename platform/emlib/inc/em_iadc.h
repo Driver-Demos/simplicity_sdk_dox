@@ -327,6 +327,14 @@ typedef enum {
   /** Vddio2 / 4 */
   iadcPosInputVddio2    = (_IADC_SCAN_PORTPOS_SUPPLY << (_IADC_SCAN_PORTPOS_SHIFT - _IADC_SCAN_PINPOS_SHIFT))
                           | 3,
+#elif defined(_SILICON_LABS_32B_SERIES_2_CONFIG_7) || defined(_SILICON_LABS_32B_SERIES_2_CONFIG_9)
+  /** Vbat /4 */
+  iadcPosInputVbat      = (_IADC_SCAN_PORTPOS_SUPPLY << (_IADC_SCAN_PORTPOS_SHIFT - _IADC_SCAN_PINPOS_SHIFT))
+                          | 2,
+
+  /** Vss  */
+  iadcPosInputVss       = (_IADC_SCAN_PORTPOS_SUPPLY << (_IADC_SCAN_PORTPOS_SHIFT - _IADC_SCAN_PINPOS_SHIFT))
+                          | 3,
 #else
   /** Vss  */
   iadcPosInputVss       = (_IADC_SCAN_PORTPOS_SUPPLY << (_IADC_SCAN_PORTPOS_SHIFT - _IADC_SCAN_PINPOS_SHIFT))

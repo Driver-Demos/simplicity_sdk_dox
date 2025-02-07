@@ -59,7 +59,10 @@ The list of available commands is output on the console with the associated help
 | wisun clear_credential_cache | Clear the wisun credential cache | > wisun clear_credential_cache |
 | wisun reset_statistics | Reset the statistics | > wisun reset_statistics |
 | wisun set_trace_level \<string> | Set [trace level](https://docs.silabs.com/wisun/latest/wisun-stack-api/sl-wisun-types#sl-wisun-trace-level-t) for a [trace group](https://docs.silabs.com/wisun/latest/wisun-stack-api/sl-wisun-types#sl-wisun-trace-group-t) | > wisun set_trace_level all,debug<br>[Set 64 trace groups]<br>> wisun set_trace_level 1,none;4,info<br>[Set 2 trace groups]|
-| wisun mode_switch \<mode> \<phy_mode_id> \<neighbor_mac_address> |  configure mode switch: <br> - [uint8] mode: 0=disabled, 1=enabled, 2=default <br> - [uint8] PhyModeId <br> - [string] neighbor MAC address (optional)   | > wisun mode_switch 1 84 <br> > wisun mode_switch 1 84 01:02:03:04:05:06:07:08 |
+| wisun mode_switch \<mode> \<phy_mode_id> \<neighbor_mac_address> |  configure mode switch: <br> - [uint8] mode: 0=disabled, 1=enabled, 2=default <br> - [uint8] PhyModeID <br> - [string] neighbor MAC address (optional)   | > wisun mode_switch 1 84 <br> > wisun mode_switch 1 84 01:02:03:04:05:06:07:08 |
+| wisun getsockname \<socket> | Get local IP address of the socket | > wisun getsockname 3 |
+| wisun getpeername \<socket> | Get peer IP address of the socket | > wisun getpeername 3 |
+| wisun set_phy_sens \<phy_mode_id> \<sensitivy> | Set the sensitivity for the given PhyModeID <br> - [uint8] PhyModeID <br> - [int16] sensitivy in dBm | > wisun set_phy_sens 1 -70 |
 
 ## Wi-SUN Settings
 

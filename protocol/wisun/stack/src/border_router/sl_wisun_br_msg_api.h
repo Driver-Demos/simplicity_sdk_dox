@@ -191,7 +191,7 @@ SL_PACK_START(1)
 typedef struct {
   /// GTK
   uint8_t gtk[GTK_LEN];
-  /// index
+  /// Index
   uint8_t index;
   /// Reserved, set to zero
   uint8_t reserved[3];
@@ -282,9 +282,12 @@ SL_PACK_START(1)
 typedef struct {
   /// Status of the request
   uint32_t status;
-  uint8_t *addr_ll;
-  uint8_t *addr_gua;
-  uint8_t *addr_dodagid;
+  /// Link-local address
+  in6_addr_t link_local_address;
+  /// Global Unicast address
+  in6_addr_t global_address;
+  /// DODAGID
+  in6_addr_t dodagid;
 } SL_ATTRIBUTE_PACKED sl_wisun_br_msg_ip_addr_cnf_body_t;
 SL_PACK_END()
 
@@ -306,7 +309,9 @@ SL_PACK_END()
 
 SL_PACK_START(1)
 typedef struct {
+  /// Index
   uint8_t index;
+  /// Reserved, set to zero
   uint8_t reserved[3];
 } SL_ATTRIBUTE_PACKED sl_wisun_br_msg_get_gak_req_body_t;
 SL_PACK_END()
@@ -325,8 +330,9 @@ SL_PACK_START(1)
 typedef struct {
   /// Status of the request
   uint32_t status;
-  uint8_t *gak;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_msg_gak_cnf_body_t;
+  /// GAK
+  uint8_t gak[SL_WISUN_GAK_LEN];
+} SL_ATTRIBUTE_PACKED sl_wisun_br_msg_get_gak_cnf_body_t;
 SL_PACK_END()
 
 SL_PACK_START(1)
@@ -334,7 +340,7 @@ typedef struct {
   /// Common message header
   sl_wisun_br_msg_header_t header;
   /// Confirmation message body
-  sl_wisun_br_msg_gak_cnf_body_t body;
+  sl_wisun_br_msg_get_gak_cnf_body_t body;
 } SL_ATTRIBUTE_PACKED sl_wisun_br_msg_get_gak_cnf_t;
 SL_PACK_END()
 
@@ -356,7 +362,8 @@ SL_PACK_START(1)
 typedef struct {
   /// Status of the request
   uint32_t status;
-  uint8_t state;
+  /// Border router state
+  uint32_t state;
 } SL_ATTRIBUTE_PACKED sl_wisun_br_msg_get_state_cnf_body_t;
 SL_PACK_END()
 

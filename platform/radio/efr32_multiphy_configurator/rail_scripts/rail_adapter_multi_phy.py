@@ -11,7 +11,7 @@ from enum import IntEnum
 import itertools
 
 # Update kRAILVersion to be used in phyInfoData.
-kRAILVersion = 18
+kRAILVersion = 19
 
 class ConcPhyEnum(IntEnum):
   CONC_PHY_NONE = 0
@@ -81,6 +81,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     self.railModel = RAILModel(self.yamlobject)
     self._railModelPopulated = False
 
+    self.series = self._getSeriesFromFamily(kwargs['mphyConfig'].get_part_family().lower())
     # Store the register bases in self._regBases
     self._getRegBasesFromFamily(kwargs['mphyConfig'].get_part_family().lower())
 
@@ -88,14 +89,18 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     # Get address for protected field regs on the current chip
     PROTECTED_FIELD_REG_VALUES = {}
     for register in config.PROTECTED_FIELDS[self.partFamily.lower()].keys():
-      registerObject = getattr(self.rm, register.split('.')[0], None)
+      baseName = register.split('.')[0]
+      fieldName = register.split('.')[1]
+      try:
+        protectedAddress = self._getRegAddressWithPolarity(baseName, fieldName)
+      except AttributeError:
+        continue
+      registerObject = getattr(self.rm, baseName, None)
       if registerObject == None:
         continue
-      registerObject = getattr(registerObject, register.split('.')[1], None)
+      registerObject = getattr(registerObject, fieldName, None)
       if registerObject == None:
         continue
-      base = registerObject.baseAddress
-      offset = registerObject.addressOffset
       protectionMask = 0
       for field in config.PROTECTED_FIELDS[self.partFamily.lower()][register]:
         fieldObject = getattr(registerObject, field, None)
@@ -104,7 +109,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
         bitWidth = fieldObject.bitWidth
         bitOffset = fieldObject.bitOffset
         protectionMask |= ((2 ** bitWidth - 1) << bitOffset)
-      PROTECTED_FIELD_REG_VALUES[base + offset] = { 'protectionMask' : protectionMask, 'name': register }
+      PROTECTED_FIELD_REG_VALUES[protectedAddress] = { 'protectionMask' : protectionMask, 'name': register }
 
     while length > 0:
       currentLength = length
@@ -254,7 +259,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     base_info["base"] = new_base
 
     # Move PHYINFO (and associated registers in a continuous write) to the start
-    address = self._getRegAddress("SEQ","PHYINFO")
+    address = self._getRegAddressWithPolarity("SEQ","PHYINFO")
     allWrites = [new_base]
     allWrites.extend(regs_channels)
     for add in allWrites:
@@ -291,7 +296,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
           if ((self.partFamily in ["ocelot", "margay"]) and (j != 0) and ((base_info["add"][j - 1][1][1].entryType.value == ConcPhyEnum.CONC_PHY_VT) or (base_info["add"][j - 1][1][1].entryType.value == ConcPhyEnum.CONC_PHY_9_6_NON_HOP))):
             # apply calculator workaround for ZWave concurrent PHY
             # need to make sure  BCR demod is enable and viterbi demod is disabled for virtual concurrent PHY (i.e. Zwave 9.6K concurrent PHY)
-            if (register[0] == self._getRegAddress("MODEM", "BCRDEMODCTRL")):
+            if (register[0] == self._getRegAddressWithPolarity("MODEM", "BCRDEMODCTRL")):
               # Enable BCR demod
               # reg[1] = ((reg[1] | MODEM_BCRDEMODCTRL_BCRDEMODEN) & ~MODEM_BCRDEMODCTRL_BBPMDETEN)
               bcrdemoctrlReg.io = register[1]
@@ -302,7 +307,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
               chunkWrite[i] = (register[0], bcrdemoctrlReg.io, "MODEM.BCRDEMODCTRL")
               if (do_print):
                 print("New BCRDEMODCTRL {}".format(chunkWrite[i]))
-            elif (register[0] == self._getRegAddress("MODEM", "VITERBIDEMOD")):
+            elif (register[0] == self._getRegAddressWithPolarity("MODEM", "VITERBIDEMOD")):
               # Disable Viterbi demod
               # reg[1] = (reg[1] & ~_MODEM_VITERBIDEMOD_VTDEMODEN_MASK)
               viterbidemodReg.io = register[1]
@@ -329,7 +334,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
       regNameLists = ["SRCCHF", "BCRDEMODCTRL", "VITERBIDEMOD", "CTRL0", "SYNC0", "FRMSCHTIME", "TRECPMPATT"]
       regLists = []
       for regNameList in regNameLists:
-        regLists.append(self._getRegAddress("MODEM", regNameList))
+        regLists.append(self._getRegAddressWithPolarity("MODEM", regNameList))
       if (do_print):
         for regIdx, reg in enumerate(regLists):
           for add in allWrites:
@@ -353,7 +358,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
           lastWrites = []
           # Find the registers that has to be executed first
           for list in firstWriteLists:
-            list_addr = self._getRegAddress("MODEM", list)
+            list_addr = self._getRegAddressWithPolarity("MODEM", list)
             regFound = False
             for i, reg in enumerate(reg_lists):
               if reg[0] == list_addr:
@@ -369,7 +374,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
           # Find the registers that has to be executed last
           for list in lastWriteLists:
             regFound = False
-            list_addr = self._getRegAddress("MODEM", list)
+            list_addr = self._getRegAddressWithPolarity("MODEM", list)
             for i, reg in enumerate(reg_lists):
               if reg[0] == list_addr:
                 if (do_print):
@@ -475,7 +480,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
           currentPhyConfigEntryModemConfigEntry.value = newModemConfig
 
   def _writeBRA(self, phyConfigEntry, model, regs):
-    address = self._getRegAddress("FRC", "BLOCKRAMADDR")
+    address = self._getRegAddressWithPolarity("FRC", "BLOCKRAMADDR")
     if phyConfigEntry.bchArray:
       # Write BLOCKRAMADDR
       self._loadBchLookupTable(model, regs, address, phyConfigEntry.bchArray)
@@ -492,7 +497,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     # On Panther, we decided to ALWAYS write the FRC_CONVRAMADDR to HIGH RAM offset 0
     # On rest of series-2 after Panther, we decided to ALWAYS write the FRC_CONVRAMADDR to FRCRAM offset 0
     # Since this varies per part it is now owned in the Radio Configurator in series 2+
-    if self.partFamily.lower() in ["dumbo","jumbo","nerio","nixi"]:
+    if self.series == 1:
       # Series - 1 point to allocated buffer, or just leave at 0 if not needed.
       if fecEnabled:
         convDecodeBuffer = "convDecodeBuffer"
@@ -501,7 +506,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
 
       # Write the address of the convDecodeBuffer to CONVRAMADDR when
       # fecEnabled, include even when absent for speed
-      address = self._getRegAddress("FRC", "CONVRAMADDR")
+      address = self._getRegAddressWithPolarity("FRC", "CONVRAMADDR")
       regs.append((address, convDecodeBuffer, "FRC.CONVRAMADDR"))
     regs.sort()
     return regs
@@ -551,7 +556,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
 
       if self.pte_script is False:
         # Write the address of the phyInfo structure to SEQ.PHYINFO.ADDRESS
-        address = self._getRegAddress("SEQ","PHYINFO")
+        address = self._getRegAddressWithPolarity("SEQ","PHYINFO")
         regs.append((address, phyConfigEntry.phyInfoEntry.value, "SEQ.PHYINFO"))
 
       # Write the address of the last Dynamic Slicer Configuration link
@@ -559,7 +564,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
       dynamicSlicerTableEntry = phyConfigEntry.dynamicSlicerTableEntry.value
       if dynamicSlicerTableEntry and len(dynamicSlicerTableEntry._elements) > 0 and \
          self.partFamily in ["dumbo", "jumbo", "nerio", "nixi", "bobcat","caracal"]:
-          address = self._getRegAddress("SEQ","DYNAMIC_CHPWR_TABLE")
+          address = self._getRegAddressWithPolarity("SEQ","DYNAMIC_CHPWR_TABLE")
           regs.append((address, phyConfigEntry.dynamicSlicerTableEntry.value.lastElement, "SEQ.DYNAMIC_CHPWR_TABLE"))
 
       regs.sort() # Put the registers in the right order again
@@ -664,6 +669,11 @@ class RAILAdapter_MultiPhy(RAILAdapter):
       data.src1Denominator.value = (outputs.get_output('src1_calcDenominator').var_value or 0)
     data.src2Denominator.value = (outputs.get_output('src2_calcDenominator').var_value or 0)
 
+    if hasattr(outputs, 'trecs_pre_bits_to_syncword'):
+      data.trecsPreBitsToSync.value = int(outputs.get_output('trecs_pre_bits_to_syncword').var_value or 0)
+    else:
+      data.trecsPreBitsToSync.value = 0
+
     modType = model.vars.modulation_type.value
     if hasattr(model.vars.modulation_type.var_enum, 'OFDM') and modType == model.vars.modulation_type.var_enum.OFDM:
       # In OFDM txBaudRate contains the symbol rate
@@ -679,7 +689,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     data.zWaveChannelHopTiming.value = (outputs.get_output('rx_ch_hopping_delay_usec').var_value or 0)
     data.rateInfo.value = (rssiAdjustDb & 0xFF) << 16 | data.baudPerSymbol.value << 8 | data.bitsPerSymbol.value
 
-    if self.partFamily.lower() not in ["dumbo","jumbo","nerio","nixi"]:
+    if self.series != 1:
       # Cap DEC0 at 3, since the decimation value for all values above 3 is 8.
       # Also don't use value 2, in case that's useful in the future
       DEC0_MAP = [0, 1, 1, 3, 3, 3, 3, 3]
@@ -1566,7 +1576,7 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     maxConvDecodeBufferSize = 0
     # On Panther, we decided to ALWAYS write the FRC_CONVRAMADDR to HIGH RAM offset 0
     # On Lynx+, we decided to ALWAYS write the FRC_CONVRAMADDR to FRCRAM offset 0
-    if self.partFamily.lower() in ["dumbo","jumbo","nerio","nixi"]:
+    if self.series == 1:
       for multiPhyConfigEntry in railModel.multiPhyConfig.multiPhyConfigEntries._elements:
         for phyConfigEntry in multiPhyConfigEntry.phyConfigEntries._elements:
           if phyConfigEntry.convDecodeBufferSize.value > maxConvDecodeBufferSize:
@@ -1663,7 +1673,10 @@ class RAILAdapter_MultiPhy(RAILAdapter):
     self.partFamily = self.mphyConfig.part_family
 
     # Create a proper rm object depending on partFamily
-    if self.mphyConfig.part_revision == 'ANY' or self.partFamily.upper() in RM_S1_PART_FAMILY_NAMES or self.partFamily.upper() in RM_S2_PART_FAMILY_NAMES:
+    if (self.mphyConfig.part_revision == 'ANY'
+            or self.partFamily.upper() in RM_S1_PART_FAMILY_NAMES
+            or self.partFamily.upper() in RM_S2_PART_FAMILY_NAMES
+            or self.partFamily.upper() in ["RAINIER"]):
       rm_factory = RM_Factory(self.partFamily.upper())
     else:
       rm_factory = RM_Factory(self.partFamily.upper(), self.mphyConfig.part_revision)

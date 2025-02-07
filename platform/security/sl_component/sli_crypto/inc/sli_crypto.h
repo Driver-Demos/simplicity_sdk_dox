@@ -39,6 +39,7 @@
   #error Unsupported device.
 #endif
 #include "sl_status.h"
+#include "sl_code_classification.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -62,6 +63,7 @@ extern "C" {
  *                       SL_STATUS_INVALID_SIGNATURE if tag does not match payload,
  *                       relevant status code on other error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_ccm_auth_decrypt_ble(sli_crypto_descriptor_t     *key_descriptor,
                                             unsigned char               *data,
                                             size_t                      length,
@@ -82,6 +84,7 @@ sl_status_t sli_crypto_ccm_auth_decrypt_ble(sli_crypto_descriptor_t     *key_des
  *
  * @return               SL_STATUS_OK if successful, relevant status code on error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_ccm_encrypt_and_tag_ble(sli_crypto_descriptor_t     *key_descriptor,
                                                unsigned char               *data,
                                                size_t                      length,
@@ -108,6 +111,7 @@ sl_status_t sli_crypto_ccm_encrypt_and_tag_ble(sli_crypto_descriptor_t     *key_
  *                       SL_STATUS_INVALID_SIGNATURE if tag does not match payload,
  *                       relevant status code on other error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_ccm_zigbee(sli_crypto_descriptor_t     *key_descriptor,
                                   bool                        encrypt,
                                   const unsigned char         *data_in,
@@ -138,6 +142,7 @@ sl_status_t sli_crypto_ccm_zigbee(sli_crypto_descriptor_t     *key_descriptor,
  *
  * @return               SL_STATUS_OK if successful, relevant status code on error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_process_rpa(sli_crypto_descriptor_t     *key_descriptor,
                                    size_t                      irk_len,
                                    uint64_t                    keymask,
@@ -157,6 +162,7 @@ sl_status_t sli_crypto_process_rpa(sli_crypto_descriptor_t     *key_descriptor,
  *
  * @return               SL_STATUS_OK if successful, relevant status code on error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_aes_ctr_radio(sli_crypto_descriptor_t   *key_descriptor,
                                      unsigned int              keybits,
                                      const unsigned char       input[SLI_CRYPTO_AES_BLOCK_SIZE],
@@ -175,6 +181,7 @@ sl_status_t sli_crypto_aes_ctr_radio(sli_crypto_descriptor_t   *key_descriptor,
  *
  * @return               SL_STATUS_OK if successful, relevant status code on error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_aes_ecb_radio(bool                    encrypt,
                                      sli_crypto_descriptor_t *key_descriptor,
                                      unsigned int            keybits,
@@ -192,6 +199,7 @@ sl_status_t sli_crypto_aes_ecb_radio(bool                    encrypt,
  *
  * @return               SL_STATUS_OK if successful, relevant status code on error
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLI_CRYPTO, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_crypto_aes_cmac_radio(sli_crypto_descriptor_t *key_descriptor,
                                       unsigned int            keybits,
                                       const unsigned char     *input,

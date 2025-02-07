@@ -22,6 +22,16 @@
   - name: hardware_board_from_slwstk6023a
   - name: hardware_board_supports_wstk_lcd
   - name: hardware_board_has_vcom
+  - name: hardware_board_has_exp_12
+  - name: hardware_board_has_exp_14
+  - name: hardware_board_has_exp_7
+  - name: hardware_board_has_exp_9
+  - name: hardware_board_has_exp_4
+  - name: hardware_board_has_exp_6
+  - name: hardware_board_has_exp_8
+  - name: hardware_board_has_exp_10
+  - name: hardware_board_has_exp_11
+  - name: hardware_board_has_exp_13
   - name: hardware_board_has_spi
   - name: hardware_board_has_uart
   - name: board_config_clock_manager

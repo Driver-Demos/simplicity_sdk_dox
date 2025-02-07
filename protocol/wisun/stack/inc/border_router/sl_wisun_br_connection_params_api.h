@@ -47,23 +47,33 @@
 
 /// PAN discovery parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_discovery_s {
   /// PAN advertisement trickle timer
   sl_wisun_trickle_params_t trickle_pa;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_discovery;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// PAN discovery parameter set
+typedef struct sl_wisun_br_params_discovery_s sl_wisun_br_params_discovery;
+/// PAN discovery parameter set
+typedef struct sl_wisun_br_params_discovery_s sl_wisun_br_params_discovery_t;
 
 /// PAN configuration parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_configuration_s {
   /// PAN configuration trickle timer
   sl_wisun_trickle_params_t trickle_pc;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_configuration;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// PAN configuration parameter set
+typedef struct sl_wisun_br_params_configuration_s sl_wisun_br_params_configuration;
+/// PAN configuration parameter set
+typedef struct sl_wisun_br_params_configuration_s sl_wisun_br_params_configuration_t;
 
 /// Authentication parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_eapol_s {
   /// Security key lifetimes
   sl_wisun_key_lifetimes_params_t key_lifetimes;
   /// Security protocol trickle timer
@@ -74,21 +84,30 @@ typedef struct {
   uint8_t sec_prot_trickle_expirations;
   /// Reserved, set to zero
   uint8_t reserved;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_eapol;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// Authentication parameter set
+typedef struct sl_wisun_br_params_eapol_s sl_wisun_br_params_eapol;
+/// Authentication parameter set
+typedef struct sl_wisun_br_params_eapol_s sl_wisun_br_params_eapol_t;
 
 /// DHCP server parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_dhcp_s {
   /// Lease time (seconds)
   uint32_t dhcp_address_lifetime_s;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_dhcp;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
 
+/// DHCP server parameter set
+typedef struct sl_wisun_br_params_dhcp_s sl_wisun_br_params_dhcp;
+/// DHCP server parameter set
+typedef struct sl_wisun_br_params_dhcp_s sl_wisun_br_params_dhcp_t;
 
 /// RPL parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_rpl_s {
   /// RPL MinHopRankIncrease RFC6550 3.5.1
   uint16_t rpl_min_hop_rank_increase;
   /// RPL allowable increase in rank in support of local repair RFC 6550 6.7.6
@@ -105,12 +124,17 @@ typedef struct {
   uint8_t rpl_default_lifetime;
   /// Reserved, set to zero
   uint8_t reserved[2];
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_rpl;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// RPL parameter set
+typedef struct sl_wisun_br_params_rpl_s sl_wisun_br_params_rpl;
+/// RPL parameter set
+typedef struct sl_wisun_br_params_rpl_s sl_wisun_br_params_rpl_t;
 
 /// MPL parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_mpl_s {
   /// Warning: MPL parameters may be overwritten for border router
   /// MPL trickle timer
   sl_wisun_trickle_params_t trickle;
@@ -120,29 +144,44 @@ typedef struct {
   uint8_t trickle_expirations;
   /// Reserved, set to zero
   uint8_t reserved;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_mpl;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// MPL parameter set
+typedef struct sl_wisun_br_params_mpl_s sl_wisun_br_params_mpl;
+/// MPL parameter set
+typedef struct sl_wisun_br_params_mpl_s sl_wisun_br_params_mpl_t;
 
 /// LFN parent parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_lfn_parent_s {
   /// Number of broadcast LFN Pan Config retries when LFN Version is incremented
   /// Referred to as LFN_MAINTAIN_PARENT_TIME in FAN TPS 1.1
   uint8_t lfn_lpc_retry_count;
   /// Reserved, set to zero
   uint8_t reserved[3];
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_lfn_parent;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// LFN parent parameter set
+typedef struct sl_wisun_br_params_lfn_parent_s sl_wisun_br_params_lfn_parent;
+/// LFN parent parameter set
+typedef struct sl_wisun_br_params_lfn_parent_s sl_wisun_br_params_lfn_parent_t;
 
 /// Misc parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_br_params_misc_s {
   /// Temporary neighbor link minimum timeout
   uint16_t temp_link_min_timeout_s;
   /// Reserved, set to zero
   uint16_t reserved;
-} SL_ATTRIBUTE_PACKED sl_wisun_br_params_misc;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// Misc parameter set
+typedef struct sl_wisun_br_params_misc_s sl_wisun_br_params_misc;
+/// Misc parameter set
+typedef struct sl_wisun_br_params_misc_s sl_wisun_br_params_misc_t;
 
 /// BR parameter set
 SL_PACK_START(1)
@@ -155,25 +194,27 @@ typedef struct {
    */
   uint32_t version;
   /// PAN discovery parameter set
-  sl_wisun_br_params_discovery discovery;
+  sl_wisun_br_params_discovery_t discovery;
   /// PAN configuration parameter set
-  sl_wisun_br_params_configuration configuration;
+  sl_wisun_br_params_configuration_t configuration;
   /// Authentication parameter set
-  sl_wisun_br_params_eapol eapol;
+  sl_wisun_br_params_eapol_t eapol;
   /// DHCP server parameter set
-  sl_wisun_br_params_dhcp dhcp;
+  sl_wisun_br_params_dhcp_t dhcp;
   /// RPL parameter set
-  sl_wisun_br_params_rpl rpl;
+  sl_wisun_br_params_rpl_t rpl;
   /// MPL parameter set
-  sl_wisun_br_params_mpl mpl;
+  sl_wisun_br_params_mpl_t mpl;
   /// LFN parent parameter set
-  sl_wisun_br_params_lfn_parent lfn_parent;
+  sl_wisun_br_params_lfn_parent_t lfn_parent;
   /// Misc parameter set
-  sl_wisun_br_params_misc misc;
+  sl_wisun_br_params_misc_t misc;
   /// Maximum number of nodes supported by border router at once
   uint32_t pan_capacity;
-  /// Enable FAN 1.0 router node support PAN-wide
+  /// Enable authentication of FAN 1.0 routers
   uint8_t enable_ffn10;
+  /// Reserved, set to zero
+  uint8_t reserved[3];
 } SL_ATTRIBUTE_PACKED sl_wisun_br_connection_params_t;
 SL_PACK_END()
 

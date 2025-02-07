@@ -31,6 +31,8 @@ requires:
   - name: status
   - name: cmsis_core
   - name: component_catalog
+  - name: interrupt_manager_vector_table_in_ram
+    condition: [device_series_3]
 template_contribution:
   - name: component_catalog
     value: interrupt_manager

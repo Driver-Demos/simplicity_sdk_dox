@@ -87,7 +87,7 @@ extern "C" {
 /***************************************************************************//**
  *  @brief Definitions of NVM3 constraints.
  ******************************************************************************/
-#define NVM3_MIN_PAGE_SIZE              512U                            ///< The minimum page size supported
+#define NVM3_MIN_PAGE_SIZE              4096U                           ///< The minimum page size supported
 #define NVM3_MAX_OBJECT_SIZE_LOW_LIMIT  204U                            ///< The minimum value for the maximum object size
 #define NVM3_MAX_OBJECT_SIZE_HIGH_LIMIT 4096U                           ///< The maximum value for the maximum object size
 #define NVM3_MAX_OBJECT_SIZE_DEFAULT    1900U                           ///< The default value for the maximum object size
@@ -762,11 +762,16 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    found by searching the NVM. The search will start at the last stored object
    and search all the way to the oldest object. If the object is found, the cache
    is updated accordingly.
+   NVM3 Optimization improves the NVM3 initialization and object lookup time.
+   Code size increases ~1248 bytes with NVM3 Optimization enabled. NVM3 driver provides
+   a means to enable or disable Optimization from Simplicity Studio UC.
 
    The application must allocate and support data for the cache.
    See the @ref nvm3_open function for more details. The size of each cache
    element is one uint32_t and one pointer giving a total of 8 bytes (2 words)
-   pr. entry for EFM32 and EFR32 devices.
+   per entry for EFM32 and EFR32 devices. With Optimization enabled, the size of each
+   cache element is two uint32_t and one pointer giving a total of 12 bytes (3 words)
+   per entry.
 
    @note The cache is fully initialized by @ref nvm3_open() and automatically
    updated by any subsequent write, read, or delete function call.
@@ -791,11 +796,12 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    for IAR and ARM GCC. The maximum stack usage measured was 420 bytes for
    IAR, and 472 bytes for ARM GCC builds. The unit test used to validate the
    stack usage has a 10% margin and uses a stack limit of 462 bytes for IAR
-   and 520 for ARM GCC. The maximum stack usage measured was 715 bytes for ARM
-   GCC builds with security. The unit test used to validate the stack usage has
-   a 10% margin and uses a stack limit of 794 bytes for ARM GCC with security.
-   Note that the actual stack usage is a little different on the Cortex
-   M0 Plus, M3, M4, and M33 with NVM3 source.
+   and 520 bytes for ARM GCC. The maximum stack usage measured on SIXX device was
+   540 bytes for IAR, and 520 bytes for ARM GCC builds with security. The unit
+   test used to validate the stack usage has a 10% margin and uses a stack
+   limit of 600 bytes for IAR and 576 bytes for ARM GCC builds with security.
+   Note that the actual stack usage is a little different on the Cortex M4 and M33
+   with NVM3 source.
 
    # The API {#nvm3_api}
    The NVM3 API is defined in the nvm3.h file. The application code
@@ -860,7 +866,7 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    -# NVM area size must be a multiple of the page size.
 
    The minimum required NVM size is dependent on both the NVM page size and the
-   NVM3_MAX_OBJECT_SIZE value. For a device with 2 kB page size and typical
+   NVM3_MAX_OBJECT_SIZE value. For a device with 4 kB page size and typical
    values for NVM3_MAX_OBJECT_SIZE, the following is the minimum required
    number of pages:
      - For NVM3_MAX_OBJECT_SIZE=208:  3 pages
@@ -943,21 +949,28 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    @n The "driver" for external Flash is selected by setting the halHandle in
    the nvm3_open initialization structure to point to nvm3_halFlashHandle.
 
-   @n All data objects are authenticated + encrypted using AES-GCM mode and
-   counter objects are stored in plain. NVM3 encryption key is stored in SE
-   MTP region. Reading the external memory alone will not give access to the
-   unencrypted data objects.
+   # Securing Objects in External Flash {#nvm3_support_secure_storage}
+   All data objects are authenticated + encrypted using AES-GCM mode and
+   counter objects are stored in plain. Each data object which is securely stored
+   in external flash has a size overhead of 8 bytes. NVM3 uses device generated key
+   for crypto operations. Reading the external memory directly (without using NVM3)
+   will not give access to the unencrypted data objects.
 
    @n HAL for crypto is added to have the flexibility to use available crypto
    which can be selected by setting the halCryptoHandle in the nvm3_open
    initialization structure to point to desired crypto handle.
 
+   @n NVM3 crypto key will be changed if "device erase" is triggered on a debug
+   locked part, which will also clean up the NVM3 from the memory. In this case,
+   if previously stored NVM3 data is reloaded to the same device, NVM3 data read
+   will fail as NVM3 crypto key has changed.
+
    # NVM3 Source code {#nvm3_source_code}
-   The NVM3 source code can be compiled for Cortex M0, M3, M4, and M33 with either
-   Arm GCC or IAR toolchains. In addition, the NVM3 driver provides a means to
-   securely store and retrieve the objects in external Flash using authenticated
-   encryption. Objects in internal Flash need not be encrypted, while objects
-   in external Flash must always be encrypted.
+   The NVM3 source code can be compiled for Cortex M4 and M33 with either ARM GCC
+   or IAR toolchains. In addition, the NVM3 driver provides a means to securely
+   store and retrieve the objects in external Flash using authenticated encryption.
+   Objects in internal Flash need not be encrypted, while objects in external Flash
+   must always be encrypted.
 
    # Storage Capacity {#nvm3_capacity}
    Basic storage is defined as the size of on instance of all objects, including
@@ -972,15 +985,6 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    with enough flash pages to put the maximum allowed basic storage significantly
    higher than the actual basic storage.
 
-   ## Max Allowed Basic Storage with 8 kB page size
-   |                Flash pages    |                Total size (bytes)    |    Max allowed basic storage (bytes)    |                                     |                                      |                                      |
-   |-------------------------------|--------------------------------------|-----------------------------------------|-------------------------------------|--------------------------------------|--------------------------------------|
-   |                               |                                      |    Max object size = 204 bytes          |    Max object size = 254 bytes      |    Max object size = 1900 bytes      |    Max object size = 4096 bytes      |
-   |    3                          |    24516                             |    7748                                 |    7648                             |    4356                              |    0                                 |
-   |    4                          |    32688                             |    15920                                |    15820                            |    12528                             |    8136                              |
-   |    5                          |    40860                             |    24092                                |    23992                            |    20700                             |    16308                             |
-   |    6                          |    49032                             |    32264                                |    32164                            |    28872                             |    24480                             |
-
    ## Max Allowed Basic Storage with 4 kB page size
    |                Flash pages    |                Total size (bytes)    |    Max allowed basic storage (bytes)    |                                     |                                      |                                      |
    |-------------------------------|--------------------------------------|-----------------------------------------|-------------------------------------|--------------------------------------|--------------------------------------|
@@ -993,6 +997,15 @@ __STATIC_INLINE size_t nvm3_countDeletedObjects(nvm3_Handle_t *h)
    |    8                          |    32608                             |    24032                                |    23932                            |    20640                             |    16248                             |
    |    9                          |    36684                             |    28108                                |    28008                            |    24716                             |    20324                             |
    |    10                         |    40760                             |    32184                                |    32084                            |    28792                             |    24400                             |
+
+## Max Allowed Basic Storage with 8 kB page size
+   |                Flash pages    |                Total size (bytes)    |    Max allowed basic storage (bytes)    |                                     |                                      |                                      |
+   |-------------------------------|--------------------------------------|-----------------------------------------|-------------------------------------|--------------------------------------|--------------------------------------|
+   |                               |                                      |    Max object size = 204 bytes          |    Max object size = 254 bytes      |    Max object size = 1900 bytes      |    Max object size = 4096 bytes      |
+   |    3                          |    24516                             |    7748                                 |    7648                             |    4356                              |    0                                 |
+   |    4                          |    32688                             |    15920                                |    15820                            |    12528                             |    8136                              |
+   |    5                          |    40860                             |    24092                                |    23992                            |    20700                             |    16308                             |
+   |    6                          |    49032                             |    32264                                |    32164                            |    28872                             |    24480                             |
 
    # Default Instance {#nvm3_default}
    Several NVM3 instances can be created on a device and live independently of each other,

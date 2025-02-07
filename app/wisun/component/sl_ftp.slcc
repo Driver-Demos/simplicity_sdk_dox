@@ -15,7 +15,7 @@ description: >
   To ensure proper functionality, a TFTP server, such as tftpd-hpa, must be prepared on the remote host.
   
 category: "Wi-SUN|Wi-SUN Services"
-quality: "production"
+quality: "evaluation"
 metadata:
   sbom:
     license: Zlib

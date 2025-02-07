@@ -43,9 +43,7 @@ component:
   - id: app_em4h_reset
   - id: ZW_MIGRATION_TO_7_19
   - id: zw_cli_common
-    condition: [zw_release, hardware_board_from_stk] # WSTK specific
-  - id: zw_cli_common
-    condition: [zw_release, brd2705a] # Explorer kit 
+    condition: [zw_production]
   - id: app_button_press
   - id: app_assert
   - id: simple_button

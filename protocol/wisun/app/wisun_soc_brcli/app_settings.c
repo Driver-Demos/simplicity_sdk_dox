@@ -35,7 +35,7 @@
 #include "sl_wisun_br_wifi.h"
 #endif
 
-#ifdef WISUN_FAN_CERTIFICATION
+#ifdef SL_CATALOG_WISUN_FAN_CERTIFICATION_PRESENT
 
   // Defaults for Wi-SUN FAN Certification.
 
@@ -47,7 +47,7 @@
   #define APP_SETTINGS_WISUN_DEFAULT_CHAN_PLAN_ID  1
   #define APP_SETTINGS_WISUN_DEFAULT_PHY_MODE_ID  2
   #define APP_SETTINGS_WISUN_DEFAULT_NETWORK_SIZE  SL_WISUN_NETWORK_SIZE_CERTIFICATION
-  #define APP_SETTINGS_WISUN_DEFAULT_ALLOWED_CHANNELS  "0"
+  #define APP_SETTINGS_WISUN_DEFAULT_ALLOWED_CHANNELS  "10"
 
 #elif defined SL_CATALOG_WISUN_CONFIG_PRESENT
 
@@ -420,6 +420,7 @@ static const app_enum_t app_settings_wisun_regulation_enum[] =
   { "none", SL_WISUN_REGULATION_NONE },
   { "arib", SL_WISUN_REGULATION_ARIB },
   { "wpc", SL_WISUN_REGULATION_WPC },
+  { "etsi", SL_WISUN_REGULATION_ETSI },
   { NULL, 0 }
 };
 

@@ -421,7 +421,7 @@ bool bootloader_getUpgradeLocation(uint32_t *location)
   uint32_t blMinorVersion = ((info.version & BOOTLOADER_VERSION_MINOR_MASK)
                              >> BOOTLOADER_VERSION_MINOR_SHIFT);
 
-  if (blMajorVersion == 2UL && blMinorVersion >= 1UL) {
+  if (blMajorVersion > 2UL || (blMajorVersion == 2UL && blMinorVersion >= 1UL)) {
     *location = mainBootloaderTable->getUpgradeLocation();
     return true;
   }

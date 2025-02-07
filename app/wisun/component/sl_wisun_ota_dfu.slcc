@@ -21,7 +21,7 @@ description: >
   To save on download time, we recommend applying compression on both the bootloader and device projects.
 
 category: "Wi-SUN|Wi-SUN Services"
-quality: "production"
+quality: "evaluation"
 metadata:
   sbom:
     license: Zlib

@@ -125,10 +125,10 @@ class Profile_Sigfox_TX_Ocelot(Profile_Sigfox_TX):
 
     def set_packet_inputs_defaults(self, model) -> None:
         # Packet Inputs
-        model.vars.frame_bitendian.value_forced = model.vars.frame_bitendian.var_enum.LSB_FIRST
-        model.vars.frame_length_type.value_forced = model.vars.frame_length_type.var_enum.VARIABLE_LENGTH
+        model.vars.frame_bitendian.value_forced = model.vars.frame_bitendian.var_enum.MSB_FIRST
+        model.vars.frame_length_type.value_forced = model.vars.frame_length_type.var_enum.FIXED_LENGTH
         model.vars.payload_white_en.value_forced = False
-        model.vars.payload_crc_en.value_forced = True
+        model.vars.payload_crc_en.value_forced = False
 
     def build_modem_inputs(self, profile: ModelProfile) -> None:
         pass
@@ -173,6 +173,8 @@ class Profile_Sigfox_TX_Ocelot(Profile_Sigfox_TX):
         IProfile.make_required_input(profile, model.vars.bitrate, "modem", readable_name="Bitrate",
                                      value_limit_min=100, value_limit_max=600,
                                      units_multiplier=UnitsMultiplier.KILO)
+        IProfile.make_required_input(profile, model.vars.fixed_length_size, category='frame_fixed_length',
+                                     readable_name="Fixed Payload Size", value_limit_min=0, value_limit_max=4095)
 
     def build_hidden_profile_inputs(self, model: ModelRoot, profile: ModelProfile) -> None:
         # Add Ocelot-specific variables
@@ -195,8 +197,6 @@ class Profile_Sigfox_TX_Ocelot(Profile_Sigfox_TX):
         # Hidden inputs to allow for fixed frame length testing
         self.make_hidden_input(profile, model.vars.frame_length_type, 'frame_general',
                                readable_name="Frame Length Algorithm")
-        self.make_hidden_input(profile, model.vars.fixed_length_size, category='frame_fixed_length',
-                               readable_name="Fixed Payload Size", value_limit_min=0, value_limit_max=0x7fffffff)
 
     def build_optional_profile_inputs(self, model, profile: ModelProfile) -> None:
         pass

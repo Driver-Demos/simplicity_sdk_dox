@@ -1043,6 +1043,19 @@ void sl_zigbee_counter_rollover_handler(
   sl_zigbee_af_pop_network_index();
 }
 
+// Weak implementation of public Callback sl_zigbee_af_mux_invalid_rx_cb
+WEAK(void sl_zigbee_af_mux_invalid_rx_cb(uint8_t new_rx_channel, uint8_t old_rx_channel))
+{
+}
+
+void sl_zigbee_mux_invalid_rx_handler(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+  sl_zigbee_af_push_callback_network_index();
+  sli_zigbee_af_mux_invalid_rx(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_mux_invalid_rx_cb(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_pop_network_index();
+}
+
 // -----------------------------------------------------------------------------
 // Weak implementation of public Callback sl_zigbee_af_raw_transmit_complete_cb
 WEAK(void sl_zigbee_af_raw_transmit_complete_cb(

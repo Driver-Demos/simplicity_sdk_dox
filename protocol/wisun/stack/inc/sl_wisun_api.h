@@ -867,6 +867,20 @@ sl_status_t sl_wisun_set_phy_sensitivity(uint8_t phy_mode_id, int16_t sensitivit
  *****************************************************************************/
 sl_status_t sl_wisun_set_direct_connect_pmk(const uint32_t pmk_key_id);
 
+/**************************************************************************//**
+ * Set the preferred PAN for this device.
+ *
+ * @param[in] pan_id Preferred PAN ID. Set to 0xFFFF to disable.
+ * @return SL_STATUS_OK if successful, an error code otherwise
+ *
+ * This function sets a preferred PAN ID that the device will always select
+ * during connection if available, or seek to roam to while connected to
+ * another PAN.
+ *
+ * @note Available in libraries: Full, FFN (see @ref API_AVAILABILITY)
+ *****************************************************************************/
+sl_status_t sl_wisun_set_preferred_pan(uint16_t pan_id);
+
 /** @} (end SL_WISUN_API) */
 
 #ifdef __cplusplus

@@ -102,6 +102,11 @@ RAIL_Handle_t app_init(void)
 
   // Get RAIL handle, used later by the application
   RAIL_Handle_t rail_handle = sl_rail_util_get_handle(SL_RAIL_UTIL_HANDLE_INST0);
+  // Set to IDLE (channel select automatically start RX)
+  rail_status = RAIL_Idle(rail_handle, RAIL_IDLE, true);
+  if (rail_status != RAIL_STATUS_NO_ERROR) {
+    app_log_warning("Couldn't enter into IDLE, error code %lu\n", rail_status);
+  }
 
   set_up_tx_fifo(rail_handle);
 

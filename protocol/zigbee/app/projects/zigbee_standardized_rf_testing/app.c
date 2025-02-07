@@ -1443,7 +1443,7 @@ void sli_srft_cli_customSilabsLocalReport(sl_cli_command_arg_t *arguments)
 // Callbacks
 //////////////////////////////////////////////
 
-void app_init(void)
+void sl_zigbee_af_main_init_cb(void)
 {
   // Initialize events
   sl_zigbee_af_event_init(&change_channel_with_ping_event, change_channel_with_ping_event_handler);

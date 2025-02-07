@@ -32,22 +32,6 @@
 #define SL_SEC_MAN_AES_BLOCK_SIZE       16
 #define SL_SEC_MAN_TRANSIENT_KEY_ID 0x200F0
 
-static bool is_security_manager_initialised = false;
-
-psa_status_t sl_sec_man_init(void)
-{
-  psa_status_t status = PSA_SUCCESS;
-  if (!is_security_manager_initialised) {
-    status = psa_crypto_init();
-
-    if (status == PSA_SUCCESS) {
-      is_security_manager_initialised = true;
-    }
-  }
-
-  return status;
-}
-
 static void sl_sec_man_set_key_attributes(psa_key_id_t *        sl_psa_key_id,
                                           psa_key_attributes_t *sl_psa_key_attr,
                                           psa_key_type_t        sl_psa_key_type,
@@ -77,7 +61,11 @@ static void sl_sec_man_set_key_attributes(psa_key_id_t *        sl_psa_key_id,
   psa_set_key_usage_flags(sl_psa_key_attr, sl_psa_key_usage);
   psa_set_key_algorithm(sl_psa_key_attr, sl_psa_key_algorithm);
   psa_set_key_type(sl_psa_key_attr, sl_psa_key_type);
-  psa_set_key_bits(sl_psa_key_attr, sl_psa_key_len);
+
+  // If we are importing a public key, dont set key bits, as it is not needed
+  if (!PSA_KEY_TYPE_IS_ECC_PUBLIC_KEY(sl_psa_key_type)) {
+    psa_set_key_bits(sl_psa_key_attr, sl_psa_key_len);
+  }
 }
 
 psa_status_t sl_sec_man_import_key(psa_key_id_t *        sl_psa_key_id,

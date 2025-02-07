@@ -61,6 +61,8 @@
 #define SL_WISUN_LGTK_NUM  3
 /// Length of a PMK in bytes
 #define SL_WISUN_PMK_LEN 32
+/// Length of a GAK in bytes
+#define SL_WISUN_GAK_LEN  16
 
 /// Enumerations for device type
 typedef enum {
@@ -961,6 +963,8 @@ typedef enum {
   SL_WISUN_REGULATION_ARIB = 1,
   /// WPC, can only be used with IN regulatory domain
   SL_WISUN_REGULATION_WPC = 2,
+  /// ETSI, can only be used with EU regulatory domain
+  SL_WISUN_REGULATION_ETSI = 3,
 } sl_wisun_regulation_t;
 
 /// Enumeration for Mode Switch mode

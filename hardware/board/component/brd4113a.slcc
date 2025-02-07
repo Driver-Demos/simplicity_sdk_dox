@@ -19,6 +19,10 @@
   - name: hardware_board_from_stk
   - name: hardware_board_has_vcom
   - name: hardware_board_has_spiflash
+  - name: hardware_board_has_exp_12
+  - name: hardware_board_has_exp_14
+  - name: hardware_board_has_exp_9
+  - name: hardware_board_has_exp_7
   - name: hardware_board_has_uart
   - name: board_config_clock_manager
   - name: hardware_board_has_hfxo_freq_38.4mhz
@@ -43,7 +47,7 @@
     instance:
     - btn0
     - btn1
-  - id: mx25_flash_shutdown_usart
+  - id: mx25_flash_shutdown_eusart
   - id: bootloader_spi_controller_usart_driver
   - id: bootloader_spi_peripheral_usart_driver
 - template_contribution:

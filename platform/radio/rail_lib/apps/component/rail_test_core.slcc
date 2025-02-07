@@ -796,6 +796,12 @@ template_contribution:
 
   - name: cli_command
     value:
+      name: triggerRxHop
+      handler: triggerRxHop
+      help: "Trigger a manual RX channel hopping hop."
+
+  - name: cli_command
+    value:
       name: getRxHoppingRssi
       handler: getChannelHoppingRssi
       help: "Get the latest RSSI for a hopping channel."

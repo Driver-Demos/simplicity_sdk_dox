@@ -17,9 +17,9 @@
   - name: SL_KIT_NAME
     value: '"MGM260P-RB4350A"'
   - name: SL_KIT_REV
-    value: '"A00"'
+    value: '"A01"'
 - tag:
   - kit:opn:MGM260P-RB4350A
   - kit:pn:RB4350
   - kit:variant:A
-  - kit:revision:A00
+  - kit:revision:A01

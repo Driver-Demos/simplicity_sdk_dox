@@ -44,7 +44,7 @@ class CALC_WiSUN_Jumbo(ICalculator):
             ['IN', 0x05, 'India'],
             ['MX', 0x06, 'Mexico'],
             ['BZ', 0x07, 'Brazil'],
-            ['AZ_NZ', 0x08, 'Australia and New Zealand'],
+            ['AU_NZ', 0x08, 'Australia and New Zealand'],
             ['KR', 0x09, 'Korea'],
             ['PH', 0x0A, 'Philippines'],
             ['MY', 0x0B, 'Malaysia'],
@@ -224,7 +224,7 @@ class CALC_WiSUN_Jumbo(ICalculator):
                     error = True
                     base_frequency_hz = 902.2e6
                     channel_spacing_hz = 200e3
-            elif wisun_reg_domain == reg_domain_enum.AZ_NZ:
+            elif wisun_reg_domain == reg_domain_enum.AU_NZ:
                 if wisun_operating_class == 1:
                     base_frequency_hz = 915.2e6
                     channel_spacing_hz = 200e3

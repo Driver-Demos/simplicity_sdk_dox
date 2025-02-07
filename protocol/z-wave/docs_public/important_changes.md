@@ -3,7 +3,39 @@
 The changes described in this file will possibly break the build and/or functionality of an
 existing application. The description serves the purpose of helping to fix the failing build.
 
+# 7.23.1 {#section-7-23-1}
+
+## S2V2 specification update
+
+The following Z-Wave protocol command classes are removed from the NLS coverage list:
+- `0x22 ZWAVE_CMD_SET_NWI_MODE`
+- `0x23 ZWAVE_CMD_EXCLUDE_REQUEST`
+
+## Implement new EU_LR frequency
+Shifted EU_LR frequency from 864.4/866.4 Mhz to 864.0/866.0 Mhz to comply with ETSI regulation rules.
+
+## Door Lock Keypad default bolt state
+The default bolt state of the Door Lock Keypad application was changed to unlocked.
+
 # 7.23.0 {#section-7-23-0}
+
+## S2V2 Alpha
+A first implementation of the Security 2 Version 2 specification.
+Alpha release implements the following NLS commands:
+- `KEX Report NLS Support Bit`
+- `NLS State Get`
+- `NLS State Set`
+- `NLS State Report`
+and the following SerialAPI commands:
+- `Transfer Protocol Command Class (0x69)`
+- `Enable Node NLS (0x6A)`
+- `Get Node NLS State (0x6B)`
+- `Request Protocol Command Class Encryption (0x6C)`
+- `Controller Node Send Protocol Data (0xAC)`
+Alpha release will not support:
+- virtual nodes
+- supervision encapsulation of protocol commands
+- NLS commands `NLS Node List Get` and `NLS Node List Report`
 
 ## Migration guide
 
@@ -34,7 +66,7 @@ uint16_t monochrome_value = (100 * sum_colors) / (3 * 255);
 ```
 
 ### zwave_soc_power_strip
-Previously, this example displayed the Multilevel Switch value on the RGB LED. Now, if an RGB LED is available, the brightness of that LED 
+Previously, this example displayed the Multilevel Switch value on the RGB LED. Now, if an RGB LED is available, the brightness of that LED
 is controlled by the Multilevel Switch value. Otherwise, a monochrome LED is used to display this value.
 
 ## Reduce the number of demo applications

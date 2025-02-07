@@ -6,7 +6,6 @@
 
 // SEQACC base address configuration
 // Only MSB are kept, assuming the LSB are all zeros.
-// Note: Need to keep 0xB000 for PHYINFO location by rail_scripts
 {% for baseAddrName, baseAddrCfg in RegBases.items() -%}
 uint16_t {{baseAddrName}}Array[{{"{}".format(baseAddrCfg['Define'])}}] = {
   {%- for addr in baseAddrCfg['BaseAddr'].keys() %}

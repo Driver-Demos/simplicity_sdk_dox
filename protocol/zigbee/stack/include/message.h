@@ -364,6 +364,8 @@ void sl_zigbee_incoming_network_status_handler(uint8_t errorCode,
  * @param *relayList      The route record. Each relay in the list is an uint16_t node ID. The
  * list is passed as uint8_t * to avoid alignment problems.
  * @param consumed if set to true stack won't process the Incoming route record
+ * @internal SL_ZIGBEE_IPC_ARGS
+ * {# relayList | length: relayCount | max: MAX_IPC_VEC_ARG_CAPACITY #}
  */
 void sl_zigbee_override_incoming_route_record_handler(sl_zigbee_rx_packet_info_t *packetInfo,
                                                       uint8_t relayCount,
@@ -414,6 +416,8 @@ uint8_t sl_zigbee_internal_override_append_source_route_handler(sl_802154_short_
  * @param relayCount      The number of relays in relayList.
  * @param *relayList      The route record. Each relay in the list is an uint16_t node ID. The
  * list is passed as uint8_t * to avoid alignment problems.
+ * @internal SL_ZIGBEE_IPC_ARGS
+ * {# relayList | length: relayCount | max: MAX_IPC_VEC_ARG_CAPACITY #}
  */
 void sl_zigbee_incoming_route_record_handler(sl_zigbee_rx_packet_info_t *packetInfo,
                                              uint8_t relayCount,
@@ -887,8 +891,10 @@ sl_zigbee_packet_action_t sl_zigbee_af_outgoing_packet_filter_cb(sl_zigbee_zigbe
  * @param proxyTableIndex The proxy table index of the corresponding proxy table entry to the
  * incoming GPDF.
  * @param gpdCommandPayloadLength The length of the GPD command payload.
- * @param gpdCommandPayload The GPD command payload..
+ * @param gpdCommandPayload The GPD command payload.
  * @param packetInfo Rx packet information.
+ * @internal SL_ZIGBEE_IPC_ARGS
+ * {# gpdCommandPayload | length: gpdCommandPayloadLength | max: MAX_IPC_VEC_ARG_CAPACITY #}
  */
 void sl_zigbee_gpep_incoming_message_handler(
   sl_zigbee_gp_status_t status,

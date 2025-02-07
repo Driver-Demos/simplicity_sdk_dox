@@ -35,12 +35,12 @@ if (not slc.is_selected("bootloader_spiflash_storage")) and (not slc.is_selected
     do
         -- Check alignment for all enabled slots
 	 	if isSlotEnabled[slotID] == "1" then
-	 	    if tonumber(slotStartAddress[slotID],10) % flash_page_size ~= 0 then
+	 	    if tonumber(slotStartAddress[slotID]) % flash_page_size ~= 0 then
 	 	        validation.warning('Slot '.. tostring(tonumber(slotID-1)) ..
 	 	                " is not page aligned. Try aligning the slot start address to a " .. tostring(flash_page_size) .. "bytes boundary",
 	 					validation.target_for_project())
 	 		end
-	 		if tonumber(slotSizes[slotID],10) % flash_page_size ~= 0 then
+	 		if tonumber(slotSizes[slotID]) % flash_page_size ~= 0 then
 	 	        validation.warning('Slot size for slot '.. tostring(tonumber(slotID-1)) ..
 	 	                " is not page aligned. Try aligning the slot size to a " .. tostring(flash_page_size) .. "bytes boundary",
 	 					validation.target_for_project())
@@ -55,15 +55,15 @@ if slot_overlap.value == "0" then
     if (slot0_enable.value == "1") and (slot1_enable.value == "1") then
         -- slot 0 and slot 1 are enabled
 	    -- Conditions to detect potential overlaps b/w slot0 and slot1
-	    if tonumber(slot1_start_addr.value,10) == tonumber(slot0_start_addr.value,10) then
+	    if tonumber(slot1_start_addr.value) == tonumber(slot0_start_addr.value) then
 		    validation.error('Overlap detected between slot0 and slot1', validation.target_for_project())
 	    end
 
-	    if (tonumber(slot1_start_addr.value,10) > (tonumber(slot0_start_addr.value,10))) and ((tonumber(slot0_start_addr.value,10) + tonumber(slot0_size.value,10)) > tonumber(slot1_start_addr.value,10)) then
+	    if (tonumber(slot1_start_addr.value) > (tonumber(slot0_start_addr.value))) and ((tonumber(slot0_start_addr.value) + tonumber(slot0_size.value)) > tonumber(slot1_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 0 and slot 1',validation.target_for_project())
 	    end
 
-	    if ((tonumber(slot0_start_addr.value,10)) > (tonumber(slot1_start_addr.value,10))) and ((tonumber(slot1_start_addr.value,10) + tonumber(slot1_size.value,10)) > tonumber(slot0_start_addr.value,10)) then
+	    if ((tonumber(slot0_start_addr.value)) > (tonumber(slot1_start_addr.value))) and ((tonumber(slot1_start_addr.value) + tonumber(slot1_size.value)) > tonumber(slot0_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 0 and slot 1',validation.target_for_project())
 	    end
     end
@@ -71,28 +71,28 @@ if slot_overlap.value == "0" then
     if slot0_enable.value == "1" and slot1_enable.value == "1" and slot2_enable.value == "1" then
 	    -- slot 0,slot 1 and slot 2 are enabled
 	    -- Conditions to detect potential overlaps b/w slot1 and slot2
-	    if tonumber(slot1_start_addr.value,10) == tonumber(slot2_start_addr.value,10) then
+	    if tonumber(slot1_start_addr.value) == tonumber(slot2_start_addr.value) then
 		    validation.error('Overlap detected between storage slot 1 and slot 2',validation.target_for_project())
         end
 
-	    if ((tonumber(slot2_start_addr.value,10)) > (tonumber(slot1_start_addr.value,10))) and ((tonumber(slot1_start_addr.value,10) + tonumber(slot1_size.value,10)) > tonumber(slot2_start_addr.value,10)) then
+	    if ((tonumber(slot2_start_addr.value)) > (tonumber(slot1_start_addr.value))) and ((tonumber(slot1_start_addr.value) + tonumber(slot1_size.value)) > tonumber(slot2_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 1 and slot 2',validation.target_for_project())
         end
 
-	    if ((tonumber(slot1_start_addr.value,10)) > (tonumber(slot2_start_addr.value,10))) and ((tonumber(slot2_start_addr.value,10) + tonumber(slot2_size.value,10)) > tonumber(slot1_start_addr.value,10)) then
+	    if ((tonumber(slot1_start_addr.value)) > (tonumber(slot2_start_addr.value))) and ((tonumber(slot2_start_addr.value) + tonumber(slot2_size.value)) > tonumber(slot1_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 1 and slot 2',validation.target_for_project())
         end
 
 	    -- Conditions to detect potential overlaps b/w slot0 and slot2
-	    if tonumber(slot0_start_addr.value,10) == tonumber(slot2_start_addr.value,10) then
+	    if tonumber(slot0_start_addr.value) == tonumber(slot2_start_addr.value) then
 		    validation.error('Overlap detected between storage slot 0 and slot 2',validation.target_for_project())
         end
 
-	    if ((tonumber(slot2_start_addr.value,10)) > (tonumber(slot0_start_addr.value,10))) and ((tonumber(slot0_start_addr.value,10) + tonumber(slot0_size.value,10)) > tonumber(slot2_start_addr.value,10)) then
+	    if ((tonumber(slot2_start_addr.value)) > (tonumber(slot0_start_addr.value))) and ((tonumber(slot0_start_addr.value) + tonumber(slot0_size.value)) > tonumber(slot2_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 0 and slot 2',validation.target_for_project())
         end
 
-	    if ((tonumber(slot0_start_addr.value,10)) > (tonumber(slot2_start_addr.value,10))) and ((tonumber(slot2_start_addr.value,10) + tonumber(slot2_size.value,10)) > tonumber(slot0_start_addr.value,10)) then
+	    if ((tonumber(slot0_start_addr.value)) > (tonumber(slot2_start_addr.value))) and ((tonumber(slot2_start_addr.value) + tonumber(slot2_size.value)) > tonumber(slot0_start_addr.value)) then
 		    validation.error('Overlap detected between storage slot 0 and slot 2',validation.target_for_project())
         end
     end

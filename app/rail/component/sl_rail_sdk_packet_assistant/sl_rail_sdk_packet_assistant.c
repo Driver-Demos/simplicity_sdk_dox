@@ -50,6 +50,8 @@ uint16_t unpack_packet_sun_oqpsk(uint8_t *rx_destination, const RAIL_RxPacketInf
 void prepare_packet_sun_oqpsk(RAIL_Handle_t rail_handle, uint8_t *out_data, uint16_t length);
 uint16_t unpack_packet_sidewalk(uint8_t *rx_destination, const RAIL_RxPacketInfo_t *packet_information, uint8_t **start_of_payload);
 void prepare_packet_sidewalk(RAIL_Handle_t rail_handle, uint8_t *out_data, uint16_t length);
+uint16_t unpack_packet_longrange(uint8_t *rx_destination, const RAIL_RxPacketInfo_t *packet_information, uint8_t **start_of_payload);
+void prepare_packet_longrange(RAIL_Handle_t rail_handle, uint8_t *out_data, uint16_t length);
 uint16_t unpack_packet_base(uint8_t *rx_destination, const RAIL_RxPacketInfo_t *packet_information, uint8_t **start_of_payload);
 void prepare_packet_base(RAIL_Handle_t rail_handle, uint8_t *out_data, uint16_t length);
 
@@ -147,6 +149,10 @@ void update_assistant_pointers(uint8_t new_phy_index)
         unpack_packet_fnc = &unpack_packet_base;
         prepare_packet_fnc = &prepare_packet_base;
       }
+      break;
+    case LONGRANGE:
+      unpack_packet_fnc = &unpack_packet_longrange;
+      prepare_packet_fnc = &prepare_packet_longrange;
       break;
     default:
       unpack_packet_fnc = &unpack_packet_base;
@@ -484,6 +490,53 @@ void prepare_packet_sidewalk(RAIL_Handle_t rail_handle, uint8_t *out_data, uint1
   if (print_packet_info) {
     #if defined(SL_CATALOG_APP_LOG_PRESENT)
     app_log_info("SideWalk Packet is ready, %d bytes written with %d fcsType and %d whitening\n ", bytes_written_in_fifo, sidewalk_fcs_type, sidewalk_whitening);
+    #endif
+  }
+}
+
+/******************************************************************************
+ * The API helps to unpack the received packet, point to the payload and returns the length.
+ *****************************************************************************/
+uint16_t unpack_packet_longrange(uint8_t *rx_destination, const RAIL_RxPacketInfo_t *packet_information, uint8_t **start_of_payload)
+{
+  uint16_t payload_size = 0;
+
+  RAIL_CopyRxPacket(rx_destination, packet_information);
+  *start_of_payload
+    = sl_rail_sdk_802154_packet_unpack_longrange_data_frame(packet_information,
+                                                            &payload_size,
+                                                            rx_destination);
+  if (print_packet_info) {
+    #if defined(SL_CATALOG_APP_LOG_PRESENT)
+    app_log_info("Long Range Packet is ready, %d bytes payload read\n ", payload_size);
+    #endif
+  }
+  return payload_size;
+}
+
+/******************************************************************************
+ * The API prepares the packet for sending and load it in the RAIL TX FIFO
+ *****************************************************************************/
+void prepare_packet_longrange(RAIL_Handle_t rail_handle, uint8_t *out_data, uint16_t length)
+{
+  // Check if write fifo has written all bytes
+  uint16_t bytes_written_in_fifo = 0;
+  uint16_t packet_size = 0U;
+  uint8_t tx_frame_buffer[256];
+  sl_rail_sdk_802154_packet_pack_longrange_data_frame(length,
+                                                      out_data,
+                                                      &packet_size,
+                                                      tx_frame_buffer);
+  bytes_written_in_fifo = RAIL_WriteTxFifo(rail_handle, tx_frame_buffer, packet_size, true);
+  #if defined(SL_CATALOG_APP_ASSERT_PRESENT)
+  app_assert(bytes_written_in_fifo == packet_size,
+             "RAIL_WriteTxFifo() failed to write in fifo (%d bytes instead of %d bytes)\n",
+             bytes_written_in_fifo,
+             packet_size);
+  #endif
+  if (print_packet_info) {
+    #if defined(SL_CATALOG_APP_LOG_PRESENT)
+    app_log_info("Long Range Packet is ready, %d bytes written\n ", bytes_written_in_fifo);
     #endif
   }
 }

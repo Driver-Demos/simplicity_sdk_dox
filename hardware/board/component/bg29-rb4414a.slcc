@@ -18,9 +18,9 @@
   - name: SL_KIT_NAME
     value: '"BG29-RB4414A"'
   - name: SL_KIT_REV
-    value: '"A00"'
+    value: '"A01"'
 - tag:
   - kit:opn:BG29-RB4414A
   - kit:pn:RB4414
   - kit:variant:A
-  - kit:revision:A00
+  - kit:revision:A01

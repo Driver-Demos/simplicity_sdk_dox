@@ -29,7 +29,7 @@
 #include "sl_wisun_trace_api.h"
 #include "rail_features.h"
 
-#ifdef WISUN_FAN_CERTIFICATION
+#ifdef SL_CATALOG_WISUN_FAN_CERTIFICATION_PRESENT
 
   // Defaults for Wi-SUN FAN Certification.
 
@@ -41,7 +41,7 @@
   #define APP_SETTINGS_WISUN_DEFAULT_CHAN_PLAN_ID  1
   #define APP_SETTINGS_WISUN_DEFAULT_PHY_MODE_ID  2
   #define APP_SETTINGS_WISUN_DEFAULT_NETWORK_SIZE  SL_WISUN_NETWORK_SIZE_CERTIFICATION
-  #define APP_SETTINGS_WISUN_DEFAULT_ALLOWED_CHANNELS  "0"
+  #define APP_SETTINGS_WISUN_DEFAULT_ALLOWED_CHANNELS  "10"
 
 #elif defined SL_CATALOG_WISUN_CONFIG_PRESENT
 
@@ -144,6 +144,7 @@
 #define APP_SETTINGS_WISUN_DEFAULT_STF_LENGTH 4
 #define APP_SETTINGS_WISUN_DEFAULT_PREAMBLE_LENGTH 56
 #define APP_SETTINGS_WISUN_NEIGHBOR_TABLE_SIZE 22
+#define APP_SETTINGS_WISUN_DEFAULT_PREFERRED_PAN_ID 0xFFFF
 #define APP_SETTINGS_WISUN_DEFAULT_KEYCHAIN SL_WISUN_KEYCHAIN_AUTOMATIC
 #define APP_SETTINGS_WISUN_DEFAULT_KEYCHAIN_INDEX 0
 
@@ -233,6 +234,7 @@ static const app_settings_wisun_t app_settings_wisun_default = {
   .stf_length = APP_SETTINGS_WISUN_DEFAULT_STF_LENGTH,
   .preamble_length = APP_SETTINGS_WISUN_DEFAULT_PREAMBLE_LENGTH,
   .neighbor_table_size = APP_SETTINGS_WISUN_NEIGHBOR_TABLE_SIZE,
+  .preferred_pan_id = APP_SETTINGS_WISUN_DEFAULT_PREFERRED_PAN_ID,
   .keychain = APP_SETTINGS_WISUN_DEFAULT_KEYCHAIN,
   .keychain_index = APP_SETTINGS_WISUN_DEFAULT_KEYCHAIN_INDEX,
   .direct_connect_pmk = { 0x34, 0xba, 0x32, 0x26, 0xa0, 0xb2, 0xad, 0x66, 0x7c, 0x9f, 0x66, 0x02, 0xe5, 0xdb, 0x75, 0x77,
@@ -401,6 +403,7 @@ static const app_enum_t app_settings_wisun_regulation_enum[] =
   { "none", SL_WISUN_REGULATION_NONE },
   { "arib", SL_WISUN_REGULATION_ARIB },
   { "wpc", SL_WISUN_REGULATION_WPC },
+  { "etsi", SL_WISUN_REGULATION_ETSI },
   { NULL, 0 }
 };
 
@@ -544,6 +547,9 @@ static sl_status_t app_settings_set_tx_power(const char *value_str,
 static sl_status_t app_settings_get_tx_power(char *value_str,
                                              const char *key_str,
                                              const app_settings_entry_t *entry);
+static sl_status_t app_settings_set_preferred_pan(const char *value_str,
+                                                  const char *key_str,
+                                                  const app_settings_entry_t *entry);
 
 const app_settings_entry_t app_settings_entries[] =
 {
@@ -1252,6 +1258,19 @@ const app_settings_entry_t app_settings_entries[] =
     .set_handler = app_settings_set_integer,
     .get_handler = app_settings_get_integer,
     .description = "Neighbor table size [uint8]"
+  },
+  {
+    .key = "preferred_pan_id",
+    .domain = app_settings_domain_wisun,
+    .value_size = APP_SETTINGS_VALUE_SIZE_UINT16,
+    .input = APP_SETTINGS_INPUT_FLAG_DEFAULT,
+    .output = APP_SETTINGS_OUTPUT_FLAG_DEFAULT,
+    .value = &app_settings_wisun.preferred_pan_id,
+    .input_enum_list = NULL,
+    .output_enum_list = NULL,
+    .set_handler = app_settings_set_preferred_pan,
+    .get_handler = app_settings_get_integer,
+    .description = "Preferred PAN ID [uint16]"
   },
   {
     .key = "identifier",
@@ -3350,4 +3369,41 @@ static sl_status_t app_settings_get_tx_power(char *value_str,
   }
 
   return status;
+}
+
+static sl_status_t app_settings_set_preferred_pan(const char *value_str,
+                                                  const char *key_str,
+                                                  const app_settings_entry_t *entry)
+{
+  (void)key_str;
+  sl_status_t ret;
+  sl_wisun_join_state_t join_state;
+  uint32_t value;
+
+  ret = app_util_get_integer(&value,
+                             value_str,
+                             entry->input_enum_list,
+                             entry->input & APP_SETTINGS_INPUT_FLAG_SIGNED);
+
+  if (ret == SL_STATUS_OK) {
+    app_settings_wisun.preferred_pan_id = (uint16_t)value;
+  } else {
+    return ret;
+  }
+
+  ret = sl_wisun_get_join_state(&join_state);
+  if (ret != SL_STATUS_OK) {
+    return ret;
+  }
+
+  if (join_state != SL_WISUN_JOIN_STATE_DISCONNECTED && join_state != SL_WISUN_JOIN_STATE_DISCONNECTING) {
+    ret = sl_wisun_set_preferred_pan(app_settings_wisun.preferred_pan_id);
+    if (ret == SL_STATUS_OK) {
+      printf("[Preferred PAN set]\r\n");
+    } else {
+      printf("[Failed: unable to set preferred PAN: %lu]\r\n", ret);
+    }
+  }
+
+  return ret;
 }

@@ -22,6 +22,20 @@
   - name: hardware_board_supports_wstk_lcd
   - name: hardware_board_has_vcom
   - name: hardware_board_has_spiflash
+  - name: hardware_board_has_exp_5
+  - name: hardware_board_has_exp_7
+  - name: hardware_board_has_exp_11
+  - name: hardware_board_has_exp_13
+  - name: hardware_board_has_exp_12
+  - name: hardware_board_has_exp_14
+  - name: hardware_board_has_exp_3
+  - name: hardware_board_has_exp_10
+  - name: hardware_board_has_exp_4
+  - name: hardware_board_has_exp_6
+  - name: hardware_board_has_exp_8
+  - name: hardware_board_has_exp_15
+  - name: hardware_board_has_exp_16
+  - name: hardware_board_has_exp_9
   - name: hardware_board_has_spi
   - name: hardware_board_has_uart
   - name: hardware_board_has_i2c
@@ -50,7 +64,7 @@
     instance:
     - btn0
     - btn1
-  - id: mx25_flash_shutdown_usart
+  - id: mx25_flash_shutdown_eusart
   - id: bootloader_spi_controller_usart_driver
   - id: bootloader_spi_peripheral_usart_driver
 - template_contribution:

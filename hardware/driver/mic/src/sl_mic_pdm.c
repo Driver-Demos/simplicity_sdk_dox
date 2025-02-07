@@ -39,6 +39,10 @@
 #include "sl_sleeptimer.h"
 #include "sl_device_peripheral.h"
 
+#if (defined(SL_CATALOG_POWER_MANAGER_PRESENT))
+#include "sl_power_manager.h"
+#endif
+
 static bool dma_complete(unsigned int channel, unsigned int sequence_no, void *user_param);
 
 // Local variables
@@ -184,6 +188,11 @@ sl_status_t sl_mic_init(uint32_t sample_rate, uint8_t n_channels)
     dma_descriptor[1].xfer.size = ldmaCtrlSizeHalf;
   }
 
+#if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
+  //Add EM1 request to use LDMA
+  sl_power_manager_add_em_requirement(SL_POWER_MANAGER_EM1);
+#endif
+
   reading_samples_to_buffer = false;
   streaming_in_progress = false;
   num_channels = n_channels;
@@ -281,6 +290,11 @@ sl_status_t sl_mic_deinit(void)
 
   /* Free resources */
   DMADRV_FreeChannel(dma_channel_id);
+
+#if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
+  //Remove EM1 request
+  sl_power_manager_remove_em_requirement(SL_POWER_MANAGER_EM1);
+#endif
 
   mic_running = false;
   initialized = false;

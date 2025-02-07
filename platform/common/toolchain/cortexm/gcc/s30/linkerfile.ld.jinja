@@ -73,18 +73,64 @@
   {%- endif %}
 {%- endif %}
 
-{% if axip_region0_flash_size_overhead is defined %}
-{%- set flash_size = flash_size - axip_region0_flash_size_overhead | sum %}
-{%- if memory_flash_size is defined %}
-    {%- set memory_flash_size = memory_flash_size - axip_region0_flash_size_overhead | sum %}
-{%- endif %}
+{#-
+  Code Region 0 is usually the bootloader region. The default logical size is 32kb.
+#}
+{%- if axip_region0_enabled is defined %}
+  {%- if code_region0_size is defined %}
+    {%- set logical_code_region0_size = code_region0_size | first %}
+  {%- else %}
+    {%- set logical_code_region0_size = 32768 %}
+  {%- endif %}
+  {%- set logical_code_region0_size = ((logical_code_region0_size // 32768) * 32768) %}
+
+  {#-
+    With AXiP enabled, every 8 logical pages effectively uses 9 physical pages.
+  #}
+  {%- set physical_code_region0_size = ((9 * logical_code_region0_size) // 8)  %}
+  {%- set region0_axip_overhead = physical_code_region0_size - logical_code_region0_size  %}
 {%- endif %}
 
-{% if axip_region1_flash_size_overhead is defined %}
-{%- set flash_size = flash_size - axip_region1_flash_size_overhead | sum %}
-{%- if memory_flash_size is defined %}
-    {%- set memory_flash_size = memory_flash_size - axip_region1_flash_size_overhead | sum %}
+{#-
+  Code Region 1 is usually the app region. The default logical size depends on
+  the part's flash size. Those default sizes are defined in the lookup table below.
+#}
+{%- if axip_region1_enabled is defined %}
+  {%- if code_region1_size is defined %}
+    {%- set logical_code_region1_size = code_region1_size | first %}
+  {%- else %}
+
+    {#-
+      Code Region 1 size's look-up table.
+    #}
+    {%- if (flash_size == 1900544) %} {#- 2MB #}
+      {%- set logical_code_region1_size = 884736 %}
+    {%- elif (flash_size == 2949120) %} {#- 3MB #}
+      {%- set logical_code_region1_size = 1441792 %}
+    {%- elif (flash_size == 3997696) %} {#- 4MB #}
+      {%- set logical_code_region1_size = 2031616 %}
+    {%- else %}
+      {%- set logical_code_region1_size = 2031616 %}
+    {%- endif %}
+
+  {%- endif %}
+  {%- set logical_code_region1_size = ((logical_code_region1_size // 32768) * 32768) %}
+
+  {#-
+    With AXiP enabled, every 8 logical pages effectively uses 9 physical pages.
+  #}
+  {%- set physical_code_region1_size = ((9 * logical_code_region1_size) // 8)  %}
+  {%- set region1_axip_overhead = physical_code_region1_size - logical_code_region1_size  %}
 {%- endif %}
+
+{#-
+  Reduce the available flash size taking the Code Regions' AXiP overhead into account.
+#}
+{%- if region0_axip_overhead is defined %}
+  {%- set flash_size = flash_size - region0_axip_overhead %}
+{%- endif %}
+{%- if region1_axip_overhead is defined %}
+    {%- set flash_size = flash_size - region1_axip_overhead %}
 {%- endif %}
 
 {#-
@@ -137,6 +183,11 @@
   {%- endif %}
 {%- endif %}
 
+{%- if static_tokens_enable is defined %}
+  {%- set flash_lockbits_size = lockbits_size | first %}
+  {%- set app_flash_size = app_flash_size - flash_lockbits_size %}
+{%- endif %}
+
 {% if tz_non_secure_execution is defined %}
   {%- set app_flash_start_offset = app_flash_start - flash_addr %}
   {#-
@@ -152,6 +203,13 @@
   #}
   {%- set app_flash_start = app_flash_start + secure_app_flash_size %}
   {%- set app_flash_size = app_flash_size - secure_app_flash_size %}
+{%- endif %}
+
+{% if matter_certificate_store is defined %}
+  {#-
+    Currently matter certificates are stored at manufacturing time in the last flash page.
+  #}
+  {%- set app_flash_size = app_flash_size - flash_page_size %}
 {%- endif %}
 
 {%- set rtt = 0 %}

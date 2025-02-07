@@ -19,6 +19,7 @@
   - name: hardware_board_rb
   - name: hardware_board_has_vcom
   - name: hardware_board_has_spiflash
+  - name: hardware_board_has_exp_16
   - name: board_config_clock_manager
   - name: hardware_board_has_hfxo_freq_38.4mhz
   - name: hardware_board_has_hfxo

@@ -191,6 +191,12 @@ HIDDEN const RAIL_IEEE802154_Config_t ieee_802154_config = {
   false,                                  // defaultFramePendingInOutgoingAcks
 };
 
+SL_WEAK void sl_rail_mux_invalid_rx_channel_detected_cb(int new_rx_channel, int old_rx_channel)
+{
+  //if(network up)
+  EFM_ASSERT(false);
+}
+
 //------------------------------------------------------------------------------
 // Internal APIs
 
@@ -599,6 +605,15 @@ RAIL_Status_t sl_rail_mux_StartRx(RAIL_Handle_t railHandle,
 
   // Check to ensure lock is not active before acting on startRx
   if ( check_lock_permissions(context_index) ) {
+    #ifndef SL_CATALOG_RAIL_UTIL_IEEE802154_FAST_CHANNEL_SWITCHING_PRESENT
+    if (!fn_get_context_flag_by_index(context_index, RAIL_MUX_PROTOCOL_FLAGS_LOCK_ACTIVE)) {
+      if (rx_channel != INVALID_CHANNEL && rx_channel != channel) {
+        // this protocol context rx channel is different from the other protocol context rx channel
+        sl_rail_mux_invalid_rx_channel_detected_cb(channel, rx_channel);
+      }
+    }
+    #endif
+
     rx_channel = channel;
     fn_update_802154_address_filtering_table();
     CONFIGURE_RX_CHANNEL_SWITCHING(mux_rail_handle, channel_switching_cfg);
@@ -1533,12 +1548,13 @@ void sl_rail_mux_set_coex_counter_handler(RAIL_Handle_t railHandle,
 
 void sl_rail_util_coex_counter_on_event(sl_rail_util_coex_event_t event)
 {
-  uint8_t context_index = fn_get_active_tx_context_index();
+  uint8_t i;
 
-  EFM_ASSERT(context_index < SUPPORTED_PROTOCOL_COUNT);
-
-  if (protocol_context[context_index].coex_counter_handler != NULL) {
-    (*protocol_context[context_index].coex_counter_handler)(event);
+  for (i = 0; i < SUPPORTED_PROTOCOL_COUNT; i++) {
+    // we don't have a way to know which protocol is currently supposed to receive the coex event
+    if (protocol_context[i].coex_counter_handler != NULL) {
+      (*protocol_context[i].coex_counter_handler)(event);
+    }
   }
 }
 

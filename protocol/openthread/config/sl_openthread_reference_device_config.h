@@ -269,6 +269,11 @@
 #define OPENTHREAD_CONFIG_TMF_NETDATA_SERVICE_ENABLE    1
 #endif
 // </e>
+// <e>  Uptime of OpenThread instance
+#ifndef OPENTHREAD_CONFIG_UPTIME_ENABLE
+#define OPENTHREAD_CONFIG_UPTIME_ENABLE             1
+#endif
+// </e>
 // <e>  RAM (volatile-only storage)
 #ifndef OPENTHREAD_SETTINGS_RAM
 #define OPENTHREAD_SETTINGS_RAM                     0

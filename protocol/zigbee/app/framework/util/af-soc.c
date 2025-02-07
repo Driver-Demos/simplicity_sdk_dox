@@ -276,13 +276,7 @@ uint8_t sl_zigbee_af_get_stack_profile(void)
 uint8_t sli_zigbee_stack_get_endpoint(uint8_t index)
 {
   uint8_t ep;
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_acquire_lock();
-#endif
   ep = sli_zigbee_af_get_endpoint(index);
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_release_lock();
-#endif // SL_CATALOG_KERNEL_PRESENT
   return ep;
 }
 
@@ -291,13 +285,7 @@ bool sli_zigbee_stack_get_endpoint_description(uint8_t endpoint,
                                                sl_zigbee_endpoint_description_t *result)
 {
   bool status;
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_acquire_lock();
-#endif
   status = sli_zigbee_af_get_endpoint_description(endpoint, result);
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_release_lock();
-#endif
   return status;
 }
 
@@ -308,13 +296,7 @@ uint16_t sli_zigbee_stack_get_endpoint_cluster(uint8_t endpoint,
                                                uint8_t listIndex)
 {
   uint16_t cluster;
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_acquire_lock();
-#endif
   cluster = sli_zigbee_af_get_endpoint_cluster(endpoint, listId, listIndex);
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_release_lock();
-#endif
   return cluster;
 }
 
@@ -433,12 +415,6 @@ void sli_zigbee_af_print_ezsp_endpoint_flags(uint8_t endpoint)
 uint8_t sli_zigbee_stack_get_endpoint_count(void)
 {
   uint8_t numberOfEndpoints;
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_acquire_lock();
-#endif
   numberOfEndpoints = sl_zigbee_af_endpoint_count();
-#ifdef SL_CATALOG_KERNEL_PRESENT
-  sl_zigbee_af_release_lock();
-#endif
   return numberOfEndpoints;
 }

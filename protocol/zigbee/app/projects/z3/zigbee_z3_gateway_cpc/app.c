@@ -137,6 +137,12 @@ void sl_zigbee_af_main_init_cb(void)
                                       zcl_ias_ace_cluster_server_command_handler);
 }
 
+void sl_zigbee_af_mux_invalid_rx_cb(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+  sl_zigbee_af_core_println("WARNING: MUX detected invalid RX attempts on both %d and %d channels",
+                            new_rx_channel, old_rx_channel);
+}
+
 #ifdef SL_CATALOG_CLI_PRESENT
 //-------------------------------------
 // Custom CLI commands and related code

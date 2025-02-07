@@ -322,7 +322,7 @@ uint8_t sl_pwm_get_duty_cycle(sl_pwm_instance_t *pwm)
   uint32_t compare = TIMER_CaptureGet(pwm->timer, pwm->channel);
 #else
   uint32_t top = sl_hal_timer_get_top(pwm->timer);
-  uint32_t compare = sl_hal_timer_channel_get_capture(pwm->timer, pwm->channel);
+  uint32_t compare = sl_hal_timer_channel_get_compare(pwm->timer, pwm->channel);
 #endif
 
   uint8_t percent = (uint8_t)((compare * 100) / top);

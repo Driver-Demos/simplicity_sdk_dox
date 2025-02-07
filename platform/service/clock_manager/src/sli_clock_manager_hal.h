@@ -162,11 +162,13 @@ sl_status_t sli_clock_manager_hal_get_rco_calibration_count(uint32_t *count);
 /***************************************************************************//**
  * Sets SYSCLK clock source.
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_clock_manager_hal_set_sysclk_source(sl_oscillator_t source);
 
 /***************************************************************************//**
  * Gets SYSCLK clock source.
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_clock_manager_hal_get_sysclk_source(sl_oscillator_t *source);
 
 /***************************************************************************//**
@@ -175,19 +177,19 @@ sl_status_t sli_clock_manager_hal_get_sysclk_source(sl_oscillator_t *source);
 sl_status_t sli_clock_manager_hal_wait_usbpll(void);
 
 /***************************************************************************//**
- * Updates QSPI clock and reference clock.
+ * Sets the external FLASH reference clock.
  *
  * @note This API is not thread-safe and should therefore not be called
-         across multiple tasks.
+ *       across multiple tasks.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
-sl_status_t sli_clock_manager_hal_update_qspi_clk(sl_oscillator_t oscillator);
+sl_status_t sli_clock_manager_hal_set_ext_flash_clk(sl_oscillator_t oscillator);
 
 /***************************************************************************//**
- * Gets QSPI clock source.
+ * Gets the external FLASH clock source.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
-sl_status_t sli_clock_manager_get_current_qspi_clk(sl_oscillator_t *oscillator);
+sl_status_t sli_clock_manager_hal_get_ext_flash_clk(sl_oscillator_t *oscillator);
 
 #ifdef __cplusplus
 }

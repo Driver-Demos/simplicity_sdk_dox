@@ -34,7 +34,7 @@ provides:
 
 define:
   - name: SL_CODE_COMPONENT_PSEC_OSAL
-    value: psec_osal  
+    value: psec_osal
 
 template_contribution:
   - name: code_classification_components

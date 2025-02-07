@@ -446,8 +446,10 @@ class calc_softmodem_sol(ICalculator):
             fdec0_out_hz = adc_freq_actual/8.0/dec0_actual
 
             if afc_correction == 2: #For now we always choose this
-                afc_mixer_ratio_att = 16
-                afc_mixer_ratio_gain = round(1302*lodiv_actual/xtal_frequency_hz*(2**(13+afc_mixer_ratio_att-ofdm_option_index)))
+                for afc_mixer_ratio_att in [16,15]:
+                    afc_mixer_ratio_gain = round(1302*lodiv_actual/xtal_frequency_hz*(2**(13+afc_mixer_ratio_att-ofdm_option_index)))
+                    if afc_mixer_ratio_gain <= 65535:  # no saturation occurs
+                        break
             else:
                 afc_mixer_ratio_att = 15
                 afc_mixer_ratio_gain = round(1302/fdec0_out_hz*(2**(14+afc_mixer_ratio_att-ofdm_option_index)))

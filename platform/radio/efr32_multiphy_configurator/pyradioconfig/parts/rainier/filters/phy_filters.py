@@ -10,6 +10,8 @@ class PhyFiltersRainier(IPhyFilter):
                            'Phys_Internal_Base_ValOnly',
                            'Phys_Internal_Connect',
                            'Phys_Internal_Base_Customer_Signify',
+                           'Phys_Internal_Base_FastSw',
+                           'Phys_Internal_Base_DutyCycle'
                            ]
 
     # Studio white list (these PHYs show in Studio as proprietary starting points)

@@ -60,7 +60,7 @@
 #include "sl_wisun_br_dhcpv6_server.h"
 #endif
 
-#define APP_TASK_PRIORITY osPriorityLow3  // Lowest priority in the system for all CLI related task
+#define APP_TASK_PRIORITY osPriorityLow1  // (CLI related task) must be the lowest priority in the system
 #define APP_TASK_STACK_SIZE 500 // in units of CPU_INT32U
 
 #define APP_ICMPV6_TYPE_ECHO_REQUEST 128
@@ -76,7 +76,7 @@
 #define APP_CERTIFICATE_INDEX_ALL 255
 
 #define APP_SERVICE_TASK_NAME  "app_service_task"
-#define APP_SERVICE_TASK_PRIORITY  osPriorityLow3
+#define APP_SERVICE_TASK_PRIORITY  osPriorityBelowNormal1
 #define APP_SERVICE_TASK_STACK_SIZE  500 // in units of CPU_INT32U
 
 SL_PACK_START(1)
@@ -271,7 +271,7 @@ static sl_slist_node_t *app_socket_entry_list;
 static app_socket_entry_t app_socket_entries[APP_MAX_SOCKET_ENTRIES];
 
 static bool app_started;
-static int app_dhcpv6_socket;
+static int app_dhcpv6_socket = SOCKET_INVALID_ID;
 
 static void app_handle_join_state_ind(sl_wisun_evt_t *evt)
 {
@@ -429,6 +429,12 @@ static void app_handle_socket_data_ind(sl_wisun_evt_t *evt)
 
 static void app_handle_socket_data_available_ind(sl_wisun_evt_t *evt)
 {
+  app_socket_entry_t *entry;
+
+  entry = app_socket_entry(evt->evt.socket_data_sent.socket_id);
+  if (!entry) {
+    return;
+  }
   printf("[Data available: %lu,%u]\r\n",
          evt->evt.socket_data_available.socket_id,
          evt->evt.socket_data_available.data_length);
@@ -544,9 +550,9 @@ static void app_handle_dhcp_vendor_data_ind(sl_wisun_evt_t *evt)
 static void app_handle_br_stopped_ind(sl_wisun_evt_t *evt)
 {
   if (evt->evt.br_stopped.status == SL_STATUS_OK) {
-    printf("[Border Router stopped]");
+    printf("[Border Router stopped]\r\n");
   } else {
-    printf("[Failed to stop Border Router]");
+    printf("[Failed to stop Border Router]\r\n");
   }
 }
 
@@ -1319,6 +1325,23 @@ cleanup:
     printf("[Set %d trace groups]\r\n", group_count);
   } else {
     printf("[Error when setting trace level: %lu]\r\n", ret);
+  }
+
+  app_wisun_cli_mutex_unlock();
+}
+
+void app_clear_credential_cache(sl_cli_command_arg_t *arguments)
+{
+  sl_status_t ret;
+  (void)arguments;
+
+  app_wisun_cli_mutex_lock();
+
+  ret = sl_wisun_clear_credential_cache();
+  if (ret == SL_STATUS_OK) {
+    printf("[Credential cache cleared]\r\n");
+  } else {
+    printf("[Credential cache clear failed: %lu]\r\n", ret);
   }
 
   app_wisun_cli_mutex_unlock();

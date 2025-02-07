@@ -67,7 +67,7 @@
 
 // USART0 TX on PA00
 #ifndef SL_SERIAL_UART_TX_PORT
-#define SL_SERIAL_UART_TX_PORT                   gpioPortA
+#define SL_SERIAL_UART_TX_PORT                   SL_GPIO_PORT_A
 #endif
 #ifndef SL_SERIAL_UART_TX_PIN
 #define SL_SERIAL_UART_TX_PIN                    0
@@ -75,7 +75,7 @@
 
 // USART0 RX on PA01
 #ifndef SL_SERIAL_UART_RX_PORT
-#define SL_SERIAL_UART_RX_PORT                   gpioPortA
+#define SL_SERIAL_UART_RX_PORT                   SL_GPIO_PORT_A
 #endif
 #ifndef SL_SERIAL_UART_RX_PIN
 #define SL_SERIAL_UART_RX_PIN                    1
@@ -87,7 +87,7 @@
 
 // $[GPIO_SL_VCOM_ENABLE]
 #ifndef SL_VCOM_ENABLE_PORT
-#define SL_VCOM_ENABLE_PORT                      gpioPortB
+#define SL_VCOM_ENABLE_PORT                      SL_GPIO_PORT_B
 #endif
 #ifndef SL_VCOM_ENABLE_PIN
 #define SL_VCOM_ENABLE_PIN                       0

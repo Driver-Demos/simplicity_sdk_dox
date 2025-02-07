@@ -43,16 +43,11 @@
 // In non-Series2 devices the top page  of flash is free for all existing prior uses.
 #define LOCKBITS_BASE ((FLASH_BASE + FLASH_SIZE) - FLASH_PAGE_SIZE)
 #elif defined(_SILICON_LABS_32B_SERIES_3)
-// In Series3, USER DATA and LOCK BITS region are defined in the Host data region
-// 3 flash pages have been reserved.
-// Outof which 1 flash page (at the end of flash) is reserved for USER DATA and
-// 2 flash pages reserved for LOCKBITS DATA.
+// In Series3, LOCK BITS region is defined in the Host data region,
+// 2 flash pages have been reserved for LOCKBITS DATA(at the end of flash).
 #define NUM_OF_FLASH_PAGES            2U
-#define USER_DATA_SIZE                FLASH_PAGE_SIZE
 #define LOCKBITS_DATA_SIZE            (NUM_OF_FLASH_PAGES * FLASH_PAGE_SIZE)
-#define USERDATA_BASE                 (FLASH_BASE + FLASH_SIZE - USER_DATA_SIZE)
-#define USERDATA_END                  (USERDATA_BASE + USER_DATA_SIZE)
-#define LOCKBITS_BASE                 (USERDATA_BASE - LOCKBITS_DATA_SIZE)
+#define LOCKBITS_BASE                 (FLASH_BASE + FLASH_SIZE - LOCKBITS_DATA_SIZE)
 #define LOCKBITS_END                  (LOCKBITS_BASE + LOCKBITS_DATA_SIZE)
 #else
   #error The flash map of manufacturing tokens is not configured for this device

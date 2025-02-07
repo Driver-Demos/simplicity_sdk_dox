@@ -154,17 +154,18 @@ FUNCTION_SCOPE sl_status_t init_hfxo(void)
 
   int ctune = -1;
 
-#ifndef _SILICON_LABS_32B_SERIES_2_CONFIG_9
 #if defined(_DEVINFO_MODXOCAL_HFXOCTUNEXIANA_MASK)
   // Use HFXO tuning value from DEVINFO if available (PCB modules)
   if ((DEVINFO->MODULEINFO & _DEVINFO_MODULEINFO_HFXOCALVAL_MASK) == 0) {
     ctune = DEVINFO->MODXOCAL & _DEVINFO_MODXOCAL_HFXOCTUNEXIANA_MASK;
   }
 #endif
-#endif
 
   // Use HFXO tuning value from MFG token in UD page if not already set
   if ((ctune == -1)
+#if defined(SL_CLOCK_MANAGER_CTUNE_MFG_HFXO_EN)
+      && (SL_CLOCK_MANAGER_CTUNE_MFG_HFXO_EN == 1)
+#endif
       && (MFG_CTUNE_HFXO_VAL <= (_HFXO_XTALCTRL_CTUNEXIANA_MASK >> _HFXO_XTALCTRL_CTUNEXIANA_SHIFT))) {
     ctune = MFG_CTUNE_HFXO_VAL;
   }
@@ -307,6 +308,9 @@ FUNCTION_SCOPE sl_status_t init_lfxo(void)
 #endif
 
   if ((clock_manager_lfxo_init.capTune == 0xFF)
+#if defined(SL_CLOCK_MANAGER_CTUNE_MFG_LFXO_EN)
+      && (SL_CLOCK_MANAGER_CTUNE_MFG_LFXO_EN == 1)
+#endif
       && (MFG_CTUNE_LFXO_VAL <= (_LFXO_CAL_CAPTUNE_MASK >> _LFXO_CAL_CAPTUNE_SHIFT))) {
     clock_manager_lfxo_init.capTune = MFG_CTUNE_LFXO_VAL;
   }

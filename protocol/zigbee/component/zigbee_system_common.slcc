@@ -52,6 +52,7 @@ requires:
   - name: rail_lib_multiprotocol
     condition:
       - ot_stack
+      - rail_util_ieee802154_fast_channel_switching
   # Free RTOS Heap 3 implementation matches Micrium's the closest
   # Generally, we default to Heap 4. Therefore, we explicitly set this
   # to heap 3.
@@ -157,6 +158,13 @@ toolchain_settings:
     value: -Werror
     condition:
       - zigbee_pro_stack_common_source
+  # lto sometimes inlines the weak definition and bypass the strong one,
+  # resulting in run-time failures
+  # this flag helps to disable funtion inlining globally when lto is used
+  - option: gcc_compiler_option
+    value: -fno-inline
+    condition:
+      - toolchain_lto
 
 template_file:
   - path: protocol/zigbee/app/framework/common/template/zigbee_stack_callback_dispatcher.h.jinja

@@ -11,6 +11,7 @@ class Phys_Studio_Sigfox_Tx_Ocelot(IPhy):
         phy.profile_inputs.xtal_frequency_hz.value = 39_000_000
         phy.profile_inputs.base_frequency_hz.value = 868_034_000
         phy.profile_inputs.channel_spacing_hz.value = 100
+        phy.profile_inputs.fixed_length_size.value = 16
 
         return phy
 
@@ -23,6 +24,7 @@ class Phys_Studio_Sigfox_Tx_Ocelot(IPhy):
         phy.profile_inputs.xtal_frequency_hz.value = 39_000_000
         phy.profile_inputs.base_frequency_hz.value = 905_104_000
         phy.profile_inputs.channel_spacing_hz.value = 100
+        phy.profile_inputs.fixed_length_size.value = 16
 
         return phy
 

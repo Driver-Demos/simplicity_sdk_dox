@@ -272,11 +272,6 @@ struct RAIL_ChannelConfigEntryAttr {
 
 #if (_SILICON_LABS_32B_SERIES_3_CONFIG == 301) || (_SILICON_LABS_32B_SERIES_3_CONFIG == 300)
 /**
- * The maximum valid value for the \ref RAIL_TxPowerLevel_t when in \ref
- * RAIL_TX_POWER_MODE_2P4GIG_HP or \ref RAIL_TX_POWER_MODE_2P4GIG_LP modes.
- */
-#define RAIL_TX_POWER_LEVEL_2P4GIG_HP_LP_MAX     (95U)
-/**
  * The minimum valid value for the \ref RAIL_TxPowerLevel_t when in \ref
  * RAIL_TX_POWER_MODE_2P4GIG_HP or \ref RAIL_TX_POWER_MODE_2P4GIG_LP modes.
  */
@@ -284,11 +279,11 @@ struct RAIL_ChannelConfigEntryAttr {
 /** Legacy define for High Power (HP) and Low Power (LP) modes. */
 #define RAIL_TX_POWER_LEVEL_2P4_LP_MIN        (RAIL_TX_POWER_LEVEL_2P4GIG_HP_LP_MIN)
 /** Legacy define for High Power (HP) and Low Power (LP) modes. */
-#define RAIL_TX_POWER_LEVEL_2P4_LP_MAX        (RAIL_TX_POWER_LEVEL_2P4GIG_HP_LP_MAX)
+#define RAIL_TX_POWER_LEVEL_2P4_LP_MAX        (31U)
 /** Legacy define for High Power (HP) and Low Power (LP) modes. */
 #define RAIL_TX_POWER_LEVEL_2P4_HP_MIN        (RAIL_TX_POWER_LEVEL_2P4GIG_HP_LP_MIN)
 /** Legacy define for High Power (HP) and Low Power (LP) modes. */
-#define RAIL_TX_POWER_LEVEL_2P4_HP_MAX        (RAIL_TX_POWER_LEVEL_2P4GIG_HP_LP_MAX)
+#define RAIL_TX_POWER_LEVEL_2P4_HP_MAX        (95U)
 #else
 #error "RAIL_TX_POWER_LEVEL not defined for this device"
 #endif
@@ -382,7 +377,7 @@ struct RAIL_ChannelConfigEntryAttr {
  * @note Transitions may need to be slower than this when using longer
  *   \ref RAIL_TxPowerConfig_t::rampTime values
  */
-#define RAIL_MINIMUM_TRANSITION_US (100U)
+#define RAIL_MINIMUM_TRANSITION_US (75U)
 
 /**
  * @def RAIL_MAXIMUM_TRANSITION_US

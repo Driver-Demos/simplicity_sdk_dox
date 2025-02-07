@@ -592,6 +592,14 @@ void set_power_level_to_max(bool init)
         tx_power_config_original.mode = SL_RAIL_UTIL_PA_SELECTION_SUBGHZ;
         tx_power_needs_reinit = true;
       }
+#if RAIL_SUPPORTS_OFDM_PA
+      if (channelConfigs[range_test_settings.current_phy]->configs[0].stackInfo[0] == CONNECT
+          || channelConfigs[range_test_settings.current_phy]->configs[0].stackInfo[0] == WISUN) {
+        if (channelConfigs[range_test_settings.current_phy]->configs[0].stackInfo[1] >= 0x20) {
+          tx_power_config_original.mode = SL_RAIL_UTIL_PA_SELECTION_OFDM;
+        }
+      }
+#endif
     } else {
       if (tx_power_config_original.mode != SL_RAIL_UTIL_PA_SELECTION_2P4GHZ) {
         tx_power_config_original.mode = SL_RAIL_UTIL_PA_SELECTION_2P4GHZ;

@@ -54,8 +54,7 @@ bool validate_new_credential_metadata(
   );
 
 /**
- * Validates that a uuid belongs to an existing user
- * User Credential Command Class.
+ * Validates that a UUID belongs to an existing user.
  *
  * @param[in] uuid UUID to check if exists
  *

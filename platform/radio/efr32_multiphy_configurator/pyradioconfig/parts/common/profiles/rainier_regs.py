@@ -103,6 +103,7 @@ def build_modem_regs_rainier(model, profile):
     profile.outputs.append(ModelOutput(model.vars.MODEM_DIGMIXCTRL_DSSSCFECOMBO, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.DIGMIXCTRL.DSSSCFECOMBO'))
 
     profile.outputs.append(ModelOutput(model.vars.MODEM_SYNC3_SYNC3, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.SYNC3.SYNC3'))
+    profile.outputs.append(ModelOutput(model.vars.MODEM_SRCCHF_CHMUTETIMER, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.SRCCHF.CHMUTETIMER'))
 
     profile.outputs.append(ModelOutput(model.vars.MODEM_EHDSSSCTRL_DSSSPMTIMEOUT, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.EHDSSSCTRL.DSSSPMTIMEOUT'))
     profile.outputs.append(ModelOutput(model.vars.MODEM_EHDSSSCTRL_DSSSFRMTIMEOUT, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.EHDSSSCTRL.DSSSFRMTIMEOUT'))
@@ -251,6 +252,9 @@ def build_modem_regs_rainier(model, profile):
     profile.outputs.append(ModelOutput(model.vars.SEQ_MODINDEX_CALC_MODINDEXE_DOUBLED_MODINDEXM, '', ModelOutputType.SVD_REG_FIELD,readable_name='SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.MODINDEXM'))
     profile.outputs.append(ModelOutput(model.vars.SEQ_MODINDEX_CALC_MODINDEXE_DOUBLED_FREQGAINE, '', ModelOutputType.SVD_REG_FIELD,readable_name='SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.FREQGAINE'))
     profile.outputs.append(ModelOutput(model.vars.SEQ_MODINDEX_CALC_MODINDEXE_DOUBLED_FREQGAINM, '', ModelOutputType.SVD_REG_FIELD,readable_name='SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.FREQGAINM'))
+    profile.outputs.append(ModelOutput(model.vars.SEQ_MISC_SYNTH_MODE_TX00D_EN, '', ModelOutputType.SVD_REG_FIELD,readable_name='SEQ.MISC.SYNTH_MODE_TX00D_EN'))
+    profile.outputs.append(ModelOutput(model.vars.MODEM_SPARE_SPARE, '', ModelOutputType.SVD_REG_FIELD, readable_name='MODEM.SPARE.SPARE'))
+
 ## Synth_IF Series 3 Reigsters
 def build_synth_regs_s3(model, profile):
     ## LPF
@@ -356,6 +360,46 @@ def build_synth_regs_s3(model, profile):
   #  profile.outputs.append(ModelOutput(model.vars.RAC_SYCTRL1_SYLODIVSELFP4G82G4TX, '',       ModelOutputType.SVD_REG_FIELD, readable_name='RAC.SYCTRL1.SYLODIVSELFP4G82G4TX'))
   #  profile.outputs.append(ModelOutput(model.vars.RAC_SYMMDCTRL_SYMMDSEL56STG, '',            ModelOutputType.SVD_REG_FIELD, readable_name='RAC.SYMMDCTRL.SYMMDSEL56STG'))
   #  profile.outputs.append(ModelOutput(model.vars.RAC_SYMMDCTRL_SYMMDSEL56STGTX, '',          ModelOutputType.SVD_REG_FIELD, readable_name='RAC.SYMMDCTRL.SYMMDSEL56STGTX'))
+
+
+    # DTIMLOSS feature for fast switch PHY optimization. See https://jira.silabs.com/browse/MCUW_RADIO_CFG-2525
+    profile.outputs.append(ModelOutput(model.vars.MODEM_TRECSCFG_DTIMLOSSEN, '', ModelOutputType.SVD_REG_FIELD,
+                                       readable_name='MODEM.TRECSCFG.DTIMLOSSEN'))
+    profile.outputs.append(ModelOutput(model.vars.MODEM_TRECSCFG_DTIMLOSSTHD, '', ModelOutputType.SVD_REG_FIELD,
+                                       readable_name='MODEM.TRECSCFG.DTIMLOSSTHD'))
+
+    # TODO: Add to lpwh72000 and lpwh74000 when available in register map
+    if not (model.part_family.upper() == 'RAINIER' and model.part_revision in ['A0', 'A1', 'A2']):
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_FASTCWDETECTEN, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.FASTCWDETECTEN'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_FASTSUPERCHIPEN, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.FASTSUPERCHIPEN'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_FASTNARROWPULSEEN, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.FASTNARROWPULSEEN'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_EYEOPENINGMODE, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.EYEOPENINGMODE'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_CWDETECTSTARTWINDOW, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.CWDETECTSTARTWINDOW'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_CWDETECTTHRESHOLD, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.CWDETECTTHRESHOLD'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_SUPERCHIPSTARTWINDOW, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.SUPERCHIPSTARTWINDOW'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_NPULSEFIXEDTHRESHOLD, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.NPULSEFIXEDTHRESHOLD'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJEN, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.NPULSETHRESHADJEN'))
+        profile.outputs.append(
+            ModelOutput(model.vars.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJ, '', ModelOutputType.SVD_REG_FIELD,
+                        readable_name='MODEM.SIFASTDETECTCTRL.NPULSETHRESHADJ'))
 
 def build_syctrl_regs_s3(model, profile):
     profile.outputs.append(ModelOutput(model.vars.RAC_SYCTRL0_SYVCOTRIMIPTAT, '', ModelOutputType.SVD_REG_FIELD, readable_name='RAC.SYCTRL0.SYVCOTRIMIPTAT'))

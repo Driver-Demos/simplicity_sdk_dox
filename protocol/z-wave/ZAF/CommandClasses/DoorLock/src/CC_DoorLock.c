@@ -453,9 +453,9 @@ static void reset(void)
   door_lock_data.lockTimeoutSec = DOOR_LOCK_OPERATION_SET_TIMEOUT_NOT_SUPPORTED;
   door_lock_data.outsideDoorHandleState = 0; /* Handles not being pressed */
   door_lock_data.insideDoorHandleState = 0; /* Handles not being pressed */
-  door_lock_data.condition = 0;
+  door_lock_data.condition = CC_DOOR_LOCK_BOLT_FLAG; // Start with bolt unlocked
 
-  cc_door_lock_bolt_set(false);
+  cc_door_lock_bolt_set((door_lock_data.condition & CC_DOOR_LOCK_BOLT_FLAG) ? false : true);
   cc_door_lock_handle_set(false);
   cc_door_lock_latch_set(false);
 

@@ -193,4 +193,9 @@ Please note the zw_cli_common component will modify the power consumption in cas
     <td>-</td>
     <td>Shows the current Red Green and Blue values. The range is 0-65535 for each component. In case the target does not have RGB LED it shows the LED intensity on a scale 0-255.</td>
 </tr>
+<tr>
+    <th>toggle_led_bulb</th>
+    <td>-</td>
+    <td>Toggle "LED Bulb" on/off</td>
+</tr>
 </table>

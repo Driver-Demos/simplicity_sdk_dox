@@ -13,14 +13,28 @@
 // <usart signal=TX,RX> SERIAL_API
 
 // $[USART_SERIAL_API]
-#define SERIAL_API_PERIPHERAL     USART0
-#define SERIAL_API_PERIPHERAL_NO  0
+#ifndef SERIAL_API_PERIPHERAL
+#define SERIAL_API_PERIPHERAL                    USART0
+#endif
+#ifndef SERIAL_API_PERIPHERAL_NO
+#define SERIAL_API_PERIPHERAL_NO                 0
+#endif
 
-#define SERIAL_API_TX_PORT        gpioPortA
-#define SERIAL_API_TX_PIN         8
+// USART0 TX on PA08
+#ifndef SERIAL_API_TX_PORT
+#define SERIAL_API_TX_PORT                       SL_GPIO_PORT_A
+#endif
+#ifndef SERIAL_API_TX_PIN
+#define SERIAL_API_TX_PIN                        8
+#endif
 
-#define SERIAL_API_RX_PORT        gpioPortA
-#define SERIAL_API_RX_PIN         9
+// USART0 RX on PA09
+#ifndef SERIAL_API_RX_PORT
+#define SERIAL_API_RX_PORT                       SL_GPIO_PORT_A
+#endif
+#ifndef SERIAL_API_RX_PIN
+#define SERIAL_API_RX_PIN                        9
+#endif
 // [USART_SERIAL_API]$
 
 // <<< sl:end pin_tool >>>

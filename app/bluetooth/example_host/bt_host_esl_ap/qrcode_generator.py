@@ -146,6 +146,7 @@ def generate_qrcode(data, height, width):
         abort(-3)
     # Create black and white QR code image
     img = qr.make_image(fill_color="black", back_color="white")
+    img = img.convert("RGBA") # BG-18013: fix regression caused by Pillow module update v11, keeps backward compatibiliy with older Pillow versions
     qr_width, qr_height = img.size
     log.info(f"Generated QR code size: {qr_width}x{qr_height}")
     log.info(f"Scaling it to: {width}x{height}")

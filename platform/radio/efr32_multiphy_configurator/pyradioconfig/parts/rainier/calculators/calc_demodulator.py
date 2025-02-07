@@ -2,6 +2,11 @@ from pyradioconfig.parts.bobcat.calculators.calc_demodulator import Calc_Demodul
 from pycalcmodel.core.variable import ModelVariableFormat, CreateModelVariableEnum
 from enum import Enum
 from math import *
+import numpy as np
+import numpy.matlib
+from scipy import signal as sp
+from pyradioconfig.parts.rainier.calculators.calc_shaping import CalcShapingRainier
+from pyradioconfig.calculator_model_framework.Utils.LogMgr import LogMgr
 
 class CalcDemodulatorRainier(Calc_Demodulator_Bobcat):
 
@@ -313,8 +318,115 @@ class CalcDemodulatorRainier(Calc_Demodulator_Bobcat):
         self._reg_write(model.vars.SEQ_MODEMINFO_SOFTMODEM_EN, soft_modem_used)
         self._reg_write(model.vars.SEQ_MODEMINFO_SPARE2, 0)
 
+    def return_ksi2_ksi3_calc(self, model, ksi1):
+        # get parameters
+        lock_bwsel = model.vars.lock_bwsel.value # use the lock bw
+        bwsel = model.vars.bwsel.value  # use the lock bw
+        osr = int(round(model.vars.oversampling_rate_actual.value))
+        shaping_filter = model.vars.shaping_filter.value
+        # not using this model variable but keeping it here. Will remove it once, sure.
+        # shaping_coeff_override = model.vars.shaping_coeff_ksi_calc_override.value
+
+        # calculate only if needed - ksi1 would be already calculated if that is the case
+        if (ksi1 == 0):
+            best_ksi2 = 0
+            best_ksi3 = 0
+            best_ksi3wb = 0
+        else:
+            # get shaping filter and it oversampling rate with respect to baudrate
+
+            # If no shaping_filter is a generic shape, use generic shape values for ksi calculation.
+            # If shaping_filter is custom, assumption is that shaping_filter will be set to NONE, and manual overrides
+            # will be used. In that case, check if there are any non-zero shaping coeffs, and use those coeffs for
+            # ksi calculation
+            sf = CalcShapingRainier().get_shaping_filter(model)/1.0
+            if shaping_filter.value == model.vars.shaping_filter._var_enum.NONE.value:
+                if np.count_nonzero(sf) == 64:
+                    LogMgr.Error("ERROR: No pulse shaping being used, please select a pulse shape in shaping_filter")
+            else:
+                # if shaping_filter is set to a generic shape (e.g. gaussian, rc, rrc),
+                # use generic filter to calculate ksi
+                sf, shaping = CalcShapingRainier().run_shaping_filter_calc(model)
+            sfosr = 8 # shaping filter coeffs are sampled at 8x
+
+            # get channel filter and expend the symmetric part
+            cfh = np.asarray(self.return_coeffs(lock_bwsel))
+            cf = np.block([cfh, cfh[-2::-1]])/1.0
+            cfh = np.asarray(self.return_coeffs(bwsel))
+            cfwb = np.block([cfh, cfh[-2::-1]])/1.0
+
+            # base sequences for +1 and -1
+            a = np.array([ 1.0, 0, 0, 0, 0, 0, 0, 0])
+            b = np.array([-1.0, 0, 0, 0, 0, 0, 0, 0])
+
+            # generate frequency signal for periodic 1 1 1 0 0 0 sequence for ksi1
+            x1 = np.matlib.repmat(np.append(np.matlib.repmat(a, 1, 3),np.matlib.repmat(b, 1, 3)), 1, 4)
+            f1 = self.gen_frequency_signal( x1[0], sf, cf, sfosr, model)
+
+            # generate frequency signal for periodic 1 1 0 0 1 1 sequence for ksi2
+            x2 = np.matlib.repmat(np.append(np.matlib.repmat(a, 1, 2), np.matlib.repmat(b, 1, 2)), 1, 6)
+            f2 = self.gen_frequency_signal( x2[0], sf, cf, sfosr, model)
+
+            # generate frequency signal for periodic 1 0 1 0 1 0 sequence for ksi3
+            x3 = np.matlib.repmat(np.append(np.matlib.repmat(a, 1, 1), np.matlib.repmat(b, 1, 1)), 1, 12)
+            f3 = self.gen_frequency_signal( x3[0], sf, cf, sfosr, model)
+
+            # generate frequency signal for periodic 1 0 1 0 1 0 sequence for ksi3 but with aqcusition channel filter
+            f3wb = self.gen_frequency_signal( x3[0], sf, cfwb, sfosr, model)
+
+            # find scaling needed to get f1 to the desired ksi1 value and apply it to f2 and f3
+            ind = osr - 1
+            scaler = ksi1 / np.max(np.abs(f1[ind + 8 * osr - 1: - 2 * osr: osr]))
+            f2 = scaler * f2
+            f3 = scaler * f3
+            f3wb = scaler * f3wb
+
+            # from matplotlib import pyplot as plt
+            # plt.plot(f1*scaler,'x-')
+            # plt.show()
+            # plt.plot(f2,'x-')
+            # plt.plot(f3,'x-')
+            # plt.plot(f3wb,'x-')
+
+            # search for best phase to sample to get ksi3 value.
+            # best phase is the phase that gives largest eye opening
+            best_ksi3 = 0
+            for ph in range(osr):
+                ksi3 = np.max(np.round(np.abs(f3[ - 6 * osr + ph: - 2 * osr: osr])))
+                if ksi3 > best_ksi3:
+                    best_ksi3 = ksi3
+
+            best_ksi3wb = 0
+            for ph in range(osr):
+                ksi3wb = np.max(np.round(np.abs(f3wb[ - 6 * osr + ph: - 2 * osr: osr])))
+                if ksi3wb > best_ksi3wb:
+                    best_ksi3wb = ksi3wb
+
+            # ksi2 is tricky depending if we sampled perfectly (symmetric around a
+            # pulse we should see the same value for 1 1 0 and 0 1 1 sequence but
+            # most of the time we cannot sample perfectly since can go as low as 4x
+            # oversampling for Viterbi PHYs. In this case we have 2 ksi values which we
+            # average to get the ksi2 value
+            best_cost = 1e9
+            for ph in range(osr):
+                x = np.round(np.abs(f2[- 6 * osr + ph: - 2 * osr: osr]))
+                cost = np.sum(np.abs(x - np.mean(x)))
+                if cost < best_cost:
+                    best_cost = cost
+                    best_ksi2 = np.round(np.mean(x))
+
+        # ensure that ksi1 >= ksi2 >= ksi3
+        # this code should only be needed in the extreme case when ksi1 = ksi2 = ksi3 and
+        # small variation can cause one to be larger than the other
+        best_ksi2 = ksi1 if best_ksi2 > ksi1 else best_ksi2
+        best_ksi3 = best_ksi2 if best_ksi3 > best_ksi2 else best_ksi3
+        best_ksi3wb = best_ksi2 if best_ksi3wb > best_ksi2 else best_ksi3wb
+
+        return best_ksi2, best_ksi3, best_ksi3wb
+
+
     def calc_rssi_rf_adjust_db(self, model):
-        model.vars.rssi_rf_adjust_db.value = -14.0
+        model.vars.rssi_rf_adjust_db.value = -15.8
 
     def calc_dsss_concurrent_reg(self, model):
         trecs_used = model.vars.MODEM_VITERBIDEMOD_VTDEMODEN.value
@@ -348,3 +460,50 @@ class CalcDemodulatorRainier(Calc_Demodulator_Bobcat):
         self._reg_write(model.vars.SEQ_MODINDEX_CALC_FREQGAINE, freqgain_e)
         self._reg_write(model.vars.SEQ_MODINDEX_CALC_MODINDEXE_DOUBLED_FREQGAINM, freqgain_m)
         self._reg_write(model.vars.SEQ_MODINDEX_CALC_MODINDEXE_DOUBLED_FREQGAINE, freqgain_e)
+
+    def calc_chmutetimer_reg(self, model):
+        hop_enable = True if model.vars.hop_enable.value == model.vars.hop_enable.var_enum.ENABLED else False
+
+        if hop_enable:
+            chmutetimer = 195           # Default value for 2ZB hopping
+        else:
+            chmutetimer = 0
+
+        self._reg_write(model.vars.MODEM_SRCCHF_CHMUTETIMER, chmutetimer)
+
+    def calc_fast_switching_regs(self, model):
+        hop_enable = True if model.vars.hop_enable.value == model.vars.hop_enable.var_enum.ENABLED else False
+        protocol_id = model.vars.protocol_id.value
+
+        # Enable DTIMLOSS feature for fast switching PHYs
+        # See https://jira.silabs.com/browse/MCUW_RADIO_CFG-2525
+        if hop_enable and protocol_id == model.vars.protocol_id.var_enum.Zigbee:
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSEN, 1)
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSTHD, 200)
+        elif hop_enable and protocol_id == model.vars.protocol_id.var_enum.BLE:
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSEN, 1)
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSTHD, 1000)
+        else:
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSEN, 0)
+            self._reg_write(model.vars.MODEM_TRECSCFG_DTIMLOSSTHD, 0)
+
+    def calc_spare_regs(self, model):
+        hop_enable = model.vars.hop_enable.value == model.vars.hop_enable.var_enum.ENABLED
+
+        # revB0+ SPARE register is defined as follows:
+        # dsss_dsa_unqualified_sel=  spare[0]
+        # lr_eof_sel_force0=         spare[1]
+        # lrble_compound_muxctrl=    spare[2]
+
+        if hop_enable:
+            # : if fixed timeout is used to control hopping, the hopping controller requires unqualified DSA signal
+            # : Qualified DSA signal may take longer than 32 us timeout, causing an incorrect channel switch at the end
+            # : of the timeout.
+            dsss_dsa_unqualified_sel = 1
+        else:
+            dsss_dsa_unqualified_sel = 0
+
+        # : if additional spare fields needs to be set, bitshift the values here
+        reg_val = dsss_dsa_unqualified_sel
+
+        self._reg_write(model.vars.MODEM_SPARE_SPARE, reg_val)

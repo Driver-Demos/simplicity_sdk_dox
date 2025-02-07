@@ -243,7 +243,7 @@ def GenerateDbmToPowerSettingTableCommonInterface(
     """
     ramplev = GetCommonInterfaceData(File)
     submode = 0
-    if variant == "10dbm":
+    if variant != "10dbm":
         submode = 1
     assert ramplev.__len__() == (abs(maxpwr - minpwr) / increment) + 1, \
         "Expected number of power levels {} does not match actual number of power levels {}".format(

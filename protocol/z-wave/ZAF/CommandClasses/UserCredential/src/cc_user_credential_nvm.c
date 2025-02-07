@@ -909,15 +909,13 @@ u3c_db_operation_result CC_UserCredential_modify_credential(
       credential_metadata_nvm metadata;
       convert_credential_metadata_to_nvm(&metadata, &p_credential->metadata);
 
-      return (
-        // Overwrite Credential metadata in NVM
-        nvm(U3C_WRITE, AREA_CREDENTIAL_METADATA, object_offset, &metadata, 0)
-
-        // Overwrite Credential data in NVM
-        && nvm(U3C_WRITE, AREA_CREDENTIAL_DATA, object_offset,
-               p_credential->data, p_credential->metadata.length))
-             ? U3C_DB_OPERATION_RESULT_SUCCESS
-             : U3C_DB_OPERATION_RESULT_ERROR_IO;
+      bool nvm_success = true;
+      // Overwrite Credential metadata in NVM
+      nvm_success &= nvm(U3C_WRITE, AREA_CREDENTIAL_METADATA, object_offset, &metadata, 0);
+      // Overwrite Credential data in NVM
+      nvm_success &= nvm(U3C_WRITE, AREA_CREDENTIAL_DATA, object_offset,
+                         p_credential->data, p_credential->metadata.length);
+      return nvm_success ? U3C_DB_OPERATION_RESULT_SUCCESS : U3C_DB_OPERATION_RESULT_ERROR_IO;
     }
   }
 

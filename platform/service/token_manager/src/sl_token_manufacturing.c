@@ -32,6 +32,11 @@
 #include "sl_se_manager_util.h"
 #endif // (_SILICON_LABS_32B_SERIES_2_CONFIG == 1)
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+#include "sl_se_manager.h"
+#include "sl_se_manager_extmem.h"
+#endif //_SILICON_LABS_32B_SERIES_3
+
 #define DEFINETOKENS
 #define TOKEN_MFG(name, creator, iscnt, isidx, type, arraysize, ...) \
   const uint16_t TOKEN_##name = TOKEN_##name##_ADDRESS;
@@ -95,10 +100,14 @@ static void getMfgTokenData(void *data,
       i++;
     }
   } else if ((token & 0xF000) == (USERDATA_TOKENS & 0xF000)) {
+#if (_SILICON_LABS_32B_SERIES == 2)
     uint32_t realAddress = ((USERDATA_BASE + (token & 0x0FFF)) + (len * index));
     uint8_t *flash = (uint8_t *)realAddress;
 
     memcpy(ram, flash, len);
+#elif (_SILICON_LABS_32B_SERIES == 3)
+    //TODO: Handle UD data write into SE MTP region once the API's are available.
+#endif
   } else if (((token & 0xF000) == (LOCKBITS_TOKENS & 0xF000))
              || ((token & 0xF000) == (LOCKBITSDATA_TOKENS & 0xF000))) {
     uint32_t realAddress = ((LOCKBITS_BASE + (token & 0x0FFF)) + (len * index));
@@ -280,8 +289,11 @@ sl_status_t halInternalFlashWrite(uint32_t address, uint16_t *data, uint32_t len
   return SL_STATUS_OK;
 }
 
-// Odd len is not supported by this function
-static void halFlashWrite(uint32_t realAddress, void *data, uint32_t len)
+/***************************************************************************//**
+ * This function is used to write data to the User or Lockbits page.
+ * Odd len is not supported by this function
+ ******************************************************************************/
+static void hal_flash_write(uint32_t realAddress, void *data, uint32_t len)
 {
   sl_status_t flashStatus = SL_STATUS_FAIL;
   flashStatus = halInternalFlashWrite(realAddress, (uint16_t*)data, (len / 2));
@@ -289,6 +301,84 @@ static void halFlashWrite(uint32_t realAddress, void *data, uint32_t len)
 }
 
 #endif
+
+#if defined(_SILICON_LABS_32B_SERIES_3)
+#define CHECK_DATA  1           ///< Macro defining if data should be checked
+/***************************************************************************//**
+ * Open the MFG hal for usage. SE will take care of clocking the externalflash.
+ * This function initializes the SE lock mutex and checks if LOCKBITS
+ * start and end addresses are within the data region or not.
+ ******************************************************************************/
+static sl_status_t hal_external_flash_open(void)
+{
+  sl_status_t slStatus;
+  void *startAdr;
+  size_t regSize;
+  sl_se_command_context_t cmd_ctx;
+
+  slStatus = sl_se_init();
+
+  if (slStatus != SL_STATUS_OK) {
+    return SL_STATUS_NOT_INITIALIZED;
+  }
+
+  sl_se_init_command_context(&cmd_ctx);
+  slStatus = sl_se_data_region_get_location(&cmd_ctx, &startAdr, &regSize);
+
+  if (slStatus == SL_STATUS_OK) {
+    // Check if LOCKBITS page's start and end addresses are within the data region or not
+    if (((size_t)LOCKBITS_BASE < (size_t)startAdr) || (((size_t)LOCKBITS_END) > ((size_t)startAdr + regSize))) {
+      return SL_STATUS_INVALID_PARAMETER;
+    }
+  } else {
+    return SL_STATUS_INVALID_STATE;
+  }
+
+  return slStatus;
+}
+
+/***************************************************************************//**
+ * This function is used to write data to the LOCKBITS page, using SE API.
+ ******************************************************************************/
+static void hal_external_flash_write(uint32_t dstAdr, void const *src, size_t length)
+{
+  sl_status_t slStatus;
+  sl_se_command_context_t cmd_ctx;
+  size_t byte_count = length;
+  size_t word_count = byte_count / sizeof(uint32_t);
+
+  //make it word aligned
+  if ((byte_count % sizeof(uint32_t)) != 0) {
+    word_count = word_count + 1;
+  }
+
+  sl_se_init_command_context(&cmd_ctx);
+  slStatus = sl_se_data_region_write(&cmd_ctx, (void *)dstAdr, src, (word_count * sizeof(uint32_t)));
+
+#if CHECK_DATA
+  if (slStatus == SL_STATUS_OK) {
+    if (memcmp((void *)dstAdr, src, byte_count) != 0) {
+      slStatus = SL_STATUS_FAIL;
+    }
+  }
+#endif
+
+  assert(slStatus == SL_STATUS_OK);
+}
+#endif
+
+/***************************************************************************//**
+ * This function is used to initialize SE
+ ******************************************************************************/
+void sl_token_mfg_init(void)
+{
+#if defined(_SILICON_LABS_32B_SERIES_3)
+  sl_status_t slStatus;
+  //Init SE manager
+  slStatus = hal_external_flash_open();
+  assert(slStatus == SL_STATUS_OK);
+#endif
+}
 
 #if (_SILICON_LABS_32B_SERIES_2_CONFIG == 1)
 static void halFlashWriteSE(uint32_t realAddress, void *data, uint32_t len)
@@ -299,7 +389,7 @@ static void halFlashWriteSE(uint32_t realAddress, void *data, uint32_t len)
     status = sl_se_write_user_data(&cmd_ctx, (realAddress & 0x0FFF), data, len);
     assert(status == SL_STATUS_OK);
   } else {
-    halFlashWrite(realAddress, data, len);
+    hal_flash_write(realAddress, data, len);
   }
 }
 #endif // (_SILICON_LABS_32B_SERIES_2_CONFIG == 1)
@@ -316,12 +406,13 @@ static void halFlashWriteSE(uint32_t realAddress, void *data, uint32_t len)
   || (_SILICON_LABS_32B_SERIES_2_CONFIG == 7)    \
   || (_SILICON_LABS_32B_SERIES_2_CONFIG == 8)
     #define FLASHWRITE(realAddress, data, len) \
-  (halFlashWrite((realAddress), (data), (len)))
+  (hal_flash_write((realAddress), (data), (len)))
   #else
     #error Unknown device configuration
   #endif
 #elif (_SILICON_LABS_32B_SERIES == 3)
-//TODO:Handle S3 flash write by using SE APIs
+#define FLASHWRITE(realAddress, data, len) \
+  (hal_external_flash_write((realAddress), (data), (len)))
 #else
   #error Unknown device series
 #endif
@@ -394,11 +485,14 @@ sl_status_t sl_token_set_manufacturing_data(uint32_t token,
     return status;
   }
 
-#if (_SILICON_LABS_32B_SERIES == 2)
   if ((token & 0xF000) == (USERDATA_TOKENS & 0xF000)) {
+#if (_SILICON_LABS_32B_SERIES == 2)
     realAddress = ((USERDATA_BASE + (token & 0x0FFF)));
     flash = (uint8_t *)realAddress;
     assert((realAddress >= USERDATA_BASE) && ((realAddress + length - 1) <= USERDATA_END));
+#elif (_SILICON_LABS_32B_SERIES == 3)
+    //TODO: Handle UD data write into SE MTP region once the API's are available.
+#endif
   } else if (((token & 0xF000) == (LOCKBITS_TOKENS & 0xF000))
              || ((token & 0xF000) == (LOCKBITSDATA_TOKENS & 0xF000))) {
     realAddress = ((LOCKBITS_BASE + (token & 0x0FFF)));
@@ -408,6 +502,7 @@ sl_status_t sl_token_set_manufacturing_data(uint32_t token,
     assert(0);
   }
 
+#if (_SILICON_LABS_32B_SERIES == 2)
   //UserData and LockBits manufacturing tokens can only be written by on-chip
   //code if the token is currently unprogrammed.  Verify the entire token is
   //unwritten.  The flash library performs a similar check, but verifying here
@@ -441,17 +536,13 @@ sl_status_t sl_token_set_manufacturing_data(uint32_t token,
     length -= 2;
     writeEndWord(realAddress, data, length);
   }
-
-  if (length > 0) {
-    FLASHWRITE(realAddress, data, length);
-  }
-
 #elif (_SILICON_LABS_32B_SERIES == 3)
-  //TODO: Handle flash write specific to S3
-  (void) realAddress;
   (void) flash;
   (void) i;
 #endif
 
+  if (length > 0) {
+    FLASHWRITE(realAddress, data, length);
+  }
   return SL_STATUS_OK;
 }

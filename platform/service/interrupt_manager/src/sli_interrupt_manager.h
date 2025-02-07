@@ -77,7 +77,7 @@ sl_interrupt_manager_irq_handler_t *sli_interrupt_manager_set_irq_table(sl_inter
  *
  * @details
  *   This function is called before each interrupt service routine
- *   when SL_INTERRUPT_MANAGER_HOOKS is enabled.
+ *   when the interrupt manager hooks feature is enabled.
  *
  * @note
  *   The function is weakly defined, and may be user-defined. By default, the
@@ -91,7 +91,7 @@ void sl_interrupt_manager_irq_enter_hook(void);
  *
  * @details
  *   This function is called after each interrupt service routine
- *   when SL_INTERRUPT_MANAGER_HOOKS is enabled.
+ *   when the interrupt manager hooks feature is enabled.
  *
  * @note
  *   The function is weakly defined, and may be user-defined. By default, the

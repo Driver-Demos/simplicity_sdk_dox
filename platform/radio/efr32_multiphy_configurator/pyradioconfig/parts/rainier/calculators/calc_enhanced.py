@@ -49,3 +49,16 @@ class CalcEnhancedRainier(ICalculator):
         self._reg_write(model.vars.MODEM_SICTRL1_FREQOFFTOLERANCE, default=True, do_not_care=do_not_care)
         self._reg_write(model.vars.MODEM_SICTRL2_SISTARTDELAY, default=True, do_not_care=do_not_care)
         self._reg_write(model.vars.MODEM_SICTRL2_SISTARTDELAYMODE, default=True, do_not_care=do_not_care)
+
+        # : only available for B0 onward
+        if not model.part_revision in ['A0', 'A1', 'A2']:
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_FASTCWDETECTEN, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_FASTSUPERCHIPEN, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_FASTNARROWPULSEEN, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_EYEOPENINGMODE, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_CWDETECTSTARTWINDOW, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_CWDETECTTHRESHOLD, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_SUPERCHIPSTARTWINDOW, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_NPULSEFIXEDTHRESHOLD, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJEN, default=True, do_not_care=do_not_care)
+            self._reg_write(model.vars.MODEM_SIFASTDETECTCTRL_NPULSETHRESHADJ, default=True, do_not_care=do_not_care)

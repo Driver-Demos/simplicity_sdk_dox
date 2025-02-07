@@ -72,7 +72,7 @@ class RM_Register_SUNOFDM_RXCFG1(Base_RM_Register):
             0xb500fc00, 0x00C,
             'RXCFG1', 'SUNOFDM.RXCFG1', 'read-write',
             u"",
-            0x00000000, 0x00001FFF,
+            0x00000000, 0x0000FFFF,
             0x00001000, 0x00002000,
             0x00003000)
 
@@ -88,6 +88,12 @@ class RM_Register_SUNOFDM_RXCFG1(Base_RM_Register):
         self.zz_fdict['EXTCOARSEFREQ'] = self.EXTCOARSEFREQ
         self.GIRECOMB = RM_Field_SUNOFDM_RXCFG1_GIRECOMB(self)
         self.zz_fdict['GIRECOMB'] = self.GIRECOMB
+        self.PSDU_CE_MODE = RM_Field_SUNOFDM_RXCFG1_PSDU_CE_MODE(self)
+        self.zz_fdict['PSDU_CE_MODE'] = self.PSDU_CE_MODE
+        self.PHR_CE_MODE = RM_Field_SUNOFDM_RXCFG1_PHR_CE_MODE(self)
+        self.zz_fdict['PHR_CE_MODE'] = self.PHR_CE_MODE
+        self.FRCMAXSPEED = RM_Field_SUNOFDM_RXCFG1_FRCMAXSPEED(self)
+        self.zz_fdict['FRCMAXSPEED'] = self.FRCMAXSPEED
         self.__dict__['zz_frozen'] = True
 
 
@@ -114,7 +120,7 @@ class RM_Register_SUNOFDM_COLLDET(Base_RM_Register):
             0xb500fc00, 0x014,
             'COLLDET', 'SUNOFDM.COLLDET', 'read-write',
             u"",
-            0x00000014, 0x0000003F,
+            0x00000014, 0x0000007F,
             0x00001000, 0x00002000,
             0x00003000)
 
@@ -122,6 +128,8 @@ class RM_Register_SUNOFDM_COLLDET(Base_RM_Register):
         self.zz_fdict['COLLDET'] = self.COLLDET
         self.COLLDETTHR = RM_Field_SUNOFDM_COLLDET_COLLDETTHR(self)
         self.zz_fdict['COLLDETTHR'] = self.COLLDETTHR
+        self.BGDIS = RM_Field_SUNOFDM_COLLDET_BGDIS(self)
+        self.zz_fdict['BGDIS'] = self.BGDIS
         self.__dict__['zz_frozen'] = True
 
 

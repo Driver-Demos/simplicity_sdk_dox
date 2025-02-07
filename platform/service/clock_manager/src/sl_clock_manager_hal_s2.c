@@ -1018,18 +1018,18 @@ sl_status_t sli_clock_manager_hal_wait_usbpll(void)
 }
 
 /***************************************************************************//**
- * Updates QSPI clock and reference clock.
+ * Sets the external FLASH reference clock.
  ******************************************************************************/
-sl_status_t sli_clock_manager_hal_update_qspi_clk(sl_oscillator_t oscillator)
+sl_status_t sli_clock_manager_hal_set_ext_flash_clk(sl_oscillator_t oscillator)
 {
   (void)oscillator;
   return SL_STATUS_NOT_AVAILABLE;
 }
 
 /***************************************************************************//**
- * Gets QSPI clock source.
+ * Gets the external FLASH clock source.
  ******************************************************************************/
-sl_status_t sli_clock_manager_get_current_qspi_clk(sl_oscillator_t *oscillator)
+sl_status_t sli_clock_manager_hal_get_ext_flash_clk(sl_oscillator_t *oscillator)
 {
   if (oscillator == NULL) {
     return SL_STATUS_NULL_POINTER;

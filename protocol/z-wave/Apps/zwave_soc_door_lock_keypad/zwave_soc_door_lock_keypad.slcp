@@ -57,7 +57,7 @@ component:
   - id: simple_led
     instance: [led0, led1]
   - id: zw_cli_common
-    condition: [zw_release]
+    condition: [zw_production]
 
 source:
   - path: app.c

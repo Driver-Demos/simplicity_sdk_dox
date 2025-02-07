@@ -640,11 +640,17 @@ void app_process_action(void)
                "with public command key.\n");
         set_key_id(SL_SE_BUILTIN_KEY_SECUREDEBUG_ID);
       } else {
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+        app_state = SELECT_KEY_STORAGE;
+        print_key_storage();
+        break;
+#else
         printf("\n  . Sign an already-calculated hash with private device "
                "key.\n");
         dsa_state = ECDSA_DEVICE_KEY_SIGN_HASH;
 #if defined(SEMAILBOX_PRESENT) && (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
         set_key_id(SL_SE_BUILTIN_KEY_APPLICATION_ATTESTATION_ID);
+#endif
 #endif
       }
       app_state = EXPORT_PUBLIC_BUILTIN_KEY;

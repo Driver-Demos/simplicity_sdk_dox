@@ -100,6 +100,9 @@ otInstance *otGetInstance(void)
   return sInstance;
 }
 
+#define OT_NWK_UP (otThreadGetDeviceRole(sInstance) != OT_DEVICE_ROLE_DISABLED)
+#else
+#define OT_NWK_UP false
 #endif //#if defined(OPENTHREAD_FTD)
 
 //---------------
@@ -146,14 +149,17 @@ static void finding_and_binding_event_handler(sl_zigbee_af_event_t *event)
  * of changes to the stack status and take appropriate action. The framework
  * will always process the stack status after the callback returns.
  */
+bool zb_nwk_up = false;
 void sl_zigbee_af_stack_status_cb(sl_status_t status)
 {
   // Note, the ZLL state is automatically updated by the stack and the plugin.
   if (status == SL_STATUS_NETWORK_DOWN) {
     led_turn_off(COMMISSIONING_STATUS_LED);
+    zb_nwk_up = false;
   } else if (status == SL_STATUS_NETWORK_UP) {
     led_turn_on(COMMISSIONING_STATUS_LED);
     sl_zigbee_af_event_set_active(&finding_and_binding_event);
+    zb_nwk_up = true;
   }
 }
 
@@ -307,6 +313,15 @@ void sl_zigbee_af_hal_button_isr_cb(uint8_t button, uint8_t state)
   }
 }
 #endif // EBER_TEST
+
+void sl_rail_mux_invalid_rx_channel_detected_cb(int new_rx_channel, int old_rx_channel)
+{
+  if (zb_nwk_up || OT_NWK_UP) {
+    sl_zigbee_af_core_println("WARNING: MUX detected invalid RX attempts on both %d and %d channels",
+                              new_rx_channel, old_rx_channel);
+    EFM_ASSERT(false);
+  }
+}
 
 #ifdef SL_CATALOG_BLUETOOTH_PRESENT
 

@@ -29,6 +29,8 @@
  ******************************************************************************/
 
 #include "sl_se_manager_util.h"
+#include "sl_se_manager_types.h"
+#include <stdint.h>
 
 #if defined(SLI_MAILBOX_COMMAND_SUPPORTED) || defined(SLI_VSE_MAILBOX_COMMAND_SUPPORTED)
 
@@ -1019,27 +1021,25 @@ sl_status_t sl_se_get_otp_version(sl_se_command_context_t *cmd_ctx,
   }
 
   #if defined(_SILICON_LABS_32B_SERIES_3)
-  /* TODO: Enable once register available: PSEC-5574
 
-     CORE_DECLARE_IRQ_STATE;
-     CORE_ENTER_CRITICAL();
+  CORE_DECLARE_IRQ_STATE;
+  CORE_ENTER_CRITICAL();
 
-     // Read state of CMU_CLKEN0_SYSCFG
-     bool syscfg_clock_was_enabled = ((CMU->CLKEN0 & CMU_CLKEN0_SYSCFG) != 0);
-     CMU->CLKEN0_SET = CMU_CLKEN0_SYSCFG;
+  // Read state of CMU_CLKEN0_SYSCFG
+  bool syscfg_clock_was_enabled = ((CMU->CLKEN0 & CMU_CLKEN0_SYSCFG) != 0);
+  CMU->CLKEN0_SET = CMU_CLKEN0_SYSCFG;
 
-     // Read SE FW version from SYSCFG
-   * version = (uint32_t)(((SYSCFG->ROOTSESWVERSION) & 0xFF000000) >> 24);
-   * version -= (uint32_t)((SYSCFG->ROMREVHW) & 0x000000FF);
+  // Read SE FW version from SYSCFG
+  *version = (uint32_t)(((SYSCFG->ROOTSESWVERSION) & 0xFF000000) >> 24);
+  *version -= (uint32_t)((SYSCFG->ROMREVHW) & 0x000000FF);
 
-     if (!syscfg_clock_was_enabled) {
-     CMU->CLKEN0_CLR = CMU_CLKEN0_SYSCFG;
-     }
-     CORE_EXIT_CRITICAL();
+  if (!syscfg_clock_was_enabled) {
+    CMU->CLKEN0_CLR = CMU_CLKEN0_SYSCFG;
+  }
+  CORE_EXIT_CRITICAL();
 
-     return SL_STATUS_OK;
-   */
-  return SL_STATUS_NOT_SUPPORTED;
+  return SL_STATUS_OK;
+
   #else
   // SE command structures
   sli_se_mailbox_command_t *se_cmd = &cmd_ctx->command;
@@ -1119,6 +1119,36 @@ sl_status_t sl_se_get_tamper_reset_cause(sl_se_command_context_t *cmd_ctx,
 }
 #endif // SLI_SE_COMMAND_READ_TAMPER_RESET_CAUSE_AVAILABLE
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+/***************************************************************************//**
+ * Reads out traceable event flags from the OTP
+ ******************************************************************************/
+sl_status_t sl_se_get_lifecycle_event_flags(sl_se_command_context_t *cmd_ctx, uint64_t *event_flags)
+{
+  sl_status_t status;
+  if (cmd_ctx == NULL || event_flags == NULL) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
+
+  uint32_t se_version = 0;
+  status = sl_se_get_se_version(cmd_ctx, &se_version);
+  if (status != SL_STATUS_OK) {
+    return status;
+  }
+  if (se_version < 0x030002UL) {
+    // SE FW version lower than 3.0.2 does not support reading trace flags
+    return SL_STATUS_NOT_SUPPORTED;
+  }
+
+  sli_se_mailbox_command_t *se_cmd = &cmd_ctx->command;
+
+  sli_se_command_init(cmd_ctx, SLI_SE_COMMAND_READ_TRACE_FLAGS);
+
+  sli_se_datatransfer_t out_data = SLI_SE_DATATRANSFER_DEFAULT(event_flags, 8);
+  sli_se_mailbox_command_add_output(se_cmd, &out_data);
+  return sli_se_execute_and_wait(cmd_ctx);
+}
+#endif
 /***************************************************************************//**
  * Enables the secure debug functionality.
  ******************************************************************************/
@@ -1397,6 +1427,56 @@ sl_status_t sl_se_exit_active_mode(sl_se_command_context_t *cmd_ctx)
 #endif // defined(SLI_MAILBOX_COMMAND_SUPPORTED)
 
 #if defined(_SILICON_LABS_32B_SERIES_3)
+/***************************************************************************//**
+ * @brief
+ *   Read the OTP rollback counter.
+ ******************************************************************************/
+sl_status_t sl_se_get_rollback_counter(sl_se_command_context_t *cmd_ctx,
+                                       uint32_t *rollback_counter)
+{
+  if ((cmd_ctx == NULL) || (rollback_counter == NULL)) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
+
+  sli_se_mailbox_command_t *se_cmd = &cmd_ctx->command;
+
+  sli_se_command_init(cmd_ctx, SLI_SE_COMMAND_GET_ROLLBACK_COUNTER);
+
+  sli_se_datatransfer_t out_data
+    = SLI_SE_DATATRANSFER_DEFAULT(rollback_counter, sizeof(uint32_t));
+  sli_se_mailbox_command_add_output(se_cmd, &out_data);
+
+  return sli_se_execute_and_wait(cmd_ctx);
+}
+
+/***************************************************************************//**
+ * @brief
+ *   Increment the OTP rollback counter.
+ ******************************************************************************/
+sl_status_t sl_se_increment_rollback_counter(sl_se_command_context_t *cmd_ctx,
+                                             uint32_t *rollback_counter)
+{
+  if (cmd_ctx == NULL) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
+
+  sli_se_mailbox_command_t *se_cmd = &cmd_ctx->command;
+
+  sli_se_command_init(cmd_ctx, (SLI_SE_COMMAND_GET_ROLLBACK_COUNTER | 0x00000100));
+
+  uint32_t output = 0;
+
+  sli_se_datatransfer_t out_data
+    = SLI_SE_DATATRANSFER_DEFAULT(&output, sizeof(uint32_t));
+  sli_se_mailbox_command_add_output(se_cmd, &out_data);
+
+  sl_status_t status = sli_se_execute_and_wait(cmd_ctx);
+
+  if (rollback_counter != NULL) {
+    *rollback_counter = output;
+  }
+  return status;
+}
 
 /***************************************************************************//**
  * Reads back the stored upgrade file version.

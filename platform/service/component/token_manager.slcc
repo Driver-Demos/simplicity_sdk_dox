@@ -53,9 +53,6 @@ template_contribution:
   - name: static_tokens_enable
     value: 1
     condition: [device_series_3]
-  - name: userdata_size
-    value: 4096
-    condition: [device_series_3]
   - name: lockbits_size
     value: 8192
     condition: [device_series_3]

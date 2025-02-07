@@ -60,11 +60,9 @@
 #ifdef NVM3_HOST_BUILD
 static int lockCount = 0;
 /// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
-#elif defined(SL_CATALOG_KERNEL_PRESENT)
-static osMutexId_t nvm3_mutex;                                           ///< NVM3 Lock Mutex
-
+#elif defined(SL_CATALOG_KERNEL_PRESENT) && !defined(_SILICON_LABS_32B_SERIES_2)
+static osMutexId_t nvm3_mutex;   ///< NVM3 Lock Mutex
 #define NVM3_ERROR_ASSERT()   do { EFM_ASSERT(false); } while (0)
-
 #else
 CORE_DECLARE_IRQ_STATE;
 /// @endcond
@@ -106,7 +104,7 @@ const size_t  nvm3_objHandleSize = sizeof(nvm3_Obj_t);
  ******************************************************************************/
 SL_WEAK void nvm3_lockCreateMutex(void)
 {
-#if defined(SL_CATALOG_KERNEL_PRESENT)
+#if defined(SL_CATALOG_KERNEL_PRESENT) && !defined(_SILICON_LABS_32B_SERIES_2)
   if (nvm3_mutex == NULL) {
     const osMutexAttr_t mutex_attr = {
       " NVM3 Mutex",
@@ -133,7 +131,9 @@ SL_WEAK void nvm3_lockBegin(void)
 {
 #ifdef NVM3_HOST_BUILD
   lockCount++;
-#elif defined(SL_CATALOG_KERNEL_PRESENT)
+// In apps running on micrium OS on Ser2, the app is acquiring the mutex within
+// a critical section while invoking bootloader APIs
+#elif defined(SL_CATALOG_KERNEL_PRESENT) && !defined(_SILICON_LABS_32B_SERIES_2)
 /// @cond DO_NOT_INCLUDE_WITH_DOXYGEN
   osStatus_t os_status = osError;
   // Bypass the lock if kernel is not running
@@ -167,7 +167,7 @@ SL_WEAK void nvm3_lockEnd(void)
     nvm3_tracePrint(NVM3_TRACE_LEVEL_ERROR, "NVM3 ERROR - lockEnd: invalid lock count.\n");
   }
   lockCount--;
-#elif defined(SL_CATALOG_KERNEL_PRESENT)
+#elif defined(SL_CATALOG_KERNEL_PRESENT) && !defined(_SILICON_LABS_32B_SERIES_2)
   osStatus_t os_status = osError;
   // Bypass the lock if kernel is not running
   if (osKernelGetState() == osKernelRunning) {

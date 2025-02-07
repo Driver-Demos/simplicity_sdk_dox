@@ -113,7 +113,7 @@ void mfglibInternalStopTone_process_ipc_command(sli_zigbee_ipc_cmd_t *msg)
 
 sl_status_t mfglibEnd(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalEnd_process_ipc_command, &msg);
 
@@ -122,7 +122,7 @@ sl_status_t mfglibEnd(void)
 
 uint8_t mfglibGetChannel(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalGetChannel_process_ipc_command, &msg);
 
@@ -131,7 +131,7 @@ uint8_t mfglibGetChannel(void)
 
 uint16_t mfglibGetCtune(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalGetCtune_process_ipc_command, &msg);
 
@@ -140,7 +140,7 @@ uint16_t mfglibGetCtune(void)
 
 uint8_t mfglibGetOptions(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalGetOptions_process_ipc_command, &msg);
 
@@ -149,7 +149,7 @@ uint8_t mfglibGetOptions(void)
 
 int8_t mfglibGetPower(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalGetPower_process_ipc_command, &msg);
 
@@ -158,7 +158,7 @@ int8_t mfglibGetPower(void)
 
 int8_t mfglibGetSynOffset(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalGetSynOffset_process_ipc_command, &msg);
 
@@ -168,7 +168,7 @@ int8_t mfglibGetSynOffset(void)
 sl_status_t mfglibSendPacket(uint8_t *packet,
                              uint16_t repeat)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   if ((packet[0] + 1) > (MAX_IPC_VEC_ARG_CAPACITY)) {
     assert(false); // "vector packet length exceeds expected maximum
@@ -188,7 +188,7 @@ sl_status_t mfglibSendPacket(uint8_t *packet,
 
 sl_status_t mfglibSetChannel(uint8_t chan)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgSetChannel.request.chan = chan;
   sli_zigbee_send_ipc_cmd(mfglibInternalSetChannel_process_ipc_command, &msg);
 
@@ -197,7 +197,7 @@ sl_status_t mfglibSetChannel(uint8_t chan)
 
 sl_status_t mfglibSetCtune(uint16_t ctune)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgSetCtune.request.ctune = ctune;
   sli_zigbee_send_ipc_cmd(mfglibInternalSetCtune_process_ipc_command, &msg);
 
@@ -206,7 +206,7 @@ sl_status_t mfglibSetCtune(uint16_t ctune)
 
 sl_status_t mfglibSetOptions(uint8_t options)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgSetOptions.request.options = options;
   sli_zigbee_send_ipc_cmd(mfglibInternalSetOptions_process_ipc_command, &msg);
 
@@ -216,7 +216,7 @@ sl_status_t mfglibSetOptions(uint8_t options)
 sl_status_t mfglibSetPower(uint16_t txPowerMode,
                            int8_t power)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgSetPower.request.txPowerMode = txPowerMode;
   msg.data.mfgSetPower.request.power = power;
   sli_zigbee_send_ipc_cmd(mfglibInternalSetPower_process_ipc_command, &msg);
@@ -226,14 +226,14 @@ sl_status_t mfglibSetPower(uint16_t txPowerMode,
 
 void mfglibSetSynOffset(int8_t synOffset)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgSetSynOffset.request.synOffset = synOffset;
   sli_zigbee_send_ipc_cmd(mfglibInternalSetSynOffset_process_ipc_command, &msg);
 }
 
 sl_status_t mfglibStart(MfglibRxCallback mfglibRxCallback)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
   msg.data.mfgStart.request.mfglibRxCallback = mfglibRxCallback;
   sli_zigbee_send_ipc_cmd(mfglibInternalStart_process_ipc_command, &msg);
 
@@ -242,7 +242,7 @@ sl_status_t mfglibStart(MfglibRxCallback mfglibRxCallback)
 
 sl_status_t mfglibStartStream(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalStartStream_process_ipc_command, &msg);
 
@@ -251,7 +251,7 @@ sl_status_t mfglibStartStream(void)
 
 sl_status_t mfglibStartTone(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalStartTone_process_ipc_command, &msg);
 
@@ -260,7 +260,7 @@ sl_status_t mfglibStartTone(void)
 
 sl_status_t mfglibStopStream(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalStopStream_process_ipc_command, &msg);
 
@@ -269,7 +269,7 @@ sl_status_t mfglibStopStream(void)
 
 sl_status_t mfglibStopTone(void)
 {
-  sli_zigbee_ipc_cmd_t msg;
+  sli_zigbee_ipc_cmd_t msg = { 0, };
 
   sli_zigbee_send_ipc_cmd(mfglibInternalStopTone_process_ipc_command, &msg);
 

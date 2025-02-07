@@ -4,7 +4,7 @@
  *        for MGM260PB22VNA
  ******************************************************************************
  * # License
- * <b>Copyright 2024 Silicon Laboratories, Inc. www.silabs.com</b>
+ * <b>Copyright 2025 Silicon Laboratories, Inc. www.silabs.com</b>
  ******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -88,7 +88,6 @@ typedef enum IRQn{
   EUSART2_TX_IRQn        = 25, /*!< 25 EFR32 EUSART2_TX Interrupt */
   EUSART3_RX_IRQn        = 26, /*!< 26 EFR32 EUSART3_RX Interrupt */
   EUSART3_TX_IRQn        = 27, /*!< 27 EFR32 EUSART3_TX Interrupt */
-  MVP_IRQn               = 28, /*!< 28 EFR32 MVP Interrupt */
   ICACHE0_IRQn           = 29, /*!< 29 EFR32 ICACHE0 Interrupt */
   BURTC_IRQn             = 30, /*!< 30 EFR32 BURTC Interrupt */
   LETIMER0_IRQn          = 31, /*!< 31 EFR32 LETIMER0 Interrupt */
@@ -515,8 +514,6 @@ typedef enum IRQn{
 #define LFXO_COUNT                                        1  /** 1 LFXOs available  */
 #define MSC_PRESENT                                          /** MSC is available in this part */
 #define MSC_COUNT                                         1  /** 1 MSCs available  */
-#define MVP_PRESENT                                          /** MVP is available in this part */
-#define MVP_COUNT                                         1  /** 1 MVPs available  */
 #define PCNT_PRESENT                                         /** PCNT is available in this part */
 #define PCNT_COUNT                                        1  /** 1 PCNTs available  */
 #define PRS_PRESENT                                          /** PRS is available in this part */
@@ -595,7 +592,6 @@ typedef enum IRQn{
 #include "mgm26_hfxo.h"
 #include "mgm26_wdog.h"
 #include "mgm26_semailbox.h"
-#include "mgm26_mvp.h"
 #include "mgm26_devinfo.h"
 
 /* Custom headers for LDMAXBAR and PRS mappings */
@@ -674,7 +670,6 @@ typedef enum IRQn{
 #define WDOG1_S_BASE              (0x4B008000UL) /* WDOG1_S base address */
 #define EUSART0_S_BASE            (0x4B010000UL) /* EUSART0_S base address */
 #define SEMAILBOX_S_HOST_BASE     (0x4C000000UL) /* SEMAILBOX_S_HOST base address */
-#define MVP_S_BASE                (0x4D000000UL) /* MVP_S base address */
 #define EMU_NS_BASE               (0x50004000UL) /* EMU_NS base address */
 #define CMU_NS_BASE               (0x50008000UL) /* CMU_NS base address */
 #define BURTC_NS_BASE             (0x5000C000UL) /* BURTC_NS base address */
@@ -739,7 +734,6 @@ typedef enum IRQn{
 #define WDOG1_NS_BASE             (0x5B008000UL) /* WDOG1_NS base address */
 #define EUSART0_NS_BASE           (0x5B010000UL) /* EUSART0_NS base address */
 #define SEMAILBOX_NS_HOST_BASE    (0x5C000000UL) /* SEMAILBOX_NS_HOST base address */
-#define MVP_NS_BASE               (0x5D000000UL) /* MVP_NS base address */
 
 #if defined(SL_COMPONENT_CATALOG_PRESENT)
 #include "sl_component_catalog.h"
@@ -1070,11 +1064,6 @@ typedef enum IRQn{
 #else
 #define SEMAILBOX_HOST_BASE    (SEMAILBOX_S_HOST_BASE)       /* SEMAILBOX_HOST base address */
 #endif // SL_TRUSTZONE_PERIPHERAL_SEMAILBOX_HOST_S
-#if ((defined(SL_TRUSTZONE_SECURE) && !defined(SL_TRUSTZONE_PERIPHERAL_MVP_S)) || (defined(SL_TRUSTZONE_PERIPHERAL_MVP_S) && (SL_TRUSTZONE_PERIPHERAL_MVP_S != 0)))
-#define MVP_BASE               (MVP_S_BASE)                  /* MVP base address */
-#else
-#define MVP_BASE               (MVP_NS_BASE)                 /* MVP base address */
-#endif // SL_TRUSTZONE_PERIPHERAL_MVP_S
 
 #define DEVINFO_BASE           (0x0FE08000UL) /* DEVINFO base address */
 /** @} End of group MGM260PB22VNA_Peripheral_Base */
@@ -1148,7 +1137,6 @@ typedef enum IRQn{
 #define WDOG1_S              ((WDOG_TypeDef *) WDOG1_S_BASE)                     /**< WDOG1_S base pointer */
 #define EUSART0_S            ((EUSART_TypeDef *) EUSART0_S_BASE)                 /**< EUSART0_S base pointer */
 #define SEMAILBOX_S_HOST     ((SEMAILBOX_HOST_TypeDef *) SEMAILBOX_S_HOST_BASE)  /**< SEMAILBOX_S_HOST base pointer */
-#define MVP_S                ((MVP_TypeDef *) MVP_S_BASE)                        /**< MVP_S base pointer */
 #define EMU_NS               ((EMU_TypeDef *) EMU_NS_BASE)                       /**< EMU_NS base pointer */
 #define CMU_NS               ((CMU_TypeDef *) CMU_NS_BASE)                       /**< CMU_NS base pointer */
 #define BURTC_NS             ((BURTC_TypeDef *) BURTC_NS_BASE)                   /**< BURTC_NS base pointer */
@@ -1213,7 +1201,6 @@ typedef enum IRQn{
 #define WDOG1_NS             ((WDOG_TypeDef *) WDOG1_NS_BASE)                    /**< WDOG1_NS base pointer */
 #define EUSART0_NS           ((EUSART_TypeDef *) EUSART0_NS_BASE)                /**< EUSART0_NS base pointer */
 #define SEMAILBOX_NS_HOST    ((SEMAILBOX_HOST_TypeDef *) SEMAILBOX_NS_HOST_BASE) /**< SEMAILBOX_NS_HOST base pointer */
-#define MVP_NS               ((MVP_TypeDef *) MVP_NS_BASE)                       /**< MVP_NS base pointer */
 #define EMU                  ((EMU_TypeDef *) EMU_BASE)                          /**< EMU base pointer */
 #define CMU                  ((CMU_TypeDef *) CMU_BASE)                          /**< CMU base pointer */
 #define BURTC                ((BURTC_TypeDef *) BURTC_BASE)                      /**< BURTC base pointer */
@@ -1278,7 +1265,6 @@ typedef enum IRQn{
 #define WDOG1                ((WDOG_TypeDef *) WDOG1_BASE)                       /**< WDOG1 base pointer */
 #define EUSART0              ((EUSART_TypeDef *) EUSART0_BASE)                   /**< EUSART0 base pointer */
 #define SEMAILBOX_HOST       ((SEMAILBOX_HOST_TypeDef *) SEMAILBOX_HOST_BASE)    /**< SEMAILBOX_HOST base pointer */
-#define MVP                  ((MVP_TypeDef *) MVP_BASE)                          /**< MVP base pointer */
 #define DEVINFO              ((DEVINFO_TypeDef *) DEVINFO_BASE)                  /**< DEVINFO base pointer */
 /** @} End of group MGM260PB22VNA_Peripheral_Declaration */
 

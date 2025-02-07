@@ -20,6 +20,8 @@
   - name: hardware_board_from_kg100s-pk6130a
   - name: hardware_board_from_kg100s-rb4332a
   - name: hardware_board_has_vcom
+  - name: hardware_board_has_exp_16
+  - name: hardware_board_has_exp_15
   - name: hardware_board_has_i2c
   - name: board_config_clock_manager
   - name: hardware_board_has_hfxo_freq_38.4mhz

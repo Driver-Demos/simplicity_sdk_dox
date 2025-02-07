@@ -144,10 +144,10 @@ void cli_get_rgb_values(__attribute__((unused)) sl_cli_command_arg_t *arguments)
   sl_led_get_rgb_color(&sl_simple_rgb_pwm_led_rgb_led0, &color_switch_red_value, &color_switch_green_value, &color_switch_blue_value);
   app_log_info("Red: %d, Green: %d, Blue: %d\r\n", color_switch_red_value, color_switch_green_value, color_switch_blue_value);
 #else
-  uint8_t monochrome_value =
-    cc_multilevel_switch_get_current_value(&cc_multilevel_switch_support_config_get_switches()[0])
+  uint8_t monochrome_percent =
+    100 * cc_multilevel_switch_get_current_value(&cc_multilevel_switch_support_config_get_switches()[0])
     / cc_multilevel_switch_get_max_value();
-  app_log_info("Monochrome: %d%%\r\n", monochrome_value);
+  app_log_info("Monochrome: %d%%\r\n", monochrome_percent);
 #endif
 }
 

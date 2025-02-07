@@ -126,7 +126,10 @@ configuration:
     value: 53
   - name: configMAX_TASK_NAME_LEN
     value: 30
-
+  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+    value: 600
+    condition:
+      - cmsis_rtos2
 
 define:
   - name: OS_CFG_COMPAT_INIT

@@ -80,10 +80,10 @@
 
 /// Synthetize app settings if it is not available
 #if !defined(SL_CATALOG_WISUN_APP_SETTING_PRESENT)
-typedef struct app_setting_wisun{
+typedef struct app_setting_wisun {
   char network_name[SL_WISUN_NETWORK_NAME_SIZE + 1];
   uint8_t network_size;
-  int16_t tx_power;
+  int16_t tx_power_ddbm;
   uint8_t device_type;
   uint8_t lfn_profile;
   bool is_default_phy;
@@ -188,9 +188,9 @@ static const app_setting_wisun_t _app_default_settings = {
   .network_size = SL_WISUN_NETWORK_SIZE_SMALL,
 #endif
 #if defined(WISUN_CONFIG_TX_POWER)
-  .tx_power = WISUN_CONFIG_TX_POWER,
+  .tx_power_ddbm = WISUN_CONFIG_TX_POWER,
 #else
-  .tx_power = 200,
+  .tx_power_ddbm = 200,
 #endif
   .is_default_phy = true,
 #if defined(WISUN_CONFIG_DEVICE_TYPE)
@@ -402,6 +402,31 @@ void sl_wisun_lfn_wake_up_hnd(sl_wisun_evt_t *evt)
 }
 
 void sl_wisun_multicast_reg_finish_hnd(sl_wisun_evt_t *evt)
+{
+  __CHECK_FOR_STATUS(evt->evt.error.status);
+}
+
+void sl_wisun_dhcp_vendor_data_hnd(sl_wisun_evt_t *evt)
+{
+  __CHECK_FOR_STATUS(evt->evt.error.status);
+}
+
+void sl_wisun_pan_defect_hnd(sl_wisun_evt_t *evt)
+{
+  __CHECK_FOR_STATUS(evt->evt.error.status);
+}
+
+void sl_wisun_direct_connect_link_available_hnd(sl_wisun_evt_t *evt)
+{
+  __CHECK_FOR_STATUS(evt->evt.error.status);
+}
+
+void sl_wisun_direct_connect_status_hnd(sl_wisun_evt_t *evt)
+{
+  __CHECK_FOR_STATUS(evt->evt.error.status);
+}
+
+void sl_wisun_br_stopped_hnd(sl_wisun_evt_t *evt)
 {
   __CHECK_FOR_STATUS(evt->evt.error.status);
 }
@@ -699,7 +724,7 @@ static sl_status_t _app_wisun_application_setting(const app_setting_wisun_t * co
 #endif
 
   // set the TX power
-  ret = sl_wisun_set_tx_power_ddbm(setting->tx_power);
+  ret = sl_wisun_set_tx_power_ddbm(setting->tx_power_ddbm);
   if (ret != SL_STATUS_OK) {
     printf("[Failed: unable to set TX power: %lu]\n", ret);
     _app_wisun_core_set_state(SL_WISUN_APP_CORE_STATE_SET_TX_POWER_ERROR);

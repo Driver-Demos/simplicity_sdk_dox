@@ -193,3 +193,5 @@ class sw_profile_outputs_common_ocelot(object):
         if not hasattr(profile.outputs, "tx_eof_delay_ns"):
             profile.outputs.append(ModelOutput(model.vars.tx_eof_delay_ns, '', ModelOutputType.RAIL_CONFIG,
                                                readable_name='Time from TX EOF timestamp to end of frame on-air'))
+        profile.outputs.append(ModelOutput(model.vars.trecs_pre_bits_to_syncword, '', ModelOutputType.RAIL_CONFIG,
+                                           readable_name='Number of preamble bits to move to syncword with TRECS'))

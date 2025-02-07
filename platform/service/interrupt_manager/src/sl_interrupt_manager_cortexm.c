@@ -58,16 +58,14 @@
 #define VECTOR_TABLE_ALIGNMENT  (512)
 
 // Interrupt vector placement is in RAM
-#if defined(_SILICON_LABS_32B_SERIES_3)                  \
-  || (defined(SL_INTERRUPT_MANAGER_S2_INTERRUPTS_IN_RAM) \
-  && (SL_INTERRUPT_MANAGER_S2_INTERRUPTS_IN_RAM == 1))   \
+#if (defined(SL_INTERRUPT_MANAGER_S2_INTERRUPTS_IN_RAM) \
+  && (SL_INTERRUPT_MANAGER_S2_INTERRUPTS_IN_RAM == 1))  \
   || defined(SL_CATALOG_INTERRUPT_MANAGER_VECTOR_TABLE_IN_RAM_PRESENT)
 #define VECTOR_TABLE_IN_RAM (1)
 #endif
 
-// Interrupt manager ISR hooks are enabled. The interrupt vector must be in RAM.
-#if defined(VECTOR_TABLE_IN_RAM) && defined(_SILICON_LABS_32B_SERIES_3)
-#define SL_INTERRUPT_MANAGER_HOOKS_ENABLED (1)
+#if defined(SL_CATALOG_INTERRUPT_MANAGER_HOOKS_PRESENT)
+#define SL_INTERRUPT_MANAGER_ENABLE_HOOKS (1)
 #endif
 
 // Interrupt vector table need to be in a different section of RAM for Cortex-M55.
@@ -95,7 +93,7 @@ static sl_interrupt_manager_irq_handler_t vector_table_ram[TOTAL_INTERRUPTS] __a
 static sl_interrupt_manager_irq_handler_t vector_table_ram[TOTAL_INTERRUPTS] VECTOR_TABLE_SECTION;
 #endif /* defined(__GNUC__) */
 
-#if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+#if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
 // When interrupt manager hooks are enabled, the actual vector table (either in
 // ram or in flash) will call an ISR wrapper. The actual ISRs will be registered
 // and called from the wrapped_vector_table.
@@ -105,7 +103,7 @@ static sl_interrupt_manager_irq_handler_t wrapped_vector_table[TOTAL_INTERRUPTS]
 #pragma data_alignment = VECTOR_TABLE_ALIGNMENT
 static sl_interrupt_manager_irq_handler_t wrapped_vector_table[TOTAL_INTERRUPTS] VECTOR_TABLE_SECTION;
 #endif /* defined(__GNUC__) */
-#endif /* SL_INTERRUPT_MANAGER_HOOKS_ENABLED */
+#endif /* SL_INTERRUPT_MANAGER_ENABLE_HOOKS */
 
 #endif /* VECTOR_TABLE_IN_RAM */
 
@@ -117,7 +115,7 @@ static void disable_interrupt(int32_t irqn);
 static void set_priority(int32_t irqn, uint32_t priority);
 static uint32_t get_priority(int32_t irqn);
 
-#if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+#if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
 #if defined(SL_CATALOG_CODE_CLASSIFICATION_VALIDATOR_PRESENT)
 CCV_SECTION
 #endif
@@ -136,7 +134,7 @@ static bool is_interrupt_manager_initialized = false;
  ******************************************************************************/
 
 #if defined(VECTOR_TABLE_IN_RAM)
-#if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+#if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
 
 __WEAK void sl_interrupt_manager_irq_enter_hook(void)
 {
@@ -227,7 +225,7 @@ void sl_interrupt_manager_init(void)
 
   // copy ROM vector table to RAM table
   for (uint32_t i = 0; i < TOTAL_INTERRUPTS; i++) {
-    #if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+    #if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
     wrapped_vector_table[i] = current[i];
     if ( i >= CORTEX_INTERRUPTS ) {
       vector_table_ram[i] = sli_interrupt_manager_isr_wrapper;
@@ -417,11 +415,11 @@ sl_status_t sl_interrupt_manager_set_irq_handler(int32_t irqn,
   // Disable irqn interrupt while updating the handler's address
   sl_interrupt_manager_disable_irq(irqn);
 
-  #if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+  #if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
   table = wrapped_vector_table;
   #else
   table = (sl_interrupt_manager_irq_handler_t*)SCB->VTOR;
-  #endif /* SL_INTERRUPT_MANAGER_HOOKS_ENABLED */
+  #endif /* SL_INTERRUPT_MANAGER_ENABLE_HOOKS */
 
   // Make sure the VTOR points to a table in RAM.
   if (((uint32_t)table < RAM_BASE) || (uint32_t)table > (RAM_BASE + RAM_SIZE)) {
@@ -595,9 +593,9 @@ uint32_t get_priority(int32_t irqn)
  ******************************************************************************/
 sl_interrupt_manager_irq_handler_t* sl_interrupt_manager_get_isr_table(void)
 {
-#if defined(SL_INTERRUPT_MANAGER_HOOKS_ENABLED)
+#if defined(SL_INTERRUPT_MANAGER_ENABLE_HOOKS)
   return wrapped_vector_table;
 #else
   return (sl_interrupt_manager_irq_handler_t*)SCB->VTOR;
-#endif /* SL_INTERRUPT_MANAGER_HOOKS_ENABLED */
+#endif /* SL_INTERRUPT_MANAGER_ENABLE_HOOKS */
 }

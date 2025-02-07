@@ -105,6 +105,7 @@ void *threaded_tick(void *ptr)
       if (threaded_tick_cli_handle->req_prompt) {
         threaded_tick_cli_handle->req_prompt = false;
         sli_cli_io_printf("%s", threaded_tick_cli_handle->prompt_string);
+        fflush(stdout);
       }
 #if defined(SL_CLI_ACTIVE_FLAG_EN)
       threaded_tick_cli_handle->active = false;

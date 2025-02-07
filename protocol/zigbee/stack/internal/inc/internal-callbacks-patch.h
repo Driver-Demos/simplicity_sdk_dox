@@ -98,6 +98,8 @@ sl_status_t sli_zigbee_stack_pan_id_conflict_handler(int8_t conflictCount);
 
 void sl_zigbee_counter_rollover_handler(sl_zigbee_counter_type_t type);
 
+void sl_zigbee_mux_invalid_rx_handler(uint8_t new_rx_channel, uint8_t old_rx_channel);
+
 void sli_zigbee_stack_stack_token_changed_handler(uint16_t tokenAddress);
 
 void sli_zigbee_stack_id_conflict_handler(sl_802154_short_addr_t conflictingId);

@@ -35,7 +35,8 @@ from . RAC_NS import *
 from . RAC_S import *
 from . RFCRC_NS import *
 from . RFCRC_S import *
-from . SEQ import *
+from . SEQ_NS import *
+from . SEQ_S import *
 from . SYNTH_NS import *
 from . SYNTH_S import *
 
@@ -113,7 +114,7 @@ class RM_Device_SIXG301XFULL_RevA0(Base_RM_Device):
         self.__dict__['zz_frozen'] = False
         super(RM_Device_SIXG301XFULL_RevA0, self).__init__(rmio, label,
             'SIXG301XFULL',
-            RM_SVD_Info('SIXG301XFULL_SEQ.svd', '29b658b42da0f8d838cb8778b74ae57a'))
+            RM_SVD_Info('SIXG301XFULL_SEQ.svd', '014c0f66318de0c5fafe6261faa8f1d8'))
 
         self.AGC_NS = RM_Peripheral_AGC_NS(self.zz_rmio, self.zz_label)
         self.zz_pdict['AGC_NS'] = self.AGC_NS
@@ -135,8 +136,10 @@ class RM_Device_SIXG301XFULL_RevA0(Base_RM_Device):
         self.zz_pdict['RFCRC_NS'] = self.RFCRC_NS
         self.RFCRC_S = RM_Peripheral_RFCRC_S(self.zz_rmio, self.zz_label)
         self.zz_pdict['RFCRC_S'] = self.RFCRC_S
-        self.SEQ = RM_Peripheral_SEQ(self.zz_rmio, self.zz_label)
-        self.zz_pdict['SEQ'] = self.SEQ
+        self.SEQ_NS = RM_Peripheral_SEQ_NS(self.zz_rmio, self.zz_label)
+        self.zz_pdict['SEQ_NS'] = self.SEQ_NS
+        self.SEQ_S = RM_Peripheral_SEQ_S(self.zz_rmio, self.zz_label)
+        self.zz_pdict['SEQ_S'] = self.SEQ_S
         self.SYNTH_NS = RM_Peripheral_SYNTH_NS(self.zz_rmio, self.zz_label)
         self.zz_pdict['SYNTH_NS'] = self.SYNTH_NS
         self.SYNTH_S = RM_Peripheral_SYNTH_S(self.zz_rmio, self.zz_label)
@@ -148,6 +151,7 @@ class RM_Device_SIXG301XFULL_RevA0(Base_RM_Device):
             self.MODEM = self.MODEM_S
             self.RAC = self.RAC_S
             self.RFCRC = self.RFCRC_S
+            self.SEQ = self.SEQ_S
             self.SYNTH = self.SYNTH_S
             pass
         elif default_tz_access_mode == RM_TrustZone_Access_Mode.TZ_NONSECURE:
@@ -156,6 +160,7 @@ class RM_Device_SIXG301XFULL_RevA0(Base_RM_Device):
             self.MODEM = self.MODEM_NS
             self.RAC = self.RAC_NS
             self.RFCRC = self.RFCRC_NS
+            self.SEQ = self.SEQ_NS
             self.SYNTH = self.SYNTH_NS
             pass
 

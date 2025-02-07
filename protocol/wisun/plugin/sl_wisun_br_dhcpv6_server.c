@@ -14,17 +14,19 @@
 
 #include <assert.h>
 #include <cmsis_os2.h>
+#include <string.h>
 #include "sl_memory_manager.h"
 #include "sl_wisun_trace_api.h"
 #include "sl_wisun_ip6string.h"
 #include "sl_wisun_types.h"
 #include "socket/socket.h"
 #include "common/iobuf.h"
+#include "sl_wisun_common.h"
 #include "sl_wisun_br_dhcpv6_server.h"
 
 static int dhcpv6_server_socket = -1;
 static uint8_t server_prefix[8], server_DUID[8];
-static uint32_t valid_lifetime, prefered_lifetime;
+static uint32_t valid_lifetime, preferred_lifetime;
 
 // Messages types (RFC3315, section 5.3)
 #define DHCPV6_MSG_SOLICIT      1
@@ -218,7 +220,7 @@ static void dhcp_fill_identity_association(struct iobuf_write *reply,
   iobuf_push_be16(reply, DHCPV6_OPT_IA_ADDRESS);
   iobuf_push_be16(reply, 16 + 4 + 4);
   iobuf_push_data(reply, ipv6, 16);
-  iobuf_push_be32(reply, prefered_lifetime);
+  iobuf_push_be32(reply, preferred_lifetime);
   iobuf_push_be32(reply, valid_lifetime);
 }
 
@@ -360,7 +362,11 @@ sl_status_t sl_wisun_br_dhcpv6_server_start(int socket, uint8_t prefix[8], uint8
 {
   dhcpv6_server_socket = socket;
   valid_lifetime = dhcp_address_lifetime;
-  prefered_lifetime = dhcp_address_lifetime / 2;
+  if (dhcp_address_lifetime == LIFETIME_INFINITE) {
+    preferred_lifetime = LIFETIME_INFINITE;
+  } else {
+    preferred_lifetime = dhcp_address_lifetime / 2;
+  }
   memcpy(server_prefix, prefix, 8);
   memcpy(server_DUID, DUID, 8);
   return SL_STATUS_OK;

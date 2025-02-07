@@ -218,6 +218,41 @@ void sl_wisun_lfn_wake_up_hnd(sl_wisun_evt_t *evt);
  *****************************************************************************/
 void sl_wisun_multicast_reg_finish_hnd(sl_wisun_evt_t *evt);
 
+/**************************************************************************//**
+ * @brief Wi-SUN DHCP vendor data event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+void sl_wisun_dhcp_vendor_data_hnd(sl_wisun_evt_t *evt);
+
+/**************************************************************************//**
+ * @brief Wi-SUN PAN defect event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+void sl_wisun_pan_defect_hnd(sl_wisun_evt_t *evt);
+
+/**************************************************************************//**
+ * @brief Wi-SUN Direct Connect link available event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+void sl_wisun_direct_connect_link_available_hnd(sl_wisun_evt_t *evt);
+
+/**************************************************************************//**
+ * @brief Wi-SUN Direct Connect status event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+void sl_wisun_direct_connect_status_hnd(sl_wisun_evt_t *evt);
+
+/**************************************************************************//**
+ * @brief Wi-SUN Border Router stopped event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+void sl_wisun_br_stopped_hnd(sl_wisun_evt_t *evt);
+
 #ifdef __cplusplus
 }
 #endif

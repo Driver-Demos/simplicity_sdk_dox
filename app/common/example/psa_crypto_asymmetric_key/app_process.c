@@ -440,7 +440,7 @@ void app_process_action(void)
         if (secpr1_key_size_select > SECPR1_SIZE_MAX) {
           secpr1_key_size_select = 0;
         }
-#if defined(_SILICON_LABS_32B_SERIES_3)
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
         if (asymmetric_key_storage_select > KEY_STORAGE_PLAIN_MAX) {
           if (secpr1_key_size_select > SECPR1_256_SIZE) {
             secpr1_key_size_select = 0;
@@ -472,6 +472,11 @@ void app_process_action(void)
         if (montgomery_key_size_select > MONTGOMERY_SIZE_MAX) {
           montgomery_key_size_select = 0;
         }
+#if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
+        if (asymmetric_key_storage_select > KEY_STORAGE_PLAIN_MAX) {
+          montgomery_key_size_select = 0;
+        }
+#endif
         printf("  + Current %s key length is %d-bit (%s).\n",
                asymmetric_key_curve_string[asymmetric_key_curve_select],
                montgomery_key_size[montgomery_key_size_select],

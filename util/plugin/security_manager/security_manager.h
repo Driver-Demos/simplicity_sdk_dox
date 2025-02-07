@@ -25,16 +25,6 @@
 #include "psa/crypto_values.h"
 
 /**
- * Initialise the security manager module.
- *
- * This API will internally initialise the PSA module
- *
- * @retval A psa_status_t status code. Refer to /ref psa_status_t.
- *
- */
-psa_status_t sl_sec_man_init(void);
-
-/**
  * Import a key into PSA ITS.
  *
  * The caller must Provide a valid key.

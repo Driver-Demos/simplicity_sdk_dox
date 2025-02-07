@@ -105,4 +105,6 @@ void halInternalSetTokenData(uint16_t token, uint8_t index, void *data, uint8_t 
 
 void halInternalIncrementCounterToken(uint8_t token);
 
+void sl_token_mfg_init(void);
+
 #endif // _TOKEN_API_H_

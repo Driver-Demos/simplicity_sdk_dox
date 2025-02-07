@@ -3,7 +3,7 @@
 - label: BRD2709A
 - package: platform
 - description: Board support for BRD2709A.
-- category: Platform|Board|Starter Kit
+- category: Platform|Board|Thunderboard
 - quality: production
 - metadata:
     sbom:
@@ -14,8 +14,9 @@
 - provides:
   - name: brd2709a
   - name: hardware_board
-  - name: hardware_board_stk
-  - name: hardware_board_from_stk
+  - name: hardware_board_tb
+  - name: hardware_board_from_tb
+  - name: hardware_board_from_xg26-ek2709a
   - name: hardware_board_has_vcom
   - name: board_config_clock_manager
   - name: hardware_board_has_hfxo_freq_39mhz
@@ -43,7 +44,7 @@
   - name: SL_BOARD_NAME
     value: '"BRD2709A"'
   - name: SL_BOARD_REV
-    value: '"A02"'
+    value: '"A03"'
   - name: HFXO_FREQ
     value: 39000000
   - name: HARDWARE_BOARD_SUPPORTS_RF_BAND_2400
@@ -52,7 +53,7 @@
 - tag:
   - board:pn:BRD2709
   - board:variant:A
-  - board:revision:A02
+  - board:revision:A03
   - board:device:efr32mg26b510f3200im48
   - hardware:has:vcom
   - hardware:has:pti

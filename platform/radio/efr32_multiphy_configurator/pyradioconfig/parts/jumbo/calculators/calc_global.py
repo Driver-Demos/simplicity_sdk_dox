@@ -23,6 +23,7 @@ class CALC_Global_jumbo(CALC_Global):
 
         # Add register groups
         self._add_SHAPING_regs(model)
+        self._add_PREDIST_regs(model)
 
         # Internal variable
         self._addModelVariable(model, 'src1',                 int,   ModelVariableFormat.DECIMAL)
@@ -163,10 +164,6 @@ class CALC_Global_jumbo(CALC_Global):
         self._addModelRegister(model, 'MODEM.CTRL0.DUALCORROPTDIS', int, ModelVariableFormat.HEX)
 
         self._addModelRegister(model, 'MODEM.CTRL4.SOFTDSSSMODE', int, ModelVariableFormat.HEX)
-        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTRST', int, ModelVariableFormat.HEX)
-        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTAVG', int, ModelVariableFormat.HEX)
-        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTDEB', int, ModelVariableFormat.HEX)
-        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTGAIN', int, ModelVariableFormat.HEX)
 
         self._addModelRegister(model, 'MODEM.CTRL5.DSSSCTD'	, int, ModelVariableFormat.HEX )
         self._addModelRegister(model, 'MODEM.CTRL5.BBSS'	         , int, ModelVariableFormat.HEX )
@@ -288,3 +285,9 @@ class CALC_Global_jumbo(CALC_Global):
         self._addModelRegister(model, 'SEQ.BBSS_GROUP_1.BBSS_LEVEL_LOW', int, ModelVariableFormat.HEX)
         self._addModelRegister(model, 'SEQ.BBSS_GROUP_1.BBSS_HYSTERESIS', int, ModelVariableFormat.HEX)
         self._addModelRegister(model, 'SEQ.BBSS_GROUP_1.IIR_SHIFT', int, ModelVariableFormat.HEX)
+
+    def _add_PREDIST_regs(self, model):
+        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTRST', int, ModelVariableFormat.HEX)
+        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTAVG', int, ModelVariableFormat.HEX)
+        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTDEB', int, ModelVariableFormat.HEX)
+        self._addModelRegister(model, 'MODEM.CTRL4.PREDISTGAIN', int, ModelVariableFormat.HEX)

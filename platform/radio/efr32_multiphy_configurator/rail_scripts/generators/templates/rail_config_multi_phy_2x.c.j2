@@ -260,6 +260,7 @@ static const uint32_t {{phyInfoEntryName}}[] = {
 {%- else %}
   (uint32_t) NULL,
 {%- endif %}
+  (uint32_t) {{phyInfoEntry.phyInfoData.trecsPreBitsToSync}}UL,
 };
 {% endfor %}
 {%- for dynamicSlicerTableEntryName, dynamicSlicerTableEntry in multiPhyConfig.commonStructures.dynamicSlicerTableEntries.items() %}

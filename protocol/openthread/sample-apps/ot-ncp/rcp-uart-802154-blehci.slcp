@@ -99,7 +99,9 @@ configuration:
     value: 15
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
-
+  - name: SL_OPENTHREAD_STACK_TASK_MEM_SIZE
+    value: 4608
+  
 template_contribution:
   - name: component_catalog
     value: bluetooth_ncp

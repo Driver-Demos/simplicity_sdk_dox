@@ -93,12 +93,15 @@ configuration:
   - name: "OS_CFG_APP_HOOKS_EN"
     value: "1"
     condition: [micriumos_kernel]
-  - name: "configUSE_POSIX_ERRNO"
-    value: "1"
-    condition: [freertos]
   - name: "OS_CFG_ERRNO_EN"
     value: "1"
     condition: [micriumos_kernel]
+  - name: "configUSE_POSIX_ERRNO"
+    value: "1"
+    condition: [freertos]
+  - name: "configTIMER_TASK_PRIORITY"
+    value: "55"
+    condition: [freertos]
   - name: "WISUN_CLI_AUTO_SAVE"
     value: "0"
   - name: "NVM3_DEFAULT_MAX_OBJECT_SIZE"
@@ -366,6 +369,14 @@ template_contribution:
       argument:
         - type: wildcard
           help: empty | [uint32] Socket Id [string] Option
+  - name: "cli_command"
+    value:
+      group: "wisun"
+      name: "clear_credential_cache"
+      handler: "app_clear_credential_cache"
+      help: "Clear the credential cache: w ccc"
+      shortcuts:
+        - name: "ccc"
   - name: "cli_command"
     value:
       group: "wisun"

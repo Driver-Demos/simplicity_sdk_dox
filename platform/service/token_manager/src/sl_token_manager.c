@@ -80,6 +80,13 @@ sl_status_t sl_token_init(void)
   sl_status_t slStatus, status;
   nvm3_HalInfo_t halInfo;
 
+#if !defined(NVM3_OVERRIDE_ENABLE)
+  //TODO: For now all the tokens are stored in NVM3.
+  //Below INIT should be enabled, once we enable the flash access via SE.
+  //Manufacturing init
+  sl_token_mfg_init();
+#endif
+
   slStatus = nvm3_open(nvm3_defaultHandle, nvm3_defaultInit);
   TOKENDBG(printf("halStackInitTokens nvm3_open status: 0x%0lx\r\n", slStatus); )
   if (slStatus != SL_STATUS_OK) {

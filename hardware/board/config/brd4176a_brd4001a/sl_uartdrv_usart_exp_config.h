@@ -100,7 +100,13 @@
 #define SL_UARTDRV_USART_EXP_RX_PORT             SL_GPIO_PORT_A
 #define SL_UARTDRV_USART_EXP_RX_PIN              6
 
+// USART0 CTS on PB00
+#define SL_UARTDRV_USART_EXP_CTS_PORT            SL_GPIO_PORT_B
+#define SL_UARTDRV_USART_EXP_CTS_PIN             0
 
+// USART0 RTS on PB01
+#define SL_UARTDRV_USART_EXP_RTS_PORT            SL_GPIO_PORT_B
+#define SL_UARTDRV_USART_EXP_RTS_PIN             1
 
 // [USART_SL_UARTDRV_USART_EXP]$
 // <<< sl:end pin_tool >>>

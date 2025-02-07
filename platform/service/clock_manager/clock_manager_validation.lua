@@ -27,6 +27,7 @@ local socpll_refclk = slc.config("SL_CLOCK_MANAGER_SOCPLL_REFCLK")
 local clkin0_freq = slc.config("SL_CLOCK_MANAGER_CLKIN0_FREQ")
 local qspi_advanced_config_enable = slc.config("SL_CLOCK_MANAGER_QSPICLK_CUSTOM_FREQ")
 local qspi_custom_freq = slc.config("SL_CLOCK_MANAGER_QSPICLK_CUSTOM_FREQ")
+local socpll_advanced_settings = slc.config("SOCPLL_ADVANCED_SETTINGS")
 
 -- OSCILLATORS VALIDATION --
 -- HFXO related
@@ -88,7 +89,7 @@ if (sysclk_source.value == "CMU_SYSCLKCTRL_CLKSEL_CLKIN0") or (em01grpbclk_sourc
     nil,
     nil)
   end
-  if clkin0_freq < 1000000 or clkin0_freq > 38000000 then
+  if tonumber(clkin0_freq.value) < 1000000 or tonumber(clkin0_freq.value) > 38000000 then
     validation.warning(
     "Unsupported CLKIN0 frequency. It should be between 1MHz and 38MHz",
     validation.target_for_defines({"SL_CLOCK_MANAGER_CLKIN0_FREQ"}),
@@ -148,7 +149,7 @@ end
       socpll_refclk_freq = tonumber(slc.config("SL_CLOCK_MANAGER_HFRCO_BAND").value)
     end
   end
-  if socpll_refclk_freq ~= nil then
+  if socpll_refclk_freq ~= nil and socpll_advanced_settings ~= nil and socpll_advanced_settings == 1 then
     -- check formula validation: socpll_freq = Fref * (DIVN+2 + DIVF/1024) / 6
     local socpll_freq
     local socpll_freq_expected = tonumber(slc.config("SL_CLOCK_MANAGER_SOCPLL_FREQ").value)

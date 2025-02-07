@@ -36,6 +36,7 @@
 #ifdef SL_CATALOG_ZW_CLI_COMMON_PRESENT
 
 #include "zaf_event_distributor_soc.h"
+#include "CC_MultilevelSwitch_Support.h"
 #include "sl_cli.h"
 #include "app_log.h"
 #include "ev_man.h"
@@ -80,6 +81,22 @@ void cli_get_rgb_values(__attribute__((unused)) sl_cli_command_arg_t *arguments)
   uint8_t color_switch_monochrome_value = sl_pwm_get_duty_cycle(&sl_pwm_led1);
   app_log_info("Monochrome: %d%%\r\n", color_switch_monochrome_value);
 #endif
+}
+
+/******************************************************************************
+ * CLI - toggle_led_bulb: Toggle the LED bulb on/off
+ *****************************************************************************/
+void cli_toggle_led_bulb(__attribute__((unused)) sl_cli_command_arg_t *arguments)
+{
+  cc_multilevel_switch_t *switches;
+  switches = cc_multilevel_switch_support_config_get_switches();
+  cc_multilevel_switch_stop_level_change(&switches[0]);
+
+  if (cc_multilevel_switch_get_current_value(&switches[0]) > 0) {
+    cc_multilevel_switch_set(&switches[0], 0, 0); // Turn it off
+  } else {
+    cc_multilevel_switch_set(&switches[0], 0xFF, 0); // 0xFF for last on value.
+  }
 }
 
 #endif // SL_CATALOG_ZW_CLI_COMMON_PRESENT

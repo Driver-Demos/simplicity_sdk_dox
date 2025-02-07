@@ -16,7 +16,10 @@ class RegModel(object):
         else:
             if part_family.upper() in RM_ALL_PART_FAMILY_NAMES:
                 #Add to reg model
-                if part_revision == 'ANY' or part_family.upper() in RM_S1_PART_FAMILY_NAMES or part_family.upper() in RM_S2_PART_FAMILY_NAMES:
+                if (part_revision == 'ANY'
+                        or part_family.upper() in RM_S1_PART_FAMILY_NAMES
+                        or part_family.upper() in RM_S2_PART_FAMILY_NAMES
+                        or part_family.upper() in ["RAINIER"]):
                     cls._reg_model_dict[part_family] = RM_Factory(part_family.upper())()
                 else:
                     cls._reg_model_dict[part_family] = RM_Factory(part_family.upper(), part_revision)()

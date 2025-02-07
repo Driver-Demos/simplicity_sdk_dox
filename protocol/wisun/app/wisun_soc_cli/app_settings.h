@@ -33,14 +33,6 @@
 #define EM_MAX SL_POWER_MANAGER_EM3
 #endif
 
-typedef enum
-{
-  APP_CERTIFICATE_CHAIN_SILABS = 0,
-#ifdef WISUN_FAN_CERTIFICATION
-  APP_CERTIFICATE_CHAIN_CERTIF = 1
-#endif
-} app_certificate_chains_t;
-
 typedef struct {
   char allowed_channels[APP_UTIL_PRINTABLE_DATA_MAX_LENGTH+1];
   char network_name[SL_WISUN_NETWORK_NAME_SIZE+1];
@@ -72,6 +64,7 @@ typedef struct {
   uint8_t preamble_length;
   uint8_t stf_length;
   uint8_t neighbor_table_size;
+  uint16_t preferred_pan_id;
   uint8_t keychain;
   uint8_t keychain_index;
   uint8_t direct_connect_pmk[SL_WISUN_PMK_LEN];

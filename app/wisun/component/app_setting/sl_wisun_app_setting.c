@@ -149,9 +149,9 @@ static const app_setting_wisun_t wisun_app_settings_default = {
   .network_size = SL_WISUN_NETWORK_SIZE_SMALL,
 #endif
 #if defined(WISUN_CONFIG_TX_POWER)
-  .tx_power = WISUN_CONFIG_TX_POWER,
+  .tx_power_ddbm = WISUN_CONFIG_TX_POWER,
 #else
-  .tx_power = 200,
+  .tx_power_ddbm = 200,
 #endif
   .is_default_phy = true,
 #if defined(WISUN_CONFIG_DEVICE_TYPE)
@@ -315,7 +315,7 @@ sl_status_t app_wisun_setting_set_tx_power(const int16_t * const tx_power)
 
   _app_wisun_mutex_acquire();
 
-  _wisun_app_settings.tx_power = *tx_power;
+  _wisun_app_settings.tx_power_ddbm = *tx_power;
 
   stat = _setting_notify(APP_SETTING_NOTIFICATION_SET_TX_POWER);
 
@@ -391,7 +391,7 @@ sl_status_t app_wisun_setting_get_tx_power(int16_t * const tx_power)
   }
 
   _app_wisun_mutex_acquire();
-  *tx_power = _wisun_app_settings.tx_power;
+  *tx_power = _wisun_app_settings.tx_power_ddbm;
   _app_wisun_mutex_release();
 
   return SL_STATUS_OK;

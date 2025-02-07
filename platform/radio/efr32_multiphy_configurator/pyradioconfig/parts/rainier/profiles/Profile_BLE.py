@@ -49,37 +49,37 @@ class ProfileBLERainier(ProfileBLEBobcat):
 
         if ble_feature == model.vars.ble_feature.var_enum.LE_1M:
             model.vars.rx_sync_delay_ns.value_forced = 50000
-            model.vars.rx_eof_delay_ns.value_forced = 11000
-            model.vars.tx_sync_delay_ns.value_forced = 3500
-            model.vars.tx_eof_delay_ns.value_forced = 750
+            model.vars.rx_eof_delay_ns.value_forced = 9980
+            model.vars.tx_sync_delay_ns.value_forced = 3210
+            model.vars.tx_eof_delay_ns.value_forced = 1106
         elif ble_feature == model.vars.ble_feature.var_enum.LE_2M:
             model.vars.rx_sync_delay_ns.value_forced = 12492
-            model.vars.rx_eof_delay_ns.value_forced = 6000
-            model.vars.tx_sync_delay_ns.value_forced = 3000
-            model.vars.tx_eof_delay_ns.value_forced = 535
+            model.vars.rx_eof_delay_ns.value_forced = 5460
+            model.vars.tx_sync_delay_ns.value_forced = 1520
+            model.vars.tx_eof_delay_ns.value_forced = 416
         elif ble_feature == model.vars.ble_feature.var_enum.CODED_125K:
             model.vars.rx_sync_delay_ns.value_forced = 7000
-            model.vars.rx_eof_delay_ns.value_forced = 6500
-            model.vars.tx_sync_delay_ns.value_forced = 5375
-            model.vars.tx_eof_delay_ns.value_forced = 500
+            model.vars.rx_eof_delay_ns.value_forced = 7930
+            model.vars.tx_sync_delay_ns.value_forced = 3182
+            model.vars.tx_eof_delay_ns.value_forced = 1058
         elif ble_feature == model.vars.ble_feature.var_enum.CODED_500K:
             model.vars.rx_sync_delay_ns.value_forced = 6750
-            model.vars.rx_eof_delay_ns.value_forced = 6500
-            model.vars.tx_sync_delay_ns.value_forced = 5375
-            model.vars.tx_eof_delay_ns.value_forced = 500
+            model.vars.rx_eof_delay_ns.value_forced = 7930
+            model.vars.tx_sync_delay_ns.value_forced = 3182
+            model.vars.tx_eof_delay_ns.value_forced = 1058
         elif ble_feature == model.vars.ble_feature.var_enum.AOX_1M:
             model.vars.rx_sync_delay_ns.value_forced = 50000
-            model.vars.rx_eof_delay_ns.value_forced = 11000
-            model.vars.tx_sync_delay_ns.value_forced = 3500
-            model.vars.tx_eof_delay_ns.value_forced = 750
+            model.vars.rx_eof_delay_ns.value_forced = 9980
+            model.vars.tx_sync_delay_ns.value_forced = 3210
+            model.vars.tx_eof_delay_ns.value_forced = 1106
         elif ble_feature == model.vars.ble_feature.var_enum.AOX_2M:
             model.vars.rx_sync_delay_ns.value_forced = 12492
-            model.vars.rx_eof_delay_ns.value_forced = 6000
-            model.vars.tx_sync_delay_ns.value_forced = 3000
-            model.vars.tx_eof_delay_ns.value_forced = 535
+            model.vars.rx_eof_delay_ns.value_forced = 5460
+            model.vars.tx_sync_delay_ns.value_forced = 1520
+            model.vars.tx_eof_delay_ns.value_forced = 416
         elif ble_feature == model.vars.ble_feature.var_enum.CONCURRENT:
             model.vars.rx_sync_delay_ns.value_forced = 50000
-            model.vars.rx_eof_delay_ns.value_forced = 11750
+            model.vars.rx_eof_delay_ns.value_forced = 10700
             model.vars.tx_sync_delay_ns.value_forced = 2000
             model.vars.tx_eof_delay_ns.value_forced = 2000
         elif ble_feature == model.vars.ble_feature.var_enum.HADM_1M:
@@ -89,11 +89,11 @@ class ProfileBLERainier(ProfileBLEBobcat):
             model.vars.tx_eof_delay_ns.value_forced = 0
         elif ble_feature == model.vars.ble_feature.var_enum.HADM_2M:
             model.vars.rx_sync_delay_ns.value_forced = 12492
-            model.vars.rx_eof_delay_ns.value_forced = 6000
-            model.vars.tx_sync_delay_ns.value_forced = 3000
-            model.vars.tx_eof_delay_ns.value_forced = 535
+            model.vars.rx_eof_delay_ns.value_forced = 5460
+            model.vars.tx_sync_delay_ns.value_forced = 1520
+            model.vars.tx_eof_delay_ns.value_forced = 416
         elif ble_feature == model.vars.ble_feature.var_enum.HADM_2M_2BT:
             model.vars.rx_sync_delay_ns.value_forced = 12492
-            model.vars.rx_eof_delay_ns.value_forced = 6000
-            model.vars.tx_sync_delay_ns.value_forced = 3000
-            model.vars.tx_eof_delay_ns.value_forced = 535
+            model.vars.rx_eof_delay_ns.value_forced = 5460
+            model.vars.tx_sync_delay_ns.value_forced = 1520
+            model.vars.tx_eof_delay_ns.value_forced = 416

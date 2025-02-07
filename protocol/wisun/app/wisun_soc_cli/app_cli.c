@@ -33,6 +33,7 @@
 #include "sl_wisun_version.h"
 #include "sl_wisun_keychain.h"
 #include "psa/crypto.h"
+#include "sl_psa_crypto.h"
 #include "em_system.h"
 #if defined(SEMAILBOX_PRESENT)
 #include "sl_se_manager.h"
@@ -54,7 +55,7 @@
 #include "task.h"
 #endif
 
-#define APP_TASK_PRIORITY osPriorityLow3 // Lowest priority in the system for all CLI related task
+#define APP_TASK_PRIORITY osPriorityLow1  // (CLI related task) must be the lowest priority in the system
 #define APP_TASK_STACK_SIZE 500 // in units of CPU_INT32U
 
 #define APP_ICMPV6_TYPE_ECHO_REQUEST 128
@@ -238,7 +239,8 @@ typedef enum
 {
   APP_CONNECTION_STATE_NOT_CONNECTED,
   APP_CONNECTION_STATE_CONNECTING,
-  APP_CONNECTION_STATE_CONNECTED
+  APP_CONNECTION_STATE_CONNECTED,
+  APP_CONNECTION_STATE_DISCONNECTING
 } app_connection_state_t;
 
 typedef enum {
@@ -682,6 +684,10 @@ static void app_handle_join_state_ind(sl_wisun_evt_t *evt)
 {
   const app_enum_t *ptr;
 
+  if (evt->evt.join_state.join_state == SL_WISUN_JOIN_STATE_DISCONNECTED) {
+    app_connection_state = APP_CONNECTION_STATE_NOT_CONNECTED;
+  }
+
   if (app_settings_wisun.device_type == SL_WISUN_LFN) {
     ptr = app_util_get_enum_by_integer(app_settings_wisun_join_state_enum_lfn, evt->evt.join_state.join_state);
   } else {
@@ -899,7 +905,7 @@ static void app_join(sl_wisun_phy_config_type_t phy_config_type)
   app_wisun_cli_mutex_lock();
 
   if (app_connection_state != APP_CONNECTION_STATE_NOT_CONNECTED) {
-    printf("[Failed: already connecting or connected]\r\n");
+    printf("[Failed: not disconnected]\r\n");
     goto cleanup;
   }
 
@@ -1002,6 +1008,14 @@ static void app_join(sl_wisun_phy_config_type_t phy_config_type)
   if (ret != SL_STATUS_OK) {
     printf("[Failed: unable to set neighbor table size: %lu]\r\n", ret);
     goto cleanup;
+  }
+
+  if (app_settings_wisun.device_type == SL_WISUN_ROUTER) {
+    ret = sl_wisun_set_preferred_pan(app_settings_wisun.preferred_pan_id);
+    if (ret != SL_STATUS_OK) {
+      printf("[Failed: unable to set preferred PAN: %lu]\r\n", ret);
+      goto cleanup;
+    }
   }
 
   if (app_settings_wisun.device_type == SL_WISUN_LFN) {
@@ -1244,10 +1258,14 @@ void app_disconnect(sl_cli_command_arg_t *arguments)
     goto cleanup;
   }
 
+  if (app_connection_state == APP_CONNECTION_STATE_DISCONNECTING) {
+    printf("[Failed: already disconnecting]\r\n");
+    goto cleanup;
+  }
+
   ret = sl_wisun_disconnect();
   if (ret == SL_STATUS_OK) {
-    app_connection_state = APP_CONNECTION_STATE_NOT_CONNECTED;
-    printf("[Disconnecting]\r\n");
+    app_connection_state = APP_CONNECTION_STATE_DISCONNECTING;
   } else {
     printf("[Disconnection failed: %lu]\r\n", ret);
   }

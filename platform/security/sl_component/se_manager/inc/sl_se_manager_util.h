@@ -64,6 +64,23 @@
 extern "C" {
 #endif
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+/// Lifecycle event flags keep track of certain events and state changes by setting a one-time
+/// irreversible flag in the OTP. This enum contains information on what the separate event flags
+/// indicate. The lifecycle state flags can be fetched using @ref sl_se_get_lifecycle_event_flags. The utility
+/// @ref sl_se_lifecycle_event_flag_is_set can be used to check if any specific flag has been set.
+typedef enum {
+  SL_SE_LIFECYCLE_EVENT_HOST_UNSECURE_UNLOCKED = 0,       ///< Host has been unsecure-unlocked
+  SL_SE_LIFECYCLE_EVENT_HOST_SECURE_UNLOCKED = 1,         ///< Host has been secure-unlocked
+  SL_SE_LIFECYCLE_EVENT_SE_SECURE_UNLOCKED = 2,           ///< SE has been secure-unlocked
+  SL_SE_LIFECYCLE_EVENT_INITIAL_DEBUG_LOCK_SET = 3,       ///< Initial debug lock token has been set in MTP
+  SL_SE_LIFECYCLE_EVENT_HOST_SECURE_DEBUG_ENABLED = 4,    ///< Host secure debug has been enabled
+  SL_SE_LIFECYCLE_EVENT_HOST_SECURE_DEBUG_DISABLED = 5,   ///< Host secure debug has been disabled
+  SL_SE_LIFECYCLE_EVENT_HOST_DEBUG_LOCKED = 6,            ///< Host has been debug locked
+  SL_SE_LIFECYCLE_EVENT_AXIP_NONCE_ROLL_DISABLED = 7,     ///< AXiP nonce rolling has been disabled
+} sl_se_lifecycle_event_flag_t;
+#endif // #if defined(_SILICON_LABS_32B_SERIES_3)
+
 // -----------------------------------------------------------------------------
 // Prototypes
 
@@ -82,7 +99,7 @@ extern "C" {
  *   Pointer to SE image to validate.
  *
  * @return
- *   One of the following sl_status_t codes:
+ *   One of the following @ref status codes:
  *   - @c SL_STATUS_OK when the command was executed successfully
  *   - @c SL_STATUS_INVALID_PARAMETER when an invalid parameter was passed
  ******************************************************************************/
@@ -531,6 +548,46 @@ sl_status_t sl_se_get_tamper_reset_cause(sl_se_command_context_t *cmd_ctx,
                                          uint32_t *reset_cause);
 #endif // SLI_SE_COMMAND_READ_TAMPER_RESET_CAUSE_AVAILABLE
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+/***************************************************************************//**
+ * @brief
+ *   Reads out traceable lifecycle event flags from the OTP. See
+ *   \ref sl_se_lifecycle_event_flag_t for details on what the individual flag bits
+ *   indicate.
+ *
+ * @param[in] cmd_ctx
+ *   Pointer to an SE command context object.
+ *
+ * @param[out] event_flags
+ *   Pointer to an array of at least 8 bytes, to contain the trace flags
+ *
+ * @return
+ *   SL_STATUS_OK upon successfull execution, error code elsewise
+ ******************************************************************************/
+sl_status_t sl_se_get_lifecycle_event_flags(sl_se_command_context_t *cmd_ctx, uint64_t *event_flags);
+
+/***************************************************************************//**
+ * @brief
+ *   Utility for checking if a certain lifecycle event flag is set
+ *
+ * @param[in] flags
+ *   Pointer to an 8 byte array of lifecycle event flags (event_flags from
+ *   \ref sl_se_get_lifecycle_event_flags)
+ *
+ * @param[in] flag_index
+ *   Which bit (event flag) to check if is set
+ *
+ * @return
+ *   true if event flag bit was set
+ *   false if event flag bit was not set
+ ******************************************************************************/
+__STATIC_INLINE bool sl_se_lifecycle_event_flag_is_set(uint64_t *flags, sl_se_lifecycle_event_flag_t flag_index)
+{
+  return (*flags & (1 << flag_index) ? true : false);
+}
+
+#endif // #if defined(_SILICON_LABS_32B_SERIES_3)
+
 /***************************************************************************//**
  * @brief
  *   Enables the secure debug functionality.
@@ -768,7 +825,7 @@ sl_status_t sl_se_read_cert_size(sl_se_command_context_t *cmd_ctx,
  *   Length of certificate in number of bytes.
  *
  * @return
- *   Status code, @ref sl_status.h.
+ *   Status code, @ref status
  ******************************************************************************/
 sl_status_t sl_se_read_cert(sl_se_command_context_t *cmd_ctx,
                             sl_se_cert_type_t cert_type,
@@ -828,9 +885,9 @@ sl_status_t sl_se_exit_active_mode(sl_se_command_context_t *cmd_ctx);
  *   Pointer to location where the rollback counter value will be returned.
  *
  * @return
- *   SL_STATUS_OK when the functions was successfully, or else, a status code
+ *   SL_STATUS_OK when the function executed successfully, else, a status code
  *   of type sl_status_t that indicates why the function was not successful,
- *   ref sl_status.h.
+ *   @ref status
  ******************************************************************************/
 sl_status_t sl_se_get_rollback_counter(sl_se_command_context_t *cmd_ctx,
                                        uint32_t *rollback_counter);
@@ -842,12 +899,16 @@ sl_status_t sl_se_get_rollback_counter(sl_se_command_context_t *cmd_ctx,
  * @param[in] cmd_ctx
  *   Pointer to an SE command context object.
  *
+ * @param[out] rollback_counter
+ *    Optional: Retrieve the rollback counter count after increment
+ *              Set to NULL to ignore
  * @return
- *   SL_STATUS_OK when the functions was successfully, or else, a status code
+ *   SL_STATUS_OK when the function executed successfully, else, a status code
  *   of type sl_status_t that indicates why the function was not successful,
- *   ref sl_status.h.
+ *   @ref status
  ******************************************************************************/
-sl_status_t sl_se_increment_rollback_counter(sl_se_command_context_t *cmd_ctx);
+sl_status_t sl_se_increment_rollback_counter(sl_se_command_context_t *cmd_ctx,
+                                             uint32_t *rollback_counter);
 
 /***************************************************************************//**
  * @brief
@@ -859,9 +920,9 @@ sl_status_t sl_se_increment_rollback_counter(sl_se_command_context_t *cmd_ctx);
  *   The stored upgrade file version.
  *
  * @return
- *   SL_STATUS_OK when the functions was successfully, or else, a status code
+ *   SL_STATUS_OK when the function executed successfully, else, a status code
  *   of type sl_status_t that indicates why the function was not successful,
- *   ref sl_status.h.
+ *   @ref status
  ******************************************************************************/
 sl_status_t sl_se_get_upgrade_file_version(sl_se_command_context_t *cmd_ctx,
                                            uint32_t *version);
@@ -876,9 +937,9 @@ sl_status_t sl_se_get_upgrade_file_version(sl_se_command_context_t *cmd_ctx,
  *   New upgrade file version
  *
  * @return
- *   SL_STATUS_OK when the functions was successfully, or else, a status code
+ *   \ref SL_STATUS_OK when the function executed successfully, else, a status code
  *   of type sl_status_t that indicates why the function was not successful,
- *   ref sl_status.h.
+ *   @ref status
  ******************************************************************************/
 sl_status_t sl_se_set_upgrade_file_version(sl_se_command_context_t *cmd_ctx,
                                            uint32_t version);

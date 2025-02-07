@@ -37,7 +37,7 @@
 #include "sl_status.h"
 
 /// API version used to check compatibility (do not edit when using this header)
-#define SL_WISUN_PARAMS_API_VERSION  5
+#define SL_WISUN_PARAMS_API_VERSION  6
 
 /**************************************************************************//**
  * @addtogroup SL_WISUN_TYPES
@@ -110,7 +110,7 @@ SL_PACK_END()
 
 /// PAN discovery parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_discovery_s {
   /// PAN Advertisement trickle timer
   sl_wisun_trickle_params_t trickle_pa;
   /// PAN Advertisement Solicit trickle timer
@@ -124,12 +124,17 @@ typedef struct {
   uint8_t allow_skip;
   /// Reserved, set to zero
   uint8_t reserved[2];
-} SL_ATTRIBUTE_PACKED sl_wisun_params_discovery;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// PAN discovery parameter set
+typedef struct sl_wisun_params_discovery_s sl_wisun_params_discovery;
+/// PAN discovery parameter set
+typedef struct sl_wisun_params_discovery_s sl_wisun_params_discovery_t;
 
 /// Authentication parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_eapol_s {
   /// Security protocol trickle timer
   sl_wisun_trickle_params_t sec_prot_trickle;
   /// PMK lifetime (minutes)
@@ -167,22 +172,32 @@ typedef struct {
   uint8_t allow_skip;
   /// Reserved, set to zero
   uint8_t reserved[3];
-} SL_ATTRIBUTE_PACKED sl_wisun_params_eapol;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// Authentication parameter set
+typedef struct sl_wisun_params_eapol_s sl_wisun_params_eapol;
+/// Authentication parameter set
+typedef struct sl_wisun_params_eapol_s sl_wisun_params_eapol_t;
 
 /// PAN configuration parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_configuration_s {
   /// PAN Configuration trickle timer
   sl_wisun_trickle_params_t trickle_pc;
   /// PAN Configuration Solicit trickle timer
   sl_wisun_trickle_params_t trickle_pcs;
-} sl_wisun_params_configuration;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// PAN configuration parameter set
+typedef struct sl_wisun_params_configuration_s sl_wisun_params_configuration;
+/// PAN configuration parameter set
+typedef struct sl_wisun_params_configuration_s sl_wisun_params_configuration_t;
 
 /// RPL parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_rpl_s {
   /// RPL first DIS maximum delay (seconds)
   uint16_t dis_max_delay_first_s;
   /// RPL DIS maximum delay (seconds)
@@ -201,12 +216,17 @@ typedef struct {
   uint8_t candidate_parents_max;
   /// RPL max parents
   uint8_t parents_max;
-} sl_wisun_params_rpl;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// RPL parameter set
+typedef struct sl_wisun_params_rpl_s sl_wisun_params_rpl;
+/// RPL parameter set
+typedef struct sl_wisun_params_rpl_s sl_wisun_params_rpl_t;
 
 /// MPL parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_mpl_s {
   /// MPL trickle timer
   sl_wisun_trickle_params_t trickle;
   /// MPL seed set entry lifetime (seconds)
@@ -217,12 +237,17 @@ typedef struct {
   ///  0 indicates the seed-id is elided and is the IPv6 source address,
   ///  3 indicates the seed-id is the 128-bit ULA/GUA of the source
   uint8_t seed_id_type;
-} SL_ATTRIBUTE_PACKED sl_wisun_params_mpl;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// MPL parameter set
+typedef struct sl_wisun_params_mpl_s sl_wisun_params_mpl;
+/// MPL parameter set
+typedef struct sl_wisun_params_mpl_s sl_wisun_params_mpl_t;
 
 /// LFN parent parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_lfn_parent_s {
   /// Interval after which an FFN parent must disable LFN broadcast messaging
   /// if the FFN parent is unable communicate with its Border Router.
   uint16_t lfn_pan_timeout_m;
@@ -235,20 +260,30 @@ typedef struct {
   /// Make sure that the value is equal to or less than the corresponding field on LFNs.
   /// Specification range [30, 120] (set lower for test purposes)
   uint8_t lfn_na_wait_duration_m;
-} SL_ATTRIBUTE_PACKED sl_wisun_params_lfn_parent;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// LFN parent parameter set
+typedef struct sl_wisun_params_lfn_parent_s sl_wisun_params_lfn_parent;
+/// LFN parent parameter set
+typedef struct sl_wisun_params_lfn_parent_s sl_wisun_params_lfn_parent_t;
 
 /// Misc parameter set
 SL_PACK_START(1)
-typedef struct {
+struct sl_wisun_params_misc_s {
   /// Temporary neighbor link minimum timeout
   uint16_t temp_link_min_timeout_s;
   /// Border router communication timeout PAN_TIMEOUT
   uint8_t pan_timeout_m;
   /// Reserved, set to zero
   uint8_t reserved;
-} SL_ATTRIBUTE_PACKED sl_wisun_params_misc;
+} SL_ATTRIBUTE_PACKED;
 SL_PACK_END()
+
+/// Misc parameter set
+typedef struct sl_wisun_params_misc_s sl_wisun_params_misc;
+/// Misc parameter set
+typedef struct sl_wisun_params_misc_s sl_wisun_params_misc_t;
 
 /// FFN parameter set
 SL_PACK_START(1)
@@ -261,22 +296,22 @@ typedef struct {
    */
   uint32_t version;
   /// PAN discovery parameter set
-  sl_wisun_params_discovery discovery;
+  sl_wisun_params_discovery_t discovery;
   /// PAN configuration parameter set
-  sl_wisun_params_configuration configuration;
+  sl_wisun_params_configuration_t configuration;
   /// Authentication parameter set
-  sl_wisun_params_eapol eapol;
+  sl_wisun_params_eapol_t eapol;
   /// RPL parameter set
-  sl_wisun_params_rpl rpl;
+  sl_wisun_params_rpl_t rpl;
   /// MPL parameter set
-  sl_wisun_params_mpl mpl;
+  sl_wisun_params_mpl_t mpl;
   /// LFN parent parameter set
-  sl_wisun_params_lfn_parent lfn_parent;
+  sl_wisun_params_lfn_parent_t lfn_parent;
   /// Misc parameter set
-  sl_wisun_params_misc misc;
+  sl_wisun_params_misc_t misc;
   /// Direct Connect Authentication parameter set
-  sl_wisun_params_eapol direct_connect_eapol;
-} sl_wisun_connection_params_t;
+  sl_wisun_params_eapol_t direct_connect_eapol;
+} SL_ATTRIBUTE_PACKED sl_wisun_connection_params_t;
 SL_PACK_END()
 
 /***************************************************************************//**

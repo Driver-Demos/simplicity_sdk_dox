@@ -81,7 +81,7 @@ typedef struct app_setting_wisun{
   /// Network size
   uint8_t network_size;
   /// TX Power
-  int16_t tx_power;
+  int16_t tx_power_ddbm;
   /// Device type
   uint8_t device_type;
   /// LFN profile

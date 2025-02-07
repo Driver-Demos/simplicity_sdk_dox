@@ -33,7 +33,8 @@
 
 #include "sl_clock_manager.h"
 #include "sl_status.h"
-#include "em_device.h"
+#include "sl_compiler.h"
+#include "sl_code_classification.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,11 +43,13 @@ extern "C" {
 /***************************************************************************//**
  * Set SYSCLK clock source.
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_clock_manager_set_sysclk_source(sl_oscillator_t source);
 
 /***************************************************************************//**
  * Get SYSCLK clock source.
  ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
 sl_status_t sli_clock_manager_get_sysclk_source(sl_oscillator_t *source);
 
 /***************************************************************************//**

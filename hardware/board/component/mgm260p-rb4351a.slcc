@@ -17,9 +17,9 @@
   - name: SL_KIT_NAME
     value: '"MGM260P-RB4351A"'
   - name: SL_KIT_REV
-    value: '"A00"'
+    value: '"A01"'
 - tag:
   - kit:opn:MGM260P-RB4351A
   - kit:pn:RB4351
   - kit:variant:A
-  - kit:revision:A00
+  - kit:revision:A01

@@ -111,6 +111,7 @@ typedef enum {
   SL_WISUN_MSG_ACCEPT_DIRECT_CONNECT_LINK_REQ_ID          = 0x47,
   SL_WISUN_MSG_SET_PHY_SENSITIVITY_REQ_ID                 = 0x48,
   SL_WISUN_MSG_SET_DIRECT_CONNECT_PMK_ID_REQ_ID           = 0x49,
+  SL_WISUN_MSG_SET_PREFERRED_PAN_REQ_ID                   = 0x4A,
 } sl_wisun_msg_req_id_t;
 
 /// Wi-SUN Message API confirmation IDs
@@ -184,6 +185,7 @@ typedef enum {
   SL_WISUN_MSG_ACCEPT_DIRECT_CONNECT_LINK_CNF_ID          = 0x47,
   SL_WISUN_MSG_SET_PHY_SENSITIVITY_CNF_ID                 = 0x48,
   SL_WISUN_MSG_SET_DIRECT_CONNECT_PMK_ID_CNF_ID           = 0x49,
+  SL_WISUN_MSG_SET_PREFERRED_PAN_CNF_ID                   = 0x4A,
 } sl_wisun_msg_cnf_id_t;
 
 /**************************************************************************//**
@@ -3278,6 +3280,51 @@ typedef struct {
 SL_PACK_END()
 
 /** @} (end SL_WISUN_MSG_SET_DIRECT_CONNECT_PMK_ID) */
+
+/**************************************************************************//**
+ * @defgroup SL_WISUN_MSG_SET_PREFERRED_PAN sl_wisun_msg_set_preferred_pan
+ * @{
+ ******************************************************************************/
+
+/// Request message body
+SL_PACK_START(1)
+typedef struct {
+  /// Preferred PAN ID
+  uint16_t pan_id;
+  /// Reserved, set to zero
+  uint16_t reserved;
+} SL_ATTRIBUTE_PACKED sl_wisun_msg_set_preferred_pan_req_body_t;
+SL_PACK_END()
+
+/// Request message
+SL_PACK_START(1)
+typedef struct {
+  /// Common message header
+  sl_wisun_msg_header_t header;
+  /// Request message body
+  sl_wisun_msg_set_preferred_pan_req_body_t body;
+} SL_ATTRIBUTE_PACKED sl_wisun_msg_set_preferred_pan_req_t;
+SL_PACK_END()
+
+/// Confirmation message body
+SL_PACK_START(1)
+typedef struct {
+  /// Status of the request
+  uint32_t status;
+} SL_ATTRIBUTE_PACKED sl_wisun_msg_set_preferred_pan_cnf_body_t;
+SL_PACK_END()
+
+/// Confirmation message
+SL_PACK_START(1)
+typedef struct {
+  /// Common message header
+  sl_wisun_msg_header_t header;
+  /// Confirmation message body
+  sl_wisun_msg_set_preferred_pan_cnf_body_t body;
+} SL_ATTRIBUTE_PACKED sl_wisun_msg_set_preferred_pan_cnf_t;
+SL_PACK_END()
+
+/** @} (end SL_WISUN_MSG_SET_PREFERRED_PAN) */
 
 /** @} (end SL_WISUN_MSG_API) */
 

@@ -61,7 +61,12 @@ typedef enum {
   EVENT_IDX_JOIN_STATE,
   EVENT_IDX_REGULATION_TX_LEVEL,
   EVENT_IDX_LFN_WAKE_UP,
-  EVENT_IDX_MULTICAST_REG_FINISH
+  EVENT_IDX_MULTICAST_REG_FINISH,
+  EVENT_IDX_DHCP_VENDOR_DATA,
+  EVENT_IDX_PAN_DEFECT,
+  EVENT_IDX_DIRECT_CONNECT_LINK_AVAILABLE,
+  EVENT_IDX_DIRECT_CONNECT_LINK_STATUS,
+  EVENT_IDX_BR_STOPPED
 } app_wisun_event_id_t;
 
 /// Wi-SUN application callback type.
@@ -199,6 +204,31 @@ static event_handler_t _wisun_events[] = {
   {
     .id = SL_WISUN_MSG_LFN_MULTICAST_REG_IND_ID,
     .callback = sl_wisun_multicast_reg_finish_hnd,
+    .custom_callback = NULL
+  },
+  {
+    .id = SL_WISUN_MSG_DHCP_VENDOR_DATA_IND_ID,
+    .callback = sl_wisun_dhcp_vendor_data_hnd,
+    .custom_callback = NULL
+  },
+  {
+    .id = SL_WISUN_MSG_PAN_DEFECT_IND_ID,
+    .callback = sl_wisun_pan_defect_hnd,
+    .custom_callback = NULL
+  },
+  {
+    .id = SL_WISUN_MSG_DIRECT_CONNECT_LINK_AVAILABLE_IND_ID,
+    .callback = sl_wisun_direct_connect_link_available_hnd,
+    .custom_callback = NULL
+  },
+  {
+    .id = SL_WISUN_MSG_DIRECT_CONNECT_LINK_STATUS_IND_ID,
+    .callback = sl_wisun_direct_connect_status_hnd,
+    .custom_callback = NULL
+  },
+  {
+    .id = SL_WISUN_BR_MSG_STOPPED_IND_ID,
+    .callback = sl_wisun_br_stopped_hnd,
     .custom_callback = NULL
   }
 };
@@ -404,7 +434,13 @@ __STATIC_INLINE app_wisun_event_id_t _decode_ind(const sl_wisun_msg_ind_id_t ind
     case SL_WISUN_MSG_REGULATION_TX_LEVEL_IND_ID:           return EVENT_IDX_REGULATION_TX_LEVEL;
     case SL_WISUN_MSG_LFN_WAKE_UP_IND_ID:                   return EVENT_IDX_LFN_WAKE_UP;
     case SL_WISUN_MSG_LFN_MULTICAST_REG_IND_ID:             return EVENT_IDX_MULTICAST_REG_FINISH;
+    case SL_WISUN_MSG_DHCP_VENDOR_DATA_IND_ID:              return EVENT_IDX_DHCP_VENDOR_DATA;
+    case SL_WISUN_MSG_PAN_DEFECT_IND_ID:                    return EVENT_IDX_PAN_DEFECT;
+    case SL_WISUN_MSG_DIRECT_CONNECT_LINK_AVAILABLE_IND_ID: return EVENT_IDX_DIRECT_CONNECT_LINK_AVAILABLE;
+    case SL_WISUN_MSG_DIRECT_CONNECT_LINK_STATUS_IND_ID:    return EVENT_IDX_DIRECT_CONNECT_LINK_STATUS;
+    case SL_WISUN_BR_MSG_STOPPED_IND_ID:                    return EVENT_IDX_BR_STOPPED;
     default:                                                return EVENT_IDX_NOTVALID;
+
   }
 }
 
@@ -564,6 +600,61 @@ SL_WEAK void sl_wisun_lfn_wake_up_hnd(sl_wisun_evt_t *evt)
  * @param[in] evt event ptr
  *****************************************************************************/
 SL_WEAK void sl_wisun_multicast_reg_finish_hnd(sl_wisun_evt_t *evt)
+{
+  (void) evt;
+  assert(false);
+}
+
+/**************************************************************************//**
+ * @brief Wi-SUN DHCP vendor data event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+SL_WEAK void sl_wisun_dhcp_vendor_data_hnd(sl_wisun_evt_t *evt)
+{
+  (void) evt;
+  assert(false);
+}
+
+/**************************************************************************//**
+ * @brief Wi-SUN PAN defect event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+SL_WEAK void sl_wisun_pan_defect_hnd(sl_wisun_evt_t *evt)
+{
+  (void) evt;
+  assert(false);
+}
+
+/**************************************************************************//**
+ * @brief Wi-SUN Direct Connect link available event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+SL_WEAK void sl_wisun_direct_connect_link_available_hnd(sl_wisun_evt_t *evt)
+{
+  (void) evt;
+  assert(false);
+}
+
+/**************************************************************************//**
+ * @brief Wi-SUN Direct Connect status event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+SL_WEAK void sl_wisun_direct_connect_status_hnd(sl_wisun_evt_t *evt)
+{
+  (void) evt;
+  assert(false);
+}
+
+/**************************************************************************//**
+ * @brief Wi-SUN Border Router stopped event handler
+ * @details
+ * @param[in] evt event ptr
+ *****************************************************************************/
+SL_WEAK void sl_wisun_br_stopped_hnd(sl_wisun_evt_t *evt)
 {
   (void) evt;
   assert(false);

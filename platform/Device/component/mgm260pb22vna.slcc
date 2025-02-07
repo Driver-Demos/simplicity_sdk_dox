@@ -3,7 +3,7 @@
 - package: platform
 - description: Silicon Labs CMSIS-Device part headers for MGM260PB22VNA.
 - category: Platform|Device|MGM26
-- quality: evaluation
+- quality: production
 - define:
   - name: MGM260PB22VNA
     unless:
@@ -56,7 +56,6 @@
     - path: mgm26_mailbox.h
     - path: mgm26_mpahbram.h
     - path: mgm26_msc.h
-    - path: mgm26_mvp.h
     - path: mgm26_pcnt.h
     - path: mgm26_prs.h
     - path: mgm26_prs_signals.h
@@ -143,7 +142,6 @@
   - name: device_has_lfrco
   - name: device_has_lfxo
   - name: device_has_msc
-  - name: device_has_mvp
   - name: device_has_pcnt
   - name: device_has_pcnt0
   - name: device_has_prs
@@ -192,7 +190,7 @@
   - name: device_supports_bluetooth_coded_phy
   - name: device_supports_bluetooth_cte
   - name: device_supports_connect
-  - name: device_compute_mvp
+  - name: device_compute_basic
 - recommends:
   - id: trustzone_unaware
 - requires:

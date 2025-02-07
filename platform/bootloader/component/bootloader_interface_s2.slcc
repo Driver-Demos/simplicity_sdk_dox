@@ -16,8 +16,12 @@ source:
     condition: [trustzone_secure]
   - path: platform/bootloader/api/btl_interface_ns.c
     condition: [trustzone_nonsecure]
+  - path: platform/bootloader/core/flash/btl_internal_flash.c
+
 include:
-  - path: platform/bootloader
+  - path: platform/bootloader 
+    file_list:
+    - path: core/btl_util.h
   - path: platform/bootloader/api
     file_list:
     - path: application_properties.h
@@ -26,6 +30,9 @@ include:
     - path: btl_interface_parser.h
     - path: btl_interface_storage.h
     - path: btl_reset_info.h
+  - path: platform/bootloader/core/flash/
+    file_list:
+    - path: btl_internal_flash.h
 provides:
   - name: bootloader_interface_common
     condition: [device_series_2]
@@ -107,8 +114,7 @@ template_contribution:
   - name: bootloader_size
     value: 73728
     condition: [apploader]
-    unless: [trustzone_secure, trustzone_nonsecure]
-
+    unless: [trustzone_secure, trustzone_nonsecure]  
 documentation:
   docset: mcu-bootloader
   document: group-Interface

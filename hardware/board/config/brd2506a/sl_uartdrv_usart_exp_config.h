@@ -101,6 +101,9 @@
 #define SL_UARTDRV_USART_EXP_RX_PIN              8
 
 
+// USART0 RTS on PB00
+#define SL_UARTDRV_USART_EXP_RTS_PORT            SL_GPIO_PORT_B
+#define SL_UARTDRV_USART_EXP_RTS_PIN             0
 
 // [USART_SL_UARTDRV_USART_EXP]$
 // <<< sl:end pin_tool >>>

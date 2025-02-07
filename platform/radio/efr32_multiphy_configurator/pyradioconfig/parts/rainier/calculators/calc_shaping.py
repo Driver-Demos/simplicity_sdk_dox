@@ -127,6 +127,12 @@ class CalcShapingRainier(Calc_Shaping_Bobcat):
             model (ModelRoot) : Data model to read and write variables from
         """
 
+        coeff, shaping = self.run_shaping_filter_calc(model)
+
+        self.write_coeff_registers(model, coeff, shaping)
+
+    def run_shaping_filter_calc(self, model):
+
         shaping_filter_option = model.vars.shaping_filter.value
         max_filter_taps = model.vars.max_filter_taps.value
         coeff = np.zeros(max_filter_taps)
@@ -175,4 +181,4 @@ class CalcShapingRainier(Calc_Shaping_Bobcat):
         else:
             raise CalculationException("ERROR: Unrecognized shaping filter option")
 
-        self.write_coeff_registers(model, coeff, shaping)
+        return coeff, shaping

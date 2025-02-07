@@ -8,6 +8,11 @@ class CalcGlobalRainier(Calc_Global_Bobcat):
       super().buildVariables(model)
       self._add_SYNTH_S3_regs(model)
       self._add_syctrl_regs_s3(model)
+      self._add_spare_regs(model)
+      self._add_fastdetect_regs(model)
+
+   def _add_spare_regs(self, model):
+        self._addModelRegister(model, 'MODEM.SPARE.SPARE', int, ModelVariableFormat.HEX)
 
    def _add_common_regs(self, model):
       super()._add_common_regs(model)
@@ -364,6 +369,26 @@ class CalcGlobalRainier(Calc_Global_Bobcat):
         self._addModelRegister(model, 'SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.MODINDEXM', int, ModelVariableFormat.HEX)
         self._addModelRegister(model, 'SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.FREQGAINE', int, ModelVariableFormat.HEX)
         self._addModelRegister(model, 'SEQ.MODINDEX_CALC_MODINDEXE_DOUBLED.FREQGAINM', int, ModelVariableFormat.HEX)
+
+        self._addModelRegister(model, 'MODEM.TRECSCFG.DTIMLOSSEN', int, ModelVariableFormat.HEX)
+        self._addModelRegister(model, 'MODEM.TRECSCFG.DTIMLOSSTHD', int, ModelVariableFormat.HEX)
+        self._addModelRegister(model, 'MODEM.SRCCHF.CHMUTETIMER', int, ModelVariableFormat.HEX)
+
+        self._addModelRegister(model, 'SEQ.MISC.SYNTH_MODE_TX00D_EN', int, ModelVariableFormat.HEX)
+
+   def _add_fastdetect_regs(self, model):
+        if not (model.part_family.upper() == 'RAINIER' and model.part_revision in ['A0', 'A1', 'A2']):
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.FASTCWDETECTEN', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.FASTSUPERCHIPEN', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.FASTNARROWPULSEEN', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.EYEOPENINGMODE', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.CWDETECTSTARTWINDOW', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.CWDETECTTHRESHOLD', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.SUPERCHIPSTARTWINDOW', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.NPULSEFIXEDTHRESHOLD', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.NPULSETHRESHADJEN', int, ModelVariableFormat.HEX)
+            self._addModelRegister(model, 'MODEM.SIFASTDETECTCTRL.NPULSETHRESHADJ', int, ModelVariableFormat.HEX)
+
 
    def _add_RAC_CLKMULTEN0_en(self, model):
       """CLKMULTENADCDRV, CLKMULTENDACDRV become FW controlled as must shut them off during opposite operation"""

@@ -273,6 +273,8 @@ PROTECTED_FIELDS = {
     'caracal': mergeDictionaries(PROTECTED_FIELDS_BASE, PROTECTED_FIELDS_CARACAL),
     'lion': mergeDictionaries(PROTECTED_FIELDS_BASE, PROTECTED_FIELDS_LION),
     'rainier': ProtectedFieldsRainier().get_rail_protected_field_dict(),
+    'lpwh72000': ProtectedFieldsRainier().get_rail_protected_field_dict(),
+    'lpwh74000': ProtectedFieldsRainier().get_rail_protected_field_dict(),
 }
 
 # Radio config action "enum"

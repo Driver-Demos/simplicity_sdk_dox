@@ -79,6 +79,15 @@ bool sl_zigbee_af_zll_touch_link_in_progress(void);
  */
 void sl_zigbee_af_zll_reset_to_factory_new(void);
 
+/**
+ * @brief Unsets the factory new status for a Zigbee device.
+ *
+ * This function is used to clear the factory new status of a Zigbee device,
+ * indicating that the device has been previously commissioned and is no longer
+ * in its factory default state.
+ */
+void sl_zigbee_af_zll_unset_factory_new(void);
+
 /** @brief Disable touchlink processing.
  *
  * This function will cause the device to refuse network start/join

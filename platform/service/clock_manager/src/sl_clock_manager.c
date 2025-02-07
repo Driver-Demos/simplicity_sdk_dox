@@ -28,7 +28,9 @@
  *
  ******************************************************************************/
 
+#include "sli_clock_manager.h"
 #include "sl_clock_manager.h"
+#include "sli_clock_manager.h"
 #include "sli_clock_manager_hal.h"
 #include "sl_assert.h"
 #include "cmsis_compiler.h"
@@ -292,4 +294,20 @@ sl_status_t sl_clock_manager_wait_usbpll(void)
 __WEAK void sl_clock_manager_hfxo_notify_consecutive_failed_startups(void)
 {
   EFM_ASSERT(false);
+}
+
+/***************************************************************************//**
+ * Sets the external FLASH reference clock.
+ ******************************************************************************/
+sl_status_t sl_clock_manager_set_ext_flash_clk(sl_oscillator_t oscillator)
+{
+  return sli_clock_manager_hal_set_ext_flash_clk(oscillator);
+}
+
+/***************************************************************************//**
+ * Gets the external FLASH clock source.
+ ******************************************************************************/
+sl_status_t sl_clock_manager_get_ext_flash_clk(sl_oscillator_t *oscillator)
+{
+  return sli_clock_manager_hal_get_ext_flash_clk(oscillator);
 }

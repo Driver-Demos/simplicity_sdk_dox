@@ -2,7 +2,7 @@ id: nvm3_optimization_enable
 label: NVM3 enable optimization
 package: platform
 description: >
-  Enabling this component improves the NVM3 init time and object lookup time.
+  This component improves the NVM3 initialization and object lookup time.
   Code size increases ~1248 bytes with NVM3 optimization enabled.
 category: Services|NVM3
 quality: production

@@ -174,6 +174,10 @@ static void sw_pwm_led_on(led_sw_pwm_t *instance, uint8_t duty)
 {
   uint32_t duration = (sl_sleeptimer_ms_to_tick(16) / SW_PWM_MAX_DUTY_STEPS);
 
+  if (instance == NULL) {
+    return; // avoid accidental / malicious NULL dereference
+  }
+
   // set SW PWM time base
   instance->pace    = duration;
   // set an empirical offset to compensate the perceived brightness
@@ -184,7 +188,7 @@ static void sw_pwm_led_on(led_sw_pwm_t *instance, uint8_t duty)
   // ESL LED specification
   if (duty < SW_PWM_MAX_DUTY_STEPS) {
     instance->duty = duty;
-    duration *= ++duty;
+    duration *= ++duty; // no need for OF check after max duty limit!
   } else {
     instance->duty = SW_PWM_MAX_DUTY_VALUE;
   }

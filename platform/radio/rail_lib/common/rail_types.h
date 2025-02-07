@@ -1191,11 +1191,6 @@ RAIL_ENUM_GENERIC(RAIL_Events_t, uint64_t) {
  * through the channels again. If this event is left on indefinitely and not
  * handled it will likely be a fairly noisy event, as it continues to fire
  * each time the hopping algorithm cycles through the channel sequence.
- *
- * @warning This event currently does not occur when using \ref
- *   RAIL_RxChannelHoppingMode_t::RAIL_RX_CHANNEL_HOPPING_MODE_MANUAL.
- *   As a workaround, an application can monitor the current hop channel
- *   with \ref RAIL_GetChannelAlt().
  */
 #define RAIL_EVENT_RX_CHANNEL_HOPPING_COMPLETE (1ULL << RAIL_EVENT_RX_CHANNEL_HOPPING_COMPLETE_SHIFT)
 
@@ -1767,6 +1762,22 @@ typedef uint32_t RAIL_PaPowerSetting_t;
  * not support the dBm to power setting mapping table.
  */
 #define RAIL_TX_PA_POWER_SETTING_UNSUPPORTED     (0U)
+
+/**
+ * @struct RAIL_TxPowerSettingEntry_t
+ *
+ * @brief A structure containing power-setting information for a deci-dBm power.
+ */
+typedef struct RAIL_TxPowerSettingEntry {
+  /** PowerSetting information corresponds to currentPaPowerDdbm*/
+  RAIL_PaPowerSetting_t paPowerSetting;
+  /** Minimum power (in deci-dBm) supported by powersetting table in use */
+  RAIL_TxPower_t minPaPowerDdbm;
+  /** Maximum power (in deci-dBm) supported by powersetting table in use */
+  RAIL_TxPower_t maxPaPowerDdbm;
+  /** Current power (in deci-dBm) */
+  RAIL_TxPower_t currentPaPowerDdbm;
+} RAIL_TxPowerSettingEntry_t;
 
 /**
  * @enum RAIL_TxPowerMode_t
@@ -4911,13 +4922,7 @@ RAIL_ENUM(RAIL_RxChannelHoppingMode_t) {
    * Switch to the next channel each time the radio re-enters RX after
    * packet reception or a transmit based on the corresponding \ref
    * State_Transitions. A hop can also be manually triggered by calling
-   * \ref RAIL_CalibrateTemp() while the radio is listening.
-   *
-   * @warning This mode currently does not issue \ref
-   *   RAIL_EVENT_RX_CHANNEL_HOPPING_COMPLETE when hopping out of
-   *   the last channel in the hop sequence.
-   *   As a workaround, an application can monitor the current hop channel
-   *   with \ref RAIL_GetChannelAlt().
+   * \ref RAIL_TriggerRxChannelHop() while the radio is listening.
    */
   RAIL_RX_CHANNEL_HOPPING_MODE_MANUAL = 0,
   /**
@@ -5121,7 +5126,7 @@ RAIL_ENUM(RAIL_RxChannelHoppingOptions_t) {
   RAIL_RX_CHANNEL_HOPPING_OPTION_SKIP_DC_CAL_SHIFT = 1,
   /** Shift position of \ref RAIL_RX_CHANNEL_HOPPING_OPTION_RSSI_THRESHOLD bit. */
   RAIL_RX_CHANNEL_HOPPING_OPTION_RSSI_THRESHOLD_SHIFT = 2,
-  /** Stop hopping on this hop. */
+  /** Shift position of \ref RAIL_RX_CHANNEL_HOPPING_OPTION_STOP bit. */
   RAIL_RX_CHANNEL_HOPPING_OPTION_STOP_SHIFT = 3,
   /** A count of the choices in this enumeration. Must be last. */
   RAIL_RX_CHANNEL_HOPPING_OPTIONS_COUNT
@@ -5159,7 +5164,8 @@ RAIL_ENUM(RAIL_RxChannelHoppingOptions_t) {
 #define RAIL_RX_CHANNEL_HOPPING_OPTION_RSSI_THRESHOLD (1U << RAIL_RX_CHANNEL_HOPPING_OPTION_RSSI_THRESHOLD_SHIFT)
 /**
  * An option to stop the hopping sequence at this entry in the hop
- * table.
+ * table, which also idles the radio. Intended only for testing
+ * purposes and not supported on EFR32xG21.
  */
 #define RAIL_RX_CHANNEL_HOPPING_OPTION_STOP (1U << RAIL_RX_CHANNEL_HOPPING_OPTION_STOP_SHIFT)
 

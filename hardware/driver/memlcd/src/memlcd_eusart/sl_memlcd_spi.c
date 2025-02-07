@@ -141,7 +141,8 @@ sl_status_t sli_memlcd_spi_tx(sli_memlcd_spi_handle_t *handle, const void *data,
 #if defined(_SILICON_LABS_32B_SERIES_2)
     EUSART_Tx(eusart, SL_RBIT8(buffer[i]));
 #else
-    sl_hal_eusart_tx(eusart, SL_RBIT16((uint16_t) buffer[i]));
+    uint16_t reversed_data = (uint16_t)SL_RBIT8(buffer[i]);
+    sl_hal_eusart_tx(eusart,reversed_data);
 #endif
 #endif
   }

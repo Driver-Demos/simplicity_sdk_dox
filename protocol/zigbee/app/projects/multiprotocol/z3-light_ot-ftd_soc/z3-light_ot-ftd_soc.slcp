@@ -145,7 +145,10 @@ configuration:
     value: 1
   - name: SL_BT_CONFIG_MAX_CONNECTIONS
     value: 1
-
+  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+    value: 600
+    condition:
+      - cmsis_rtos2
 
 define:
   - name: OS_CFG_COMPAT_INIT

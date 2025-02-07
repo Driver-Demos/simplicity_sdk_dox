@@ -105,7 +105,7 @@ template_contribution:
       handler: psa_crypto_init
     priority: 1
     condition: [trustzone_unaware, psa_crypto_trng]
-    unless: [zigbee_classic_key_storage, native, device_si91x]
+    unless: [native, device_si91x]
   - name: event_handler
     value:
       event: service_init
@@ -113,7 +113,7 @@ template_contribution:
       handler: psa_crypto_init
     priority: 1
     condition: [trustzone_unaware, mbedtls_entropy_nvseed]
-    unless: [rail_lib, zigbee_classic_key_storage, native]
+    unless: [rail_lib, native]
 
   - name: mbedtls_config
     value: MBEDTLS_PSA_CRYPTO_C
@@ -123,9 +123,6 @@ template_contribution:
 
   - name: mbedtls_config
     value: MBEDTLS_CIPHER_C
-
-  - name: mbedtls_config
-    value: MBEDTLS_PSA_ASSUME_EXCLUSIVE_BUFFERS
 
   - name: psa_key_slots
     value:

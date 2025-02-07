@@ -29,12 +29,12 @@
  ******************************************************************************/
 #include <stdlib.h>
 #include <string.h>
-#include <assert.h>
 #include "sl_common.h"
 #include "sl_memory_manager.h"
 #include "psa/crypto.h"
 #include "sl_bt_ead_core.h"
 #include "psa/crypto_values.h"
+#include "mbedtls/platform_util.h"
 #include "sli_protocol_crypto.h"
 #include "sl_bt_ead_core_config.h"
 
@@ -53,9 +53,14 @@ static const uint8_t aad[] = { SL_BT_ENCRYPTED_DATA_B1_HEADER };
 sl_status_t sl_bt_ead_randomizer_update(sl_bt_ead_nonce_p nonce)
 {
   sl_status_t result = SL_STATUS_FAIL;
+  // Keep calling the psa_crypto_init() as it allows doing so, explicitly
+  // (see the comment in it's implementation) This is safer than accidentally
+  // not doing it at all.
   psa_status_t status = psa_crypto_init();
 
-  assert(nonce != NULL);
+  if (nonce == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
 
   if (status == PSA_SUCCESS) {
     status = psa_generate_random((uint8_t *)(nonce->randomizer),
@@ -76,7 +81,9 @@ sl_status_t sl_bt_ead_randomizer_set(sl_bt_ead_randomizer_t randomizer,
 {
   sl_status_t result = SL_STATUS_NOT_SUPPORTED;
 
-  assert(nonce != NULL);
+  if (nonce == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
 
   if (randomizer != NULL) {
     memcpy((void *)(nonce->randomizer),
@@ -152,7 +159,7 @@ sl_status_t sl_bt_ead_store_key(psa_key_usage_t           key_usage,
                                 key_id);
 
         if (status == PSA_SUCCESS) {
-          memset(key_material->key, 0, sizeof(key_material->key));
+          mbedtls_platform_zeroize(key_material->key, sizeof(key_material->key));
           key_material->key_id = *key_id;
           result = SL_STATUS_OK;
         }
@@ -166,7 +173,7 @@ sl_status_t sl_bt_ead_store_key(psa_key_usage_t           key_usage,
     }
 
     // Sanitize the copy before leaving as it is not needed anymore
-    memset(tmp, 0, sizeof(tmp));
+    mbedtls_platform_zeroize(tmp, sizeof(tmp));
   }
 
   return result;
@@ -194,7 +201,8 @@ sl_status_t sl_bt_ead_delete_key(sl_bt_ead_key_material_p key_material)
   #endif // (SL_BT_EAD_CORE_ACCELERATOR == SL_BT_EAD_CORE_USE_RADIOAES)
 
   if (result == SL_STATUS_OK) {
-    memset(key_material, 0, sizeof(struct sl_bt_ead_key_material_s));
+    mbedtls_platform_zeroize(key_material,
+                             sizeof(struct sl_bt_ead_key_material_s));
   }
   return result;
 }
@@ -240,11 +248,15 @@ sl_status_t sl_bt_ead_encrypt(sl_bt_ead_key_material_p key_material,
   const size_t output_size = length + SL_BT_EAD_MIC_SIZE;
   #endif // (SL_BT_EAD_CORE_ACCELERATOR == SL_BT_EAD_CORE_USE_PSA_ACC)
 
-  assert(key_material != NULL);
-  assert(nonce != NULL);
-  assert(length >= 1);
-  assert(data != NULL);
-  assert(mic != NULL);
+  if (key_material == NULL
+      || nonce == NULL
+      || data == NULL
+      || mic == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
+  if (length < 1) {
+    return SL_STATUS_INVALID_COUNT;
+  }
 
 #if (SL_BT_EAD_CORE_ACCELERATOR == SL_BT_EAD_CORE_USE_RADIOAES)
   // Use the RADIOAES accelerator instead of PSA Crypto library
@@ -280,7 +292,8 @@ sl_status_t sl_bt_ead_encrypt(sl_bt_ead_key_material_p key_material,
 
       // Purge the key copies, if any
       psa_purge_key(key_material->key_id);
-
+      // Purge local buffer
+      mbedtls_platform_zeroize(output_data, sizeof(output_data));
       sl_free(output_data);
       output_data = NULL;
     }
@@ -305,10 +318,16 @@ sl_status_t sl_bt_ead_decrypt(sl_bt_ead_key_material_p key_material,
   size_t       output_length;
   const size_t output_size = length + SL_BT_EAD_MIC_SIZE;
   #endif // (SL_BT_EAD_CORE_ACCELERATOR == SL_BT_EAD_CORE_USE_PSA_ACC)
-  assert(key_material != NULL);
-  assert(length >= 1);
-  assert(data != NULL);
-  assert(mic != NULL);
+
+  if (key_material == NULL
+      || nonce == NULL
+      || mic == NULL
+      || data == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
+  if (length < 1) {
+    return SL_STATUS_INVALID_COUNT;
+  }
 
   #if (SL_BT_EAD_CORE_ACCELERATOR == SL_BT_EAD_CORE_USE_RADIOAES)
   // Use the RADIOAES accelerator instead of PSA Crypto library
@@ -367,10 +386,14 @@ sl_status_t sl_bt_ead_unpack_decrypt(sl_bt_ead_key_material_p key_material,
   sl_status_t result = SL_STATUS_INVALID_TYPE;
   uint32_t data_length;
 
-  assert(key_material != NULL);
-  assert(length != NULL);
-  assert(data != NULL);
-  assert(*data != NULL);
+  if (key_material == NULL
+      || data == NULL
+      || length == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
+  if (*data == NULL) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
 
   data_length = (uint32_t)(*data)[0];
   // Check if the encrypted data has the minimum expected size
@@ -406,7 +429,7 @@ sl_status_t sl_bt_ead_unpack_decrypt(sl_bt_ead_key_material_p key_material,
       }
     }
     // Sanitize nonce copy
-    memset(&nonce, 0, sizeof(nonce));
+    mbedtls_platform_zeroize(&nonce, sizeof(nonce));
   }
 
   return result;
@@ -424,14 +447,18 @@ sl_status_t sl_bt_ead_pack_ad_data(sl_bt_ead_ad_structure_p ad_info,
   uint32_t    data_index;
 
   // Check for invalid parameters
-  assert(ad_info != NULL);
-  assert(size != NULL);
-  assert(pack_buf != NULL);
+  if (ad_info == NULL
+      || size == NULL
+      || pack_buf == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
 
   // Check for uninitialized ad_info structure
-  assert(ad_info->randomizer != NULL);
-  assert(ad_info->ad_data != NULL);
-  assert(ad_info->mic != NULL);
+  if (ad_info->randomizer == NULL
+      || ad_info->ad_data == NULL
+      || ad_info->mic == NULL) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
 
   // Check for valid encrypted length
   if (ad_info->length < 1) {
@@ -475,11 +502,18 @@ sl_status_t sl_bt_ead_unpack_ad_data(uint8_t                  *packed_data,
   sl_status_t result = SL_STATUS_INVALID_TYPE;
   uint32_t data_length;
 
-  assert(packed_data != NULL);
-  assert(ad_info != NULL);
-  assert(ad_info->randomizer != NULL);
-  assert(ad_info->ad_data != NULL);
-  assert(ad_info->mic != NULL);
+  // Check for invalid parameters
+  if (ad_info == NULL
+      || packed_data == NULL) {
+    return SL_STATUS_NULL_POINTER;
+  }
+
+  // Check for uninitialized ad_info structure
+  if (ad_info->randomizer == NULL
+      || ad_info->ad_data == NULL
+      || ad_info->mic == NULL) {
+    return SL_STATUS_INVALID_PARAMETER;
+  }
 
   data_length = (uint32_t)packed_data[0];
   ad_info->ad_type = packed_data[1];

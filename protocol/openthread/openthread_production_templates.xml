@@ -6,7 +6,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ble-dmp.trustzone.ot-ble-dmp-tz.slcw"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ble-dmp/trustzone/ot-ble-dmp-tz.slcw"/>
     <properties key="readmeFiles" value="sample-apps/ot-tz-secure-app/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -22,7 +22,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-cli.trustzone.ot-cli-ftd-tz.slcw"/>
     <properties key="projectFilePaths" value="sample-apps/ot-cli/trustzone/ot-cli-ftd-tz.slcw"/>
     <properties key="readmeFiles" value="sample-apps/ot-tz-secure-app/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -38,7 +38,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-cli.trustzone.ot-cli-mtd-tz.slcw"/>
     <properties key="projectFilePaths" value="sample-apps/ot-cli/trustzone/ot-cli-mtd-tz.slcw"/>
     <properties key="readmeFiles" value="sample-apps/ot-tz-secure-app/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -54,7 +54,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ble-dmp.ot-ble-dmp-no-buttons.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ble-dmp/ot-ble-dmp-no-buttons.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ble-dmp/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -69,7 +69,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ble-dmp.ot-ble-dmp.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ble-dmp/ot-ble-dmp.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ble-dmp/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -84,7 +84,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-cli.ot-cli-ftd.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-cli/ot-cli-ftd.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-cli/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -99,7 +99,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-cli.ot-cli-mtd.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-cli/ot-cli-mtd.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-cli/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -114,7 +114,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ncp.ot-rcp.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ncp/ot-rcp.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ncp/README-OT-RCP.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.* .*efr32mr21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -129,7 +129,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ncp.rcp-spi-802154-blehci.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ncp/rcp-spi-802154-blehci.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ncp/README-MP-DMP-RCP.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.* .*efr32mr21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -144,7 +144,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ncp.rcp-spi-802154.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ncp/rcp-spi-802154.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ncp/README-MP-RCP.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.* .*efr32mr21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -159,7 +159,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ncp.rcp-uart-802154-blehci.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ncp/rcp-uart-802154-blehci.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ncp/README-MP-DMP-RCP.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.* .*efr32mr21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -174,7 +174,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.ot-ncp.rcp-uart-802154.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/ot-ncp/rcp-uart-802154.slcp"/>
     <properties key="readmeFiles" value="sample-apps/ot-ncp/README-MP-RCP.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2704a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.* .*efr32mr21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -189,7 +189,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.sleepy-demo.sleepy-demo-ftd.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/sleepy-demo/sleepy-demo-ftd.slcp"/>
     <properties key="readmeFiles" value="sample-apps/sleepy-demo/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -204,7 +204,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.sleepy-demo.sleepy-demo-mtd.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/sleepy-demo/sleepy-demo-mtd.slcp"/>
     <properties key="readmeFiles" value="sample-apps/sleepy-demo/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>
@@ -219,7 +219,7 @@
     <properties key="solutionReferenceId" value="protocol.openthread.sample-apps.sleepy-demo.sleepy-demo-ssed.slcp"/>
     <properties key="projectFilePaths" value="sample-apps/sleepy-demo/sleepy-demo-ssed.slcp"/>
     <properties key="readmeFiles" value="sample-apps/sleepy-demo/README.md"/>
-    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd4116a brd4117a brd4118a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
+    <properties key="boardCompatibility" value="brd2601a brd2601b brd2606a brd2608a brd2703a brd2709a brd2713a brd4116a brd4117a brd4118a brd4120a brd4121a brd4171a brd4176a brd4179b brd4180a brd4180b brd4181a brd4181b brd4181c brd4186a brd4186b brd4186c brd4187a brd4187b brd4187c brd4188a brd4188b brd4195a brd4195b brd4196a brd4196b brd4197a brd4198a brd4198b brd4199b brd4308a brd4308b brd4308c brd4308d brd4309a brd4309b brd4316a brd4317a brd4318a brd4319a brd4329a brd4337a brd4350a brd4351a brd4406a brd4411a com.silabs.board.none"/>
     <properties key="partCompatibility" value=".*efr32mg21.* .*efr32mg24.* .*efr32mg26.* .*mgm21.* .*mgm24.* .*mgm26.* .*rm21.*"/>
     <properties key="ideCompatibility" value="makefile-ide simplicity-ide visual-studio-code generic-template"/>
     <properties key="toolchainCompatibility" value="gcc"/>

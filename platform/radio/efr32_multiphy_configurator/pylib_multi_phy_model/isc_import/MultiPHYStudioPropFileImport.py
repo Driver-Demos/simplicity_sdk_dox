@@ -16,7 +16,7 @@ class MultiPHYStudioPropFileImport(object):
     def __init__(self):
         pass
 
-    def run(self, radioconf_filename, output_directory, output_filename=None, internal=False, secondary=False, sign=False):
+    def run(self, radioconf_filename, output_directory, output_filename=None, internal=False, secondary=False, sign=False, wifi_script=False, wifi_script_seqacc=False):
         xml_string = self.parse_file(radioconf_filename)
         # print xml_string
 
@@ -35,7 +35,7 @@ class MultiPHYStudioPropFileImport(object):
         ModelDiff.process_diffs(multi_phy_model)
 
         if int(multi_phy_model.status_code) != ModelDiffCodes.UNKNOWN_ERROR.value:
-            RAILScriptsWrapper.run_rail_scripts(multi_phy_model, output_filename=output_filename, internal=internal, secondary=secondary, sign=sign)
+            RAILScriptsWrapper.run_rail_scripts(multi_phy_model, output_filename=output_filename, internal=internal, secondary=secondary, sign=sign, wifi_script=wifi_script, wifi_script_seqacc=wifi_script_seqacc)
 
             # Renaming the files for uniqueness
             for file in multi_phy_model.output_files.file:

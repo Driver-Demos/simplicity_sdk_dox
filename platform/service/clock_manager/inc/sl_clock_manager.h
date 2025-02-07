@@ -627,6 +627,31 @@ sl_status_t sl_clock_manager_wait_usbpll(void);
  ******************************************************************************/
 void sl_clock_manager_hfxo_notify_consecutive_failed_startups(void);
 
+/***************************************************************************//**
+ * Sets the external FLASH reference clock.
+ *
+ * @param[in] oscillator  Oscillator used to clock the external FLASH.
+ *
+ * @return  Status code.
+ *          SL_STATUS_OK if successful. Error code otherwise.
+ *
+ * @note This API is not thread-safe and should therefore not be called
+ *       across multiple tasks.
+ ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+sl_status_t sl_clock_manager_set_ext_flash_clk(sl_oscillator_t oscillator);
+
+/***************************************************************************//**
+ * Gets the external FLASH clock source.
+ *
+ * @param[out] oscillator Oscillator used to clock the external FLASH.
+ *
+ * @return  Status code.
+ *          SL_STATUS_OK if successful. Error code otherwise.
+ ******************************************************************************/
+SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+sl_status_t sl_clock_manager_get_ext_flash_clk(sl_oscillator_t *oscillator);
+
 /** @} (end addtogroup clock_manager) */
 
 #ifdef __cplusplus

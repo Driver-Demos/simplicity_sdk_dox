@@ -63,7 +63,10 @@ sl_status_t esl_core_build_response(tlv_t tlv, const void *input_data)
   uint8_t       length = esl_core_get_tlv_len(tlv);
   const uint8_t *data  = (uint8_t *)input_data;
 
-  if (esl_response_queue.size - esl_response_queue.count > length) {
+  if (data == NULL) {
+    // input data pointer shall never be NULL
+    return SL_STATUS_NULL_POINTER;
+  } else if (esl_response_queue.size - esl_response_queue.count > length) {
     queueAdd(&esl_response_queue, (void *)(uint32_t)tlv);
 
     while (length--) {

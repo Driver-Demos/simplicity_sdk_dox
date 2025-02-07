@@ -39,7 +39,7 @@ template_contribution:
       event: platform_init
       include: nvm3_default.h
       handler: nvm3_initDefault
-    priority: 9999
+    priority: 9998
     condition: [device_efx]
     unless: [trustzone_secure]
 documentation:

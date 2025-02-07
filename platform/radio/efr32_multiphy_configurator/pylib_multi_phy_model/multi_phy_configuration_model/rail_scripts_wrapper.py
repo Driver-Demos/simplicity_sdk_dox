@@ -11,8 +11,8 @@ class RAILScriptsWrapper(object):
     rail_signature_function = None
 
     @staticmethod
-    def run_rail_scripts(multi_phy_model, generate_debug_yaml=False, output_filename="rail_config", internal=False, secondary=False, sign=False):
-        railAdapter = RAILAdapter(mphyConfig=multi_phy_model, adapter_name=multi_phy_model.rail_adapter_version)
+    def run_rail_scripts(multi_phy_model, generate_debug_yaml=False, output_filename="rail_config", internal=False, secondary=False, sign=False, wifi_script=False, wifi_script_seqacc=False):
+        railAdapter = RAILAdapter(mphyConfig=multi_phy_model, adapter_name=multi_phy_model.rail_adapter_version, wifi_script=wifi_script, wifi_script_seqacc=wifi_script_seqacc)
         railAdapter.populateModel()
 
         if railAdapter._railModelPopulated == False:
@@ -55,9 +55,10 @@ class RAILScriptsWrapper(object):
         rail_config_c = generator.render(generator.template_path_c)
         multi_phy_model.output_files.file.append(fileType("{}.c".format(output_filename), rail_config_c))
 
-        railtest_generator = RailTest_rmrConfigGenerator(railAdapter)
-        rail_railtest_commands = railtest_generator.render(railtest_generator.template_path_railtest)
-        multi_phy_model.output_files.file.append(fileType("rail_test_commands.txt", rail_railtest_commands))
+        if wifi_script is False and wifi_script_seqacc is False :
+            railtest_generator = RailTest_rmrConfigGenerator(railAdapter)
+            rail_railtest_commands = railtest_generator.render(railtest_generator.template_path_railtest)
+            multi_phy_model.output_files.file.append(fileType("rail_test_commands.txt", rail_railtest_commands))
 
     @staticmethod
     def dump_output_files(multi_phy_model, output_path):

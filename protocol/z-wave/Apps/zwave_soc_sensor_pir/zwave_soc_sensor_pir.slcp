@@ -42,7 +42,7 @@ component:
   - id: app_em4h_reset
   - id: ZW_MIGRATION_TO_7_19
   - id: zw_cli_common
-    condition: [zw_release]
+    condition: [zw_production]
   - id: app_button_press
   - id: app_assert
   - id: simple_button

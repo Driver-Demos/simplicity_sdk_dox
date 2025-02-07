@@ -18,6 +18,8 @@ include:
 source:
   - path: protocol/zigbee/app/util/serial/sl_zigbee_command_interpreter.c
 
+validation_helper:
+  - path: protocol/zigbee/app/framework/component/scripts/zigbee_cli_task_stack_size.lua
 template_contribution:
   - name: component_catalog
     value: zigbee_cli

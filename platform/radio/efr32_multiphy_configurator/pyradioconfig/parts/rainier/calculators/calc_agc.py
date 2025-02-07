@@ -92,7 +92,7 @@ class CalcAgcRainier(Calc_AGC_Bobcat):
 
     def calc_gain_schedule_regs(self, model):
         lnaindexborder = 5 # Pre-silicon from Chris 10/23/23
-        pgaindexborder = 4 # Pre-silicon from Chris 10/23/23
+        pgaindexborder = 5 # From Chris 1/16/25
         pnindexborder = 0  # New for Series3
                            # 0: RFPAD at end of RFPKD schedule
                            # 1: RFPAD at end of IFPKD schedule

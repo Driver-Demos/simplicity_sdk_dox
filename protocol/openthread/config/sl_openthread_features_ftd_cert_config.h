@@ -295,6 +295,11 @@
 #define OPENTHREAD_CONFIG_NET_DIAG_VENDOR_INFO_SET_API_ENABLE   1
 #endif
 // </e>
+// <e>  Uptime of OpenThread instance
+#ifndef OPENTHREAD_CONFIG_UPTIME_ENABLE
+#define OPENTHREAD_CONFIG_UPTIME_ENABLE             1
+#endif
+// </e>
 // <e>  Time Synchronization Service
 #define OPENTHREAD_CONFIG_TIME_SYNC_ENABLE          0
 // </e>

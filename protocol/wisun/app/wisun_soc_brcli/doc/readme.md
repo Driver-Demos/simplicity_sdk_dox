@@ -72,10 +72,11 @@ The list of available commands is output on the console with the associated help
 | wisun udp_client \<remote address> \<remote port> | Open a UDP connection to a remote host | > wisun udp_client fd00:6172:6d00:0:3038:5115:26:27 7 |
 | wisun udp_server \<local port> | Open a UDP server port | > wisun udp_server 5001 |
 | wisun socket_get_option \<socket> \<option> | Get a socket option | > wisun socket_get_option |
+| wisun clear_credential_cache | Clear the wisun credential cache | > wisun clear_credential_cache |
 | wisun reset_statistics | Reset the statistics | > wisun reset_statistics |
 | wisun set_trace_level \<string> | Set [trace level](https://docs.silabs.com/wisun/latest/wisun-stack-api/sl-wisun-types#sl-wisun-trace-level-t) for a [trace group](https://docs.silabs.com/wisun/latest/wisun-stack-api/sl-wisun-types#sl-wisun-trace-group-t) | > wisun set_trace_level all,debug<br>[Set 64 trace groups]<br>> wisun set_trace_level 1,none;4,info<br>[Set 2 trace groups]|
 | wisun set_lfn_support \<lfn_limit> | configure LFN support: <br> - [uint8] lfn_limit: Number of LFN children (10 maximum) | > wisun set_lfn_support 3 |
-| wisun mode_switch \<mode> \<phy_mode_id> \<neighbor_mac_address> |  configure mode switch: <br> - [uint8] mode: 0=disabled, 1=enabled, 2=default <br> - [uint8] PhyModeId <br> - [string] neighbor MAC address (optional)   | > wisun mode_switch 1 84 <br> > wisun mode_switch 1 84 01:02:03:04:05:06:07:08 |
+| wisun mode_switch \<mode> \<phy_mode_id> \<neighbor_mac_address> |  configure mode switch: <br> - [uint8] mode: 0=disabled, 1=enabled, 2=default <br> - [uint8] PhyModeID <br> - [string] neighbor MAC address (optional)   | > wisun mode_switch 1 84 <br> > wisun mode_switch 1 84 01:02:03:04:05:06:07:08 |
 | wisun trigger \<frame type> | Trigger a transmission of a periodic frame <br> - [string] pas: PAN Advertisement Solicit, pa: PAN Advertisement, pcs: PAN Configuration Solicit, pc: PAN Configuration, dis: DODAG Information Solicitation, dio: DODAG Information Object | > wisun trigger pas |
 | wisun getsockname \<socket> | Get local IP address of the socket | > wisun getsockname 3 |
 | wisun getpeername \<socket> | Get peer IP address of the socket | > wisun getpeername 3 |

@@ -93,16 +93,31 @@ class RAILAdapter(object):
 
     return encodedAddress
 
-  def _getRegAddress(self, block, register):
+  def _getRegAddress(self, block, register, suffix=''):
     # Use the RM_Device object to get the absolute register address
-    baseAddrString = "self.rm.{0}.{1}.baseAddress".format(block, register)
-    regOffsetString = "self.rm.{0}.{1}.addressOffset".format(block, register)
+    baseAddrString = "self.rm.{}{}.{}.baseAddress".format(block, suffix, register)
+    regOffsetString = "self.rm.{}{}.{}.addressOffset".format(block, suffix, register)
     regAddr = eval(baseAddrString) + eval(regOffsetString)
+    return regAddr
+
+  def _getRegAddressWithPolarity(self, block, register):
+    if self.series == 3:
+      try:
+        regAddr = self._getRegAddress(block, register, suffix='_NS')
+        regBase = self._regBases[int(regAddr) & 0xFFFF0000]
+      except (KeyError, AttributeError):
+        try:
+          regAddr = self._getRegAddress(block, register, suffix='_S')
+        except (KeyError, AttributeError):
+          regAddr = self._getRegAddress(block, register, suffix='')
+    else:
+      regAddr = self._getRegAddress(block, register)
     return regAddr
 
   def _regOutput(self, block, register, value, name=None):
     # Use the RM_Device object to get register address value pairs
-    regAddr = self._getRegAddress(block, register)
+    regAddr = self._getRegAddressWithPolarity(block, register)
+
     if (name is None):
       return (regAddr, value)
     else:
@@ -116,12 +131,11 @@ class RAILAdapter(object):
     # Bit positions for base address and opcode
     basePos = 25
     opCodePos = 28
-    isSeries1or2 = True
 
-    if family in ["dumbo", "jumbo", "nerio", "nixi"]:
+    if self.series == 1:
       regBases = self._REG_BASES
 
-    elif family in ["panther", "lynx", "ocelot", "bobcat", "leopard", "margay", "caracal", "lion", "sol"]:
+    elif self.series == 2:
       regBases = self._REG_BASES_EFR32XG2x
 
       if family in ["sol"]:
@@ -133,7 +147,6 @@ class RAILAdapter(object):
 
     else:
       # Series 3
-      isSeries1or2 = False
       basePos = 24
       ymlSource = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'generators/seqacc_regbases.yml')
 
@@ -151,7 +164,7 @@ class RAILAdapter(object):
 
     maxNumRegBases = 2 ** (opCodePos - basePos)
 
-    if isSeries1or2:
+    if self.series < 3:
       if len(regBases) > maxNumRegBases:
         raise Exception(("Number of register bases ({}) exceeds maximum allowed "
                          "value ({}) for {}").format(len(regBases), maxNumRegBases, family))
@@ -162,6 +175,16 @@ class RAILAdapter(object):
                          "value ({}) for {}").format(len(regBases) - 1, maxNumRegBases, family))
 
     self._regBases = regBases
+
+  @staticmethod
+  def _getSeriesFromFamily(family):
+    if family in ["dumbo", "jumbo", "nerio", "nixi"]:
+      series = 1
+    elif family in ["panther", "lynx", "ocelot", "bobcat", "leopard", "margay", "caracal", "lion", "sol"]:
+      series = 2
+    else:
+      series = 3
+    return series
 
 def getParserArgs():
   """

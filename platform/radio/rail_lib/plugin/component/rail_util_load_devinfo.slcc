@@ -14,11 +14,11 @@ requires:
 provides:
   - name: rail_util_load_devinfo
 include:
-  - path: platform/radio/rail_lib/plugin/rail_utiL_load_devinfo
+  - path: platform/radio/rail_lib/plugin/rail_util_load_devinfo
     file_list:
       - path: sl_rail_util_load_devinfo.h
 source:
-  - path: platform/radio/rail_lib/plugin/rail_utiL_load_devinfo/sl_rail_util_load_devinfo.c
+  - path: platform/radio/rail_lib/plugin/rail_util_load_devinfo/sl_rail_util_load_devinfo.c
 template_contribution:
   - name: event_handler
     value:

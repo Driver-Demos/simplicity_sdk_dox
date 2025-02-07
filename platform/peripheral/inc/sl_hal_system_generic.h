@@ -189,12 +189,15 @@ uint32_t sl_hal_system_get_hfrcodpll_band_calibration(uint32_t frequency);
 
 /***************************************************************************//**
  * @brief
- *    Get a factory calibration value for HFRCOCEM23 oscillator.
+ *    Get a factory calibration value for HFRCOEM23 oscillator.
+ *
+ * @param [in]
+ *    HFRCOEM23 frequency for which to retrieve calibration.
  *
  * @return
  *    HFRCOEM23 calibration value.
  ******************************************************************************/
-uint32_t sl_hal_system_get_hfrcoem23_calibration(void);
+uint32_t sl_hal_system_get_hfrcoem23_calibration(uint32_t frequency);
 
 /***************************************************************************//**
  * @brief

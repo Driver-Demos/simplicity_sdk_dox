@@ -21,11 +21,6 @@ include:
       - path: sl_wisun_alliance_certificates.h
       - path: sl_wisun_silabs_certificates.h
 
-define:
-  - name: WISUN_FAN_CERTIFICATION
-  - name: FAN_TPS_VERSION
-    value: 1
-
 template_contribution:
   - name: component_catalog
     value: wisun_fan_certification

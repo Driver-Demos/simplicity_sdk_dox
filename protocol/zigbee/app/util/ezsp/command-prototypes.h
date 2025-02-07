@@ -407,6 +407,12 @@ void sl_zigbee_ezsp_counter_rollover_handler(
   // Type of Counter
   sl_zigbee_counter_type_t type);
 
+// Callback
+// This call is fired when mux detects an invalid rx
+void sl_zigbee_ezsp_mux_invalid_rx_handler(
+  uint8_t new_rx_channel,
+  uint8_t old_rx_channel);
+
 // Used to test that UART flow control is working correctly.
 void sl_zigbee_ezsp_delay_test(
   // Data will not be read from the host for this many milliseconds.

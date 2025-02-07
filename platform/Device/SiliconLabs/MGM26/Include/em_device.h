@@ -14,7 +14,7 @@
  * @endverbatim
  ******************************************************************************
  * # License
- * <b>Copyright 2024 Silicon Laboratories, Inc. www.silabs.com</b>
+ * <b>Copyright 2025 Silicon Laboratories, Inc. www.silabs.com</b>
  ******************************************************************************
  *
  * SPDX-License-Identifier: Zlib
@@ -49,6 +49,15 @@
 
 #elif defined(MGM260PB32VNN)
 #include "mgm260pb32vnn.h"
+
+#elif defined(MGM260PD22VNA)
+#include "mgm260pd22vna.h"
+
+#elif defined(MGM260PD32VNA)
+#include "mgm260pd32vna.h"
+
+#elif defined(MGM260PD32VNN)
+#include "mgm260pd32vnn.h"
 
 #else
 #error "em_device.h: PART NUMBER undefined"

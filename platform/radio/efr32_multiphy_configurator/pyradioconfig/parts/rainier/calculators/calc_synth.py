@@ -68,6 +68,14 @@ class CalcSynthRainier(Calc_Synth_Bobcat):
 
         self._reg_write(model.vars.RAC_ADCCTRL1_ADCENHALFMODE, reg)
 
+    def calc_synth_settling_mode(self, model):
+        hop_enable = model.vars.hop_enable.value        # Disable by default
+
+        if hop_enable == model.vars.hop_enable.var_enum.ENABLED:
+            model.vars.synth_settling_mode.value = model.vars.synth_settling_mode.var_enum.FAST
+        else:       # FastSw Disabled
+            model.vars.synth_settling_mode.value = model.vars.synth_settling_mode.var_enum.NORMAL
+
     def calc_adc_clockmode_reg(self, model):
         adc_clock_mode_actual = model.vars.adc_clock_mode.value
 
@@ -340,8 +348,6 @@ class CalcSynthRainier(Calc_Synth_Bobcat):
         self._reg_write(model.vars.SYNTH_DSMCTRLTX_LSBFORCETX, tx_mode_settings['SYNTH.DSMCTRLTX.LSBFORCETX'][ind])
         self._reg_write(model.vars.SYNTH_DSMCTRLTX_DEMMODETX, tx_mode_settings['SYNTH.DSMCTRLTX.DEMMODETX'][ind])
 
-        #:self._reg_write(model.vars.RAC_SYCTRL1_SYLODIVSELFP4G82G4TX, tx_mode_settings['RAC_SYCTRL1_SYLODIVSELFP4G82G4TX'][ind])
-        #self._reg_write(model.vars.RAC_SYMMDCTRL_SYMMDSEL56STGTX, tx_mode_settings['RAC_SYMMDCTRL_SYMMDSEL56STGTX'][ind])
 
 
     def calc_dlf_ctrl(self, model):
@@ -421,6 +427,9 @@ class CalcSynthRainier(Calc_Synth_Bobcat):
             self._reg_write(model.vars.SEQ_MMDDENOMINIT_CALC_DOUBLED_DENOMINIT0, int(denominit0))
             self._reg_write(model.vars.SEQ_MMDDENOMINIT_CALC_DOUBLED_DENOMINIT1, int(denominit1))
 
+        # Force TX10D mode by default
+        self._reg_write(model.vars.SEQ_MISC_SYNTH_MODE_TX00D_EN, 0)
+
     def calc_synth_misc(self, model):
        # self._reg_write(model.vars.RAC_SYCTRL1_SYLODIVSELFP4G82G4, 0)  #RX always 2.4G, default REG value, remove from calculator
        # self._reg_write(model.vars.RAC_SYMMDCTRL_SYMMDSEL56STG, 0)     #RX always 2.4G
@@ -475,9 +484,8 @@ class CalcSynthRainier(Calc_Synth_Bobcat):
 
     def calc_rx_mode(self, model):
         synth_settling_mode = model.vars.synth_settling_mode.value
-        hop_enable = True if model.vars.hop_enable.value == model.vars.hop_enable.var_enum.ENABLED else False
 
-        if hop_enable:
+        if synth_settling_mode == model.vars.synth_settling_mode.var_enum.FAST:
             model.vars.synth_rx_mode.value = model.vars.synth_rx_mode.var_enum.MODE_HOP
         elif synth_settling_mode == model.vars.synth_settling_mode.var_enum.BLE_LR:
             model.vars.synth_rx_mode.value = model.vars.synth_rx_mode.var_enum.MODE1

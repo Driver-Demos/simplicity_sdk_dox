@@ -211,11 +211,11 @@ static psa_status_t generate_firmware_hash(uint8_t *firmware_addr,
                                            uint8_t *hash_buffer,
                                            size_t *hash_size)
 {
-  #if (FLASH_BASE == 0UL)
-  // Process the first 4 bytes by moving them into the stack buffer.
-  // this is needed since the address 0 can't be used as the input.
-
-  #define HASH_BUFFER_SIZE (4u)
+  // Calculate the hash by moving into a temporary small buffer on stack
+  // because the SKL and device is usually not configured with a sufficiently
+  // sized heap to allocate a full exclusive buffer internally in the PSA Crypto
+  // library.
+  #define HASH_BUFFER_SIZE (256u)
   psa_hash_operation_t hash_operation;
   hash_operation = psa_hash_operation_init();
 
@@ -224,31 +224,23 @@ static psa_status_t generate_firmware_hash(uint8_t *firmware_addr,
     return status;
   }
   uint8_t hash_in_buffer[HASH_BUFFER_SIZE];
-  memcpy(hash_in_buffer, (uint8_t *)((uint32_t)firmware_addr), HASH_BUFFER_SIZE);
-  status = psa_hash_update(&hash_operation,
-                           (const uint8_t *)hash_in_buffer,
-                           HASH_BUFFER_SIZE);
-  if (status != PSA_SUCCESS) {
-    return status;
-  }
-  status = psa_hash_update(&hash_operation,
-                           (uint8_t *)((uint32_t)firmware_addr + HASH_BUFFER_SIZE),
-                           firmware_size - HASH_BUFFER_SIZE);
-  if (status != PSA_SUCCESS) {
-    return status;
+  size_t bytes_to_copy;
+  while (firmware_size > 0) {
+    bytes_to_copy = firmware_size > HASH_BUFFER_SIZE ? HASH_BUFFER_SIZE : firmware_size;
+    memcpy(hash_in_buffer, (uint8_t *)((uint32_t)firmware_addr), bytes_to_copy);
+    status = psa_hash_update(&hash_operation,
+                             (const uint8_t *)hash_in_buffer,
+                             bytes_to_copy);
+    if (status != PSA_SUCCESS) {
+      return status;
+    }
+    firmware_addr += bytes_to_copy;
+    firmware_size -= bytes_to_copy;
   }
   status = psa_hash_finish(&hash_operation,
                            hash_buffer,
                            TZ_ATTESTATION_SHA256_DIGESTSIZE,
                            hash_size);
-  #else
-  psa_status_t status = psa_hash_compute(PSA_ALG_SHA_256,
-                                         (const uint8_t *)firmware_addr,
-                                         firmware_size,
-                                         hash_buffer,
-                                         TZ_ATTESTATION_SHA256_DIGESTSIZE,
-                                         hash_size);
-  #endif
   return status;
 }
 

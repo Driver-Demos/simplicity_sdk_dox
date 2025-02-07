@@ -36,6 +36,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_868/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - device_has_radio_subghz
@@ -58,12 +59,14 @@ config_file:
   - device_generic_family_efr32xg21
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Base/simple_rail_singlephy/device_generic_family_efr32xg23/rf_band_434/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_default_rf_band_434
   - device_generic_family_efr32xg23
   - device_supports_zwave
 - path: platform/radio/radio_configuration/Range_Test_sdid_210_868_915/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_supports_rf_band_868
@@ -73,6 +76,7 @@ config_file:
   - device_is_module
   - device_generic_family_efr32xg21
 - path: platform/radio/radio_configuration/Range_Test_sdid_210_868_915/radio_settings.radioconf
+  file_id: radio_configuration_settings
   directory: rail
   condition:
   - hardware_board_supports_rf_band_868

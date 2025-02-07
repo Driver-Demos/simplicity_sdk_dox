@@ -89,6 +89,10 @@ configuration:
     value: 5
   - name: SL_CLI_EXAMPLE_IOSTREAM_HANDLE
     value: sl_iostream_get_default()
+  - name: SL_CLI_EXAMPLE_TASK_STACK_SIZE
+    value: 600
+    condition:
+      - cmsis_rtos2
 
 include:
   - path: ./

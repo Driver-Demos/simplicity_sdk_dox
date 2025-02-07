@@ -162,7 +162,8 @@ static bool set_user_code(
     ? CC_UserCredential_modify_credential(&credential)
     : CC_UserCredential_add_credential(&credential);
 
-  return (credential_set_result == U3C_DB_OPERATION_RESULT_SUCCESS);
+  return ((credential_set_result == U3C_DB_OPERATION_RESULT_SUCCESS)
+          || (credential_set_result == U3C_DB_OPERATION_RESULT_FAIL_IDENTICAL));
 }
 
 /****************************************************************************/

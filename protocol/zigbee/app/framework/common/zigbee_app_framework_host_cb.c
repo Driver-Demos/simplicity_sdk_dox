@@ -778,6 +778,21 @@ void sl_zigbee_ezsp_counter_rollover_handler(sl_zigbee_counter_type_t type)
   sl_zigbee_af_counter_rollover_cb(type);
   sl_zigbee_af_pop_network_index();
 }
+//sli_zigbee_af_mux_invalid_rx_callback
+
+// -----------------------------------------------------------------------------
+// Weak implementation of public Callback sl_zigbee_af_mux_invalid_rx_cb
+WEAK(void sl_zigbee_af_mux_invalid_rx_cb(uint8_t new_rx_channel, uint8_t old_rx_channel))
+{
+}
+
+void sl_zigbee_ezsp_mux_invalid_rx_handler(uint8_t new_rx_channel, uint8_t old_rx_channel)
+{
+  sl_zigbee_af_push_callback_network_index();
+  sli_zigbee_af_mux_invalid_rx(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_mux_invalid_rx_cb(new_rx_channel, old_rx_channel);
+  sl_zigbee_af_pop_network_index();
+}
 
 // -----------------------------------------------------------------------------
 // Weak implementation of public Callback sl_zigbee_af_zll_address_assignment_cb

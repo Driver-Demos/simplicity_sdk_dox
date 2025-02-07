@@ -68,7 +68,9 @@ configuration:
     value: 15
   - name: CIRCULAR_QUEUE_LEN_MAX
     value: 16
-
+  - name: SL_OPENTHREAD_STACK_TASK_MEM_SIZE
+    value: 4608
+  
 tag:
   - prebuilt_demo
 

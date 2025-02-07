@@ -16,6 +16,8 @@
  ******************************************************************************/
 
 #include "btl_interface.h"
+#include "btl_internal_flash.h"
+#include <string.h>
 
 // -----------------------------------------------------------------------------
 // Defines
@@ -37,6 +39,36 @@ static Bootloader_PPUSATDnCLKENnState_t blPPUSATDnCLKENnState = { 0 };
 
 // -----------------------------------------------------------------------------
 // Functions
+
+static bool verifyAddressRange(uint32_t address,
+                               uint32_t length)
+{
+  // Flash starts at FLASH_BASE, and is FLASH_SIZE large
+  if ((length > FLASH_SIZE)
+#if (FLASH_BASE > 0x0UL)
+      || (address < FLASH_BASE)
+#endif
+      || (address > FLASH_BASE + FLASH_SIZE)) {
+    return false;
+  }
+
+  if ((address + length) <= FLASH_BASE + FLASH_SIZE) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+static bool verifyErased(uint32_t address,
+                         uint32_t length)
+{
+  for (uint32_t i = 0; i < length; i += 4) {
+    if (*(uint32_t *)(address + i) != 0xFFFFFFFF) {
+      return false;
+    }
+  }
+  return true;
+}
 
 void bootloader_getStorageInfo(BootloaderStorageInformation_t *info)
 {
@@ -70,20 +102,53 @@ int32_t bootloader_readStorage(uint32_t slotId,
                                uint8_t  *buffer,
                                size_t   length)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_TABLE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+  BootloaderStorageSlot_t storageSlot;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure slot is valid
+    if (slotId >= storageInfo.numStorageSlots) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_SLOT;
+    }
+
+    retVal = bootloader_getStorageSlotInfo(slotId, &storageSlot);
+    if (retVal != BOOTLOADER_OK) {
+      return retVal;
+    }
+
+    // Ensure address is within slot
+    if ((offset + length > storageSlot.length) \
+        || (offset > storageSlot.length)       \
+        || (length > storageSlot.length)) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+
+    // Address range is valid; read data
+    retVal = bootloader_readRawStorage(storageSlot.address + offset,
+                                       buffer,
+                                       length);
   }
+  //END OF INTERNAL_FLASH
+  else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_TABLE;
+    }
 
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
-  int32_t retVal = mainBootloaderTable->storage->read(slotId, offset, buffer, length);
+    retVal = mainBootloaderTable->storage->read(slotId, offset, buffer, length);
 
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+  #endif
+  }
 
   return retVal;
 }
@@ -93,20 +158,50 @@ int32_t bootloader_writeStorage(uint32_t slotId,
                                 uint8_t  *buffer,
                                 size_t   length)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_TABLE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+  BootloaderStorageSlot_t storageSlot;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure slot is valid
+    if (slotId >= storageInfo.numStorageSlots) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_SLOT;
+    }
+
+    retVal = bootloader_getStorageSlotInfo(slotId, &storageSlot);
+    if (retVal != BOOTLOADER_OK) {
+      return retVal;
+    }
+
+    // Ensure address is within slot
+    if ((offset + length > storageSlot.length) \
+        || (offset > storageSlot.length)       \
+        || (length > storageSlot.length)) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+
+    retVal = bootloader_writeRawStorage(storageSlot.address + offset,
+                                        buffer,
+                                        length);
+  } else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_TABLE;
+    }
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+
+    retVal = mainBootloaderTable->storage->write(slotId, offset, buffer, length);
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
   }
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
-
-  int32_t retVal = mainBootloaderTable->storage->write(slotId, offset, buffer, length);
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
   return retVal;
 }
@@ -200,20 +295,41 @@ int32_t bootloader_eraseWriteStorage(uint32_t slotId,
 
 int32_t bootloader_eraseStorageSlot(uint32_t slotId)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_TABLE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+  BootloaderStorageSlot_t storageSlot;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure slot is valid
+    if (slotId >= storageInfo.numStorageSlots) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_SLOT;
+    }
+
+    retVal = bootloader_getStorageSlotInfo(slotId, &storageSlot);
+    if (retVal != BOOTLOADER_OK) {
+      return retVal;
+    }
+
+    retVal = bootloader_eraseRawStorage(storageSlot.address, storageSlot.length);
+  } else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_TABLE;
+    }
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+
+    retVal = mainBootloaderTable->storage->erase(slotId);
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
   }
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
-
-  int32_t retVal = mainBootloaderTable->storage->erase(slotId);
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
   return retVal;
 }
@@ -486,19 +602,36 @@ int32_t bootloader_readRawStorage(uint32_t address,
                                   uint8_t  *buffer,
                                   size_t   length)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_STORAGE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure address is is within flash
+    if (!verifyAddressRange(address, length)) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+
+    memcpy(buffer, (void *)address, length);
+
+    retVal = BOOTLOADER_OK;
+  } else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_STORAGE;
+    }
+    #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+    #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+
+    retVal = mainBootloaderTable->storage->readRaw(address, buffer, length);
+
+    #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+    #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
   }
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
-
-  int32_t retVal = mainBootloaderTable->storage->readRaw(address, buffer, length);
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
   return retVal;
 }
@@ -507,20 +640,44 @@ int32_t bootloader_writeRawStorage(uint32_t address,
                                    uint8_t  *buffer,
                                    size_t   length)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_STORAGE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure address is is within chip
+    if (!verifyAddressRange(address, length)) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+    // Ensure space is empty
+    if (!verifyErased(address, length)) {
+      return BOOTLOADER_ERROR_STORAGE_NEEDS_ERASE;
+    }
+
+    if (flash_writeBuffer(address, buffer, length)) {
+      retVal = BOOTLOADER_OK;
+    } else {
+      retVal = BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+    //END OF INTERNAL FLASH
+  } else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_STORAGE;
+    }
+
+    #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+    #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+
+    retVal = mainBootloaderTable->storage->writeRaw(address, buffer, length);
+
+    #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+    #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
   }
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
-
-  int32_t retVal = mainBootloaderTable->storage->writeRaw(address, buffer, length);
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
   return retVal;
 }
@@ -554,23 +711,59 @@ int32_t bootloader_getAllocatedDMAChannel(void)
 int32_t bootloader_eraseRawStorage(uint32_t address,
                                    size_t   length)
 {
-  if (!bootloader_pointerValid(mainBootloaderTable)
-      || !bootloader_pointerValid(mainBootloaderTable->storage)) {
-    return BOOTLOADER_ERROR_INIT_STORAGE;
+  int32_t retVal;
+  BootloaderStorageInformation_t storageInfo;
+
+  //Check for the storageType of the device
+  bootloader_getStorageInfo(&storageInfo);
+
+  if (storageInfo.storageType == INTERNAL_FLASH) {
+    // Ensure erase covers an integer number of pages
+    if (length % FLASH_PAGE_SIZE) {
+      return BOOTLOADER_ERROR_STORAGE_NEEDS_ALIGN;
+    }
+    // Ensure erase is page aligned
+    if (address % FLASH_PAGE_SIZE) {
+      return BOOTLOADER_ERROR_STORAGE_NEEDS_ALIGN;
+    }
+    // Ensure address is is within flash
+    if (!verifyAddressRange(address, length)) {
+      return BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+
+    bool ret = false;
+
+    do {
+      ret = flash_erasePage(address);
+      address += FLASH_PAGE_SIZE;
+      length -= FLASH_PAGE_SIZE;
+    } while (length > 0 && ret);
+
+    if (ret) {
+      retVal = BOOTLOADER_OK;
+    } else {
+      retVal = BOOTLOADER_ERROR_STORAGE_INVALID_ADDRESS;
+    }
+  } else {
+    if (!bootloader_pointerValid(mainBootloaderTable)
+        || !bootloader_pointerValid(mainBootloaderTable->storage)) {
+      return BOOTLOADER_ERROR_INIT_STORAGE;
+    }
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
+
+    retVal = mainBootloaderTable->storage->eraseRaw(address, length);
+
+  #if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
+    bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
+  #endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
   }
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnSaveReconfigureState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
-
-  int32_t retVal = mainBootloaderTable->storage->eraseRaw(address, length);
-
-#if defined(BOOTLOADER_INTERFACE_TRUSTZONE_AWARE)
-  bootloader_ppusatdnRestoreState(&blPPUSATDnCLKENnState);
-#endif // BOOTLOADER_INTERFACE_TRUSTZONE_AWARE
 
   return retVal;
 }
+
 #if defined(__GNUC__)
 #pragma GCC diagnostic pop
 #endif

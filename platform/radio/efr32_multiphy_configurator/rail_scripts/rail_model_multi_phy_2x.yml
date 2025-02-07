@@ -370,6 +370,8 @@ RAILModel:
                               - name: modemTxCompensation
                                 dataType: FieldDataType.INT16_T
                                 isPtr: True
+                              - name: trecsPreBitsToSync
+                                dataType: FieldDataType.UINT32_T
 
             - RAILModelObjectArray:
                 name: modemConfigEntries

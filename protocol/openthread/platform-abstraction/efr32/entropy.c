@@ -43,12 +43,6 @@
 
 void otPlatCryptoRandomInit(void)
 {
-    // Security manager is initialised by OT stack, in key_manager.
-    // But Random manager is initialised much before this, so we
-    // initialise security manager here. Later initialisation by
-    // stack is ignored by security manager.
-
-    (void)sl_sec_man_init();
 }
 
 void otPlatCryptoRandomDeinit(void)

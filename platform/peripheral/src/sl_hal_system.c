@@ -301,14 +301,26 @@ uint32_t sl_hal_system_get_hfrcodpll_band_calibration(uint32_t frequency)
 /***************************************************************************//**
  * Get a factory calibration value for HFRCOCEM23 oscillator.
  ******************************************************************************/
-uint32_t sl_hal_system_get_hfrcoem23_calibration(void)
+uint32_t sl_hal_system_get_hfrcoem23_calibration(uint32_t frequency)
 {
 #if defined(_SILICON_LABS_32B_SERIES_3_CONFIG_301)
   sl_status_t status;
   sl_se_command_context_t se_command_ctx;
   sli_se_device_data_t otp_section_id = (sli_se_device_data_t)(SLI_SE_DEVICE_DATA_DI0 + DEVINFO_GP_FRAGMENT_INDEX);
-  uint32_t offset = DEVINFO_GP_HFRCOEM23DEFAULT_OFFSET;
+  uint32_t offset;
   uint32_t calibration_value = 0;
+
+  // Determine offset based on HFRCOEM23 frequency.
+  if (frequency == 40000000UL) {
+#if defined(DEVINFO_GP_HFRCOEM2340MHZ_OFFSET)
+    offset = DEVINFO_GP_HFRCOEM2340MHZ_OFFSET;
+#else
+    // Default to 20Mhz.
+    offset = DEVINFO_GP_HFRCOEM23DEFAULT_OFFSET;
+#endif
+  } else {
+    offset = DEVINFO_GP_HFRCOEM23DEFAULT_OFFSET;
+  }
 
   // Initialize command context
   status = sl_se_init_command_context(&se_command_ctx);
@@ -324,6 +336,7 @@ uint32_t sl_hal_system_get_hfrcoem23_calibration(void)
 
   return calibration_value;
 #else
+  (void)frequency;
   return 0;
 #endif
 }

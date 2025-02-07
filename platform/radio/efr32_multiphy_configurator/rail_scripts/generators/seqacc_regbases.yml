@@ -17,9 +17,10 @@ RAINIER:
       0xA0210000: 1
       0xA0220000: 2
       0xA0000000: 3
-      0xB0000000: 4
-      0x40860000: 5
+      0x40860000: 4
       0xFFFFFFFF: 0xFFFFFFFF
+    Alias:
+      SEQRAM: 0xA0000000
 
 LPWH72000:
   BaseAddrCfgDefault:
@@ -33,8 +34,9 @@ LPWH72000:
       0xB0280000: 5
       0xB0000000: 6
       0xB0010000: 7
-      0xA0000000: 8
       0xFFFFFFFF: 0xFFFFFFFF
+    Alias:
+      SEQRAM: 0xB0010000
 
 LPWH74000:
   BaseAddrCfgDefault:
@@ -43,8 +45,11 @@ LPWH74000:
       0xB0200000: 0
       0xB0210000: 1
       0xB0220000: 2
-      0xB0270000: 3
-      0xB0280000: 4
-      0xB0000000: 5
-      0xB0300000: 6
+      0xB0260000: 3
+      0xB0270000: 4
+      0xB0280000: 5
+      0xB0000000: 6
+      0xB0010000: 7
       0xFFFFFFFF: 0xFFFFFFFF
+    Alias:
+      SEQRAM: 0xB0010000

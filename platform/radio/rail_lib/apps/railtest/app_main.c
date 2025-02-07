@@ -1047,8 +1047,8 @@ void processPendingCalibrations(void)
   // Only calibrate the radio when not currently receiving a packet
   bool calsInMode = inAppMode(NONE, NULL);
   bool calsInTxMode = inAppMode(TX_N_PACKETS, NULL)
-                      | inAppMode(TX_CONTINUOUS, NULL)
-                      | inAppMode(TX_STREAM, NULL);
+                      || inAppMode(TX_CONTINUOUS, NULL)
+                      || inAppMode(TX_STREAM, NULL);
   bool receivingPacket = RAIL_GetRadioState(railHandle) == RAIL_RF_STATE_RX_ACTIVE;
 
   if (calibrateRadio && (calsInMode | calsInTxMode) && !skipCalibrations && !receivingPacket) {

@@ -245,6 +245,10 @@ WEAK(void sl_zigbee_ezsp_zll_scan_complete_handler(sl_status_t status))
 {
 }
 
+WEAK(void sl_zigbee_ezsp_mux_invalid_rx_handler(uint8_t new_rx_channel, uint8_t old_rx_channel))
+{
+}
+
 WEAK(void sl_zigbee_ezsp_zll_address_assignment_handler(
        // Address assignment information.
        sl_zigbee_zll_address_assignment_t *addressInfo,

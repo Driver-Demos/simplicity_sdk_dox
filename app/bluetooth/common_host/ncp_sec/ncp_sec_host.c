@@ -81,63 +81,63 @@ SL_WEAK int sl_bgapi_user_cmd_increase_security(uint8_t *public_key,
 static sl_status_t ec_ephemeral_key(ec_keypair_t *key)
 {
   // NOTE: OpenSSL random number generator is not thread safe
-  uint8_t priv_buf[ECDH_PRIVATE_KEY_SIZE] = { 0 };
-  uint8_t pub_buf[1 + PUBLIC_KEYPAIR_SIZE] = { 0 };
   EC_KEY *ec_key = NULL;
   EC_GROUP *group = NULL;
-  const BIGNUM *priv_bn = NULL;
-  const EC_POINT *pub_point = NULL;
-  sl_status_t e;
-  size_t s;
+  sl_status_t e = SL_STATUS_ALLOCATION_FAILED;
 
-  group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  if (!group) {
+  do {
+    const BIGNUM *priv_bn = NULL;
+    const EC_POINT *pub_point = NULL;
+    size_t s;
+    uint8_t priv_buf[ECDH_PRIVATE_KEY_SIZE] = { 0 };
+    uint8_t pub_buf[1 + PUBLIC_KEYPAIR_SIZE] = { 0 };
+
+    group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+    if (!group) {
+      break;
+    }
+
+    ec_key = EC_KEY_new();
+    if (!ec_key) {
+      break;
+    }
+
+    if (EC_KEY_set_group(ec_key, group) < 1
+        || EC_KEY_generate_key(ec_key) < 1) {
+      e = SL_STATUS_INITIALIZATION;
+      break;
+    }
+
+    priv_bn = EC_KEY_get0_private_key(ec_key);
+    if (!priv_bn || BN_num_bytes(priv_bn) != ECDH_PRIVATE_KEY_SIZE) {
+      e = SL_STATUS_INVALID_KEY;
+      break;
+    }
+    BN_bn2bin(priv_bn, priv_buf);
+
+    pub_point = EC_KEY_get0_public_key(ec_key);
+    if (!pub_point) {
+      e = SL_STATUS_INVALID_KEY;
+      break;
+    }
+
     e = SL_STATUS_FAIL;
-    goto out;
-  }
+    s = EC_POINT_point2oct(group, pub_point, POINT_CONVERSION_UNCOMPRESSED,
+                           NULL, 0, NULL);
+    if (s == sizeof(pub_buf)) {
+      s = EC_POINT_point2oct(group, pub_point, POINT_CONVERSION_UNCOMPRESSED,
+                             pub_buf, sizeof(pub_buf), NULL);
 
-  ec_key = EC_KEY_new();
-  if (!ec_key) {
-    e = SL_STATUS_NO_MORE_RESOURCE;
-    goto out;
-  }
+      if (s != 0) {
+        memcpy(key->priv, priv_buf, ECDH_PRIVATE_KEY_SIZE);
+        memcpy(key->pub, pub_buf + 1, PUBLIC_KEYPAIR_SIZE);
+        e = SL_STATUS_OK;
+      }
+    }
+  } while (0);
 
-  if (EC_KEY_set_group(ec_key, group) < 1
-      || EC_KEY_generate_key(ec_key) < 1) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
-
-  priv_bn = EC_KEY_get0_private_key(ec_key);
-  if (!priv_bn || BN_num_bytes(priv_bn) != ECDH_PRIVATE_KEY_SIZE) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
-  BN_bn2bin(priv_bn, priv_buf);
-
-  pub_point = EC_KEY_get0_public_key(ec_key);
-  if (!pub_point) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
-
-  s = EC_POINT_point2oct(group, pub_point, POINT_CONVERSION_UNCOMPRESSED,
-                         NULL, 0, NULL);
-  if (s != sizeof(pub_buf)) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
-
-  EC_POINT_point2oct(group, pub_point, POINT_CONVERSION_UNCOMPRESSED,
-                     pub_buf, sizeof(pub_buf), NULL);
-
-  memcpy(key->priv, priv_buf, ECDH_PRIVATE_KEY_SIZE);
-  memcpy(key->pub, pub_buf + 1, PUBLIC_KEYPAIR_SIZE);
-  e = SL_STATUS_OK;
-
-  out:
-  EC_KEY_free(ec_key);
-  EC_GROUP_free(group);
+  (void)EC_KEY_free(ec_key);
+  (void)EC_GROUP_free(group);
   return e;
 }
 
@@ -154,59 +154,59 @@ static EVP_PKEY *ec_key(const ec_keypair_t *key,
 
   tmp[0] = POINT_CONVERSION_UNCOMPRESSED;
   memcpy(tmp + 1, key->pub, PUBLIC_KEYPAIR_SIZE);
-
-  group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
-  if (!group) {
-    goto out;
-  }
-
-  ec_key = EC_KEY_new();
-  if (!ec_key) {
-    goto out;
-  }
-  if (EC_KEY_set_group(ec_key, group) < 1) {
-    goto out;
-  }
-
-  if (both_parts) {
-    priv_bn = BN_bin2bn(key->priv, ECDH_PRIVATE_KEY_SIZE, NULL);
-    if (!priv_bn) {
-      goto out;
+  do {
+    group = EC_GROUP_new_by_curve_name(NID_X9_62_prime256v1);
+    if (!group) {
+      break;
     }
-    if (EC_KEY_set_private_key(ec_key, priv_bn) != 1) {
-      goto out;
+
+    ec_key = EC_KEY_new();
+    if (!ec_key) {
+      break;
     }
-  }
+    if (EC_KEY_set_group(ec_key, group) < 1) {
+      break;
+    }
 
-  pub_point = EC_POINT_new(group);
-  if (!pub_point) {
-    goto out;
-  }
-  if (EC_POINT_oct2point(group, pub_point, tmp, sizeof(tmp), NULL) < 1) {
-    goto out;
-  }
-  if (EC_KEY_set_public_key(ec_key, pub_point) != 1) {
-    goto out;
-  }
+    if (both_parts) {
+      priv_bn = BN_bin2bn(key->priv, ECDH_PRIVATE_KEY_SIZE, NULL);
+      if (!priv_bn) {
+        break;
+      }
+      if (EC_KEY_set_private_key(ec_key, priv_bn) != 1) {
+        break;
+      }
+    }
 
-  evp_key = EVP_PKEY_new();
-  if (!evp_key) {
-    goto out;
-  }
+    pub_point = EC_POINT_new(group);
+    if (!pub_point) {
+      break;
+    }
+    if (EC_POINT_oct2point(group, pub_point, tmp, sizeof(tmp), NULL) < 1) {
+      break;
+    }
+    if (EC_KEY_set_public_key(ec_key, pub_point) != 1) {
+      break;
+    }
 
-  if (EVP_PKEY_set1_EC_KEY(evp_key, ec_key) != 1) {
-    goto out;
-  }
+    evp_key = EVP_PKEY_new();
+    if (!evp_key) {
+      break;
+    }
 
-  result = evp_key;
-  evp_key = NULL;
+    if (EVP_PKEY_set1_EC_KEY(evp_key, ec_key) != 1) {
+      break;
+    }
 
-  out:
-  EVP_PKEY_free(evp_key);
-  EC_KEY_free(ec_key);
-  BN_free(priv_bn);
-  EC_POINT_free(pub_point);
-  EC_GROUP_free(group);
+    result = evp_key;
+    evp_key = NULL;
+  } while (0);
+
+  (void)EVP_PKEY_free(evp_key);
+  (void)EC_KEY_free(ec_key);
+  (void)BN_free(priv_bn);
+  (void)EC_POINT_free(pub_point);
+  (void)EC_GROUP_free(group);
 
   return result;
 }
@@ -215,74 +215,63 @@ static sl_status_t ecdh_secret(const ec_keypair_t *remote_ec_key)
 {
   EVP_PKEY_CTX *ctxt = NULL;
   unsigned char *secret_ptr = NULL;
-  size_t secret_len;
   EVP_PKEY *local_pkey = NULL;
   EVP_PKEY *remote_pkey = NULL;
-  sl_status_t e;
+  sl_status_t e = SL_STATUS_ALLOCATION_FAILED;
 
-  // Set up keys
-  local_pkey = ec_key(&local_ec_key, 1);
-  if (!local_pkey) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+  do {
+    size_t secret_len;
+    uint8_t *hash = NULL;
+    // Set up keys
+    local_pkey = ec_key(&local_ec_key, 1);
+    if (!local_pkey) {
+      break;
+    }
 
-  remote_pkey = ec_key(remote_ec_key, 0);
-  if (!remote_pkey) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+    remote_pkey = ec_key(remote_ec_key, 0);
+    if (!remote_pkey) {
+      break;
+    }
 
-  ctxt = EVP_PKEY_CTX_new(local_pkey, NULL);
-  if (!ctxt) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+    ctxt = EVP_PKEY_CTX_new(local_pkey, NULL);
+    if (!ctxt) {
+      break;
+    }
 
-  if (EVP_PKEY_derive_init(ctxt) < 1
-      || EVP_PKEY_derive_set_peer(ctxt, remote_pkey) < 1
-      || EVP_PKEY_derive(ctxt, NULL, &secret_len) < 1
-      || secret_len != 32) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+    if (EVP_PKEY_derive_init(ctxt) < 1
+        || EVP_PKEY_derive_set_peer(ctxt, remote_pkey) < 1
+        || EVP_PKEY_derive(ctxt, NULL, &secret_len) < 1
+        || secret_len != 32) {
+      e = SL_STATUS_INITIALIZATION;
+      break;
+    }
 
-  secret_ptr = OPENSSL_malloc(secret_len);
-  if (!secret_ptr) {
-    e = SL_STATUS_NO_MORE_RESOURCE;
-    goto out;
-  }
+    secret_ptr = OPENSSL_malloc(secret_len);
+    if (!secret_ptr) {
+      e = SL_STATUS_NO_MORE_RESOURCE;
+      break;
+    }
 
-  if (EVP_PKEY_derive(ctxt, secret_ptr, &secret_len) < 1) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+    if (EVP_PKEY_derive(ctxt, secret_ptr, &secret_len) < 1) {
+      e = SL_STATUS_INVALID_KEY;
+      break;
+    }
 
-  // Use sha256 to derive the AES CCM key.
-  // NOTE: This is not thread safe
-  uint8_t *hash = SHA256(secret_ptr, secret_len, NULL);
-  if (!hash) {
-    e = SL_STATUS_FAIL;
-    goto out;
-  }
+    // Use sha256 to derive the AES CCM key.
+    // NOTE: This is not thread safe
+    hash = SHA256(secret_ptr, secret_len, NULL);
+    if (!hash) {
+      e = SL_STATUS_FAIL;
+    } else {
+      memcpy(ccm_key, hash, AES_CCM_KEY_SIZE);
+      e = SL_STATUS_OK;
+    }
+  } while (0);
 
-  memcpy(ccm_key, hash, AES_CCM_KEY_SIZE);
-  e = SL_STATUS_OK;
-
-  out:
-  if (secret_ptr) {
-    OPENSSL_free(secret_ptr);
-  }
-  if (local_pkey) {
-    EVP_PKEY_free(local_pkey);
-  }
-  if (remote_pkey) {
-    EVP_PKEY_free(remote_pkey);
-  }
-  if (ctxt) {
-    EVP_PKEY_CTX_free(ctxt);
-  }
-
+  (void)OPENSSL_free(secret_ptr);
+  (void)EVP_PKEY_free(local_pkey);
+  (void)EVP_PKEY_free(remote_pkey);
+  (void)EVP_PKEY_CTX_free(ctxt);
   return e;
 }
 
@@ -294,74 +283,73 @@ static sl_status_t aes_ccm_encrypt(const uint8_t *key, const uint8_t *nonce,
                                    uint8_t *cipher_text, uint8_t *mac)
 {
   EVP_CIPHER_CTX *ccm = NULL;
-  int len;
-  sl_status_t r;
+  sl_status_t r = SL_STATUS_ALLOCATION_FAILED;
 
   ccm = EVP_CIPHER_CTX_new();
+
   if (!ccm) {
-    r = SL_STATUS_FAIL;
-    goto out;
+    return r;
   }
 
-  if (EVP_EncryptInit_ex(ccm, EVP_aes_128_ccm(), NULL, NULL, NULL) != 1
-      || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_IVLEN,
-                             NONCE_SIZE, NULL) != 1
-      || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_TAG,
-                             MAC_LEN, NULL) != 1
-      || EVP_EncryptInit_ex(ccm, NULL, NULL, key, nonce) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+  do {
+    int len;
 
-  // Provide the total plain text length
-  if (EVP_EncryptUpdate(ccm,
-                        NULL, &len,
-                        NULL, text_len) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+    if (EVP_EncryptInit_ex(ccm, EVP_aes_128_ccm(), NULL, NULL, NULL) != 1
+        || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_IVLEN,
+                               NONCE_SIZE, NULL) != 1
+        || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_TAG,
+                               MAC_LEN, NULL) != 1
+        || EVP_EncryptInit_ex(ccm, NULL, NULL, key, nonce) != 1) {
+      r = SL_STATUS_INITIALIZATION;
+      break;
+    }
 
-  // Provide any AAD data. This can be called zero or one times as required
-  if (additional) {
+    // Provide the total plain text length
     if (EVP_EncryptUpdate(ccm,
                           NULL, &len,
-                          additional, additional_len) != 1) {
-      r = SL_STATUS_FAIL;
-      goto out;
+                          NULL, text_len) != 1) {
+      r = SL_STATUS_BT_APPLICATION_ENCRYPTION_DECRYPTION_ERROR;
+      break;
     }
-  }
-  if (len != additional_len) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
 
-  /* Provide the message to be encrypted, and obtain the encrypted output.
-     EVP_EncryptUpdate can only be called once for this */
-  if (EVP_EncryptUpdate(ccm,
-                        cipher_text, &len,
-                        plain_text, text_len) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
-  if (len != text_len) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+    // Provide any AAD data. This can be called zero or one times as required
+    if (additional) {
+      if (EVP_EncryptUpdate(ccm,
+                            NULL, &len,
+                            additional, additional_len) != 1) {
+        r = SL_STATUS_BT_APPLICATION_ENCRYPTION_DECRYPTION_ERROR;
+        break;
+      }
+    }
+    if (len != additional_len) {
+      r = SL_STATUS_FAIL;
+      break;
+    }
 
-  // Get the tag
-  if (EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_GET_TAG,
-                          MAC_LEN, mac) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+    /* Provide the message to be encrypted, and obtain the encrypted output.
+       EVP_EncryptUpdate can only be called once for this */
+    if (EVP_EncryptUpdate(ccm,
+                          cipher_text, &len,
+                          plain_text, text_len) != 1) {
+      r = SL_STATUS_BT_APPLICATION_ENCRYPTION_DECRYPTION_ERROR;
+      break;
+    }
+    if (len != text_len) {
+      r = SL_STATUS_FAIL;
+      break;
+    }
 
-  r = SL_STATUS_OK;
+    // Get the tag
+    if (EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_GET_TAG,
+                            MAC_LEN, mac) != 1) {
+      r = SL_STATUS_INVALID_SIGNATURE;
+      break;
+    }
 
-  out:
-  if (ccm) {
-    EVP_CIPHER_CTX_free(ccm);
-  }
+    r = SL_STATUS_OK;
+  } while (0);
 
+  (void)EVP_CIPHER_CTX_free(ccm);
   return r;
 }
 
@@ -373,67 +361,65 @@ static sl_status_t aes_ccm_decrypt(const uint8_t *key, const uint8_t *nonce,
                                    uint8_t *plain_text, const uint8_t *mac)
 {
   EVP_CIPHER_CTX *ccm = NULL;
-  int len;
-  sl_status_t r;
+  sl_status_t r = SL_STATUS_ALLOCATION_FAILED;
 
   ccm = EVP_CIPHER_CTX_new();
+
   if (!ccm) {
-    r = SL_STATUS_FAIL;
-    goto out;
+    return r;
   }
 
-  if (EVP_DecryptInit_ex(ccm, EVP_aes_128_ccm(), NULL, NULL, NULL) != 1
-      || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_IVLEN,
-                             NONCE_SIZE, NULL) != 1
-      || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_TAG,
-                             MAC_LEN, (void *)mac) != 1
-      || EVP_DecryptInit_ex(ccm, NULL, NULL, key, nonce) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+  do {
+    int len;
+    if (EVP_DecryptInit_ex(ccm, EVP_aes_128_ccm(), NULL, NULL, NULL) != 1
+        || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_IVLEN,
+                               NONCE_SIZE, NULL) != 1
+        || EVP_CIPHER_CTX_ctrl(ccm, EVP_CTRL_CCM_SET_TAG,
+                               MAC_LEN, (void *)mac) != 1
+        || EVP_DecryptInit_ex(ccm, NULL, NULL, key, nonce) != 1) {
+      r = SL_STATUS_INITIALIZATION;
+      break;
+    }
 
-  // Provide the total plain text length
-  if (EVP_DecryptUpdate(ccm,
-                        NULL, &len,
-                        NULL, text_len) != 1) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
-
-  // Provide any AAD data. This can be called zero or one times as required
-  if (additional) {
+    // Provide the total plain text length
     if (EVP_DecryptUpdate(ccm,
                           NULL, &len,
-                          additional, additional_len) != 1) {
-      r = SL_STATUS_FAIL;
-      goto out;
+                          NULL, text_len) != 1) {
+      r = SL_STATUS_BT_APPLICATION_ENCRYPTION_DECRYPTION_ERROR;
+      break;
     }
-  }
-  if (len != additional_len) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
 
-  /* Provide the message to be decrypted, and obtain the decrypted output.
-     EVP_DecryptUpdate can be called multiple times if necessary */
-  if (EVP_DecryptUpdate(ccm,
-                        plain_text, &len,
-                        cipher_text, text_len) != 1) {
-    r = SL_STATUS_BT_CTRL_AUTHENTICATION_FAILURE;
-    goto out;
-  }
-  if (len != text_len) {
-    r = SL_STATUS_FAIL;
-    goto out;
-  }
+    // Provide any AAD data. This can be called zero or one times as required
+    if (additional) {
+      if (EVP_DecryptUpdate(ccm,
+                            NULL, &len,
+                            additional, additional_len) != 1) {
+        r = SL_STATUS_BT_APPLICATION_ENCRYPTION_DECRYPTION_ERROR;
+        break;
+      }
+    }
+    if (len != additional_len) {
+      r = SL_STATUS_FAIL;
+      break;
+    }
 
-  r = SL_STATUS_OK;
+    /* Provide the message to be decrypted, and obtain the decrypted output.
+       EVP_DecryptUpdate can be called multiple times if necessary */
+    if (EVP_DecryptUpdate(ccm,
+                          plain_text, &len,
+                          cipher_text, text_len) != 1) {
+      r = SL_STATUS_SECURITY_DECRYPT_ERROR;
+      break;
+    }
+    if (len != text_len) {
+      r = SL_STATUS_FAIL;
+      break;
+    }
 
-  out:
-  if (ccm) {
-    EVP_CIPHER_CTX_free(ccm);
-  }
+    r = SL_STATUS_OK;
+  } while (0);
 
+  (void)EVP_CIPHER_CTX_free(ccm);
   return r;
 }
 

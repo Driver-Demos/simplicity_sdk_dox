@@ -154,6 +154,36 @@ class RM_Field_SUNOFDM_RXCFG1_GIRECOMB(Base_RM_Field):
         self.__dict__['zz_frozen'] = True
 
 
+class RM_Field_SUNOFDM_RXCFG1_PSDU_CE_MODE(Base_RM_Field):
+    def __init__(self, register):
+        self.__dict__['zz_frozen'] = False
+        super(RM_Field_SUNOFDM_RXCFG1_PSDU_CE_MODE, self).__init__(register,
+            'PSDU_CE_MODE', 'SUNOFDM.RXCFG1.PSDU_CE_MODE', 'read-write',
+            u"",
+            13, 1)
+        self.__dict__['zz_frozen'] = True
+
+
+class RM_Field_SUNOFDM_RXCFG1_PHR_CE_MODE(Base_RM_Field):
+    def __init__(self, register):
+        self.__dict__['zz_frozen'] = False
+        super(RM_Field_SUNOFDM_RXCFG1_PHR_CE_MODE, self).__init__(register,
+            'PHR_CE_MODE', 'SUNOFDM.RXCFG1.PHR_CE_MODE', 'read-write',
+            u"",
+            14, 1)
+        self.__dict__['zz_frozen'] = True
+
+
+class RM_Field_SUNOFDM_RXCFG1_FRCMAXSPEED(Base_RM_Field):
+    def __init__(self, register):
+        self.__dict__['zz_frozen'] = False
+        super(RM_Field_SUNOFDM_RXCFG1_FRCMAXSPEED, self).__init__(register,
+            'FRCMAXSPEED', 'SUNOFDM.RXCFG1.FRCMAXSPEED', 'read-write',
+            u"",
+            15, 1)
+        self.__dict__['zz_frozen'] = True
+
+
 class RM_Field_SUNOFDM_RXCFG2_RSSISETPOINT(Base_RM_Field):
     def __init__(self, register):
         self.__dict__['zz_frozen'] = False
@@ -181,6 +211,16 @@ class RM_Field_SUNOFDM_COLLDET_COLLDETTHR(Base_RM_Field):
             'COLLDETTHR', 'SUNOFDM.COLLDET.COLLDETTHR', 'read-write',
             u"",
             1, 5)
+        self.__dict__['zz_frozen'] = True
+
+
+class RM_Field_SUNOFDM_COLLDET_BGDIS(Base_RM_Field):
+    def __init__(self, register):
+        self.__dict__['zz_frozen'] = False
+        super(RM_Field_SUNOFDM_COLLDET_BGDIS, self).__init__(register,
+            'BGDIS', 'SUNOFDM.COLLDET.BGDIS', 'read-write',
+            u"",
+            6, 1)
         self.__dict__['zz_frozen'] = True
 
 

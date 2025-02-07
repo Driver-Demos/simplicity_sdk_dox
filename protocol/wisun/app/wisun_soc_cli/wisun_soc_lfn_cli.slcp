@@ -195,7 +195,6 @@ template_contribution:
           help: "Remote address"
         - type: uint16opt
           help: "packet size in byte"
-
   - name: "cli_command"
     value:
       group: "wisun"
@@ -398,6 +397,36 @@ template_contribution:
           help: "neighbor MAC address (optional)"
     condition:
       - "cli"
+  - name: "cli_command"
+    value:
+      group: "wisun"
+      name: "getsockname"
+      handler: "app_getsockname"
+      help: "Get socket's local Ip address"
+      argument:
+        - type: uint32
+          help: "Socket Id"
+  - name: "cli_command"
+    value:
+      group: "wisun"
+      name: "getpeername"
+      handler: "app_getpeername"
+      help: "Get socket's peer Ip address"
+      argument:
+        - type: uint32
+          help: "Socket Id"
+  - name: "cli_command"
+    value:
+      group: "wisun"
+      name: "set_phy_sens"
+      handler: "app_set_phy_sensitivity"
+      help: "Set the sensitivity for the given PHY mode ID"
+      argument:
+        - type: uint8
+          help: "PHY mode ID"
+        - type: int16
+          help: "Sensitivity in dBm"
+
 
 # -------------------------------
   - name: "cli_group"

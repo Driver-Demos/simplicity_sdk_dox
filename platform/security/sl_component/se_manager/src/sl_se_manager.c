@@ -328,8 +328,8 @@ void SEMBRX_IRQHandler(void)
     status = sli_psec_osal_complete(&se_command_completion);
     EFM_ASSERT(status == SL_STATUS_OK);
   }
-  // Get command response (clears interrupt condition in SEMAILBOX)
-  se_manager_command_response = sli_se_mailbox_read_response();
+  // Get command response and clear interrupt condition in SEMAILBOX peripheral
+  se_manager_command_response = sli_se_mailbox_handle_response();
   // Clear interrupt condition in NVIC
   NVIC_ClearPendingIRQ(SEMBRX_IRQn);
 }
@@ -388,8 +388,7 @@ sl_status_t sli_se_execute_and_wait(sl_se_command_context_t *cmd_ctx)
   // Execute SE mailbox command
   sli_se_mailbox_execute_command(&cmd_ctx->command);
 
-  #if defined(SL_SE_MANAGER_YIELD_WHILE_WAITING_FOR_COMMAND_COMPLETION) \
-  && !defined(_SILICON_LABS_32B_SERIES_3)
+  #if defined(SL_SE_MANAGER_YIELD_WHILE_WAITING_FOR_COMMAND_COMPLETION)
   if (cmd_ctx->yield) {
     // Enable SEMAILBOX RXINT interrupt
     sli_se_mailbox_enable_interrupt(SEMAILBOX_CONFIGURATION_RXINTEN);
@@ -416,29 +415,15 @@ sl_status_t sli_se_execute_and_wait(sl_se_command_context_t *cmd_ctx)
     se_manager_command_response = SLI_SE_RESPONSE_INTERNAL_ERROR;
   } else {
     // Wait for command completion and get command response
-    command_response = sli_se_mailbox_read_response();
+    command_response = sli_se_mailbox_handle_response();
   }
 
   #else // #if defined(SL_SE_MANAGER_YIELD_WHILE_WAITING_FOR_COMMAND_COMPLETION)
 
-  #if defined(_SILICON_LABS_32B_SERIES_3)
-  CORE_DECLARE_IRQ_STATE;
-  CORE_ENTER_ATOMIC();
-  #endif
-
   // Wait for command completion and get command response
-  command_response = sli_se_mailbox_read_response();
-
-  #if defined(_SILICON_LABS_32B_SERIES_3)
-  CORE_EXIT_ATOMIC();
-  #endif
+  command_response = sli_se_mailbox_handle_response();
 
   #endif // #if defined(SL_SE_MANAGER_YIELD_WHILE_WAITING_FOR_COMMAND_COMPLETION)
-
-  #if (_SILICON_LABS_32B_SERIES == 3)
-  // Read the command handle word ( not used ) from the SEMAILBOX FIFO
-  SEMAILBOX_HOST->FIFO;
-  #endif // #if (_SILICON_LABS_32B_SERIES == 3)
 
   // Release SE lock
   status = sli_se_lock_release();

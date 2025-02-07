@@ -33,6 +33,7 @@
 
 #if defined(SLI_MAILBOX_COMMAND_SUPPORTED)
 
+#include "sl_se_manager_defines.h"
 #include "sli_se_manager_internal.h"
 #include "sl_se_manager_key_handling.h"
 
@@ -54,7 +55,14 @@
 #define KEYSPEC_MODE_OFFSET                 26
 #define KEYSPEC_MODE_UNPROTECTED            (0UL << KEYSPEC_MODE_OFFSET)
 #define KEYSPEC_MODE_VOLATILE               (1UL << KEYSPEC_MODE_OFFSET)
+#if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
+  #define KEYSPEC_MODE_WRAPPED              (2UL << KEYSPEC_MODE_OFFSET)
+#endif
+#if defined(_SILICON_LABS_32B_SERIES_3)
+  #define KEYSPEC_MODE_KSU                  (3UL << KEYSPEC_MODE_OFFSET)
+#endif
 
+// Key Mode Specific KEYSPEC fields
 #define KEYSPEC_RESTRICTION_MASK            0x03000000U
 #define KEYSPEC_RESTRICTION_OFFSET          24U
 
@@ -63,15 +71,18 @@
 #define KEYSPEC_INDEX_MASK                  0x00ff0000U
 #define KEYSPEC_INDEX_OFFSET                16U
 
-#define KEYSPEC_TRANSFER_MODE_MASK          0x00000300U
-#define KEYSPEC_TRANSFER_MODE_OFFSET        8U
-#define KEYSPEC_TRANSFER_INDEX_MASK         0x000000ffU
-#define KEYSPEC_TRANSFER_INDEX_OFFSET       0U
-#define KEYSPEC_TRANSFER_PROT_BIT_MASK      0xffe00000U
-#define KEYSPEC_TRANSFER_PROT_BIT_OFFSET    21U
-
 #define KEYSPEC_NOPROT_MASK                 0x00008000U
 #define KEYSPEC_NOPROT_OFFSET               15U
+
+// KSU KEYSPEC Fields
+#define KEYSPEC_KSU_ID_MASK                 0x03000000U
+#define KEYSPEC_KSU_ID_OFFSET               24U
+
+#define KEYSPEC_KSU_KEYSLOT_MASK            0x00FC0000U
+#define KEYSPEC_KSU_KEYSLOT_OFFSET          18U
+
+#define KEYSPEC_KSU_KEY_USAGE_MASK          0x00038000U
+#define KEYSPEC_KSU_KEY_USAGE_OFFSET        15U
 
 #define KEYSPEC_ATTRIBUTES_MASK             0x00007fffU
 #define KEYSPEC_ATTRIBUTES_OFFSET           0U
@@ -82,14 +93,27 @@
 #define KEYSPEC_ATTRIBUTES_ECC_SIGN         (1U << 10)
 #define KEYSPEC_ATTRIBUTES_ECC_SIZE_MASK    0x0000007fU
 
+// Transfer KEYSPECS
+#define KEYSPEC_TRANSFER_MODE_MASK          0x00000300U
+#define KEYSPEC_TRANSFER_MODE_OFFSET        8U
+#define KEYSPEC_TRANSFER_INDEX_MASK         0x000000ffU
+#define KEYSPEC_TRANSFER_INDEX_OFFSET       0U
+#define KEYSPEC_TRANSFER_PROT_BIT_MASK      0xffe00000U
+#define KEYSPEC_TRANSFER_PROT_BIT_OFFSET    21U
+
+#if defined(_SILICON_LABS_32B_SERIES_3)
+// Transfer KeySpecs for KSU Keys
+#define KEYSPEC_TRANSFER_KSU_ID_MASK          0x00000C00U
+#define KEYSPEC_TRANSFER_KSU_ID_OFFSET        10U
+#define KEYSPEC_TRANSFER_KSU_KEY_USAGE_MASK   0x00007000U
+#define KEYSPEC_TRANSFER_KSU_KEY_USAGE_OFFSET 12U
+#endif
+
 #define KEYSPEC_TYPE_ECC_EDWARDS    ((uint32_t)(0xaUL << KEYSPEC_TYPE_OFFSET))
 #define KEYSPEC_TYPE_ECC_MONTGOMERY ((uint32_t)(0xbUL << KEYSPEC_TYPE_OFFSET))
 #define KEYSPEC_TYPE_ECC_EDDSA      ((uint32_t)(0xcUL << KEYSPEC_TYPE_OFFSET))
 
 #if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
-
-  #define KEYSPEC_MODE_WRAPPED \
-  (2UL << KEYSPEC_MODE_OFFSET)
 
   #define KEYSPEC_ECC_WEIERSTRASS_PRIME_A_IS_ZERO \
   (1U << 9)
@@ -333,6 +357,8 @@ sl_status_t sli_se_key_to_keyspec(const sl_se_key_descriptor_t *key,
     return SL_STATUS_INVALID_PARAMETER;
   }
 
+  uint32_t keyspec_restriction = 0;
+
   // Clear output
   *keyspec = 0;
 
@@ -362,63 +388,102 @@ sl_status_t sli_se_key_to_keyspec(const sl_se_key_descriptor_t *key,
     case SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE:
       *keyspec |= KEYSPEC_MODE_VOLATILE;
       break;
-
+#if defined(_SILICON_LABS_32B_SERIES_3)
+    case SL_SE_KEY_STORAGE_INTERNAL_KSU:
+      *keyspec |= KEYSPEC_MODE_KSU;
+      break;
+#endif
     default:
       return SL_STATUS_INVALID_PARAMETER;
   }
 
-  // ---------------------
-  // Key restriction [25-24]
+  // Handle key mode specific attributes:
+  switch (key->storage.method) {
+    #if defined(_SILICON_LABS_32B_SERIES_3)
+    case SL_SE_KEY_STORAGE_INTERNAL_KSU:
+      // ---------------------
+      // KSU ID [25-24]
+      // Not currently handled
+      // ---------------------
+      // KSU KeySlot [23-18]
+      #if defined(_SILICON_LABS_32B_SERIES_3)
+      if (key->storage.location.ksu.keyslot > 63) {
+        return SL_STATUS_INVALID_PARAMETER;
+      }
+      *keyspec = (*keyspec & ~KEYSPEC_KSU_KEYSLOT_MASK)
+                 | ((key->storage.location.ksu.keyslot << KEYSPEC_KSU_KEYSLOT_OFFSET)
+                    & KEYSPEC_KSU_KEYSLOT_MASK);
+      #endif
+      // ---------------------
+      // KSU KeyUsage [17-15]
+      if (key->storage.location.ksu.crypto_engine_id > 7) {
+        return SL_STATUS_INVALID_PARAMETER;
+      }
+      *keyspec = (*keyspec & ~KEYSPEC_KSU_KEY_USAGE_MASK)
+                 | ((key->storage.location.ksu.crypto_engine_id << KEYSPEC_KSU_KEY_USAGE_OFFSET)
+                    & KEYSPEC_KSU_KEY_USAGE_MASK);
+      // ---------------------
+      // KSU AllowedKeyUsers [14-12]
+      // Not currently handled
 
-  uint32_t keyspec_restriction = 0;
-  if (key->flags & SL_SE_KEY_FLAG_NON_EXPORTABLE) {
-    keyspec_restriction = KEYSPEC_RESTRICTION_LOCKED;
-  }
-  if (key->flags & SL_SE_KEY_FLAG_IS_DEVICE_GENERATED) {
-    keyspec_restriction = KEYSPEC_RESTRICTION_INTERNAL;
-  }
-  if ((key->flags & SL_SE_KEY_FLAG_IS_RESTRICTED) == SL_SE_KEY_FLAG_IS_RESTRICTED) {
-    keyspec_restriction = KEYSPEC_RESTRICTION_RESTRICTED;
-  }
-  // Key restrictions are only applicable to volatile and wrapped keys
-  if (key->storage.method == SL_SE_KEY_STORAGE_EXTERNAL_PLAINTEXT) {
-    if (keyspec_restriction != 0) {
-      return SL_STATUS_INVALID_PARAMETER;
-    }
-  }
+      // KSU does not support flags
+      if (key->flags != 0) {
+        return SL_STATUS_INVALID_PARAMETER;
+      }
+      break;
+    #endif
 
-  *keyspec = (*keyspec & ~KEYSPEC_RESTRICTION_MASK)
-             | (keyspec_restriction & KEYSPEC_RESTRICTION_MASK);
+    default:
+      // ---------------------
+      // Key restriction [25-24]
+      if (key->flags & SL_SE_KEY_FLAG_NON_EXPORTABLE) {
+        keyspec_restriction = KEYSPEC_RESTRICTION_LOCKED;
+      }
+      if (key->flags & SL_SE_KEY_FLAG_IS_DEVICE_GENERATED) {
+        keyspec_restriction = KEYSPEC_RESTRICTION_INTERNAL;
+      }
+      if ((key->flags & SL_SE_KEY_FLAG_IS_RESTRICTED) == SL_SE_KEY_FLAG_IS_RESTRICTED) {
+        keyspec_restriction = KEYSPEC_RESTRICTION_RESTRICTED;
+      }
+      // Key restrictions are only applicable to volatile and wrapped keys
+      if (key->storage.method == SL_SE_KEY_STORAGE_EXTERNAL_PLAINTEXT) {
+        if (keyspec_restriction != 0) {
+          return SL_STATUS_INVALID_PARAMETER;
+        }
+      }
 
-  // ---------------------
-  // Key index [23-16]
+      *keyspec = (*keyspec & ~KEYSPEC_RESTRICTION_MASK)
+                 | (keyspec_restriction & KEYSPEC_RESTRICTION_MASK);
 
-#if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
-  if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_VOLATILE) {
-    if (key->storage.location.slot > SL_SE_KEY_SLOT_VOLATILE_3) {
-      return SL_STATUS_INVALID_PARAMETER;
-    }
-    *keyspec = (*keyspec & ~KEYSPEC_INDEX_MASK)
-               | ((key->storage.location.slot << KEYSPEC_INDEX_OFFSET)
-                  & KEYSPEC_INDEX_MASK);
-  }
-#endif
+      // ---------------------
+      // Key index [23-16]
 
-  if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE) {
-    if (key->storage.location.slot
-        < SL_SE_KEY_SLOT_INTERNAL_MIN) {
-      return SL_STATUS_INVALID_PARAMETER;
-    }
-    *keyspec = (*keyspec & ~KEYSPEC_INDEX_MASK)
-               | ((key->storage.location.slot << KEYSPEC_INDEX_OFFSET)
-                  & KEYSPEC_INDEX_MASK);
-  }
+      #if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
+      if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_VOLATILE) {
+        if (key->storage.location.slot > SL_SE_KEY_SLOT_VOLATILE_3) {
+          return SL_STATUS_INVALID_PARAMETER;
+        }
+        *keyspec = (*keyspec & ~KEYSPEC_INDEX_MASK)
+                   | ((key->storage.location.slot << KEYSPEC_INDEX_OFFSET)
+                      & KEYSPEC_INDEX_MASK);
+      }
+      #endif
 
-  // ---------------------
-  // Key NoProt [15]
+      if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE) {
+        if (key->storage.location.slot
+            < SL_SE_KEY_SLOT_INTERNAL_MIN) {
+          return SL_STATUS_INVALID_PARAMETER;
+        }
+        *keyspec = (*keyspec & ~KEYSPEC_INDEX_MASK)
+                   | ((key->storage.location.slot << KEYSPEC_INDEX_OFFSET)
+                      & KEYSPEC_INDEX_MASK);
+      }
 
-  if (key->flags & SL_SE_KEY_FLAG_ALLOW_ANY_ACCESS) {
-    *keyspec = (*keyspec & ~KEYSPEC_NOPROT_MASK) | (1 << KEYSPEC_NOPROT_OFFSET);
+      // ---------------------
+      // Key NoProt [15]
+      if (key->flags & SL_SE_KEY_FLAG_ALLOW_ANY_ACCESS) {
+        *keyspec = (*keyspec & ~KEYSPEC_NOPROT_MASK) | (1 << KEYSPEC_NOPROT_OFFSET);
+      }
   }
 
   // ---------------------
@@ -568,26 +633,39 @@ sl_status_t sli_se_keyspec_to_key(const uint32_t keyspec,
       return SL_STATUS_INVALID_PARAMETER;
     }
     key->storage.location.slot = key_index;
-  } else {
+  }
+  #if defined(_SILICON_LABS_32B_SERIES_3)
+  else if ((keyspec & KEYSPEC_MODE_MASK) == KEYSPEC_MODE_KSU) {
+    key->storage.method = SL_SE_KEY_STORAGE_INTERNAL_KSU;
+  }
+  #endif
+  else {
     return SL_STATUS_INVALID_PARAMETER;
   }
 
+#if defined(_SILICON_LABS_32B_SERIES_3)
+  if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_KSU) {
+    key->storage.location.ksu.keyslot = (keyspec & KEYSPEC_KSU_KEYSLOT_MASK) >> KEYSPEC_KSU_KEYSLOT_OFFSET;
+    key->storage.location.ksu.crypto_engine_id = (keyspec & KEYSPEC_KSU_KEY_USAGE_MASK) >> KEYSPEC_KSU_KEY_USAGE_OFFSET;
+    // KSU_ID
+    // KSU_ALLOWED_USERS
+  } else {
+#endif
   // ---------------------
   // Key restriction [25-24]
-
   uint32_t keyspec_restriction = (keyspec & KEYSPEC_RESTRICTION_MASK);
   if (keyspec_restriction == KEYSPEC_RESTRICTION_LOCKED) {
     key->flags |= SL_SE_KEY_FLAG_NON_EXPORTABLE;
   } else if (keyspec_restriction == KEYSPEC_RESTRICTION_UNLOCKED) {
     // no-op
   }
-#if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
+  #if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
   else if (keyspec_restriction == KEYSPEC_RESTRICTION_INTERNAL) {
     key->flags |= SL_SE_KEY_FLAG_IS_DEVICE_GENERATED;
   } else if (keyspec_restriction == KEYSPEC_RESTRICTION_RESTRICTED) {
     key->flags |= SL_SE_KEY_FLAG_IS_RESTRICTED;
   }
-#endif
+  #endif
   else {
     return SL_STATUS_INVALID_PARAMETER;
   }
@@ -605,6 +683,9 @@ sl_status_t sli_se_keyspec_to_key(const uint32_t keyspec,
   if ((keyspec & KEYSPEC_NOPROT_MASK) == (1 << KEYSPEC_NOPROT_OFFSET)) {
     key->flags |= SL_SE_KEY_FLAG_ALLOW_ANY_ACCESS;
   }
+#if defined(_SILICON_LABS_32B_SERIES_3)
+}   // if (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_KSU);
+#endif
 
   // ---------------------
   // Key attributes [14-0]
@@ -738,11 +819,18 @@ sl_status_t sli_se_get_key_input_output(const sl_se_key_descriptor_t *key,
       return SL_STATUS_WOULD_OVERFLOW;
     }
 
+    if (key->storage.location.buffer.pointer == NULL) {
+      return SL_STATUS_INVALID_PARAMETER;
+    }
+
     buffer->data = key->storage.location.buffer.pointer;
     buffer->length = total_storage_size | SLI_SE_DATATRANSFER_REALIGN;
   } else if ((key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE)
 #if (_SILICON_LABS_SECURITY_FEATURE == _SILICON_LABS_SECURITY_FEATURE_VAULT)
              || (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_VOLATILE)
+#endif
+#if defined(_SILICON_LABS_32B_SERIES_3)
+             || (key->storage.method == SL_SE_KEY_STORAGE_INTERNAL_KSU)
 #endif
              ) {
     buffer->length = 0;
@@ -1003,8 +1091,14 @@ sl_status_t sl_se_import_key(sl_se_command_context_t *cmd_ctx,
     return status;
   }
 
+  // We only support importing keys with
+  // key_type in = plaintext
+  // key out volatile, wrapped or KSU storage
   if ((key_in->storage.method != SL_SE_KEY_STORAGE_EXTERNAL_PLAINTEXT)
       || ((key_out->storage.method != SL_SE_KEY_STORAGE_INTERNAL_VOLATILE)
+    #if defined(_SILICON_LABS_32B_SERIES_3)
+          && (key_out->storage.method != SL_SE_KEY_STORAGE_INTERNAL_KSU)
+    #endif
           && (key_out->storage.method != SL_SE_KEY_STORAGE_EXTERNAL_WRAPPED))) {
     return SL_STATUS_INVALID_PARAMETER;
   }
@@ -1106,6 +1200,9 @@ sl_status_t sl_se_transfer_key(sl_se_command_context_t *cmd_ctx,
 
   if ((key_in->storage.method == SL_SE_KEY_STORAGE_EXTERNAL_PLAINTEXT)
       || (key_in->storage.method == SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE)
+    #if defined(_SILICON_LABS_32B_SERIES_3)
+      || (key_in->storage.method == SL_SE_KEY_STORAGE_INTERNAL_KSU)
+    #endif
       || (key_out->storage.method == SL_SE_KEY_STORAGE_EXTERNAL_PLAINTEXT)
       || (key_out->storage.method == SL_SE_KEY_STORAGE_INTERNAL_IMMUTABLE)) {
     return SL_STATUS_INVALID_PARAMETER;
@@ -1125,6 +1222,21 @@ sl_status_t sl_se_transfer_key(sl_se_command_context_t *cmd_ctx,
   }
   key_update_index = ((keyspec_out & KEYSPEC_INDEX_MASK) >> KEYSPEC_INDEX_OFFSET);
   key_update_mode = ((keyspec_out & KEYSPEC_MODE_MASK) >> KEYSPEC_MODE_OFFSET);
+
+  #if defined(_SILICON_LABS_32B_SERIES_3)
+  if (key_out->storage.method == SL_SE_KEY_STORAGE_INTERNAL_KSU) {
+    // Set KSU specific keyspecs
+    key_update_index = ((keyspec_out & KEYSPEC_KSU_KEYSLOT_MASK) >> KEYSPEC_KSU_KEYSLOT_OFFSET);
+    uint32_t key_update_ksu_id = ((keyspec_out & KEYSPEC_KSU_ID_MASK) >> KEYSPEC_KSU_ID_OFFSET);
+    uint32_t key_update_ksu_usage = ((keyspec_out & KEYSPEC_KSU_KEY_USAGE_MASK) >> KEYSPEC_KSU_KEY_USAGE_OFFSET);
+    keyspec_out = (keyspec_out & ~KEYSPEC_TRANSFER_KSU_ID_MASK)
+                  | ((key_update_ksu_id << KEYSPEC_TRANSFER_KSU_ID_OFFSET)
+                     & KEYSPEC_TRANSFER_KSU_ID_MASK);
+    keyspec_out = (keyspec_out & ~KEYSPEC_TRANSFER_KSU_ID_MASK)
+                  | ((key_update_ksu_usage << KEYSPEC_TRANSFER_KSU_KEY_USAGE_OFFSET)
+                     & KEYSPEC_TRANSFER_KSU_KEY_USAGE_MASK);
+  }
+  #endif
   keyspec_out = (keyspec_out & ~KEYSPEC_TRANSFER_INDEX_MASK)
                 | ((key_update_index << KEYSPEC_TRANSFER_INDEX_OFFSET)
                    & KEYSPEC_TRANSFER_INDEX_MASK);

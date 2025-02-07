@@ -787,6 +787,7 @@ static void send_report(
   )
 {
   node_id_t initiator_node_id = p_rx_options->sourceNode.nodeId;
+  uint8_t initiator_endpoint = p_rx_options->sourceNode.endpoint;
   uint8_t n_nodes_in_lifeline = 0;
   bool initiator_is_in_lifeline = false;
 
@@ -797,7 +798,8 @@ static void send_report(
       == NODE_LIST_STATUS_SUCCESS
     ) {
       for (uint8_t i = 0; i < n_nodes_in_lifeline; ++i) {
-        if (p_nodes[i].node.nodeId == initiator_node_id) {
+        if (p_nodes[i].node.nodeId == initiator_node_id
+            && p_nodes[i].node.endpoint == initiator_endpoint) {
           initiator_is_in_lifeline = true;
         }
       }
@@ -1010,13 +1012,11 @@ bool CC_UserCredential_CredentialGet_handler(
       &p_metadata->type, &p_metadata->slot);
   }
 
-  /**
-   * CC:0083.01.0C.11.015: UUID is set to 0 to allow queries where this field
-   * is erroneous. In this case, the actual assigned UUID will be returned.
-   */
-  switch (CC_UserCredential_get_credential(
-            0, p_metadata->type, p_metadata->slot,
-            &credential.metadata, credential.data)) {
+  u3c_db_operation_result get_result = CC_UserCredential_get_credential(
+    p_metadata->uuid, p_metadata->type, p_metadata->slot,
+    &credential.metadata, credential.data);
+
+  switch (get_result) {
     case U3C_DB_OPERATION_RESULT_SUCCESS: {
       credential_found = true;
 

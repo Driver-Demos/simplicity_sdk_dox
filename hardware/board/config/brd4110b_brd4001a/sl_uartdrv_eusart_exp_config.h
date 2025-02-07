@@ -106,7 +106,13 @@
 #define SL_UARTDRV_EUSART_EXP_RX_PORT            SL_GPIO_PORT_A
 #define SL_UARTDRV_EUSART_EXP_RX_PIN             6
 
+// EUSART0 CTS on PA04
+#define SL_UARTDRV_EUSART_EXP_CTS_PORT           SL_GPIO_PORT_A
+#define SL_UARTDRV_EUSART_EXP_CTS_PIN            4
 
+// EUSART0 RTS on PA00
+#define SL_UARTDRV_EUSART_EXP_RTS_PORT           SL_GPIO_PORT_A
+#define SL_UARTDRV_EUSART_EXP_RTS_PIN            0
 
 // [EUSART_SL_UARTDRV_EUSART_EXP]$
 // <<< sl:end pin_tool >>>
