@@ -1,0 +1,50 @@
+# ignore git
+.git
+.gitattributes
+.gitignore
+
+# ignore dotfiles
+.lfsconfig
+.properties
+.studio
+
+# ignore license and readme
+License.txt
+README.md
+
+# ignore XML
+*.xml
+
+# Ignore everything not in platform
+app/
+hardware/
+meta/
+# platform/
+protocol/
+simplicity_sdk.slcs/
+util/
+
+# ignore everything except driver, peripheral, and service
+platform/CMSIS/
+platform/Device/
+platform/bootloader/
+platform/common/
+platform/compute/
+platform/documentation/
+# platform/driver/
+platform/emdrv/
+platform/emlib/
+platform/halconfig/
+platform/hwconf_data/
+platform/micrium_os/
+platform/middleware/
+# platform/peripheral/
+platform/radio/
+platform/scripts/
+platform/security/
+# platform/service/
+platform/upgrade.slcu/
+
+
+
+
