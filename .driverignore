@@ -1,12 +1,12 @@
 # ignore git
-.git
+.git/
 .gitattributes
 .gitignore
 
 # ignore dotfiles
 .lfsconfig
 .properties
-.studio
+.studio/
 
 # ignore license and readme
 License.txt
