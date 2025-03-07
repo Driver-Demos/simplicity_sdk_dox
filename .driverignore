@@ -46,6 +46,8 @@ platform/security/
 platform/upgrade.slcu/
 
 # Ignore all devices except EFR32MG24 and EFR32BG22
+platform/Device/component/
+platform/Device/config/
 platform/Device/SiliconLabs/BGM21/
 platform/Device/SiliconLabs/BGM22/
 platform/Device/SiliconLabs/BGM24/
@@ -82,6 +84,3 @@ platform/Device/SiliconLabs/MGM24/
 platform/Device/SiliconLabs/MGM26/
 platform/Device/SiliconLabs/ZGM23/
 platform/Device/SiliconLabs/simulation/
-
-
-
