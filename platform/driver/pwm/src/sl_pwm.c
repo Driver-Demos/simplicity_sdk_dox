@@ -1,32 +1,3 @@
-/***************************************************************************//**
- * @file
- * @brief PWM Driver
- *******************************************************************************
- * # License
- * <b>Copyright 2020 Silicon Laboratories Inc. www.silabs.com</b>
- *******************************************************************************
- *
- * SPDX-License-Identifier: Zlib
- *
- * The licensor of this software is Silicon Laboratories Inc.
- *
- * This software is provided 'as-is', without any express or implied
- * warranty. In no event will the authors be held liable for any damages
- * arising from the use of this software.
- *
- * Permission is granted to anyone to use this software for any purpose,
- * including commercial applications, and to alter it and redistribute it
- * freely, subject to the following restrictions:
- *
- * 1. The origin of this software must not be misrepresented; you must not
- *    claim that you wrote the original software. If you use this software
- *    in a product, an acknowledgment in the product documentation would be
- *    appreciated but is not required.
- * 2. Altered source versions must be plainly marked as such, and must not be
- *    misrepresented as being the original software.
- * 3. This notice may not be removed or altered from any source distribution.
- *
- ******************************************************************************/
 
 #include "sl_pwm.h"
 
@@ -41,10 +12,15 @@
 #include "sl_clock_manager.h"
 #include "sl_device_peripheral.h"
 
-// -----------------------------------------------------------------------------
-//                                Static Functions
-// -----------------------------------------------------------------------------
 
+/**
+ * @brief The `get_timer_clock` function maps a given timer to its corresponding bus clock and peripheral identifiers.
+ *
+ * @param timer A pointer to a TIMER_TypeDef structure representing the timer whose clock and peripheral identifiers are to be determined.
+ * @param timer_clock A pointer to an sl_bus_clock_t variable where the function will store the bus clock identifier corresponding to the given timer.
+ * @param peripheral A pointer to an sl_peripheral_t variable where the function will store the peripheral identifier corresponding to the given timer.
+ * @return The function does not return a value but modifies the values pointed to by `timer_clock` and `peripheral` to reflect the bus clock and peripheral identifiers for the specified timer.
+ */
 static void get_timer_clock(TIMER_TypeDef *timer, sl_bus_clock_t *timer_clock, sl_peripheral_t *peripheral)
 {
   switch ((uint32_t)timer) {
@@ -96,6 +72,13 @@ static void get_timer_clock(TIMER_TypeDef *timer, sl_bus_clock_t *timer_clock, s
   }
 }
 
+/**
+ * @brief The `sl_pwm_init` function initializes a PWM instance with specified configuration settings, including setting up the timer, GPIO, and channel parameters for PWM operation.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure that represents the PWM instance to be initialized.
+ * @param config A pointer to an `sl_pwm_config_t` structure that contains the configuration settings for the PWM, such as frequency and polarity.
+ * @return Returns `SL_STATUS_OK` on successful initialization, or `SL_STATUS_FAIL` if an error occurs during the process.
+ */
 sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
 {
   sl_bus_clock_t timer_clock;
@@ -103,7 +86,6 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
   get_timer_clock(pwm->timer, &timer_clock, &peripheral);
   sl_clock_manager_enable_bus_clock(timer_clock);
 
-  // Set PWM pin as output
   sl_clock_manager_enable_bus_clock(SL_BUS_CLOCK_GPIO);
 
   sl_gpio_t gpio;
@@ -113,7 +95,6 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
                        SL_GPIO_MODE_PUSH_PULL,
                        config->polarity);
 
-  // Set CC channel parameters
 #if defined(_SILICON_LABS_32B_SERIES_2)
   TIMER_InitCC_TypeDef channel_init = TIMER_INITCC_DEFAULT;
   channel_init.mode = timerCCModePWM;
@@ -129,7 +110,6 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
   channel_init.output_invert = (config->polarity == PWM_ACTIVE_LOW);
   sl_hal_timer_channel_init(pwm->timer, pwm->channel, &channel_init);
 #endif
-  // Configure CC channel pinout
   volatile uint32_t * route_register;
 #if defined(_GPIO_TIMER_ROUTEEN_MASK)
   route_register = &GPIO->TIMERROUTE[TIMER_NUM(pwm->timer)].CC0ROUTE;
@@ -159,7 +139,6 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
                     | (pwm->pin << _GPIO_TIMER0_CC0ROUTE_PIN_SHIFT);
 #endif
 
-  // Configure TIMER frequency
   uint32_t clock_freq;
   sl_clock_branch_t clock_branch;
 
@@ -169,22 +148,17 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
 #if defined(_SILICON_LABS_32B_SERIES_2)
   TIMER_TopSet(pwm->timer, top);
 
-  // Set initial duty cycle to 0%
   TIMER_CompareSet(pwm->timer, pwm->channel, 0U);
 
-  // Initialize TIMER
   TIMER_Init_TypeDef timer_init = TIMER_INIT_DEFAULT;
   TIMER_Init(pwm->timer, &timer_init);
 #else
-  // Initialize TIMER
   sl_hal_timer_config_t timer_init = SL_HAL_TIMER_CONFIG_DEFAULT;
   sl_hal_timer_init(pwm->timer, &timer_init);
   sl_hal_timer_enable(pwm->timer);
 
-  // Set TIMER period
   sl_hal_timer_set_top(pwm->timer, top);
 
-  // Set initial duty cycle to 0%
   sl_hal_timer_channel_set_compare(pwm->timer, pwm->channel, 0U);
 
   sl_hal_timer_start(pwm->timer);
@@ -193,9 +167,14 @@ sl_status_t sl_pwm_init(sl_pwm_instance_t *pwm, sl_pwm_config_t *config)
   return SL_STATUS_OK;
 }
 
+/**
+ * @brief The `sl_pwm_deinit` function deinitializes a PWM instance by stopping the PWM, resetting the timer and GPIO configurations, and disabling the associated clock.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure representing the PWM instance to be deinitialized.
+ * @return Returns `SL_STATUS_OK` on successful deinitialization or `SL_STATUS_FAIL` if an invalid timer number is encountered.
+ */
 sl_status_t sl_pwm_deinit(sl_pwm_instance_t *pwm)
 {
-  // Reset TIMER routes
   sl_pwm_stop(pwm);
 
   volatile uint32_t * route_register;
@@ -223,14 +202,12 @@ sl_status_t sl_pwm_deinit(sl_pwm_instance_t *pwm)
   route_register += pwm->channel;
   *route_register = 0;
 
-  // Reset TIMER
 #if defined(_SILICON_LABS_32B_SERIES_2)
   TIMER_Reset(pwm->timer);
 #else
   sl_hal_timer_reset(pwm->timer);
 #endif
 
-  // Reset GPIO
   sl_gpio_t reset_gpio;
   reset_gpio.port = pwm->port;
   reset_gpio.pin = pwm->pin;
@@ -247,9 +224,14 @@ sl_status_t sl_pwm_deinit(sl_pwm_instance_t *pwm)
   return SL_STATUS_OK;
 }
 
+/**
+ * @brief The `sl_pwm_start` function enables the PWM output for a specified PWM instance by configuring the appropriate GPIO routing based on the timer and channel information.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure that contains the PWM instance configuration, including the timer and channel to be used.
+ * @return This function does not return any value; it performs hardware register modifications to enable PWM output.
+ */
 void sl_pwm_start(sl_pwm_instance_t *pwm)
 {
-  // Enable PWM output
 #if defined(_GPIO_TIMER_ROUTEEN_MASK)
   GPIO->TIMERROUTE_SET[TIMER_NUM(pwm->timer)].ROUTEEN = 1 << (pwm->channel + _GPIO_TIMER_ROUTEEN_CC0PEN_SHIFT);
 #else
@@ -273,9 +255,14 @@ void sl_pwm_start(sl_pwm_instance_t *pwm)
 #endif
 }
 
+/**
+ * @brief The `sl_pwm_stop` function disables the PWM output for a specified PWM instance without stopping the timer, allowing other channels to continue operation.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure representing the PWM instance to be stopped.
+ * @return The function does not return a value; it performs an action to disable the PWM output for the specified instance.
+ */
 void sl_pwm_stop(sl_pwm_instance_t *pwm)
 {
-  // Disable PWM output
 #if defined(_GPIO_TIMER_ROUTEEN_MASK)
   GPIO->TIMERROUTE_CLR[TIMER_NUM(pwm->timer)].ROUTEEN = 1 << (pwm->channel + _GPIO_TIMER_ROUTEEN_CC0PEN_SHIFT);
 #else
@@ -297,24 +284,34 @@ void sl_pwm_stop(sl_pwm_instance_t *pwm)
       break;
   }
 #endif
-  // Keep timer running in case other channels are in use
 }
 
+/**
+ * @brief The `sl_pwm_set_duty_cycle` function sets the duty cycle of a PWM signal to a specified percentage.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure representing the PWM instance to configure.
+ * @param percent An 8-bit unsigned integer representing the desired duty cycle percentage (0-100).
+ * @return The function does not return a value; it modifies the PWM instance to reflect the new duty cycle.
+ */
 void sl_pwm_set_duty_cycle(sl_pwm_instance_t *pwm, uint8_t percent)
 {
 #if defined(_SILICON_LABS_32B_SERIES_2)
   uint32_t top = TIMER_TopGet(pwm->timer);
 
-  // Set compare value
   TIMER_CompareBufSet(pwm->timer, pwm->channel, (top * percent) / 100);
 #else
   uint32_t top = sl_hal_timer_get_top(pwm->timer);
 
-  // Set compare value
   sl_hal_timer_channel_set_compare_buffer(pwm->timer, pwm->channel, (top * percent) / 100);
 #endif
 }
 
+/**
+ * @brief The `sl_pwm_get_duty_cycle` function calculates and returns the current duty cycle percentage of a PWM signal for a given PWM instance.
+ *
+ * @param pwm A pointer to an `sl_pwm_instance_t` structure representing the PWM instance for which the duty cycle is to be retrieved.
+ * @return The function returns an 8-bit unsigned integer representing the duty cycle percentage of the PWM signal.
+ */
 uint8_t sl_pwm_get_duty_cycle(sl_pwm_instance_t *pwm)
 {
 #if defined(_SILICON_LABS_32B_SERIES_2)
