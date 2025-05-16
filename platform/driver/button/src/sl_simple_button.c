@@ -12,37 +12,30 @@
 #define SL_SIMPLE_BUTTON_DEBOUNCE_BITS  15U
 #endif
 
+static const uint16_t check_press = (uint16_t)(0xffff << SL_SIMPLE_BUTTON_DEBOUNCE_BITS);
+static const uint16_t check_release = (uint16_t)(~(0x1 << SL_SIMPLE_BUTTON_DEBOUNCE_BITS));
+static const uint16_t debounce_window = (uint16_t)(0xffff << (SL_SIMPLE_BUTTON_DEBOUNCE_BITS + 1));
+
 /**
  * @var `uint16_t`
  * @brief The `check_press` variable is a constant of type `uint16_t` that is used to determine the condition for a button press event in a debouncing mechanism. It is calculated by left-shifting the hexadecimal value `0xffff` by the number of debounce bits defined by `SL_SIMPLE_BUTTON_DEBOUNCE_BITS`. This operation effectively creates a mask that is used to check if a button has been pressed consistently over a specified number of polling cycles.
  *
  * @details This variable is used in the button polling function to verify if the button press condition is met during debouncing.
  */
-static const uint16_t check_press = (uint16_t)(0xffff << SL_SIMPLE_BUTTON_DEBOUNCE_BITS);
+static void sli_simple_button_on_change(uint8_t interrupt_no, void *ctx)
 /**
  * @var `uint16_t`
  * @brief The `check_release` variable is a constant of type `uint16_t` that is used to determine the release state of a button in a debouncing algorithm. It is calculated by inverting a bit-shifted value based on the `SL_SIMPLE_BUTTON_DEBOUNCE_BITS` macro, which defines the number of bits used for debouncing. This variable helps in identifying when a button has been released after being pressed.
  *
  * @details `check_release` is used in the debouncing logic to check if the button has been released by comparing it with the button's history.
  */
-static const uint16_t check_release = (uint16_t)(~(0x1 << SL_SIMPLE_BUTTON_DEBOUNCE_BITS));
+{
 /**
  * @var `uint16_t`
  * @brief The `debounce_window` is a constant variable of type `uint16_t` that is used to define a bitmask for debouncing logic in a button driver. It is calculated by left-shifting the hexadecimal value `0xffff` by the sum of `SL_SIMPLE_BUTTON_DEBOUNCE_BITS` and 1. This effectively creates a window of bits used to filter out noise in button press signals.
  *
  * @details This variable is used in the debouncing logic to ensure stable button press detection by filtering out transient signals.
  */
-static const uint16_t debounce_window = (uint16_t)(0xffff << (SL_SIMPLE_BUTTON_DEBOUNCE_BITS + 1));
-
-/**
- * @brief The `sli_simple_button_on_change` function updates the state of a button when its GPIO pin changes, and triggers a callback if the button is not disabled.
- *
- * @param interrupt_no The interrupt number associated with the button's GPIO pin, which is not used in the function.
- * @param ctx A pointer to the button handle, which is cast to `sl_button_t` to access the button's context.
- * @return The function does not return any value; it updates the button's state and triggers a callback if necessary.
- */
-static void sli_simple_button_on_change(uint8_t interrupt_no, void *ctx)
-{
   (void)interrupt_no;
   sl_button_t *button = (sl_button_t *)ctx;
   sl_simple_button_context_t *simple_button = button->context;
@@ -55,17 +48,18 @@ static void sli_simple_button_on_change(uint8_t interrupt_no, void *ctx)
   if (simple_button->state != SL_SIMPLE_BUTTON_DISABLED) {
     sl_gpio_get_pin_input(&gpio, &pin_value);
     simple_button->state = ((bool)pin_value == SL_SIMPLE_BUTTON_POLARITY);
+/**
+ * @brief The `sli_simple_button_on_change` function updates the state of a button when its GPIO pin changes, and triggers a callback if the button is not disabled.
+ *
+ * @param interrupt_no The interrupt number associated with the button's GPIO pin, which is not used in the function.
+ * @param ctx A pointer to the button handle, which is cast to `sl_button_t` to access the button's context.
+ * @return The function does not return any value; it updates the button's state and triggers a callback if necessary.
+ */
 
     sl_button_on_change(button);
   }
 }
 
-/**
- * @brief The `sl_simple_button_init` function initializes a simple button by configuring its GPIO settings and setting up interrupts if required.
- *
- * @param handle A pointer to an `sl_button_t` structure representing the button to be initialized.
- * @return The function returns `SL_STATUS_OK` to indicate successful initialization of the button.
- */
 sl_status_t sl_simple_button_init(const sl_button_t *handle)
 {
   int32_t interrupt_em4, interrupt_ext;
@@ -74,6 +68,12 @@ sl_status_t sl_simple_button_init(const sl_button_t *handle)
   sl_simple_button_context_t *simple_button = button->context;
   sl_gpio_t gpio = {
     .port = simple_button->port,
+/**
+ * @brief The `sl_simple_button_init` function initializes a simple button by configuring its GPIO settings and setting up interrupts if required.
+ *
+ * @param handle A pointer to an `sl_button_t` structure representing the button to be initialized.
+ * @return The function returns `SL_STATUS_OK` to indicate successful initialization of the button.
+ */
     .pin = simple_button->pin
   };
   bool pin_value;
@@ -118,18 +118,18 @@ sl_status_t sl_simple_button_init(const sl_button_t *handle)
   return SL_STATUS_OK;
 }
 
-/**
- * @brief The function `sl_simple_button_get_state` retrieves the current state of a specified button.
- *
- * @param handle A pointer to an `sl_button_t` structure representing the button whose state is to be retrieved.
- * @return The function returns the current state of the button as an `sl_button_state_t` value.
- */
 sl_button_state_t sl_simple_button_get_state(const sl_button_t *handle)
 {
   sl_button_t *button = (sl_button_t *)handle;
   sl_simple_button_context_t *simple_button = button->context;
 
   return simple_button->state;
+/**
+ * @brief The function `sl_simple_button_get_state` retrieves the current state of a specified button.
+ *
+ * @param handle A pointer to an `sl_button_t` structure representing the button whose state is to be retrieved.
+ * @return The function returns the current state of the button as an `sl_button_state_t` value.
+ */
 }
 
 /**
@@ -188,15 +188,15 @@ void sl_simple_button_enable(const sl_button_t *handle)
   }
 
   simple_button->history = 0;
-  sl_simple_button_init(handle);
-}
-
 /**
  * @brief The `sl_simple_button_disable` function disables a button by updating its state and deconfiguring its interrupt if necessary.
  *
  * @param handle A pointer to an `sl_button_t` structure representing the button to be disabled.
  * @return The function does not return a value; it modifies the state of the button to indicate it is disabled.
  */
+  sl_simple_button_init(handle);
+}
+
 void sl_simple_button_disable(const sl_button_t *handle)
 {
   sl_button_t *button = (sl_button_t *)handle;
