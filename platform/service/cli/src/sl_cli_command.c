@@ -48,44 +48,35 @@
 #define SL_CLI_EOL_STRING "\n"
 #endif
 
-/***************************************************************************//**
- * @brief
- *   Hook executed before the command. Unless specifically redefined to
- *   something, this hook does nothing.
+/**
+ * @brief The `sli_cli_pre_cmd_hook` function is a weakly defined hook that is executed before a CLI command, but does nothing unless specifically redefined.
  *
- * @param[in] arguments     The arguments passed to the command handler.
- *
- ******************************************************************************/
+ * @param arguments A pointer to an `sl_cli_command_arg_t` structure containing the arguments passed to the command handler.
+ * @return The function does not produce any output or return any value.
+ */
 SL_WEAK void sli_cli_pre_cmd_hook(sl_cli_command_arg_t* arguments)
 {
   (void) arguments;
 }
 
-/***************************************************************************//**
- * @brief
- *   Hook executed after the command. Unless specifically redefined to
- *   something, this hook does nothing.
+/**
+ * @brief The `sli_cli_post_cmd_hook` function is a weakly defined hook that executes after a command is processed, but does nothing unless overridden.
  *
- * @param[in] arguments     The arguments passed to the command handler.
- *
- ******************************************************************************/
+ * @param arguments A pointer to an `sl_cli_command_arg_t` structure containing the arguments passed to the command handler.
+ * @return The function does not produce any output or return a value.
+ */
 SL_WEAK void sli_cli_post_cmd_hook(sl_cli_command_arg_t* arguments)
 {
   (void) arguments;
 }
 
-/***************************************************************************//**
- * @brief
- *   Compare two command strings. If the comparison shall be case sensitive or
- *   not can be configured with SL_CLI_IGNORE_COMMAND_CASE.
+/**
+ * @brief The `cmd_strcmp` function compares two command strings, either case-sensitively or case-insensitively, based on a preprocessor directive.
  *
- * @param[in] a         String to compare.
- *
- * @param[in] b         String to compare.
- *
- * @return              An integer greater than, or less than 0 if the strings
- *                      are not equal. 0 if the strings are equal.
- ******************************************************************************/
+ * @param a The first string to compare.
+ * @param b The second string to compare.
+ * @return The function returns an integer greater than, less than, or equal to 0, indicating whether the first string is greater than, less than, or equal to the second string.
+ */
 static int cmd_strcmp(const char *a, const char *b)
 {
 #if SL_CLI_IGNORE_COMMAND_CASE
@@ -96,17 +87,13 @@ static int cmd_strcmp(const char *a, const char *b)
 }
 
 #if SL_CLI_HELP_DESCRIPTION_ENABLED
-/***************************************************************************//**
- * @brief
- *   Print a string and append spaces until the total length is reached.
+/**
+ * @brief The `print_and_pad` function prints a given string and appends spaces until a specified total length is reached.
  *
- * @param[in] string
- *   A pointer to the string that shall be printed.
- *
- * @param[in] total_lenght
- *   The total length of the string. If the length of the string is equal or
- *  larger than total_length, no spaces are appended.
- ******************************************************************************/
+ * @param string A pointer to the string that needs to be printed.
+ * @param total_length The total length that the printed string should occupy, including the original string and any added spaces.
+ * @return The function does not return a value; it outputs the string followed by spaces directly to the standard output.
+ */
 static void print_and_pad(const char *string,
                           size_t total_length)
 {
@@ -117,16 +104,12 @@ static void print_and_pad(const char *string,
   }
 }
 
-/***************************************************************************//**
- * @brief
- *   Get a string representation of an argument type
+/**
+ * @brief The `get_arg_type_string` function returns a string representation of a given CLI argument type.
  *
- * @param[in] type
- *   The argument type to be translated.
- *
- * @return
- *   A pointer to the string.
- ******************************************************************************/
+ * @param type An enumeration value of type `sl_cli_argument_type_t` representing the CLI argument type to be translated into a string.
+ * @return A constant character pointer to a string that represents the input argument type.
+ */
 static const char *get_arg_type_string(sl_cli_argument_type_t type)
 {
   const char *str;
@@ -256,14 +239,12 @@ static void cmd_help_command(const sl_cli_command_entry_t *cmd_entry)
 }
 
 #else
-/***************************************************************************//**
- * @brief
- *   Print out the available commands in the given command table.
+/**
+ * @brief The `cmd_help_command` function prints the name of a CLI command entry followed by a newline.
  *
- * @param[in] command_table
- *   sl_cli_command_entry_t array that is {NULL, NULL}-terminated. Can be both
- *   root command table and group command table
- ******************************************************************************/
+ * @param cmd_entry A pointer to an `sl_cli_command_entry_t` structure representing a command entry, which contains the name of the command to be printed.
+ * @return The function does not return any value; it performs an output operation to print the command name.
+ */
 static void cmd_help_command(const sl_cli_command_entry_t *cmd_entry)
 {
   sli_cli_io_printf("  %s" SL_CLI_EOL_STRING, cmd_entry->name);
@@ -271,6 +252,12 @@ static void cmd_help_command(const sl_cli_command_entry_t *cmd_entry)
 
 #endif // SL_CLI_HELP_DESCRIPTION_ENABLED
 
+/**
+ * @brief The `cmd_help_group` function iterates over a command table and prints help information for each command that is not a shortcut.
+ *
+ * @param command_table An array of `sl_cli_command_entry_t` structures representing the command table, which is terminated by an entry with a NULL name.
+ * @return The function does not return a value; it outputs help information for each non-shortcut command in the command table.
+ */
 static void cmd_help_group(const sl_cli_command_entry_t command_table[])
 {
   int i = 0;
@@ -286,6 +273,14 @@ static void cmd_help_group(const sl_cli_command_entry_t command_table[])
   }
 }
 
+/**
+ * @brief The `cmd_help` function provides help information for CLI commands by printing details of a specific command or a group of commands based on the input parameters.
+ *
+ * @param handle A handle to the CLI instance, which contains the command groups.
+ * @param cmd_table A pointer to a command table (array of command entries) that is either a specific command or a group of commands.
+ * @param single A boolean flag indicating whether to display help for a single command (true) or a group of commands (false).
+ * @return The function does not return a value; it outputs help information to the CLI interface.
+ */
 static void cmd_help(sl_cli_handle_t handle, const sl_cli_command_entry_t *cmd_table, bool single)
 {
   if (cmd_table != NULL) {
@@ -307,9 +302,13 @@ static void cmd_help(sl_cli_handle_t handle, const sl_cli_command_entry_t *cmd_t
   }
 }
 
-/*******************************************************************************
- ****************************   GLOBAL FUNCTIONS   *****************************
- ******************************************************************************/
+/**
+ * @brief The function `sl_cli_command_add_command_group` adds a command group to a CLI handle if it is not already in use.
+ *
+ * @param handle A pointer to an `sl_cli_handle_t` structure representing the CLI handle to which the command group will be added.
+ * @param command_group A pointer to an `sl_cli_command_group_t` structure representing the command group to be added.
+ * @return Returns `true` if the command group was successfully added to the CLI handle, otherwise returns `false`.
+ */
 bool sl_cli_command_add_command_group(sl_cli_handle_t handle, sl_cli_command_group_t *command_group)
 {
   bool status = false;
@@ -324,6 +323,13 @@ bool sl_cli_command_add_command_group(sl_cli_handle_t handle, sl_cli_command_gro
   return status;
 }
 
+/**
+ * @brief The function `sl_cli_command_remove_command_group` removes a command group from a CLI handle if it is currently in use.
+ *
+ * @param handle A pointer to the CLI handle (`sl_cli_handle_t`) from which the command group is to be removed.
+ * @param command_group A pointer to the command group (`sl_cli_command_group_t`) that is to be removed from the CLI handle.
+ * @return Returns a boolean value `true` if the command group was successfully removed, otherwise `false`.
+ */
 bool sl_cli_command_remove_command_group(sl_cli_handle_t handle, sl_cli_command_group_t *command_group)
 {
   bool status = false;
@@ -341,6 +347,16 @@ bool sl_cli_command_remove_command_group(sl_cli_handle_t handle, sl_cli_command_
 
 // The following function is only needed if advanced input handling is enabled
 #if !defined(SL_CLI_DUT) && (SL_CLI_ADVANCED_INPUT_HANDLING == 1)
+/**
+ * @brief The `sl_cli_command_find_matches` function searches for command matches in a CLI input buffer and populates a string with possible matches.
+ *
+ * @param handle A pointer to the CLI handle containing the input buffer and command group information.
+ * @param possible_matches A character array to store the possible command matches found.
+ * @param possible_matches_size The size of the `possible_matches` array.
+ * @param input_length A pointer to an integer where the length of the input command will be stored.
+ * @param input_position A pointer to an integer where the position in the input buffer will be stored.
+ * @return The function returns the number of possible command matches found.
+ */
 int sl_cli_command_find_matches(sl_cli_handle_t handle,
                                 char *possible_matches,
                                 size_t possible_matches_size,
@@ -445,6 +461,19 @@ int sl_cli_command_find_matches(sl_cli_handle_t handle,
 }
 #endif // SL_CLI_ADVANCED_INPUT_HANDLING
 
+/**
+ * @brief The `scan_entry` function searches for a command or command group in a command entry list based on tokenized input and updates flags and offsets accordingly.
+ *
+ * @param cmd_entry_in A pointer to the initial command entry to start the search from.
+ * @param group A boolean indicating if the current search context is within a command group.
+ * @param found A pointer to a boolean that will be set to true if a matching command or group is found.
+ * @param token_c A pointer to an integer representing the count of tokens in the input.
+ * @param token_v An array of strings representing the tokenized input arguments.
+ * @param arg_ofs A pointer to an integer offset indicating the current position in the token array.
+ * @param single_flag A pointer to a boolean that will be set to true if a single command is found.
+ * @param help_flag A pointer to a boolean that will be set to true if help information is requested or needed.
+ * @return Returns a pointer to the command entry that matches the input tokens, or NULL if no match is found.
+ */
 static const sl_cli_command_entry_t *scan_entry(const sl_cli_command_entry_t *cmd_entry_in,
                                                 bool group,
                                                 bool *found,
@@ -488,6 +517,17 @@ static const sl_cli_command_entry_t *scan_entry(const sl_cli_command_entry_t *cm
   return cmd_entry;
 }
 
+/**
+ * @brief The `sl_cli_command_find` function searches for a command entry in a CLI command group based on input tokens and sets flags for help or single command execution.
+ *
+ * @param handle A handle to the CLI instance containing command groups.
+ * @param token_c A pointer to an integer representing the count of tokens in the input.
+ * @param token_v An array of strings representing the tokens from the input command line.
+ * @param arg_ofs A pointer to an integer that will be updated to indicate the offset of the current argument being processed.
+ * @param single_flag A pointer to a boolean that will be set to true if a single command is found.
+ * @param help_flag A pointer to a boolean that will be set to true if the help command is detected.
+ * @return Returns a pointer to the found `sl_cli_command_entry_t` if a command is found, otherwise returns NULL.
+ */
 const sl_cli_command_entry_t *sl_cli_command_find(sl_cli_handle_t handle,
                                                   int *token_c,
                                                   char *token_v[],
@@ -526,6 +566,13 @@ const sl_cli_command_entry_t *sl_cli_command_find(sl_cli_handle_t handle,
   return cmd_entry;
 }
 
+/**
+ * @brief The `sl_cli_command_execute` function processes a command input string, finds the corresponding command, converts its arguments, and executes the command function.
+ *
+ * @param handle A handle to the CLI context, which contains command groups and other CLI-related data.
+ * @param input A string containing the command and its arguments to be executed.
+ * @return The function returns an `sl_status_t` status code indicating the success or failure of the command execution process.
+ */
 sl_status_t sl_cli_command_execute(sl_cli_handle_t handle,
                                    char *input)
 {
