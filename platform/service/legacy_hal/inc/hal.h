@@ -83,11 +83,18 @@ uint16_t halCommonGetInt16uMillisecondTick(void);
  */
 uint32_t halCommonGetInt32uMillisecondTick(void);
 
-/**
- * @brief This function will get 64u ms tick data
+/***************************************************************************//**
+ * @brief Use this function to obtain the current system time in milliseconds,
+ * represented as a 64-bit unsigned integer. This is useful for
+ * applications that require precise time tracking or need to handle long
+ * durations without overflow. The function is expected to be called in
+ * environments where the system timer is properly initialized and
+ * running. It is suitable for use in Zigbee and Connect stack
+ * applications, as part of the Legacy HAL.
  *
- * @return
- */
+ * @return Returns the current system time in milliseconds as a 64-bit unsigned
+ * integer.
+ ******************************************************************************/
 uint64_t halCommonGetInt64uMillisecondTick(void);
 
 /**
@@ -97,11 +104,18 @@ uint64_t halCommonGetInt64uMillisecondTick(void);
  */
 uint16_t halCommonGetInt16uQuarterSecondTick(void);
 
-/**
- * @brief This function will start system timer
+/***************************************************************************//**
+ * @brief This function initializes and starts the system timer, which is
+ * essential for time-based operations within the system. It should be
+ * called during the system initialization phase to ensure that the timer
+ * is ready for use. The function assumes that the underlying sleep timer
+ * initialization will succeed; if it fails, the function will trigger an
+ * assertion failure, indicating a critical error. This function is
+ * typically used in environments where precise timing is crucial, such
+ * as in embedded systems running Zigbee or Connect stack applications.
  *
- * @return
- */
+ * @return Returns 0 to indicate successful initialization of the system timer.
+ ******************************************************************************/
 uint16_t halInternalStartSystemTimer(void);
 
 /**
@@ -118,35 +132,76 @@ void halCommonDelayMicroseconds(uint16_t us);
  */
 void halCommonDelayMilliseconds(uint16_t ms);
 
-/**
- * @brief This function will set state to idle for an amount of time in ms
+/***************************************************************************//**
+ * @brief This function is intended to set the system to an idle state for a
+ * specified duration in milliseconds. However, due to the current
+ * handling by the Power Manager, the function will always indicate that
+ * the sleep was interrupted. It is primarily used in contexts where
+ * legacy behavior is expected, but users should be aware that the
+ * function does not perform actual idling as it might have in previous
+ * implementations. This function is part of the Legacy HAL and is
+ * designed for use with Zigbee and Connect stack applications.
  *
- * @param duration second in us
- *
- * @return sl_status_t
- */
+ * @param duration A pointer to a uint32_t representing the duration in
+ * milliseconds for which the system should idle. The parameter
+ * is not used in the current implementation, and the function
+ * will not modify the value pointed to by this parameter. The
+ * caller retains ownership of the memory.
+ * @return Returns SL_STATUS_SUSPENDED, indicating that the intended idle
+ * operation was interrupted.
+ ******************************************************************************/
 sl_status_t halCommonIdleForMilliseconds(uint32_t *duration);
 
-/**
- * @brief This function is halStackSymbolDelayAIsr
- */
+/***************************************************************************//**
+ * @brief This function is a placeholder to maintain compatibility with legacy
+ * code that may expect its presence. It does not perform any operations
+ * and can be safely called without any preconditions or side effects. It
+ * is intended for use in systems transitioning from older hardware
+ * abstraction layers to newer architectures, ensuring that existing
+ * codebases remain functional without modification.
+ *
+ * @return None
+ ******************************************************************************/
 void halStackSymbolDelayAIsr(void);
 
-/**
- * @brief This function is halStackProcessBootCount
- */
+/***************************************************************************//**
+ * @brief This function is used to increment a boot counter token, which tracks
+ * the number of times the stack has been booted, provided that the boot
+ * counter feature is enabled. It is typically called during the boot
+ * process of a Zigbee or Connect stack application to maintain a count
+ * of boot events. This function has no effect if the boot counter
+ * feature is not enabled in the build configuration.
+ *
+ * @return None
+ ******************************************************************************/
 void halStackProcessBootCount(void);
 
-/**
- * @brief This function is sli_util_debug_init
+/***************************************************************************//**
+ * @brief This function initializes the debug utilities, specifically targeting
+ * systems where the virtual UART (VUART) is present. It should be called
+ * during the system initialization phase to ensure that debug
+ * capabilities are set up correctly. If the VUART is not present or
+ * initialization fails, the function will return a failure status. This
+ * function is particularly relevant in environments where debugging
+ * through VUART is required.
  *
- * @return sl_status_t
- */
+ * @return Returns SL_STATUS_OK if the initialization is successful and VUART is
+ * present; otherwise, returns SL_STATUS_FAIL.
+ ******************************************************************************/
 sl_status_t sli_util_debug_init(void);
 
-/**
- * @brief This function is sli_802154phy_radio_seed_random
- */
+/***************************************************************************//**
+ * @brief This function initializes the random number generator with entropy
+ * sourced from the radio hardware. It should be called to ensure that
+ * the random number generator is properly seeded before any random
+ * numbers are generated, particularly in applications where randomness
+ * is critical, such as cryptographic operations. The function does not
+ * take any parameters and does not return a value. It is expected to be
+ * used in environments where the radio hardware is available and
+ * properly configured.
+ *
+ * @return None
+ ******************************************************************************/
 void sli_802154phy_radio_seed_random(void);
 
 /** @} (end addtogroup legacyhal) */

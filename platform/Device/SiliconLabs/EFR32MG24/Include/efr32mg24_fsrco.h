@@ -41,7 +41,28 @@
  * @brief EFR32MG24 FSRCO Register Declaration.
  *****************************************************************************/
 
-/** FSRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The FSRCO_TypeDef structure is a register declaration for the
+ * EFR32MG24 FSRCO, which includes fields for managing the IP version of
+ * the FSRCO. It contains multiple IPVERSION fields for different
+ * operations (set, clear, toggle) and large reserved arrays for future
+ * use, ensuring compatibility and extensibility in the register's
+ * design.
+ *
+ * @param IPVERSION Represents the IP version of the FSRCO.
+ * @param RESERVED0 An array reserved for future use, consisting of 1023
+ * unsigned 32-bit integers.
+ * @param IPVERSION_SET Represents the IP version of the FSRCO, used for setting
+ * operations.
+ * @param RESERVED1 An array reserved for future use, consisting of 1023
+ * unsigned 32-bit integers.
+ * @param IPVERSION_CLR Represents the IP version of the FSRCO, used for
+ * clearing operations.
+ * @param RESERVED2 An array reserved for future use, consisting of 1023
+ * unsigned 32-bit integers.
+ * @param IPVERSION_TGL Represents the IP version of the FSRCO, used for
+ * toggling operations.
+ ******************************************************************************/
 typedef struct fsrco_typedef{
   __IM uint32_t IPVERSION;                      /**< IP Version                                         */
   uint32_t      RESERVED0[1023U];               /**< Reserved for future use                            */

@@ -30,33 +30,76 @@
 
 #include <stdbool.h>
 
-/***************************************************************************/ /**
- * Returns the state of the reset bootloader sequence
+/***************************************************************************//**
+ * @brief Use this function to determine if the reset bootloader sequence has
+ * been completed successfully. This is useful in scenarios where you
+ * need to verify that the system has rebooted into bootloader mode,
+ * which may be necessary before performing certain operations like
+ * firmware updates. The function returns a boolean value indicating the
+ * completion status of the bootloader sequence.
  *
- * @return Whether the secondary has rebooted in bootloader mode or not
+ * @return A boolean value: `true` if the bootloader sequence is done, `false`
+ * otherwise.
  ******************************************************************************/
 bool sli_cpc_reboot_is_bootloader_sequence_done(void);
 
-/***************************************************************************/ /**
- * The bare metal process action function.
+/***************************************************************************//**
+ * @brief This function manages the state transitions required to reboot a
+ * secondary device in a CPC (Co-Processor Communication) system. It
+ * should be called periodically to ensure the reboot sequence progresses
+ * through its various states, handling communication and acknowledgments
+ * with the secondary device. The function is designed to be used in a
+ * bare-metal environment and does not return until the sequence is
+ * complete or an error state is reached. It is essential to ensure that
+ * the system is in a state ready to handle the reboot sequence before
+ * calling this function.
  *
- * @param[in] firmware_reset_mode  if the reset sequence should trap into bootloader
+ * @param None This function does not take any parameters.
+ * @return None
  ******************************************************************************/
 void sli_cpc_reboot_sequence_process(void);
 
-/***************************************************************************/ /**
- * The bare metal process action function for the reboot into bootloader mode.
+/***************************************************************************//**
+ * @brief This function manages the state machine for rebooting a device into
+ * bootloader mode. It should be called periodically to progress through
+ * the sequence of setting the reboot mode, waiting for acknowledgments,
+ * and confirming the reset. The function does not take any parameters
+ * and does not return a value. It is essential to ensure that the system
+ * is in a state where a reboot into bootloader mode is appropriate
+ * before calling this function. The function handles different states
+ * internally and will not perform any action if the sequence is already
+ * completed.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_reboot_bootloader_sequence_process(void);
 
-/***************************************************************************/ /**
- * Returns whether or not a gecko bootloader suitable for firmware upgrade is present
+/***************************************************************************//**
+ * @brief Use this function to determine if a Gecko bootloader, which is
+ * suitable for performing firmware upgrades, is present in the system.
+ * This function is useful in scenarios where the application needs to
+ * verify the availability of the bootloader before attempting a firmware
+ * update. It returns a boolean value indicating the presence or absence
+ * of the bootloader, allowing the application to make decisions based on
+ * this information.
  *
- * @return gecko bootloader is present
+ * @return A boolean value: `true` if a Gecko bootloader is present, `false`
+ * otherwise.
  ******************************************************************************/
 bool sli_cpc_is_gecko_bootloader_present(void);
 
-/***************************************************************************/ /**
- * Reset state machine of the reboot sequence to re-run it
+/***************************************************************************//**
+ * @brief This function is used to reset the state machine associated with the
+ * CPC reboot sequence, allowing the sequence to be re-executed. It is
+ * typically called when a fresh start of the reboot process is required,
+ * such as after a previous sequence has completed or failed. The
+ * function initializes various internal flags and state variables to
+ * their default values, ensuring that the reboot sequence can proceed
+ * without residual state from prior executions. This function should be
+ * used in contexts where a controlled reboot sequence is necessary, and
+ * it assumes that any necessary cleanup or preparation has been
+ * performed prior to invocation.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_reboot_sequence_start(void);

@@ -52,17 +52,20 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize RFFPLL
+/***************************************************************************//**
+ * @brief This function configures and locks the Digital Radio Frequency
+ * Friendly Phase Locked Loop (RFFPLL) using settings specified in the
+ * configuration header `sl_device_init_rffpll_config.h`. It should be
+ * called to set up the RFFPLL with the desired frequency and divider
+ * settings before using the RFFPLL as a clock source. The function
+ * ensures that the RFFPLL is properly initialized and ready for use, and
+ * it may overwrite previous clock source selections for the system clock
+ * (SYSCLK). It is important to ensure that the configuration header is
+ * correctly set up before calling this function.
  *
- * @details
- * Configures and locks the Digital RFFPLL using the configuration in the
- * configuration header `sl_device_init_rffpll_config.h`, where settings including
- * host target frequency and dividers are available.
- *
- * @return Status code
- * @retval SL_STATUS_OK RFFPLL successfully initialized and locked
- */
+ * @return Returns SL_STATUS_OK if the RFFPLL is successfully initialized and
+ * locked.
+ ******************************************************************************/
 sl_status_t sl_device_init_rffpll(void);
 
 /**

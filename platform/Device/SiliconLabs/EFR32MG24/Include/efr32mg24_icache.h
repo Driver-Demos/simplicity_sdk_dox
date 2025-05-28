@@ -41,7 +41,61 @@
  * @brief EFR32MG24 ICACHE Register Declaration.
  *****************************************************************************/
 
-/** ICACHE Register Declaration. */
+/***************************************************************************//**
+ * @brief The ICACHE_TypeDef is a comprehensive structure representing the
+ * ICACHE (Instruction Cache) registers for the EFR32MG24
+ * microcontroller. It includes various registers for controlling the
+ * cache, monitoring performance through hit and miss counters, managing
+ * low power modes, and handling interrupts. The structure is designed to
+ * support operations such as setting, clearing, and toggling specific
+ * register values, with reserved spaces for future expansion. This
+ * design allows for efficient cache management and performance
+ * monitoring in embedded systems.
+ *
+ * @param IPVERSION IP Version.
+ * @param CTRL Control Register.
+ * @param PCHITS Performance Counter Hits.
+ * @param PCMISSES Performance Counter Misses.
+ * @param PCAHITS Performance Counter Advanced Hits.
+ * @param STATUS Status Register.
+ * @param CMD Command Register.
+ * @param LPMODE Low Power Mode.
+ * @param IF Interrupt Flag.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP Version.
+ * @param CTRL_SET Control Register.
+ * @param PCHITS_SET Performance Counter Hits.
+ * @param PCMISSES_SET Performance Counter Misses.
+ * @param PCAHITS_SET Performance Counter Advanced Hits.
+ * @param STATUS_SET Status Register.
+ * @param CMD_SET Command Register.
+ * @param LPMODE_SET Low Power Mode.
+ * @param IF_SET Interrupt Flag.
+ * @param IEN_SET Interrupt Enable.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP Version.
+ * @param CTRL_CLR Control Register.
+ * @param PCHITS_CLR Performance Counter Hits.
+ * @param PCMISSES_CLR Performance Counter Misses.
+ * @param PCAHITS_CLR Performance Counter Advanced Hits.
+ * @param STATUS_CLR Status Register.
+ * @param CMD_CLR Command Register.
+ * @param LPMODE_CLR Low Power Mode.
+ * @param IF_CLR Interrupt Flag.
+ * @param IEN_CLR Interrupt Enable.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP Version.
+ * @param CTRL_TGL Control Register.
+ * @param PCHITS_TGL Performance Counter Hits.
+ * @param PCMISSES_TGL Performance Counter Misses.
+ * @param PCAHITS_TGL Performance Counter Advanced Hits.
+ * @param STATUS_TGL Status Register.
+ * @param CMD_TGL Command Register.
+ * @param LPMODE_TGL Low Power Mode.
+ * @param IF_TGL Interrupt Flag.
+ * @param IEN_TGL Interrupt Enable.
+ ******************************************************************************/
 typedef struct icache_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version                                         */
   __IOM uint32_t CTRL;                          /**< Control Register                                   */

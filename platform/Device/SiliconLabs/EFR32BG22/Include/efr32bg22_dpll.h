@@ -41,7 +41,57 @@
  * @brief EFR32BG22 DPLL Register Declaration.
  *****************************************************************************/
 
-/** DPLL Register Declaration. */
+/***************************************************************************//**
+ * @brief The `DPLL_TypeDef` structure is a comprehensive representation of the
+ * Digital Phase-Locked Loop (DPLL) registers for the EFR32BG22
+ * microcontroller. It includes fields for managing the DPLL's
+ * configuration, status, and control operations, such as enabling,
+ * locking, and interrupt handling. The structure also provides set,
+ * clear, and toggle operations for each register, allowing for flexible
+ * manipulation of the DPLL's state. Reserved fields are included for
+ * future expansion, ensuring compatibility with potential updates or
+ * additional features.
+ *
+ * @param IPVERSION Represents the IP version of the DPLL.
+ * @param EN Controls the enable state of the DPLL.
+ * @param CFG Holds configuration settings for the DPLL.
+ * @param CFG1 Contains additional configuration settings for the DPLL.
+ * @param IF Indicates the interrupt flag status.
+ * @param IEN Controls the interrupt enable state.
+ * @param STATUS Reflects the current status of the DPLL.
+ * @param RESERVED0 Reserved for future use.
+ * @param LOCK Manages the lock state of the DPLL.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET Set operation for the IP version.
+ * @param EN_SET Set operation for the enable state.
+ * @param CFG_SET Set operation for the configuration settings.
+ * @param CFG1_SET Set operation for additional configuration settings.
+ * @param IF_SET Set operation for the interrupt flag.
+ * @param IEN_SET Set operation for the interrupt enable state.
+ * @param STATUS_SET Set operation for the status.
+ * @param RESERVED2 Reserved for future use.
+ * @param LOCK_SET Set operation for the lock state.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR Clear operation for the IP version.
+ * @param EN_CLR Clear operation for the enable state.
+ * @param CFG_CLR Clear operation for the configuration settings.
+ * @param CFG1_CLR Clear operation for additional configuration settings.
+ * @param IF_CLR Clear operation for the interrupt flag.
+ * @param IEN_CLR Clear operation for the interrupt enable state.
+ * @param STATUS_CLR Clear operation for the status.
+ * @param RESERVED4 Reserved for future use.
+ * @param LOCK_CLR Clear operation for the lock state.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL Toggle operation for the IP version.
+ * @param EN_TGL Toggle operation for the enable state.
+ * @param CFG_TGL Toggle operation for the configuration settings.
+ * @param CFG1_TGL Toggle operation for additional configuration settings.
+ * @param IF_TGL Toggle operation for the interrupt flag.
+ * @param IEN_TGL Toggle operation for the interrupt enable state.
+ * @param STATUS_TGL Toggle operation for the status.
+ * @param RESERVED6 Reserved for future use.
+ * @param LOCK_TGL Toggle operation for the lock state.
+ ******************************************************************************/
 typedef struct dpll_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version                                         */
   __IOM uint32_t EN;                            /**< Enable                                             */

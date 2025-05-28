@@ -80,15 +80,20 @@ void sl_cli_delay_command(sl_cli_command_arg_t *arguments);
 
 #if !defined(SL_CATALOG_KERNEL_PRESENT)
 /***************************************************************************//**
- * @brief
- *  Complete execution of a delay started with the sl_cli_delay_command when
- *  running in a bare metal configuration.
+ * @brief This function is used to determine whether a non-blocking delay,
+ * initiated by a previous call to `sl_cli_delay_command`, is still in
+ * progress for a given CLI instance. It is specifically applicable in
+ * bare metal configurations where the delay does not block execution but
+ * requires periodic checking. This function should be called regularly
+ * in the main loop to ensure that the CLI instance can resume processing
+ * commands once the delay has completed. It is important to note that
+ * this function is only available when the kernel is not present.
  *
- * @param[in] handle
- *   A handle to the CLI instance where the delay is running.
- *
- * @return
- *   A boolean that is true if a delay is in progress, else false.
+ * @param handle A handle to the CLI instance being checked. It must be a valid
+ * handle associated with an ongoing delay operation. If the
+ * handle is invalid, the behavior is undefined.
+ * @return Returns a boolean value: true if a delay is currently in progress for
+ * the specified CLI instance, otherwise false.
  ******************************************************************************/
 bool sl_cli_delay_tick(sl_cli_handle_t handle);
 #endif

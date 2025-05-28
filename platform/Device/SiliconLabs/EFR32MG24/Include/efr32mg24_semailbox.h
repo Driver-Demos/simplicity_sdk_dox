@@ -40,7 +40,32 @@
  * @brief EFR32MG24 SEMAILBOX_HOST Register Declaration.
  *****************************************************************************/
 
-/** SEMAILBOX_HOST Register Declaration. */
+/***************************************************************************//**
+ * @brief The SEMAILBOX_HOST_TypeDef is a structured data type representing the
+ * register layout for the EFR32MG24 secure mailbox host. It includes
+ * various registers for managing FIFO operations, transmission and
+ * reception status, protection settings, and configuration. The
+ * structure is designed to facilitate secure communication by providing
+ * detailed control and status information for both transmission and
+ * reception processes, with reserved spaces for future enhancements.
+ *
+ * @param FIFO A 32-bit register for the ESECURE_MAILBOX_FIFO, allowing read and
+ * write operations.
+ * @param RESERVED0 An array of 15 32-bit reserved spaces for future use.
+ * @param TX_STATUS A 32-bit read-only register indicating the status of the
+ * ESECURE_MAILBOX_TXSTAT.
+ * @param RX_STATUS A 32-bit read-only register indicating the status of the
+ * ESECURE_MAILBOX_RXSTAT.
+ * @param TX_PROT A 32-bit read-only register for the ESECURE_MAILBOX_TXPROTECT,
+ * indicating transmission protection status.
+ * @param RX_PROT A 32-bit read-only register for the ESECURE_MAILBOX_RXPROTECT,
+ * indicating reception protection status.
+ * @param TX_HEADER A 32-bit register for the ESECURE_MAILBOX_TXHEADER, allowing
+ * read and write operations.
+ * @param RX_HEADER A 32-bit read-only register for the
+ * ESECURE_MAILBOX_RXHEADER.
+ * @param CONFIGURATION A 32-bit register for configuring the ESECURE_MAILBOX.
+ ******************************************************************************/
 typedef struct semailbox_host_typedef{
   __IOM uint32_t FIFO;                               /**< ESECURE_MAILBOX_FIFO                               */
   uint32_t       RESERVED0[15U];                     /**< Reserved for future use                            */
@@ -212,7 +237,34 @@ typedef struct semailbox_host_typedef{
  * @brief EFR32MG24 SEMAILBOX_APBSE Register Declaration.
  *****************************************************************************/
 
-/** SEMAILBOX_APBSE Register Declaration. */
+/***************************************************************************//**
+ * @brief The SEMAILBOX_APBSE_TypeDef is a structure representing a set of
+ * registers for managing secure mailbox operations in the EFR32MG24
+ * microcontroller. It includes registers for FIFO operations,
+ * transmission and reception status, protection settings, headers, and
+ * configuration. The structure is designed to facilitate secure
+ * communication by providing dedicated registers for handling secure and
+ * non-secure data transactions, ensuring data integrity and security in
+ * embedded systems.
+ *
+ * @param SE_ESECURE_MAILBOX_FIFO A 32-bit register for the
+ * ESECURE_MAILBOX_FIFO.
+ * @param RESERVED0 An array of 15 reserved 32-bit integers for future use.
+ * @param SE_ESECURE_MAILBOX_TXSTAT A 32-bit register for the
+ * ESECURE_MAILBOX_TXSTAT.
+ * @param SE_ESECURE_MAILBOX_RXSTAT A 32-bit register for the
+ * ESECURE_MAILBOX_RXSTAT.
+ * @param SE_ESECURE_MAILBOX_TXPROTECT A 32-bit register for the
+ * ESECURE_MAILBOX_TXPROTECT.
+ * @param SE_ESECURE_MAILBOX_RXPROTECT A 32-bit register for the
+ * ESECURE_MAILBOX_RXPROTECT.
+ * @param SE_ESECURE_MAILBOX_TXHEADER A 32-bit register for the
+ * ESECURE_MAILBOX_TXHEADER.
+ * @param SE_ESECURE_MAILBOX_RXHEADER A 32-bit register for the
+ * ESECURE_MAILBOX_RXHEADER.
+ * @param SE_ESECURE_MAILBOX_CONFIG A 32-bit register for the
+ * ESECURE_MAILBOX_CONFIG.
+ ******************************************************************************/
 typedef struct semailbox_apbse_typedef{
   __IOM uint32_t SE_ESECURE_MAILBOX_FIFO;            /**< ESECURE_MAILBOX_FIFO                               */
   uint32_t       RESERVED0[15U];                     /**< Reserved for future use                            */

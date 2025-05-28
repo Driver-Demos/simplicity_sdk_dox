@@ -41,7 +41,69 @@
  * @brief EFR32MG24 GPCRC Register Declaration.
  *****************************************************************************/
 
-/** GPCRC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `GPCRC_TypeDef` is a comprehensive structure representing the
+ * General Purpose Cyclic Redundancy Check (GPCRC) module for the
+ * EFR32MG24 microcontroller. It includes registers for enabling and
+ * controlling the CRC process, setting initial and polynomial values,
+ * and inputting data in various bit sizes. The structure also provides
+ * registers for accessing CRC results and their reversed forms.
+ * Additionally, it includes reserved spaces for future use and multiple
+ * sets of registers for setting, clearing, and toggling values, allowing
+ * for flexible manipulation of the CRC process.
+ *
+ * @param IPVERSION IP Version ID.
+ * @param EN CRC Enable.
+ * @param CTRL Control Register.
+ * @param CMD Command Register.
+ * @param INIT CRC Init Value.
+ * @param POLY CRC Polynomial Value.
+ * @param INPUTDATA Input 32-bit Data Register.
+ * @param INPUTDATAHWORD Input 16-bit Data Register.
+ * @param INPUTDATABYTE Input 8-bit Data Register.
+ * @param DATA CRC Data Register.
+ * @param DATAREV CRC Data Reverse Register.
+ * @param DATABYTEREV CRC Data Byte Reverse Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP Version ID.
+ * @param EN_SET CRC Enable.
+ * @param CTRL_SET Control Register.
+ * @param CMD_SET Command Register.
+ * @param INIT_SET CRC Init Value.
+ * @param POLY_SET CRC Polynomial Value.
+ * @param INPUTDATA_SET Input 32-bit Data Register.
+ * @param INPUTDATAHWORD_SET Input 16-bit Data Register.
+ * @param INPUTDATABYTE_SET Input 8-bit Data Register.
+ * @param DATA_SET CRC Data Register.
+ * @param DATAREV_SET CRC Data Reverse Register.
+ * @param DATABYTEREV_SET CRC Data Byte Reverse Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP Version ID.
+ * @param EN_CLR CRC Enable.
+ * @param CTRL_CLR Control Register.
+ * @param CMD_CLR Command Register.
+ * @param INIT_CLR CRC Init Value.
+ * @param POLY_CLR CRC Polynomial Value.
+ * @param INPUTDATA_CLR Input 32-bit Data Register.
+ * @param INPUTDATAHWORD_CLR Input 16-bit Data Register.
+ * @param INPUTDATABYTE_CLR Input 8-bit Data Register.
+ * @param DATA_CLR CRC Data Register.
+ * @param DATAREV_CLR CRC Data Reverse Register.
+ * @param DATABYTEREV_CLR CRC Data Byte Reverse Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP Version ID.
+ * @param EN_TGL CRC Enable.
+ * @param CTRL_TGL Control Register.
+ * @param CMD_TGL Command Register.
+ * @param INIT_TGL CRC Init Value.
+ * @param POLY_TGL CRC Polynomial Value.
+ * @param INPUTDATA_TGL Input 32-bit Data Register.
+ * @param INPUTDATAHWORD_TGL Input 16-bit Data Register.
+ * @param INPUTDATABYTE_TGL Input 8-bit Data Register.
+ * @param DATA_TGL CRC Data Register.
+ * @param DATAREV_TGL CRC Data Reverse Register.
+ * @param DATABYTEREV_TGL CRC Data Byte Reverse Register.
+ ******************************************************************************/
 typedef struct gpcrc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version ID                                      */
   __IOM uint32_t EN;                            /**< CRC Enable                                         */

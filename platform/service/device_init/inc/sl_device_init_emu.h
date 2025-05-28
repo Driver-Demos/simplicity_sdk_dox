@@ -62,23 +62,20 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize EMU
+/***************************************************************************//**
+ * @brief This function initializes the Energy Management Unit (EMU) by
+ * configuring Energy Mode 4 (EM4) settings based on the configuration
+ * specified in `sl_device_init_emu_config.h`. It is designed for use on
+ * devices where EMU initialization is not managed by a power manager. On
+ * Series 2 devices, it also enables debugging in Energy Mode 2 (EM2) by
+ * default, ensuring that power to the debug power domain is maintained
+ * upon entering EM2. This function should be called during the device
+ * initialization phase to ensure proper EMU configuration. It is
+ * important to note that voltage scaling for Energy Modes 0 to 3 is
+ * handled separately by the power manager.
  *
- * @details
- * Initializes the Energy Management Unit by configuring Energy Mode 4 (EM4)
- * according to settings in the configuration header
- * `sl_device_init_emu_config.h`.
- *
- * On Series 2 devices, debugging in EM2 is enabled by default by ensuring
- * that power to the debug power domain is sustained on EM2 entry.
- *
- * @note Voltage scaling for Energy Modes 0 to 3 are configured by the
- * @ref power_manager.
- *
- * @return Status code
- * @retval SL_STATUS_OK EMU initialized successfully
- */
+ * @return Returns `SL_STATUS_OK` if the EMU is initialized successfully.
+ ******************************************************************************/
 sl_status_t sl_device_init_emu(void);
 
 /**

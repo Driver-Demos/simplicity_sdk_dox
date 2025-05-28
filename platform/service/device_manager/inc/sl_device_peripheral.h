@@ -372,225 +372,711 @@ extern "C" {
 #endif
 
 // Declare peripheral structure for ACMP.
+/***************************************************************************//**
+ * @brief The `ACMP_TypeDef` is a typedef for a structure that represents the
+ * Analog Comparator peripheral in Silicon Labs devices, allowing for the
+ * management and configuration of the ACMP hardware features.
+ *
+ ******************************************************************************/
 typedef struct acmp_typedef ACMP_TypeDef;
 
 // Declare peripheral structure for ADC.
+/***************************************************************************//**
+ * @brief The `ADC_TypeDef` is a typedef for a structure that represents the
+ * Analog-to-Digital Converter (ADC) peripheral in Silicon Labs devices,
+ * allowing for the configuration and control of ADC functionalities.
+ *
+ ******************************************************************************/
 typedef struct adc_typedef ADC_TypeDef;
 
 // Declare peripheral structure for AES.
+/***************************************************************************//**
+ * @brief The `AES_TypeDef` is a typedef for a structure that represents the AES
+ * (Advanced Encryption Standard) peripheral in the Silicon Labs device
+ * abstraction layer, allowing for easy reference and manipulation of the
+ * AES hardware features.
+ *
+ ******************************************************************************/
 typedef struct aes_typedef AES_TypeDef;
 
 // Declare peripheral structure for AMUXCP.
+/***************************************************************************//**
+ * @brief The `AMUXCP_TypeDef` is a typedef for a structure that represents the
+ * AMUXCP peripheral in Silicon Labs devices, allowing for easy reference
+ * and manipulation of the peripheral's properties and functions.
+ *
+ ******************************************************************************/
 typedef struct amuxcp_typedef AMUXCP_TypeDef;
 
 // Declare peripheral structure for BUFC.
+/***************************************************************************//**
+ * @brief The `BUFC_TypeDef` is a typedef for a structure that represents the
+ * buffer controller peripheral in Silicon Labs devices, allowing for
+ * device-specific configurations and operations.
+ *
+ ******************************************************************************/
 typedef struct bufc_typedef BUFC_TypeDef;
 
 // Declare peripheral structure for BURAM.
+/***************************************************************************//**
+ * @brief The `BURAM_TypeDef` is a typedef for a structure that represents the
+ * BURAM peripheral in Silicon Labs devices, allowing for the abstraction
+ * and manipulation of its associated functionalities.
+ *
+ ******************************************************************************/
 typedef struct buram_typedef BURAM_TypeDef;
 
 // Declare peripheral structure for BURTC.
+/***************************************************************************//**
+ * @brief `BURTC_TypeDef` is a typedef for a structure that represents the BURTC
+ * (Backup Real-Time Counter) peripheral in Silicon Labs devices,
+ * allowing for the management and interaction with the BURTC hardware.
+ *
+ ******************************************************************************/
 typedef struct burtc_typedef BURTC_TypeDef;
 
 // Declare peripheral structure for CMU.
+/***************************************************************************//**
+ * @brief `CMU_TypeDef` is a typedef for a structure that represents the Clock
+ * Management Unit (CMU) in Silicon Labs devices, allowing for the
+ * management and configuration of clock sources and settings.
+ *
+ ******************************************************************************/
 typedef struct cmu_typedef CMU_TypeDef;
 
 // Declare peripheral structure for CRYPTOACC.
+/***************************************************************************//**
+ * @brief `CRYPTOACC_TypeDef` is a typedef for a structure that represents the
+ * Crypto Accelerator peripheral in Silicon Labs devices, allowing for
+ * cryptographic operations.
+ *
+ ******************************************************************************/
 typedef struct cryptoacc_typedef CRYPTOACC_TypeDef;
 
 // Declare peripheral structure for CRYPTOACC_PKCTRL.
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_PKCTRL_TypeDef` is a typedef for a structure that
+ * represents the control register for the CRYPTOACC peripheral, which is
+ * used for cryptographic operations in Silicon Labs devices.
+ *
+ ******************************************************************************/
 typedef struct cryptoacc_pkctrl_typedef CRYPTOACC_PKCTRL_TypeDef;
 
 // Declare peripheral structure for CRYPTOACC_RNGCTRL.
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_RNGCTRL_TypeDef` is a typedef for a structure that
+ * represents the control register for the Random Number Generator (RNG)
+ * in the CRYPTOACC peripheral, allowing for configuration and control of
+ * RNG operations.
+ *
+ ******************************************************************************/
 typedef struct cryptoacc_rngctrl_typedef CRYPTOACC_RNGCTRL_TypeDef;
 
 // Declare peripheral structure for DCDC.
+/***************************************************************************//**
+ * @brief `DCDC_TypeDef` is a typedef for a structure that represents the Direct
+ * Current to Direct Current (DCDC) converter peripheral in Silicon Labs
+ * devices, allowing for the management and control of power conversion
+ * functionalities.
+ *
+ ******************************************************************************/
 typedef struct dcdc_typedef DCDC_TypeDef;
 
 // Declare peripheral structure for DEVINFO.
+/***************************************************************************//**
+ * @brief The `DEVINFO_TypeDef` is a typedef for a structure that represents
+ * device information, typically used in embedded systems to access
+ * device-specific data and configuration.
+ *
+ ******************************************************************************/
 typedef struct devinfo_typedef DEVINFO_TypeDef;
 
 // Declare peripheral structure for DPLL.
+/***************************************************************************//**
+ * @brief The `DPLL_TypeDef` is a typedef for a structure that represents the
+ * Digital Phase-Locked Loop (DPLL) peripheral in Silicon Labs devices,
+ * allowing for the configuration and control of the DPLL hardware.
+ *
+ ******************************************************************************/
 typedef struct dpll_typedef DPLL_TypeDef;
 
 // Declare peripheral structure for EMU.
+/***************************************************************************//**
+ * @brief The `EMU_TypeDef` is a typedef for a structure that represents the EMU
+ * (Energy Management Unit) peripheral in Silicon Labs devices, allowing
+ * for the management and configuration of energy-related
+ * functionalities.
+ *
+ ******************************************************************************/
 typedef struct emu_typedef EMU_TypeDef;
 
 // Declare peripheral structure for EMU_CFGNS.
+/***************************************************************************//**
+ * @brief `EMU_CFGNS_TypeDef` is a typedef for a structure that represents the
+ * configuration namespace for the EMU (Energy Management Unit) in
+ * Silicon Labs devices, allowing for organized management of EMU
+ * settings.
+ *
+ ******************************************************************************/
 typedef struct emu_cfgns_typedef EMU_CFGNS_TypeDef;
 
 // Declare peripheral structure for ETAMPDET.
+/***************************************************************************//**
+ * @brief The `ETAMPDET_TypeDef` is a typedef for a structure that represents
+ * the ETAMPDET peripheral in the Silicon Labs device abstraction layer,
+ * allowing for easier reference and manipulation of the peripheral's
+ * properties and functions.
+ *
+ ******************************************************************************/
 typedef struct etampdet_typedef ETAMPDET_TypeDef;
 
 // Declare peripheral structure for EUSART.
+/***************************************************************************//**
+ * @brief The `EUSART_TypeDef` is a typedef for a structure that represents the
+ * configuration and control registers for the Enhanced Universal
+ * Synchronous/Asynchronous Receiver/Transmitter (EUSART) peripheral,
+ * which is used for serial communication in embedded systems.
+ *
+ ******************************************************************************/
 typedef struct eusart_typedef EUSART_TypeDef;
 
 // Declare peripheral structure for FSRCO.
+/***************************************************************************//**
+ * @brief The `FSRCO_TypeDef` is a typedef for a structure that represents the
+ * FSRCO peripheral in the Silicon Labs device abstraction layer,
+ * allowing for easy reference and manipulation of the peripheral's
+ * properties and functions.
+ *
+ ******************************************************************************/
 typedef struct fsrco_typedef FSRCO_TypeDef;
 
 // Declare peripheral structure for GPCRC.
+/***************************************************************************//**
+ * @brief `GPCRC_TypeDef` is a typedef for a structure that represents the
+ * General Purpose CRC (Cyclic Redundancy Check) peripheral in Silicon
+ * Labs devices, allowing for efficient error detection in data
+ * transmission.
+ *
+ ******************************************************************************/
 typedef struct gpcrc_typedef GPCRC_TypeDef;
 
 // Declare peripheral structure for GPIO.
+/***************************************************************************//**
+ * @brief `GPIO_TypeDef` is a typedef for a structure that represents the
+ * General Purpose Input/Output (GPIO) peripheral in Silicon Labs
+ * devices, allowing for the manipulation and control of GPIO pins.
+ *
+ ******************************************************************************/
 typedef struct gpio_typedef GPIO_TypeDef;
 
 // Declare peripheral structure for HFRCO.
+/***************************************************************************//**
+ * @brief The `HFRCO_TypeDef` is a typedef for a structure that represents the
+ * High-Frequency RC oscillator peripheral in Silicon Labs devices,
+ * allowing for configuration and control of the oscillator's parameters.
+ *
+ ******************************************************************************/
 typedef struct hfrco_typedef HFRCO_TypeDef;
 
 // Declare peripheral structure for HFXO.
+/***************************************************************************//**
+ * @brief The `HFXO_TypeDef` is a typedef for a structure that represents the
+ * high-frequency crystal oscillator peripheral in Silicon Labs devices,
+ * allowing for the management and configuration of the oscillator's
+ * settings.
+ *
+ ******************************************************************************/
 typedef struct hfxo_typedef HFXO_TypeDef;
 
 // Declare peripheral structure for HOSTPORTAL.
+/***************************************************************************//**
+ * @brief `HOSTPORTAL_TypeDef` is a typedef for a structure named
+ * `hostportal_typedef`, which is likely used to define a specific
+ * peripheral or component in the context of device management within the
+ * Silicon Labs API.
+ *
+ ******************************************************************************/
 typedef struct hostportal_typedef HOSTPORTAL_TypeDef;
 
 // Declare peripheral structure for HYDRARAM.
+/***************************************************************************//**
+ * @brief The `HYDRARAM_TypeDef` is a typedef for a structure named
+ * `hydraram_typedef`, which is likely used to represent the
+ * configuration or state of a specific hardware peripheral related to
+ * the HYDRARAM component in Silicon Labs devices.
+ *
+ ******************************************************************************/
 typedef struct hydraram_typedef HYDRARAM_TypeDef;
 
 // Declare peripheral structure for I2C.
+/***************************************************************************//**
+ * @brief `I2C_TypeDef` is a typedef for a structure that represents the I2C
+ * peripheral in Silicon Labs devices, allowing for the configuration and
+ * control of I2C communication.
+ *
+ ******************************************************************************/
 typedef struct i2c_typedef I2C_TypeDef;
 
 // Declare peripheral structure for IADC.
+/***************************************************************************//**
+ * @brief The `IADC_TypeDef` is a typedef for a structure that represents the
+ * IADC (Integrated Analog-to-Digital Converter) peripheral in Silicon
+ * Labs devices, allowing for the abstraction and manipulation of its
+ * associated functionalities.
+ *
+ ******************************************************************************/
 typedef struct iadc_typedef IADC_TypeDef;
 
 // Declare peripheral structure for ICACHE.
+/***************************************************************************//**
+ * @brief `ICACHE_TypeDef` is a typedef for a structure that represents the
+ * cache memory interface for the device, allowing for efficient data
+ * retrieval and storage.
+ *
+ ******************************************************************************/
 typedef struct icache_typedef ICACHE_TypeDef;
 
 // Declare peripheral structure for KEYSCAN.
+/***************************************************************************//**
+ * @brief The `KEYSCAN_TypeDef` is a typedef for a structure that represents the
+ * key scan peripheral in Silicon Labs devices, allowing for the
+ * management and interaction with key scanning functionalities.
+ *
+ ******************************************************************************/
 typedef struct keyscan_typedef KEYSCAN_TypeDef;
 
 // Declare peripheral structure for L2CACHE.
+/***************************************************************************//**
+ * @brief The `L2CACHE_TypeDef` is a typedef for a structure that represents the
+ * L2 cache peripheral in the Silicon Labs device architecture, allowing
+ * for efficient memory access and management.
+ *
+ ******************************************************************************/
 typedef struct l2cache_typedef L2CACHE_TypeDef;
 
 // Declare peripheral structure for LCD.
+/***************************************************************************//**
+ * @brief `LCD_TypeDef` is a typedef for a structure that represents the LCD
+ * peripheral in the Silicon Labs device abstraction layer, allowing for
+ * easy reference and manipulation of the LCD hardware.
+ *
+ ******************************************************************************/
 typedef struct lcd_typedef LCD_TypeDef;
 
 // Declare peripheral structure for LCDRF.
+/***************************************************************************//**
+ * @brief `LCDRF_TypeDef` is a typedef for a structure named `lcdrf_typedef`,
+ * which is likely used to define the properties and functionalities
+ * related to the LCD Radio Frequency (LCDRF) peripheral in the context
+ * of device management for Silicon Labs devices.
+ *
+ ******************************************************************************/
 typedef struct lcdrf_typedef LCDRF_TypeDef;
 
 // Declare peripheral structure for LDMA.
+/***************************************************************************//**
+ * @brief The `LDMA_TypeDef` is a typedef for a structure that represents the
+ * configuration and control registers for the LDMA (Low-DMA) peripheral
+ * in Silicon Labs devices, allowing for efficient data transfer
+ * operations.
+ *
+ ******************************************************************************/
 typedef struct ldma_typedef LDMA_TypeDef;
 
 // Declare peripheral structure for LDMAXBAR.
+/***************************************************************************//**
+ * @brief The `LDMAXBAR_TypeDef` is a typedef for a structure named
+ * `ldmaxbar_typedef`, which is likely used to define the properties and
+ * functionalities of the LDMAXBAR peripheral in the Silicon Labs device
+ * architecture.
+ *
+ ******************************************************************************/
 typedef struct ldmaxbar_typedef LDMAXBAR_TypeDef;
 
 // Declare peripheral structure for LEDDRV.
+/***************************************************************************//**
+ * @brief `LEDDRV_TypeDef` is a typedef for a structure that represents the LED
+ * driver peripheral in Silicon Labs devices, allowing for the
+ * abstraction and management of LED functionalities.
+ *
+ ******************************************************************************/
 typedef struct leddrv_typedef LEDDRV_TypeDef;
 
 // Declare peripheral structure for LESENSE.
+/***************************************************************************//**
+ * @brief The `LESENSE_TypeDef` is a typedef for a structure that represents the
+ * LESENSE peripheral in Silicon Labs devices, allowing for the
+ * abstraction and management of the Low Energy Sensor interface.
+ *
+ ******************************************************************************/
 typedef struct lesense_typedef LESENSE_TypeDef;
 
 // Declare peripheral structure for LETIMER.
+/***************************************************************************//**
+ * @brief The `LETIMER_TypeDef` is a typedef for a structure that represents the
+ * Low Energy Timer peripheral in Silicon Labs devices, allowing for the
+ * configuration and control of timer functionalities.
+ *
+ ******************************************************************************/
 typedef struct letimer_typedef LETIMER_TypeDef;
 
 // Declare peripheral structure for LFRCO.
+/***************************************************************************//**
+ * @brief The `LFRCO_TypeDef` is a typedef for a structure that represents the
+ * Low-Frequency RC oscillator peripheral in Silicon Labs devices,
+ * allowing for easy reference and manipulation of its associated
+ * properties and functionalities.
+ *
+ ******************************************************************************/
 typedef struct lfrco_typedef LFRCO_TypeDef;
 
 // Declare peripheral structure for LFXO.
+/***************************************************************************//**
+ * @brief The `LFXO_TypeDef` is a typedef for a structure that represents the
+ * Low-Frequency Crystal Oscillator (LFXO) peripheral in Silicon Labs
+ * devices, allowing for the management and configuration of the LFXO
+ * hardware component.
+ *
+ ******************************************************************************/
 typedef struct lfxo_typedef LFXO_TypeDef;
 
 // Declare peripheral structure for LPWAES.
+/***************************************************************************//**
+ * @brief `LPWAES_TypeDef` is a typedef for a structure named `lpwaes_typedef`,
+ * which is likely used to define the properties and functionalities of a
+ * low-power AES (Advanced Encryption Standard) peripheral in a device,
+ * although the specific fields of the structure are not provided in the
+ * given code.
+ *
+ ******************************************************************************/
 typedef struct lpwaes_typedef LPWAES_TypeDef;
 
 // Declare peripheral structure for LPW0PORTAL.
+/***************************************************************************//**
+ * @brief The `LPW0PORTAL_TypeDef` is a typedef for a structure named
+ * `lpw0portal_typedef`, which is likely used to define the properties
+ * and functionalities of the LPW0 portal peripheral in the Silicon Labs
+ * device architecture.
+ *
+ ******************************************************************************/
 typedef struct lpw0portal_typedef LPW0PORTAL_TypeDef;
 
 // Declare peripheral structure for LVGD.
+/***************************************************************************//**
+ * @brief `LVGD_TypeDef` is a typedef for a structure named `lvgd_typedef`,
+ * which is likely used to define a specific peripheral or device
+ * structure in the context of the Device Manager API for Silicon Labs
+ * devices.
+ *
+ ******************************************************************************/
 typedef struct lvgd_typedef LVGD_TypeDef;
 
 // Declare peripheral structure for MAILBOX.
+/***************************************************************************//**
+ * @brief The `MAILBOX_TypeDef` is a typedef for a structure that represents a
+ * mailbox in the device abstraction layer, allowing for communication
+ * between different components or peripherals within the system.
+ *
+ ******************************************************************************/
 typedef struct mailbox_typedef MAILBOX_TypeDef;
 
 // Declare peripheral structure for MPAHBRAM.
+/***************************************************************************//**
+ * @brief The `MPAHBRAM_TypeDef` is a typedef for a structure that represents
+ * the MPAHBRAM peripheral in the Silicon Labs device architecture,
+ * serving as a placeholder for the actual structure definition which is
+ * not provided in the given code.
+ *
+ ******************************************************************************/
 typedef struct mpahbram_typedef MPAHBRAM_TypeDef;
 
 // Declare peripheral structure for MSC.
+/***************************************************************************//**
+ * @brief `MSC_TypeDef` is a typedef for a structure that represents the Memory
+ * System Controller (MSC) peripheral in Silicon Labs devices, allowing
+ * for easier reference and manipulation of the MSC hardware.
+ *
+ ******************************************************************************/
 typedef struct msc_typedef MSC_TypeDef;
 
 // Declare peripheral structure for MVP.
+/***************************************************************************//**
+ * @brief The `MVP_TypeDef` is a typedef for a structure named `mvp_typedef`,
+ * which is likely used to represent a specific peripheral in the Silicon
+ * Labs device abstraction layer, although the actual structure
+ * definition is not provided in the code snippet.
+ *
+ ******************************************************************************/
 typedef struct mvp_typedef MVP_TypeDef;
 
 // Declare peripheral structure for PCNT.
+/***************************************************************************//**
+ * @brief `PCNT_TypeDef` is a typedef for a structure that represents the Pulse
+ * Counter peripheral in Silicon Labs devices, allowing for the
+ * management and configuration of pulse counting functionalities.
+ *
+ ******************************************************************************/
 typedef struct pcnt_typedef PCNT_TypeDef;
 
 // Declare peripheral structure for PDM.
+/***************************************************************************//**
+ * @brief The `PDM_TypeDef` is a typedef for a structure that represents the
+ * Peripheral Device Manager, which is likely used to manage and interact
+ * with various peripheral devices in a system, although the specific
+ * fields of the structure are not defined in the provided code.
+ *
+ ******************************************************************************/
 typedef struct pdm_typedef PDM_TypeDef;
 
 // Declare peripheral structure for PFMXPPRF.
+/***************************************************************************//**
+ * @brief The `PFMXPPRF_TypeDef` is a typedef for a structure named
+ * `pfmxpprf_typedef`, which is likely used to define a specific
+ * peripheral structure in the context of device management for Silicon
+ * Labs hardware.
+ *
+ ******************************************************************************/
 typedef struct pfmxpprf_typedef PFMXPPRF_TypeDef;
 
 // Declare peripheral structure for PIXELRZ.
+/***************************************************************************//**
+ * @brief The `PIXELRZ_TypeDef` is a typedef for a structure named
+ * `pixelrz_typedef`, which is likely used to define the properties and
+ * functionalities related to the PIXELRZ peripheral in the Silicon Labs
+ * device architecture.
+ *
+ ******************************************************************************/
 typedef struct pixelrz_typedef PIXELRZ_TypeDef;
 
 // Declare peripheral structure for PRS.
+/***************************************************************************//**
+ * @brief The `PRS_TypeDef` is a typedef for a structure that represents the
+ * Programmable Routing Switch (PRS) peripheral in Silicon Labs devices,
+ * allowing for the configuration and management of signal routing
+ * between various peripherals.
+ *
+ ******************************************************************************/
 typedef struct prs_typedef PRS_TypeDef;
 
 // Declare peripheral structure for RFFPLL.
+/***************************************************************************//**
+ * @brief The `RFFPLL_TypeDef` is a typedef for a structure that represents the
+ * configuration and control registers for the RFFPLL peripheral, which
+ * is part of the device's hardware abstraction layer.
+ *
+ ******************************************************************************/
 typedef struct rffpll_typedef RFFPLL_TypeDef;
 
 // Declare peripheral structure for RPA.
+/***************************************************************************//**
+ * @brief The `RPA_TypeDef` is a typedef for a structure named `rpa_typedef`,
+ * which is likely used to define a specific peripheral or component in
+ * the context of the Device Manager API for Silicon Labs devices.
+ *
+ ******************************************************************************/
 typedef struct rpa_typedef RPA_TypeDef;
 
 // Declare peripheral structure for RTCC.
+/***************************************************************************//**
+ * @brief `RTCC_TypeDef` is a typedef for a structure that represents the Real-
+ * Time Counter and Calendar (RTCC) peripheral in Silicon Labs devices,
+ * allowing for the management of timekeeping functionalities.
+ *
+ ******************************************************************************/
 typedef struct rtcc_typedef RTCC_TypeDef;
 
 // Declare peripheral structure for SCRATCHPAD.
+/***************************************************************************//**
+ * @brief The `SCRATCHPAD_TypeDef` is a typedef for a structure that represents
+ * a scratchpad memory area, typically used for temporary data storage in
+ * embedded systems.
+ *
+ ******************************************************************************/
 typedef struct scratchpad_typedef SCRATCHPAD_TypeDef;
 
 // Declare peripheral structure for SEMAILBOX_AHBHOST.
+/***************************************************************************//**
+ * @brief The `SEMAILBOX_AHBHOST_TypeDef` is a typedef for a structure that
+ * represents the AHB host mailbox interface in the Silicon Labs device
+ * architecture, allowing for communication between different components
+ * of the system.
+ *
+ ******************************************************************************/
 typedef struct semailbox_ahbhost_typedef SEMAILBOX_AHBHOST_TypeDef;
 
 // Declare peripheral structure for SEMAILBOX_HOST.
+/***************************************************************************//**
+ * @brief The `SEMAILBOX_HOST_TypeDef` is a typedef for a structure that
+ * represents a mailbox host in the context of device management,
+ * allowing for communication between different components or peripherals
+ * within a system.
+ *
+ ******************************************************************************/
 typedef struct semailbox_host_typedef SEMAILBOX_HOST_TypeDef;
 
 // Declare peripheral structure for SEMAPHORE.
+/***************************************************************************//**
+ * @brief The `SEMAPHORE_TypeDef` is a typedef for a structure that represents a
+ * semaphore, which is a synchronization primitive used to control access
+ * to a common resource in concurrent programming.
+ *
+ ******************************************************************************/
 typedef struct semaphore_typedef SEMAPHORE_TypeDef;
 
 // Declare peripheral structure for SEPORTAL.
+/***************************************************************************//**
+ * @brief The `SEPORTAL_TypeDef` is a typedef for a structure that represents
+ * the SEPORTAL peripheral in the Silicon Labs device abstraction layer,
+ * allowing for easier reference and manipulation of the peripheral's
+ * properties and functions.
+ *
+ ******************************************************************************/
 typedef struct seportal_typedef SEPORTAL_TypeDef;
 
 // Declare peripheral structure for SEPUF_APBCFG.
+/***************************************************************************//**
+ * @brief The `SEPUF_APBCFG_TypeDef` is a typedef for a structure that
+ * represents the configuration of the SEPUF (Secure Peripheral Unit
+ * Functionality) in Silicon Labs devices, allowing for the management
+ * and configuration of peripheral functionalities.
+ *
+ ******************************************************************************/
 typedef struct sepuf_apbcfg_typedef SEPUF_APBCFG_TypeDef;
 
 // Declare peripheral structure for SMU.
+/***************************************************************************//**
+ * @brief `SMU_TypeDef` is a typedef for a structure named `smu_typedef`, which
+ * is likely used to define the properties and functionalities of a
+ * Security Management Unit (SMU) in the context of device management for
+ * Silicon Labs hardware.
+ *
+ ******************************************************************************/
 typedef struct smu_typedef SMU_TypeDef;
 
 // Declare peripheral structure for SOCPLL.
+/***************************************************************************//**
+ * @brief The `SOCPLL_TypeDef` is a typedef for a structure that represents the
+ * configuration and control registers for the System-on-Chip Phase-
+ * Locked Loop (SOCPLL) peripheral, allowing for the management of clock
+ * signals in Silicon Labs devices.
+ *
+ ******************************************************************************/
 typedef struct socpll_typedef SOCPLL_TypeDef;
 
 // Declare peripheral structure for SYMCRYPTO.
+/***************************************************************************//**
+ * @brief The `SYMCRYPTO_TypeDef` is a typedef for a structure named
+ * `symcrypto_typedef`, which is likely used to define the properties and
+ * functionalities related to a symmetric cryptography peripheral in the
+ * Silicon Labs device architecture.
+ *
+ ******************************************************************************/
 typedef struct symcrypto_typedef SYMCRYPTO_TypeDef;
 
 // Declare peripheral structure for SYSCFG.
+/***************************************************************************//**
+ * @brief The `SYSCFG_TypeDef` is a typedef for a structure that represents the
+ * system configuration peripheral in Silicon Labs devices, allowing
+ * access to various configuration settings and control registers.
+ *
+ ******************************************************************************/
 typedef struct syscfg_typedef SYSCFG_TypeDef;
 
 // Declare peripheral structure for SYSCFG_CFGNS.
+/***************************************************************************//**
+ * @brief The `SYSCFG_CFGNS_TypeDef` is a typedef for a structure that
+ * represents the configuration namespace for system configuration in
+ * Silicon Labs devices, allowing for organized management of peripheral
+ * settings.
+ *
+ ******************************************************************************/
 typedef struct syscfg_cfgns_typedef SYSCFG_CFGNS_TypeDef;
 
 // Declare peripheral structure for SYSRTC.
+/***************************************************************************//**
+ * @brief The `SYSRTC_TypeDef` is a typedef for a structure that represents the
+ * Real-Time Clock (RTC) peripheral in Silicon Labs devices, allowing for
+ * the management and configuration of RTC functionalities.
+ *
+ ******************************************************************************/
 typedef struct sysrtc_typedef SYSRTC_TypeDef;
 
 // Declare peripheral structure for TIMER.
+/***************************************************************************//**
+ * @brief The `TIMER_TypeDef` is a typedef for a structure that represents a
+ * timer peripheral in the Silicon Labs device abstraction layer,
+ * allowing for the management and configuration of timer
+ * functionalities.
+ *
+ ******************************************************************************/
 typedef struct timer_typedef TIMER_TypeDef;
 
 // Declare peripheral structure for ULFRCO.
+/***************************************************************************//**
+ * @brief The `ULFRCO_TypeDef` is a typedef for a structure that represents the
+ * Ultra Low Frequency RC oscillator peripheral in Silicon Labs devices,
+ * allowing for easy reference and manipulation of its associated
+ * properties and functionalities.
+ *
+ ******************************************************************************/
 typedef struct ulfrco_typedef ULFRCO_TypeDef;
 
 // Declare peripheral structure for USART.
+/***************************************************************************//**
+ * @brief `USART_TypeDef` is a typedef for a structure that represents the
+ * Universal Synchronous/Asynchronous Receiver/Transmitter (USART)
+ * peripheral in Silicon Labs devices, allowing for serial communication.
+ *
+ ******************************************************************************/
 typedef struct usart_typedef USART_TypeDef;
 
 // Declare peripheral structure for USBAHB_AHBS.
+/***************************************************************************//**
+ * @brief The `USBAHB_AHBS_TypeDef` is a typedef for a structure that represents
+ * the USB AHB (Advanced High-performance Bus) interface, which is
+ * typically used in embedded systems to manage USB communication and
+ * data transfer.
+ *
+ ******************************************************************************/
 typedef struct usbahb_ahbs_typedef USBAHB_AHBS_TypeDef;
 
 // Declare peripheral structure for USBPLL.
+/***************************************************************************//**
+ * @brief The `USBPLL_TypeDef` is a typedef for a structure that represents the
+ * USB Phase-Locked Loop (PLL) peripheral in Silicon Labs devices,
+ * allowing for the configuration and control of USB clock generation.
+ *
+ ******************************************************************************/
 typedef struct usbpll_typedef USBPLL_TypeDef;
 
 // Declare peripheral structure for USB_APBS.
+/***************************************************************************//**
+ * @brief `USB_APBS_TypeDef` is a typedef for a structure that represents the
+ * USB APBS peripheral in the Silicon Labs device abstraction layer,
+ * allowing for easier reference and manipulation of the USB peripheral's
+ * properties and functions.
+ *
+ ******************************************************************************/
 typedef struct usb_apbs_typedef USB_APBS_TypeDef;
 
 // Declare peripheral structure for VDAC.
+/***************************************************************************//**
+ * @brief The `VDAC_TypeDef` is a typedef for a structure representing the
+ * Variable Digital-to-Analog Converter (VDAC) peripheral in Silicon Labs
+ * devices, allowing for easy reference and manipulation of the VDAC
+ * hardware interface.
+ *
+ ******************************************************************************/
 typedef struct vdac_typedef VDAC_TypeDef;
 
 // Declare peripheral structure for WDOG.
+/***************************************************************************//**
+ * @brief `WDOG_TypeDef` is a typedef for a structure that represents a watchdog
+ * timer peripheral in the Silicon Labs device abstraction layer,
+ * allowing for the management and configuration of watchdog timer
+ * functionalities.
+ *
+ ******************************************************************************/
 typedef struct wdog_typedef WDOG_TypeDef;
 
 #if defined(__ICCARM__)
@@ -908,11 +1394,12 @@ extern const sl_peripheral_val_t sl_peripheral_val_wdog1;
 // FUNCTIONS
 
 /***************************************************************************//**
- * The base address getter for ACMP.
+ * @brief Retrieves the base address of the ACMP peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * ACMP peripheral.
+ * @return Returns a pointer to the `ACMP_TypeDef` structure representing the
+ * base address of the ACMP peripheral.
  ******************************************************************************/
 inline ACMP_TypeDef *sl_device_peripheral_acmp_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -920,11 +1407,12 @@ inline ACMP_TypeDef *sl_device_peripheral_acmp_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for ADC.
+ * @brief Retrieves the base address of the ADC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * ADC peripheral.
+ * @return Returns a pointer to the `ADC_TypeDef` structure representing the
+ * base address of the ADC peripheral.
  ******************************************************************************/
 inline ADC_TypeDef *sl_device_peripheral_adc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -932,11 +1420,12 @@ inline ADC_TypeDef *sl_device_peripheral_adc_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for AES.
+ * @brief Retrieves the base address of the AES peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * AES peripheral.
+ * @return Returns a pointer to the `AES_TypeDef` structure representing the
+ * base address of the AES peripheral.
  ******************************************************************************/
 inline AES_TypeDef *sl_device_peripheral_aes_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -944,11 +1433,12 @@ inline AES_TypeDef *sl_device_peripheral_aes_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for AMUXCP.
+ * @brief Retrieves the base address of the AMUXCP peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * AMUXCP peripheral.
+ * @return Returns a pointer to the `AMUXCP_TypeDef` structure representing the
+ * base address of the AMUXCP peripheral.
  ******************************************************************************/
 inline AMUXCP_TypeDef *sl_device_peripheral_amuxcp_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -956,11 +1446,12 @@ inline AMUXCP_TypeDef *sl_device_peripheral_amuxcp_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for BUFC.
+ * @brief Retrieves the base address of the BUFC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `BUFC_TypeDef` structure representing the
+ * base address of the BUFC peripheral.
  ******************************************************************************/
 inline BUFC_TypeDef *sl_device_peripheral_bufc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -968,11 +1459,12 @@ inline BUFC_TypeDef *sl_device_peripheral_bufc_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for BURAM.
+ * @brief Retrieves the base address of the BURAM peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * BURAM peripheral.
+ * @return Returns a pointer to the `BURAM_TypeDef` structure representing the
+ * base address of the BURAM peripheral.
  ******************************************************************************/
 inline BURAM_TypeDef *sl_device_peripheral_buram_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -980,11 +1472,12 @@ inline BURAM_TypeDef *sl_device_peripheral_buram_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for BURTC.
+ * @brief Retrieves the base address of the BURTC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * BURTC peripheral.
+ * @return Returns a pointer to the `BURTC_TypeDef` structure, which represents
+ * the base address of the BURTC peripheral.
  ******************************************************************************/
 inline BURTC_TypeDef *sl_device_peripheral_burtc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -992,11 +1485,13 @@ inline BURTC_TypeDef *sl_device_peripheral_burtc_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for CMU.
+ * @brief Retrieves the base address of a specified peripheral's clock
+ * management unit (CMU).
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `CMU_TypeDef` structure representing the
+ * base address of the specified peripheral's clock management unit.
  ******************************************************************************/
 inline CMU_TypeDef *sl_device_peripheral_cmu_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1004,11 +1499,12 @@ inline CMU_TypeDef *sl_device_peripheral_cmu_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for CRYPTOACC.
+ * @brief Retrieves the base address of the `CRYPTOACC` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `CRYPTOACC_TypeDef` structure representing
+ * the base address of the `CRYPTOACC` peripheral.
  ******************************************************************************/
 inline CRYPTOACC_TypeDef *sl_device_peripheral_cryptoacc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1016,11 +1512,12 @@ inline CRYPTOACC_TypeDef *sl_device_peripheral_cryptoacc_get_base_addr(const sl_
 }
 
 /***************************************************************************//**
- * The base address getter for CRYPTOACC_PKCTRL.
+ * @brief Retrieves the base address of the `CRYPTOACC_PKCTRL` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `CRYPTOACC_PKCTRL_TypeDef` structure, which
+ * represents the base address of the `CRYPTOACC_PKCTRL` peripheral.
  ******************************************************************************/
 inline CRYPTOACC_PKCTRL_TypeDef *sl_device_peripheral_cryptoacc_pkctrl_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1028,11 +1525,12 @@ inline CRYPTOACC_PKCTRL_TypeDef *sl_device_peripheral_cryptoacc_pkctrl_get_base_
 }
 
 /***************************************************************************//**
- * The base address getter for CRYPTOACC_RNGCTRL.
+ * @brief Retrieves the base address of the `CRYPTOACC_RNGCTRL` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `CRYPTOACC_RNGCTRL_TypeDef` structure
+ * representing the base address of the `CRYPTOACC_RNGCTRL` peripheral.
  ******************************************************************************/
 inline CRYPTOACC_RNGCTRL_TypeDef *sl_device_peripheral_cryptoacc_rngctrl_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1040,11 +1538,12 @@ inline CRYPTOACC_RNGCTRL_TypeDef *sl_device_peripheral_cryptoacc_rngctrl_get_bas
 }
 
 /***************************************************************************//**
- * The base address getter for DCDC.
+ * @brief Retrieves the base address of the DCDC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * DCDC peripheral.
+ * @return Returns a pointer to the `DCDC_TypeDef` structure representing the
+ * base address of the DCDC peripheral.
  ******************************************************************************/
 inline DCDC_TypeDef *sl_device_peripheral_dcdc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1052,11 +1551,12 @@ inline DCDC_TypeDef *sl_device_peripheral_dcdc_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for DEVINFO.
+ * @brief Retrieves the base address of a specified peripheral device.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral device.
+ * @return Returns a pointer to the `DEVINFO_TypeDef` structure representing the
+ * base address of the specified peripheral.
  ******************************************************************************/
 inline DEVINFO_TypeDef *sl_device_peripheral_devinfo_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1064,11 +1564,13 @@ inline DEVINFO_TypeDef *sl_device_peripheral_devinfo_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for DPLL.
+ * @brief Retrieves the base address of a specified DPLL peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral for which the base address is
+ * requested.
+ * @return Returns a pointer to the `DPLL_TypeDef` structure representing the
+ * base address of the DPLL peripheral.
  ******************************************************************************/
 inline DPLL_TypeDef *sl_device_peripheral_dpll_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1076,11 +1578,12 @@ inline DPLL_TypeDef *sl_device_peripheral_dpll_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for EMU.
+ * @brief Retrieves the base address of the EMU peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is requested.
+ * @return Returns a pointer to the `EMU_TypeDef` structure representing the
+ * base address of the EMU peripheral.
  ******************************************************************************/
 inline EMU_TypeDef *sl_device_peripheral_emu_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1088,11 +1591,12 @@ inline EMU_TypeDef *sl_device_peripheral_emu_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for EMU_CFGNS.
+ * @brief Retrieves the base address of the EMU_CFGNS peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is to be retrieved.
+ * @return Returns a pointer to the `EMU_CFGNS_TypeDef` structure representing
+ * the base address of the EMU_CFGNS peripheral.
  ******************************************************************************/
 inline EMU_CFGNS_TypeDef *sl_device_peripheral_emu_cfgns_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1100,11 +1604,12 @@ inline EMU_CFGNS_TypeDef *sl_device_peripheral_emu_cfgns_get_base_addr(const sl_
 }
 
 /***************************************************************************//**
- * The base address getter for ETAMPDET.
+ * @brief Retrieves the base address of the `ETAMPDET` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `ETAMPDET_TypeDef` structure, which
+ * represents the base address of the `ETAMPDET` peripheral.
  ******************************************************************************/
 inline ETAMPDET_TypeDef *sl_device_peripheral_etampdet_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1112,11 +1617,12 @@ inline ETAMPDET_TypeDef *sl_device_peripheral_etampdet_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for EUSART.
+ * @brief Retrieves the base address of the specified EUSART peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * EUSART peripheral.
+ * @return Returns a pointer to the `EUSART_TypeDef` structure representing the
+ * base address of the EUSART peripheral.
  ******************************************************************************/
 inline EUSART_TypeDef *sl_device_peripheral_eusart_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1124,11 +1630,12 @@ inline EUSART_TypeDef *sl_device_peripheral_eusart_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for FSRCO.
+ * @brief Retrieves the base address of the FSRCO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * FSRCO peripheral.
+ * @return Returns a pointer to the `FSRCO_TypeDef` structure, which represents
+ * the base address of the FSRCO peripheral.
  ******************************************************************************/
 inline FSRCO_TypeDef *sl_device_peripheral_fsrco_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1136,11 +1643,12 @@ inline FSRCO_TypeDef *sl_device_peripheral_fsrco_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for GPCRC.
+ * @brief Retrieves the base address of the GPCRC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * GPCRC peripheral.
+ * @return Returns a pointer to the `GPCRC_TypeDef` structure, which represents
+ * the base address of the GPCRC peripheral.
  ******************************************************************************/
 inline GPCRC_TypeDef *sl_device_peripheral_gpcrc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1148,11 +1656,12 @@ inline GPCRC_TypeDef *sl_device_peripheral_gpcrc_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for GPIO.
+ * @brief Retrieves the base address of a specified GPIO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * GPIO peripheral.
+ * @return Returns a pointer to the `GPIO_TypeDef` structure representing the
+ * base address of the GPIO peripheral.
  ******************************************************************************/
 inline GPIO_TypeDef *sl_device_peripheral_gpio_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1160,11 +1669,12 @@ inline GPIO_TypeDef *sl_device_peripheral_gpio_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for HFRCO.
+ * @brief Retrieves the base address of the HFRCO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * HFRCO peripheral.
+ * @return Returns a pointer to the `HFRCO_TypeDef` structure, which represents
+ * the base address of the HFRCO peripheral.
  ******************************************************************************/
 inline HFRCO_TypeDef *sl_device_peripheral_hfrco_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1172,11 +1682,12 @@ inline HFRCO_TypeDef *sl_device_peripheral_hfrco_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for HFXO.
+ * @brief Returns the base address of the HFXO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * HFXO peripheral.
+ * @return Returns a pointer to the `HFXO_TypeDef` structure representing the
+ * base address of the HFXO peripheral.
  ******************************************************************************/
 inline HFXO_TypeDef *sl_device_peripheral_hfxo_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1184,11 +1695,12 @@ inline HFXO_TypeDef *sl_device_peripheral_hfxo_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for HOSTPORTAL.
+ * @brief Retrieves the base address of the `HOSTPORTAL` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `HOSTPORTAL_TypeDef` structure, which
+ * represents the base address of the `HOSTPORTAL` peripheral.
  ******************************************************************************/
 inline HOSTPORTAL_TypeDef *sl_device_peripheral_hostportal_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1196,11 +1708,12 @@ inline HOSTPORTAL_TypeDef *sl_device_peripheral_hostportal_get_base_addr(const s
 }
 
 /***************************************************************************//**
- * The base address getter for HYDRARAM.
+ * @brief Retrieves the base address of the `HYDRARAM` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral.
+ * @return Returns a pointer to the `HYDRARAM_TypeDef` structure representing
+ * the base address of the `HYDRARAM` peripheral.
  ******************************************************************************/
 inline HYDRARAM_TypeDef *sl_device_peripheral_hydraram_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1208,11 +1721,12 @@ inline HYDRARAM_TypeDef *sl_device_peripheral_hydraram_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for I2C.
+ * @brief Retrieves the base address of the specified I2C peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * I2C peripheral.
+ * @return Returns a pointer to the `I2C_TypeDef` structure representing the
+ * base address of the I2C peripheral.
  ******************************************************************************/
 inline I2C_TypeDef *sl_device_peripheral_i2c_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1220,11 +1734,12 @@ inline I2C_TypeDef *sl_device_peripheral_i2c_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for IADC.
+ * @brief Retrieves the base address of the IADC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * IADC peripheral.
+ * @return Returns a pointer to the `IADC_TypeDef` structure, which represents
+ * the base address of the IADC peripheral.
  ******************************************************************************/
 inline IADC_TypeDef *sl_device_peripheral_iadc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1232,11 +1747,12 @@ inline IADC_TypeDef *sl_device_peripheral_iadc_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for ICACHE.
+ * @brief Retrieves the base address of the ICACHE peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * ICACHE peripheral.
+ * @return Returns a pointer to the `ICACHE_TypeDef` structure representing the
+ * base address of the ICACHE peripheral.
  ******************************************************************************/
 inline ICACHE_TypeDef *sl_device_peripheral_icache_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1244,11 +1760,12 @@ inline ICACHE_TypeDef *sl_device_peripheral_icache_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for KEYSCAN.
+ * @brief Retrieves the base address of the KEYSCAN peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `KEYSCAN_TypeDef` structure, which
+ * represents the base address of the KEYSCAN peripheral.
  ******************************************************************************/
 inline KEYSCAN_TypeDef *sl_device_peripheral_keyscan_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1256,11 +1773,13 @@ inline KEYSCAN_TypeDef *sl_device_peripheral_keyscan_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for L2CACHE.
+ * @brief Retrieves the base address of the L2 cache peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral from which the base address is to be
+ * retrieved.
+ * @return Returns a pointer to the `L2CACHE_TypeDef` structure representing the
+ * base address of the L2 cache peripheral.
  ******************************************************************************/
 inline L2CACHE_TypeDef *sl_device_peripheral_l2cache_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1268,11 +1787,12 @@ inline L2CACHE_TypeDef *sl_device_peripheral_l2cache_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for LCD.
+ * @brief Retrieves the base address of the LCD peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LCD peripheral.
+ * @return Returns a pointer to the `LCD_TypeDef` structure representing the
+ * base address of the LCD peripheral.
  ******************************************************************************/
 inline LCD_TypeDef *sl_device_peripheral_lcd_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1280,11 +1800,12 @@ inline LCD_TypeDef *sl_device_peripheral_lcd_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for LCDRF.
+ * @brief Retrieves the base address of the `LCDRF` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `LCDRF_TypeDef` structure, which represents
+ * the base address of the `LCDRF` peripheral.
  ******************************************************************************/
 inline LCDRF_TypeDef *sl_device_peripheral_lcdrf_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1292,11 +1813,12 @@ inline LCDRF_TypeDef *sl_device_peripheral_lcdrf_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for LDMA.
+ * @brief Retrieves the base address of the LDMA peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is requested.
+ * @return Returns a pointer to the `LDMA_TypeDef` structure representing the
+ * base address of the LDMA peripheral.
  ******************************************************************************/
 inline LDMA_TypeDef *sl_device_peripheral_ldma_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1304,11 +1826,12 @@ inline LDMA_TypeDef *sl_device_peripheral_ldma_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for LDMAXBAR.
+ * @brief Retrieves the base address of the LDMAXBAR peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is requested.
+ * @return Returns a pointer to the `LDMAXBAR_TypeDef` structure representing
+ * the base address of the LDMAXBAR peripheral.
  ******************************************************************************/
 inline LDMAXBAR_TypeDef *sl_device_peripheral_ldmaxbar_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1316,11 +1839,12 @@ inline LDMAXBAR_TypeDef *sl_device_peripheral_ldmaxbar_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for LEDDRV.
+ * @brief Retrieves the base address of the LED driver peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LED driver peripheral.
+ * @return Returns a pointer to the `LEDDRV_TypeDef` structure, which represents
+ * the base address of the LED driver peripheral.
  ******************************************************************************/
 inline LEDDRV_TypeDef *sl_device_peripheral_leddrv_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1328,11 +1852,12 @@ inline LEDDRV_TypeDef *sl_device_peripheral_leddrv_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for LESENSE.
+ * @brief Retrieves the base address of the `LESENSE` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `LESENSE_TypeDef` structure, which
+ * represents the base address of the `LESENSE` peripheral.
  ******************************************************************************/
 inline LESENSE_TypeDef *sl_device_peripheral_lesense_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1340,11 +1865,12 @@ inline LESENSE_TypeDef *sl_device_peripheral_lesense_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for LETIMER.
+ * @brief Retrieves the base address of the LETIMER peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LETIMER peripheral.
+ * @return Returns a pointer to the `LETIMER_TypeDef` structure, which
+ * represents the base address of the LETIMER peripheral.
  ******************************************************************************/
 inline LETIMER_TypeDef *sl_device_peripheral_letimer_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1352,11 +1878,12 @@ inline LETIMER_TypeDef *sl_device_peripheral_letimer_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for LFRCO.
+ * @brief Retrieves the base address of the LFRCO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LFRCO peripheral.
+ * @return Returns a pointer of type `LFRCO_TypeDef*` that points to the base
+ * address of the LFRCO peripheral.
  ******************************************************************************/
 inline LFRCO_TypeDef *sl_device_peripheral_lfrco_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1364,11 +1891,12 @@ inline LFRCO_TypeDef *sl_device_peripheral_lfrco_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for LFXO.
+ * @brief Retrieves the base address of the LFXO peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LFXO peripheral.
+ * @return Returns a pointer to the `LFXO_TypeDef` structure representing the
+ * base address of the LFXO peripheral.
  ******************************************************************************/
 inline LFXO_TypeDef *sl_device_peripheral_lfxo_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1376,11 +1904,12 @@ inline LFXO_TypeDef *sl_device_peripheral_lfxo_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for LPWAES.
+ * @brief Retrieves the base address of the LPWAES peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LPWAES peripheral.
+ * @return Returns a pointer to the `LPWAES_TypeDef` structure representing the
+ * base address of the LPWAES peripheral.
  ******************************************************************************/
 inline LPWAES_TypeDef *sl_device_peripheral_lpwaes_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1388,11 +1917,12 @@ inline LPWAES_TypeDef *sl_device_peripheral_lpwaes_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for LPW0PORTAL.
+ * @brief Retrieves the base address of the `LPW0PORTAL` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `LPW0PORTAL_TypeDef` structure, which
+ * represents the base address of the `LPW0PORTAL` peripheral.
  ******************************************************************************/
 inline LPW0PORTAL_TypeDef *sl_device_peripheral_lpw0portal_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1400,11 +1930,12 @@ inline LPW0PORTAL_TypeDef *sl_device_peripheral_lpw0portal_get_base_addr(const s
 }
 
 /***************************************************************************//**
- * The base address getter for LVGD.
+ * @brief Retrieves the base address of the LVGD peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * LVGD peripheral.
+ * @return Returns a pointer to the `LVGD_TypeDef` structure, which represents
+ * the base address of the LVGD peripheral.
  ******************************************************************************/
 inline LVGD_TypeDef *sl_device_peripheral_lvgd_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1412,11 +1943,12 @@ inline LVGD_TypeDef *sl_device_peripheral_lvgd_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for MAILBOX.
+ * @brief Retrieves the base address of a specified peripheral mailbox.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `MAILBOX_TypeDef` structure representing the
+ * base address of the specified mailbox peripheral.
  ******************************************************************************/
 inline MAILBOX_TypeDef *sl_device_peripheral_mailbox_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1424,11 +1956,12 @@ inline MAILBOX_TypeDef *sl_device_peripheral_mailbox_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for MPAHBRAM.
+ * @brief Retrieves the base address of the MPAHBRAM peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `MPAHBRAM_TypeDef` structure representing
+ * the base address of the MPAHBRAM peripheral.
  ******************************************************************************/
 inline MPAHBRAM_TypeDef *sl_device_peripheral_mpahbram_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1436,11 +1969,14 @@ inline MPAHBRAM_TypeDef *sl_device_peripheral_mpahbram_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for MSC.
+ * @brief Retrieves the base address of the Memory System Controller (MSC)
+ * peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral from which the base address is to be
+ * retrieved.
+ * @return Returns a pointer to the `MSC_TypeDef` structure, which represents
+ * the base address of the MSC peripheral.
  ******************************************************************************/
 inline MSC_TypeDef *sl_device_peripheral_msc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1448,11 +1984,12 @@ inline MSC_TypeDef *sl_device_peripheral_msc_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for MVP.
+ * @brief Retrieves the base address of the specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `MVP_TypeDef` structure, which represents
+ * the base address of the MVP peripheral.
  ******************************************************************************/
 inline MVP_TypeDef *sl_device_peripheral_mvp_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1460,11 +1997,12 @@ inline MVP_TypeDef *sl_device_peripheral_mvp_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for PCNT.
+ * @brief Retrieves the base address of the specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `PCNT_TypeDef` structure representing the
+ * base address of the peripheral.
  ******************************************************************************/
 inline PCNT_TypeDef *sl_device_peripheral_pcnt_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1472,11 +2010,12 @@ inline PCNT_TypeDef *sl_device_peripheral_pcnt_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for PDM.
+ * @brief Retrieves the base address of the PDM peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * PDM peripheral.
+ * @return Returns a pointer to the `PDM_TypeDef` structure representing the
+ * base address of the PDM peripheral.
  ******************************************************************************/
 inline PDM_TypeDef *sl_device_peripheral_pdm_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1484,11 +2023,12 @@ inline PDM_TypeDef *sl_device_peripheral_pdm_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for PFMXPPRF.
+ * @brief Retrieves the base address of the `PFMXPPRF` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `PFMXPPRF_TypeDef` structure, which
+ * represents the base address of the `PFMXPPRF` peripheral.
  ******************************************************************************/
 inline PFMXPPRF_TypeDef *sl_device_peripheral_pfmxpprf_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1496,11 +2036,12 @@ inline PFMXPPRF_TypeDef *sl_device_peripheral_pfmxpprf_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for PIXELRZ.
+ * @brief Retrieves the base address of the `PIXELRZ` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `PIXELRZ_TypeDef` structure, which
+ * represents the base address of the `PIXELRZ` peripheral.
  ******************************************************************************/
 inline PIXELRZ_TypeDef *sl_device_peripheral_pixelrz_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1508,11 +2049,12 @@ inline PIXELRZ_TypeDef *sl_device_peripheral_pixelrz_get_base_addr(const sl_peri
 }
 
 /***************************************************************************//**
- * The base address getter for PRS.
+ * @brief Retrieves the base address of the specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `PRS_TypeDef` structure representing the
+ * base address of the specified peripheral.
  ******************************************************************************/
 inline PRS_TypeDef *sl_device_peripheral_prs_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1520,11 +2062,12 @@ inline PRS_TypeDef *sl_device_peripheral_prs_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for RFFPLL.
+ * @brief Retrieves the base address of the RFFPLL peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `RFFPLL_TypeDef` structure representing the
+ * base address of the RFFPLL peripheral.
  ******************************************************************************/
 inline RFFPLL_TypeDef *sl_device_peripheral_rffpll_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1532,11 +2075,12 @@ inline RFFPLL_TypeDef *sl_device_peripheral_rffpll_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for RPA.
+ * @brief Retrieves the base address of the RPA peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * RPA peripheral.
+ * @return Returns a pointer to the `RPA_TypeDef` structure, which represents
+ * the base address of the RPA peripheral.
  ******************************************************************************/
 inline RPA_TypeDef *sl_device_peripheral_rpa_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1544,11 +2088,12 @@ inline RPA_TypeDef *sl_device_peripheral_rpa_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for RTCC.
+ * @brief Retrieves the base address of the RTCC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * RTCC peripheral.
+ * @return Returns a pointer to the `RTCC_TypeDef` structure, which represents
+ * the base address of the RTCC peripheral.
  ******************************************************************************/
 inline RTCC_TypeDef *sl_device_peripheral_rtcc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1556,11 +2101,12 @@ inline RTCC_TypeDef *sl_device_peripheral_rtcc_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for SCRATCHPAD.
+ * @brief Retrieves the base address of the SCRATCHPAD peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to the `sl_peripheral_t` structure representing
+ * the specific peripheral.
+ * @return Returns a pointer to the `SCRATCHPAD_TypeDef` structure, which
+ * represents the base address of the SCRATCHPAD peripheral.
  ******************************************************************************/
 inline SCRATCHPAD_TypeDef *sl_device_peripheral_scratchpad_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1568,11 +2114,12 @@ inline SCRATCHPAD_TypeDef *sl_device_peripheral_scratchpad_get_base_addr(const s
 }
 
 /***************************************************************************//**
- * The base address getter for SEMAILBOX_AHBHOST.
+ * @brief Retrieves the base address of the `SEMAILBOX_AHBHOST` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `SEMAILBOX_AHBHOST_TypeDef` structure
+ * representing the base address of the specified peripheral.
  ******************************************************************************/
 inline SEMAILBOX_AHBHOST_TypeDef *sl_device_peripheral_semailbox_ahbhost_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1580,11 +2127,12 @@ inline SEMAILBOX_AHBHOST_TypeDef *sl_device_peripheral_semailbox_ahbhost_get_bas
 }
 
 /***************************************************************************//**
- * The base address getter for SEMAILBOX_HOST.
+ * @brief Retrieves the base address of the SEMAILBOX host peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `SEMAILBOX_HOST_TypeDef` structure
+ * representing the base address of the SEMAILBOX host peripheral.
  ******************************************************************************/
 inline SEMAILBOX_HOST_TypeDef *sl_device_peripheral_semailbox_host_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1592,11 +2140,12 @@ inline SEMAILBOX_HOST_TypeDef *sl_device_peripheral_semailbox_host_get_base_addr
 }
 
 /***************************************************************************//**
- * The base address getter for SEMAPHORE.
+ * @brief Retrieves the base address of a specified semaphore peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * semaphore peripheral.
+ * @return Returns a pointer to the `SEMAPHORE_TypeDef` structure representing
+ * the base address of the semaphore peripheral.
  ******************************************************************************/
 inline SEMAPHORE_TypeDef *sl_device_peripheral_semaphore_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1604,11 +2153,12 @@ inline SEMAPHORE_TypeDef *sl_device_peripheral_semaphore_get_base_addr(const sl_
 }
 
 /***************************************************************************//**
- * The base address getter for SEPORTAL.
+ * @brief Retrieves the base address of the specified `SEPORTAL` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `SEPORTAL_TypeDef` structure representing
+ * the base address of the specified peripheral.
  ******************************************************************************/
 inline SEPORTAL_TypeDef *sl_device_peripheral_seportal_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1616,11 +2166,12 @@ inline SEPORTAL_TypeDef *sl_device_peripheral_seportal_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for SEPUF_APBCFG.
+ * @brief Retrieves the base address of the SEPUF_APBCFG peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is to be retrieved.
+ * @return Returns a pointer to the `SEPUF_APBCFG_TypeDef` structure
+ * representing the base address of the SEPUF_APBCFG peripheral.
  ******************************************************************************/
 inline SEPUF_APBCFG_TypeDef *sl_device_peripheral_sepuf_apbcfg_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1628,11 +2179,12 @@ inline SEPUF_APBCFG_TypeDef *sl_device_peripheral_sepuf_apbcfg_get_base_addr(con
 }
 
 /***************************************************************************//**
- * The base address getter for SMU.
+ * @brief Retrieves the base address of the specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `SMU_TypeDef` structure, which represents
+ * the base address of the SMU peripheral.
  ******************************************************************************/
 inline SMU_TypeDef *sl_device_peripheral_smu_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1640,11 +2192,12 @@ inline SMU_TypeDef *sl_device_peripheral_smu_get_base_addr(const sl_peripheral_t
 }
 
 /***************************************************************************//**
- * The base address getter for SOCPLL.
+ * @brief Retrieves the base address of the SOCPLL peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral.
+ * @return Returns a pointer to the `SOCPLL_TypeDef` structure, which represents
+ * the base address of the SOCPLL peripheral.
  ******************************************************************************/
 inline SOCPLL_TypeDef *sl_device_peripheral_socpll_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1652,11 +2205,12 @@ inline SOCPLL_TypeDef *sl_device_peripheral_socpll_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for SYMCRYPTO.
+ * @brief Retrieves the base address of the `SYMCRYPTO` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `SYMCRYPTO_TypeDef` structure, which
+ * represents the base address of the `SYMCRYPTO` peripheral.
  ******************************************************************************/
 inline SYMCRYPTO_TypeDef *sl_device_peripheral_symcrypto_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1664,11 +2218,12 @@ inline SYMCRYPTO_TypeDef *sl_device_peripheral_symcrypto_get_base_addr(const sl_
 }
 
 /***************************************************************************//**
- * The base address getter for SYSCFG.
+ * @brief Retrieves the base address of a specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral whose base address is to be retrieved.
+ * @return Returns a pointer to the `SYSCFG_TypeDef` structure representing the
+ * base address of the specified peripheral.
  ******************************************************************************/
 inline SYSCFG_TypeDef *sl_device_peripheral_syscfg_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1676,11 +2231,12 @@ inline SYSCFG_TypeDef *sl_device_peripheral_syscfg_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for SYSCFG_CFGNS.
+ * @brief Retrieves the base address of the SYSCFG_CFGNS peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is to be retrieved.
+ * @return Returns a pointer to the `SYSCFG_CFGNS_TypeDef` structure
+ * representing the base address of the SYSCFG_CFGNS peripheral.
  ******************************************************************************/
 inline SYSCFG_CFGNS_TypeDef *sl_device_peripheral_syscfg_cfgns_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1688,11 +2244,12 @@ inline SYSCFG_CFGNS_TypeDef *sl_device_peripheral_syscfg_cfgns_get_base_addr(con
 }
 
 /***************************************************************************//**
- * The base address getter for SYSRTC.
+ * @brief Retrieves the base address of the SYSRTC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `SYSRTC_TypeDef` structure representing the
+ * base address of the SYSRTC peripheral.
  ******************************************************************************/
 inline SYSRTC_TypeDef *sl_device_peripheral_sysrtc_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1700,11 +2257,12 @@ inline SYSRTC_TypeDef *sl_device_peripheral_sysrtc_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for TIMER.
+ * @brief Retrieves the base address of a specified timer peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * timer peripheral.
+ * @return Returns a pointer to the `TIMER_TypeDef` structure representing the
+ * base address of the specified timer peripheral.
  ******************************************************************************/
 inline TIMER_TypeDef *sl_device_peripheral_timer_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1712,11 +2270,12 @@ inline TIMER_TypeDef *sl_device_peripheral_timer_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for ULFRCO.
+ * @brief Retrieves the base address of the `ULFRCO` peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the base address is to be retrieved.
+ * @return Returns a pointer to the `ULFRCO_TypeDef` structure, which represents
+ * the base address of the `ULFRCO` peripheral.
  ******************************************************************************/
 inline ULFRCO_TypeDef *sl_device_peripheral_ulfrco_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1724,11 +2283,12 @@ inline ULFRCO_TypeDef *sl_device_peripheral_ulfrco_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for USART.
+ * @brief Retrieves the base address of a specified USART peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * USART peripheral.
+ * @return Returns a pointer to the `USART_TypeDef` structure representing the
+ * base address of the specified USART peripheral.
  ******************************************************************************/
 inline USART_TypeDef *sl_device_peripheral_usart_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1736,11 +2296,12 @@ inline USART_TypeDef *sl_device_peripheral_usart_get_base_addr(const sl_peripher
 }
 
 /***************************************************************************//**
- * The base address getter for USBAHB_AHBS.
+ * @brief Retrieves the base address of the USBAHB_AHBS peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral for which the base address is to be retrieved.
+ * @return Returns a pointer to the `USBAHB_AHBS_TypeDef` structure representing
+ * the base address of the USBAHB_AHBS peripheral.
  ******************************************************************************/
 inline USBAHB_AHBS_TypeDef *sl_device_peripheral_usbahb_ahbs_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1748,11 +2309,12 @@ inline USBAHB_AHBS_TypeDef *sl_device_peripheral_usbahb_ahbs_get_base_addr(const
 }
 
 /***************************************************************************//**
- * The base address getter for USBPLL.
+ * @brief Retrieves the base address of the USBPLL peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * USBPLL peripheral.
+ * @return Returns a pointer to the `USBPLL_TypeDef` structure representing the
+ * base address of the USBPLL peripheral.
  ******************************************************************************/
 inline USBPLL_TypeDef *sl_device_peripheral_usbpll_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1760,11 +2322,12 @@ inline USBPLL_TypeDef *sl_device_peripheral_usbpll_get_base_addr(const sl_periph
 }
 
 /***************************************************************************//**
- * The base address getter for USB_APBS.
+ * @brief Retrieves the base address of the USB APBS peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * USB peripheral.
+ * @return Returns a pointer to the `USB_APBS_TypeDef` structure representing
+ * the base address of the USB APBS peripheral.
  ******************************************************************************/
 inline USB_APBS_TypeDef *sl_device_peripheral_usb_apbs_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1772,11 +2335,12 @@ inline USB_APBS_TypeDef *sl_device_peripheral_usb_apbs_get_base_addr(const sl_pe
 }
 
 /***************************************************************************//**
- * The base address getter for VDAC.
+ * @brief Retrieves the base address of the VDAC peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * VDAC peripheral.
+ * @return Returns a pointer to the `VDAC_TypeDef` structure representing the
+ * base address of the VDAC peripheral.
  ******************************************************************************/
 inline VDAC_TypeDef *sl_device_peripheral_vdac_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1784,11 +2348,13 @@ inline VDAC_TypeDef *sl_device_peripheral_vdac_get_base_addr(const sl_peripheral
 }
 
 /***************************************************************************//**
- * The base address getter for WDOG.
+ * @brief Retrieves the base address of the watchdog peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The base address of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * specific peripheral from which the base address is to be
+ * retrieved.
+ * @return Returns a pointer to the `WDOG_TypeDef` structure, which represents
+ * the base address of the watchdog peripheral.
  ******************************************************************************/
 inline WDOG_TypeDef *sl_device_peripheral_wdog_get_base_addr(const sl_peripheral_t peripheral)
 {
@@ -1803,17 +2369,26 @@ inline WDOG_TypeDef *sl_device_peripheral_wdog_get_base_addr(const sl_peripheral
  * @return  The clock branch of the peripheral.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_DEVICE_PERIPHERAL, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief Retrieves the clock branch associated with a specified peripheral.
+ *
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which to retrieve the clock branch.
+ * @return Returns the `sl_clock_branch_t` value representing the clock branch
+ * of the specified peripheral.
+ ******************************************************************************/
 inline sl_clock_branch_t sl_device_peripheral_get_clock_branch(const sl_peripheral_t peripheral)
 {
   return peripheral->clk_branch;
 }
 
 /***************************************************************************//**
- * The bus clock getter.
+ * @brief Retrieves the bus clock associated with a specified peripheral.
  *
- * @param peripheral  A pointer to peripheral.
- *
- * @return  The bus clock of the peripheral.
+ * @param peripheral A pointer to a `sl_peripheral_t` structure representing the
+ * peripheral from which the bus clock is to be retrieved.
+ * @return Returns the bus clock of type `sl_bus_clock_t` associated with the
+ * specified peripheral.
  ******************************************************************************/
 inline sl_bus_clock_t sl_device_peripheral_get_bus_clock(const sl_peripheral_t peripheral)
 {

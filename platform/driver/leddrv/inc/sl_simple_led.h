@@ -67,6 +67,20 @@ extern "C" {
 typedef uint8_t sl_led_polarity_t;    ///< LED GPIO polarities (active high/low)
 
 /// A Simple LED instance
+/***************************************************************************//**
+ * @brief The `sl_simple_led_context_t` structure is used to represent the
+ * context for a simple LED in the Simple LED Driver. It contains
+ * information about the specific GPIO port and pin to which the LED is
+ * connected, as well as the polarity that determines the initial state
+ * of the LED (active high or low). This structure is essential for
+ * managing the basic operations of an LED, such as turning it on, off,
+ * or toggling its state, within the Silicon Labs Simple LED Driver
+ * framework.
+ *
+ * @param port LED port.
+ * @param pin LED pin.
+ * @param polarity Initial state of LED.
+ ******************************************************************************/
 typedef struct {
   sl_gpio_port_t    port;             ///< LED port
   uint8_t           pin;              ///< LED pin
@@ -78,50 +92,89 @@ typedef struct {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initialize the simple LED driver.
+ * @brief This function sets up the necessary configurations for a simple LED to
+ * operate correctly. It must be called before any other operations on
+ * the LED, such as turning it on or off, to ensure the hardware is
+ * properly initialized. The function configures the GPIO pin associated
+ * with the LED to the correct mode based on its polarity. It is
+ * essential to provide a valid context pointer that contains the LED's
+ * port, pin, and polarity information. The function returns a status
+ * code indicating the success of the initialization.
  *
- * @param[in] led_handle        Pointer to simple-led specific data:
- *                                - sl_simple_led_context_t
- *
- * @return    Status Code:
- *              - SL_STATUS_OK
+ * @param led_handle Pointer to a sl_simple_led_context_t structure containing
+ * the LED's port, pin, and polarity. Must not be null, and
+ * the structure should be properly initialized with valid
+ * values before calling this function.
+ * @return Returns SL_STATUS_OK to indicate successful initialization.
  ******************************************************************************/
 sl_status_t sl_simple_led_init(void *led_handle);
 
 /***************************************************************************//**
- * Turn on a simple LED.
+ * @brief This function is used to turn on a simple LED that is represented by
+ * the provided context. It should be called when you want to activate
+ * the LED, and it respects the polarity setting of the LED to determine
+ * the correct GPIO operation. The function assumes that the LED has been
+ * properly initialized and that the context provided is valid. It does
+ * not return a value and does not handle invalid input explicitly, so
+ * ensure that the context is correctly set up before calling this
+ * function.
  *
- * @param[in] led_handle        Pointer to simple-led specific data:
- *                                - sl_simple_led_context_t
- *
+ * @param led_handle Pointer to a sl_simple_led_context_t structure that
+ * contains the LED's configuration, including port, pin, and
+ * polarity. Must not be null, and the context should be
+ * properly initialized before use.
+ * @return None
  ******************************************************************************/
 void sl_simple_led_turn_on(void *led_handle);
 
 /***************************************************************************//**
- * Turn off a simple LED.
+ * @brief This function is used to turn off a simple LED that is controlled by
+ * the provided context. It should be called when the LED needs to be
+ * turned off, and it respects the LED's polarity setting to ensure the
+ * correct operation. The function assumes that the context has been
+ * properly initialized and configured with the correct port, pin, and
+ * polarity information. It does not return a value and does not handle
+ * invalid input explicitly, so the context must be valid and non-null.
  *
- * @param[in] led_handle        Pointer to simple-led specific data:
- *                                - sl_simple_led_context_t
- *
+ * @param led_handle Pointer to a sl_simple_led_context_t structure containing
+ * the LED's port, pin, and polarity information. Must not be
+ * null and should be properly initialized before calling this
+ * function.
+ * @return None
  ******************************************************************************/
 void sl_simple_led_turn_off(void *led_handle);
 
 /***************************************************************************//**
- * Toggle a simple LED.
+ * @brief Use this function to change the current state of a simple LED from on
+ * to off or from off to on. It is typically used when you want to invert
+ * the current state of the LED without explicitly checking its current
+ * status. This function should be called with a valid LED context that
+ * has been properly initialized. Ensure that the context is not null and
+ * points to a valid `sl_simple_led_context_t` structure.
  *
- * @param[in] led_handle        Pointer to simple-led specific data:
- *                                - sl_simple_led_context_t
- *
+ * @param led_handle Pointer to a simple LED context, specifically an
+ * `sl_simple_led_context_t` structure. Must not be null and
+ * should be initialized before use. The function does not
+ * check for null pointers, so passing an invalid pointer may
+ * result in undefined behavior.
+ * @return None
  ******************************************************************************/
 void sl_simple_led_toggle(void *led_handle);
 
 /***************************************************************************//**
- * Get the current state of the simple LED.
+ * @brief This function is used to obtain the current on/off state of a simple
+ * LED. It should be called when you need to check whether the LED is
+ * currently active or inactive. The function requires a valid context
+ * pointer that represents the specific LED instance. The LED must be
+ * properly initialized before calling this function to ensure accurate
+ * results. The function handles LEDs with different polarities,
+ * returning the correct state based on the LED's configuration.
  *
- * @param[in] led_handle       Pointer to simple-led specific data:
- *                               - sl_simple_led_context_t
- *
- * @return    sl_led_state_t   Current state of simple LED. 1 for on, 0 for off
+ * @param led_handle Pointer to a sl_simple_led_context_t structure representing
+ * the LED instance. Must not be null and should point to a
+ * valid, initialized LED context.
+ * @return Returns sl_led_state_t indicating the current state of the LED: 1 for
+ * on, 0 for off.
  ******************************************************************************/
 sl_led_state_t sl_simple_led_get_state(void *led_handle);
 

@@ -96,9 +96,17 @@ extern sl_iostream_instance_info_t sl_iostream_instance_rtt_info;   ///< sl_iost
 // Prototypes
 
 /***************************************************************************//**
- * RTT Stream init.
+ * @brief This function initializes the Real Time Transfer (RTT) I/O stream,
+ * setting it as the default system stream. It should be called during
+ * the setup phase of your application to enable RTT communication via
+ * the J-Link module. This function is intended for use in a development
+ * environment and should not be used in production. After calling this
+ * function, if multiple streams are present, you may need to reconfigure
+ * the default stream to suit your application's needs. Ensure that the
+ * Segger RTT library is included in your project to use this
+ * functionality.
  *
- * @return  Status result
+ * @return Returns SL_STATUS_OK to indicate successful initialization.
  ******************************************************************************/
 sl_status_t sl_iostream_rtt_init(void);
 

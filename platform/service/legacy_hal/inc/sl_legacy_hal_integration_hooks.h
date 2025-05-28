@@ -29,4 +29,18 @@
  *
  ******************************************************************************/
 
+/***************************************************************************//**
+ * @brief This function is used to specify the action that should be taken by
+ * the power manager when an interrupt service routine (ISR) exits. It is
+ * typically called within the context of an ISR to indicate whether the
+ * system should remain awake or can return to a low-power state. This
+ * function is part of the legacy HAL integration and is crucial for
+ * managing power efficiently in systems that require precise control
+ * over power states during and after interrupt handling.
+ *
+ * @return Returns a value of type `sl_power_manager_on_isr_exit_t` indicating
+ * the power management action to be taken, specifically
+ * `SL_POWER_MANAGER_WAKEUP`, which suggests that the system should
+ * remain awake after ISR exit.
+ ******************************************************************************/
 sl_power_manager_on_isr_exit_t sl_legacy_hal_sleep_on_isr_exit(void);

@@ -41,7 +41,24 @@
  * @brief EFR32MG24 LDMA Register Declaration.
  *****************************************************************************/
 
-/** LDMA CH Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `LDMA_CH_TypeDef` is a structure that defines the layout of a
+ * channel in the Linked Direct Memory Access (LDMA) controller for the
+ * EFR32MG24 microcontroller. It includes configuration, control, source,
+ * destination, and link address registers, which are essential for
+ * setting up and managing DMA transfers. The structure also contains
+ * reserved fields for future use, ensuring compatibility with potential
+ * future enhancements.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param CFG Channel Configuration Register.
+ * @param LOOP Channel Loop Counter Register.
+ * @param CTRL Channel Descriptor Control Word Register.
+ * @param SRC Channel Descriptor Source Address.
+ * @param DST Channel Descriptor Destination Address.
+ * @param LINK Channel Descriptor Link Address.
+ * @param RESERVED1 Reserved for future use.
+ ******************************************************************************/
 typedef struct ldma_ch_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
   __IOM uint32_t CFG;                                /**< Channel Configuration Register                     */
@@ -53,7 +70,116 @@ typedef struct ldma_ch_typedef{
   uint32_t       RESERVED1[5U];                      /**< Reserved for future use                            */
 } LDMA_CH_TypeDef;
 
-/** LDMA Register Declaration. */
+/***************************************************************************//**
+ * @brief The `LDMA_TypeDef` structure represents the configuration and control
+ * registers for a Low-Density Memory Access (LDMA) controller, which is
+ * used to manage direct memory access operations in embedded systems. It
+ * includes various registers for enabling and disabling the DMA module,
+ * controlling DMA operations, managing synchronization triggers, and
+ * handling channel-specific operations such as enabling, disabling, and
+ * checking the status of DMA channels. The structure also includes
+ * interrupt management registers and arrays of channel-specific
+ * registers for detailed control over each DMA channel. The presence of
+ * SET, CLR, and TGL suffixes indicates registers that support set,
+ * clear, and toggle operations, respectively, allowing for flexible
+ * manipulation of register values.
+ *
+ * @param IPVERSION IP version.
+ * @param EN DMA module enable disable Register.
+ * @param CTRL DMA Control Register.
+ * @param STATUS DMA Status Register.
+ * @param SYNCSWSET DMA Sync Trig Sw Set Register.
+ * @param SYNCSWCLR DMA Sync Trig Sw Clear register.
+ * @param SYNCHWEN DMA Sync HW trigger enable register.
+ * @param SYNCHWSEL DMA Sync HW trigger selection register.
+ * @param SYNCSTATUS DMA Sync Trigger Status Register.
+ * @param CHEN DMA Channel Enable Register.
+ * @param CHDIS DMA Channel Disable Register.
+ * @param CHSTATUS DMA Channel Status Register.
+ * @param CHBUSY DMA Channel Busy Register.
+ * @param CHDONE DMA Channel Linking Done Register.
+ * @param DBGHALT DMA Channel Debug Halt Register.
+ * @param SWREQ DMA Channel Software Transfer Request.
+ * @param REQDIS DMA Channel Request Disable Register.
+ * @param REQPEND DMA Channel Requests Pending Register.
+ * @param LINKLOAD DMA Channel Link Load Register.
+ * @param REQCLEAR DMA Channel Request Clear Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param CH DMA Channel Registers.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP version.
+ * @param EN_SET DMA module enable disable Register.
+ * @param CTRL_SET DMA Control Register.
+ * @param STATUS_SET DMA Status Register.
+ * @param SYNCSWSET_SET DMA Sync Trig Sw Set Register.
+ * @param SYNCSWCLR_SET DMA Sync Trig Sw Clear register.
+ * @param SYNCHWEN_SET DMA Sync HW trigger enable register.
+ * @param SYNCHWSEL_SET DMA Sync HW trigger selection register.
+ * @param SYNCSTATUS_SET DMA Sync Trigger Status Register.
+ * @param CHEN_SET DMA Channel Enable Register.
+ * @param CHDIS_SET DMA Channel Disable Register.
+ * @param CHSTATUS_SET DMA Channel Status Register.
+ * @param CHBUSY_SET DMA Channel Busy Register.
+ * @param CHDONE_SET DMA Channel Linking Done Register.
+ * @param DBGHALT_SET DMA Channel Debug Halt Register.
+ * @param SWREQ_SET DMA Channel Software Transfer Request.
+ * @param REQDIS_SET DMA Channel Request Disable Register.
+ * @param REQPEND_SET DMA Channel Requests Pending Register.
+ * @param LINKLOAD_SET DMA Channel Link Load Register.
+ * @param REQCLEAR_SET DMA Channel Request Clear Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param CH_SET DMA Channel Registers.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP version.
+ * @param EN_CLR DMA module enable disable Register.
+ * @param CTRL_CLR DMA Control Register.
+ * @param STATUS_CLR DMA Status Register.
+ * @param SYNCSWSET_CLR DMA Sync Trig Sw Set Register.
+ * @param SYNCSWCLR_CLR DMA Sync Trig Sw Clear register.
+ * @param SYNCHWEN_CLR DMA Sync HW trigger enable register.
+ * @param SYNCHWSEL_CLR DMA Sync HW trigger selection register.
+ * @param SYNCSTATUS_CLR DMA Sync Trigger Status Register.
+ * @param CHEN_CLR DMA Channel Enable Register.
+ * @param CHDIS_CLR DMA Channel Disable Register.
+ * @param CHSTATUS_CLR DMA Channel Status Register.
+ * @param CHBUSY_CLR DMA Channel Busy Register.
+ * @param CHDONE_CLR DMA Channel Linking Done Register.
+ * @param DBGHALT_CLR DMA Channel Debug Halt Register.
+ * @param SWREQ_CLR DMA Channel Software Transfer Request.
+ * @param REQDIS_CLR DMA Channel Request Disable Register.
+ * @param REQPEND_CLR DMA Channel Requests Pending Register.
+ * @param LINKLOAD_CLR DMA Channel Link Load Register.
+ * @param REQCLEAR_CLR DMA Channel Request Clear Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param CH_CLR DMA Channel Registers.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP version.
+ * @param EN_TGL DMA module enable disable Register.
+ * @param CTRL_TGL DMA Control Register.
+ * @param STATUS_TGL DMA Status Register.
+ * @param SYNCSWSET_TGL DMA Sync Trig Sw Set Register.
+ * @param SYNCSWCLR_TGL DMA Sync Trig Sw Clear register.
+ * @param SYNCHWEN_TGL DMA Sync HW trigger enable register.
+ * @param SYNCHWSEL_TGL DMA Sync HW trigger selection register.
+ * @param SYNCSTATUS_TGL DMA Sync Trigger Status Register.
+ * @param CHEN_TGL DMA Channel Enable Register.
+ * @param CHDIS_TGL DMA Channel Disable Register.
+ * @param CHSTATUS_TGL DMA Channel Status Register.
+ * @param CHBUSY_TGL DMA Channel Busy Register.
+ * @param CHDONE_TGL DMA Channel Linking Done Register.
+ * @param DBGHALT_TGL DMA Channel Debug Halt Register.
+ * @param SWREQ_TGL DMA Channel Software Transfer Request.
+ * @param REQDIS_TGL DMA Channel Request Disable Register.
+ * @param REQPEND_TGL DMA Channel Requests Pending Register.
+ * @param LINKLOAD_TGL DMA Channel Link Load Register.
+ * @param REQCLEAR_TGL DMA Channel Request Clear Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param CH_TGL DMA Channel Registers.
+ ******************************************************************************/
 typedef struct ldma_typedef{
   __IM uint32_t   IPVERSION;                    /**< IP version                                         */
   __IOM uint32_t  EN;                           /**< DMA module enable disable Register                 */

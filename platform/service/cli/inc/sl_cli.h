@@ -416,113 +416,141 @@ extern sl_cli_handle_t sl_cli_default_handle;
 extern sl_cli_command_group_t *sl_cli_default_command_group;
 
 /***************************************************************************//**
- * @brief
- *  Get the hex argument length and value.
+ * @brief This function is used to obtain a hex argument from a command's
+ * argument list, along with its length. It is particularly useful when
+ * dealing with command-line interfaces where arguments are passed in a
+ * structured format. The function expects a valid command argument
+ * structure and an index specifying which argument to retrieve. The
+ * length of the hex data is stored in a two-byte format, and the
+ * function will populate the provided length pointer with this value.
+ * This function should be called only when the argument at the specified
+ * index is known to be a hex type.
  *
- * @param[in] a
- *   A pointer to the command arguments.
- *
- * @param[in] n
- *   The argument number. The first argument is number 0, the next 1, etc.
- *
- * @param[in] l
- *   A pointer to the variable that receives the argument value length.
- *   Note: The length is stored in a 2 byte variable. Valid lengths are
- *   in the range 0 .. 65535.
- *
- * @return
- *   A pointer to the value buffer.
+ * @param a A pointer to the sl_cli_command_arg_t structure containing the
+ * command arguments. Must not be null.
+ * @param n The index of the argument to retrieve, starting from 0. Must be
+ * within the range of available arguments.
+ * @param l A pointer to a size_t variable where the length of the hex data will
+ * be stored. Must not be null.
+ * @return Returns a pointer to the buffer containing the hex data, starting
+ * after the length bytes.
  ******************************************************************************/
 uint8_t *sl_cli_get_argument_hex(sl_cli_command_arg_t *a, size_t n, size_t *l);
 
 /***************************************************************************//**
- * @brief
- *  Clear (reset) a CLI.
+ * @brief Use this function to reset a CLI handle to its default state,
+ * preparing it for fresh input and command processing. This is typically
+ * necessary when reinitializing the CLI or after a significant change in
+ * the CLI's configuration. The function sets up the input buffer,
+ * initializes the command group list, and configures default prompt
+ * settings. It must be called with a valid CLI handle, and the handle
+ * should not be null. This function does not return a value and does not
+ * handle invalid handles.
  *
- * @param[in] handle
- *   A handle to the CLI that will be cleared.
+ * @param handle A valid handle to the CLI that will be cleared. Must not be
+ * null, and the caller retains ownership.
+ * @return None
  ******************************************************************************/
 void sl_cli_clear(sl_cli_handle_t handle);
 
 /***************************************************************************//**
- * @brief
- *  Redirect user input.
- *  Normally, an input string is passed to the CLI command handler for execution,
- *  but with the redirect function the input string will be passed to the
- *  alternative function.
- *  If the alternative input function should not to be used, this function
- *  can be called with NULL in the command_function, prompt and aux.
+ * @brief This function allows the redirection of user input from the default
+ * CLI command handler to an alternative command function. It is useful
+ * when you need to temporarily change the command processing behavior,
+ * such as for custom command handling or interactive sessions. The
+ * function should be called with a valid CLI handle and a non-null
+ * command function to activate redirection. To stop redirection, pass
+ * null for the command function, prompt, and user parameters. The prompt
+ * parameter can be used to specify a custom command prompt during
+ * redirection, and the user parameter can pass additional context to the
+ * command function.
  *
- * @param[in] handle
- *   A handle to the CLI.
- *
- * @param[in] command_function
- *   A pointer to the function that will receive user input when the re-direct
- *   is active. NULL to stop the redirect.
- *
- * @param[in] prompt
- *   A pointer to a string that will be used as command prompt in the redirect
- *   function. NULL to stop the redirect.
- *
- * @param[in] aux
- *   A pointer that will be added to the redirect function arguments.
- *   NULL to stop the redirect.
+ * @param handle A handle to the CLI instance. Must not be null.
+ * @param command_function A pointer to the function that will receive user
+ * input during redirection. Pass null to stop
+ * redirection.
+ * @param prompt A pointer to a string used as the command prompt during
+ * redirection. Pass null to stop redirection.
+ * @param user A pointer to user-defined data passed to the command function.
+ * Pass null to stop redirection.
+ * @return None
  ******************************************************************************/
 void sl_cli_redirect_command(sl_cli_handle_t handle, sl_cli_command_function_t command_function, const char *prompt, void *aux);
 
 /***************************************************************************//**
- * @brief
- *  Handle input. Execute a complete command line with command and arguments.
+ * @brief This function processes a complete command line input for a CLI
+ * instance, executing the command and its arguments as specified in the
+ * input string. It should be used when a command line input needs to be
+ * processed by the CLI framework. If a command function is set for
+ * redirection, the input is passed to that function instead. The
+ * function must be called with a valid CLI handle and a non-null command
+ * string. It returns an execution status indicating success or failure
+ * of the command execution.
  *
- * @param[in] handle
- *   A handle to the CLI.
- *
- * @param[in] string
- *   A pointer to the string containing the command line that shall be executed.
- *
- * @return
- *   Execution status.
- *   Note: If the command is redirected, the function will always return
- *   SL_STATUS_OK.
+ * @param handle A handle to the CLI instance. It must be a valid, initialized
+ * handle, and must not be null.
+ * @param string A pointer to the string containing the command line to be
+ * executed. It must not be null, and should contain a valid
+ * command line input.
+ * @return Returns an sl_status_t value indicating the execution status. If the
+ * command is redirected, it always returns SL_STATUS_OK.
  ******************************************************************************/
 sl_status_t sl_cli_handle_input(sl_cli_handle_t handle, char *string);
 
 /***************************************************************************//**
- * @brief
- *  Initialize a CLI instance.
+ * @brief This function sets up a Command Line Interface (CLI) instance using
+ * the provided parameters. It must be called to initialize a CLI
+ * instance before any CLI operations can be performed. The function
+ * configures the CLI with the specified I/O stream handle and default
+ * command group. If the system supports a kernel and CLI tick is
+ * enabled, it also sets up timing parameters for task scheduling. The
+ * function returns a status indicating success or failure of the
+ * initialization process.
  *
- * @param[in] handle
- *   A handle to the CLI.
- *
- * @param[in] parameters
- *   A pointer to the structure containing instance parameters.
- *
- * @return
- *   Initialization status.
+ * @param handle A handle to the CLI instance that will be initialized. Must not
+ * be null, and the caller retains ownership.
+ * @param parameters A pointer to a structure containing the parameters for the
+ * CLI instance. Must not be null, and the caller retains
+ * ownership. The structure should include valid I/O stream
+ * handle and default command group.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process. Possible return values include SL_STATUS_OK
+ * for success or an error code for failure.
  ******************************************************************************/
 sl_status_t sl_cli_instance_init(sl_cli_handle_t handle,
                                  sl_cli_instance_parameters_t *parameters);
 
 #if !defined(SL_CATALOG_KERNEL_PRESENT) || defined(DOXYGEN)
 /***************************************************************************//**
- * @brief
- *  Check if the CLI instance can allow sleep.
- *  This function is available in a bare metal configuration only.
+ * @brief This function checks whether the CLI instance is in a state that
+ * permits the system to enter a sleep mode. It should be used in bare
+ * metal configurations to decide if the system can safely sleep without
+ * missing any CLI input or activity. The function evaluates the current
+ * input state and any flags that might block sleep, returning a boolean
+ * indicating the result. It is important to ensure that the CLI instance
+ * is properly initialized before calling this function.
  *
- * @param[in] handle
- *   A handle to the CLI instance.
- *
- * @return
- *   A boolean that is true if the CLI allows sleep, else false.
+ * @param handle A handle to the CLI instance. Must not be null, and should
+ * point to a valid, initialized CLI instance. If the handle is
+ * invalid, the behavior is undefined.
+ * @return Returns a boolean value: true if the CLI allows the system to sleep,
+ * false otherwise.
  ******************************************************************************/
 bool sl_cli_is_ok_to_sleep(sl_cli_handle_t handle);
 
 /***************************************************************************//**
- * @brief
- *  The bare metal tick function.
+ * @brief This function should be called periodically to handle time-dependent
+ * operations for a CLI instance. It processes various tick-related tasks
+ * depending on the configuration of the CLI, such as delay handling or
+ * storage management. This function must be called in environments where
+ * the CLI is used, especially in bare metal configurations, to ensure
+ * proper operation of time-based features.
  *
- * @param[in] handle
- *   A handle to the CLI instance.
+ * @param handle A handle to the CLI instance. Must be a valid handle
+ * initialized prior to calling this function. The function does
+ * not check for null or invalid handles, so the caller must
+ * ensure the handle is valid.
+ * @return None
  ******************************************************************************/
 void sl_cli_tick_instance(sl_cli_handle_t handle);
 #endif

@@ -71,13 +71,34 @@
 // Forward declaration of sli_cpc_instance_t. Including
 // the header directly results in a circular dependency.
 struct sli_cpc_instance;
+/***************************************************************************//**
+ * @brief The `sli_cpc_instance_t` is a forward declaration of a structure named
+ * `sli_cpc_instance`. This type is used as a placeholder for a more
+ * complex structure that is defined elsewhere, allowing for the creation
+ * of pointers to this type without needing the full definition. This is
+ * often used to manage dependencies and avoid circular includes in C
+ * programming.
+ *
+ ******************************************************************************/
 typedef struct sli_cpc_instance sli_cpc_instance_t;
 
 typedef void (*sl_cpc_on_final_t)(uint8_t endpoint_id, void *arg, void *answer, uint32_t answer_lenght);
 
-/**
- * @brief This structure defines cpc poll final
- */
+/***************************************************************************//**
+ * @brief The `sl_cpc_poll_final_t` structure is designed to handle the final
+ * callback mechanism in the CPC (Communication Protocol Controller)
+ * framework. It contains a generic pointer `on_fnct_arg` for passing
+ * arguments to the callback function, and conditionally includes a
+ * function pointer `on_final` for the callback itself, which is only
+ * present if the `SL_CPC_ON_FINAL_PRESENT` macro is defined. This
+ * structure is used to manage and execute final operations in the CPC
+ * communication process, ensuring that necessary actions are taken at
+ * the end of a communication sequence.
+ *
+ * @param on_fnct_arg A pointer to an argument for the on function.
+ * @param on_final A function pointer for the final callback, included only if
+ * SL_CPC_ON_FINAL_PRESENT is defined.
+ ******************************************************************************/
 typedef struct {
   void *on_fnct_arg;                               ///< on fnct arg
 #ifdef SL_CPC_ON_FINAL_PRESENT
@@ -85,9 +106,76 @@ typedef struct {
 #endif
 } sl_cpc_poll_final_t;
 
-/**
- * @brief This structure defines cpc endpoint
- */
+/***************************************************************************//**
+ * @brief The `sl_cpc_endpoint_t` structure is a comprehensive data structure
+ * used in the Silicon Labs' CPC (Co-Processor Communication) framework
+ * to manage communication endpoints. It encapsulates various fields
+ * necessary for handling data transmission and reception, including
+ * sequence and acknowledgment numbers, transmission window sizes, and
+ * retransmission mechanisms. The structure also includes callback
+ * functions for handling events such as data reception, write
+ * completion, errors, and connection events. Additionally, it supports
+ * features like security, with fields for encryption and frame counters,
+ * and is designed to work with operating system features like mutexes
+ * and semaphores for synchronization. This makes it a critical component
+ * for managing reliable and efficient communication between processors.
+ *
+ * @param node A node in a singly linked list.
+ * @param node_closing A node representing the closing state in a singly linked
+ * list.
+ * @param id Unique identifier for the endpoint.
+ * @param flags Flags associated with the endpoint.
+ * @param seq Sequence number for the endpoint.
+ * @param ack Acknowledgment number for the endpoint.
+ * @param configured_tx_window_size Configured transmission window size.
+ * @param current_tx_window_space Current available space in the transmission
+ * window.
+ * @param uframe_tx_complete_pending Indicates if a uframe transmission
+ * completion is pending.
+ * @param frames_count_re_transmit_queue Count of frames in the retransmission
+ * queue.
+ * @param packet_re_transmit_count Count of packets retransmitted.
+ * @param re_transmit_timeout Timeout value for retransmissions.
+ * @param last_iframe_sent_timestamp Timestamp of the last iframe sent.
+ * @param smoothed_rtt Smoothed round-trip time.
+ * @param rtt_variation Variation in round-trip time.
+ * @param re_transmit_timer Timer handle for retransmissions.
+ * @param state Current state of the endpoint.
+ * @param poll_final Structure for CPC poll final operations.
+ * @param on_iframe_write_completed Callback for when an iframe write is
+ * completed.
+ * @param on_iframe_data_reception Callback for when iframe data is received.
+ * @param on_iframe_data_reception_arg Argument for the iframe data reception
+ * callback.
+ * @param on_uframe_write_completed Callback for when a uframe write is
+ * completed.
+ * @param on_write_complete_pending_count Count of pending write complete
+ * callbacks.
+ * @param on_uframe_data_reception Callback for when uframe data is received.
+ * @param on_uframe_data_reception_arg Argument for the uframe data reception
+ * callback.
+ * @param on_error Callback for error handling.
+ * @param on_error_arg Argument for the error callback.
+ * @param on_connect Callback for connection events.
+ * @param on_connect_arg Argument for the connect callback.
+ * @param iframe_receive_queue Queue for receiving iframes.
+ * @param uframe_receive_queue Queue for receiving uframes.
+ * @param re_transmit_queue Queue for retransmitting frames.
+ * @param iframe_holding_list List holding iframes.
+ * @param uframe_holding_list List holding uframes.
+ * @param shutdown_timeout Timeout for shutdown in ticks.
+ * @param write_timeout Timeout for write operations.
+ * @param lock_cb Control block for mutex lock.
+ * @param lock Mutex lock for synchronization.
+ * @param receive_signal Semaphore for receive signal.
+ * @param state_event_signal Semaphore indicating state change.
+ * @param frame_counter_rx Counter for received frames.
+ * @param frame_counter_tx Counter for transmitted frames.
+ * @param encrypted Indicates if encryption is enabled.
+ * @param packets_held_for_security Indicates if packets are held for security
+ * reasons.
+ * @param instance Pointer to the CPC instance.
+ ******************************************************************************/
 typedef struct  {
   sl_slist_node_t node;                                  ///< node
   sl_slist_node_t node_closing;                          ///< node closing

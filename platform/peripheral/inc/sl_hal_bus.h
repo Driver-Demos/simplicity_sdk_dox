@@ -49,14 +49,18 @@ extern "C" {
  ******************************************************************************/
 
 /***************************************************************************//**
- * @brief
- *   Perform a single-bit write operation on a 32-bit word in RAM.
+ * @brief The `sl_hal_bus_ram_write_bit` function performs a single-bit write
+ * operation on a 32-bit word in RAM, setting a specified bit to a given
+ * value.
  *
- * @param[in] addr An address of a 32-bit word in RAM.
- *
- * @param[in] bit A bit position to write, 0-31.
- *
- * @param[in] val A value to set bit to, 0 or 1.
+ * @param addr A pointer to a volatile 32-bit unsigned integer representing the
+ * address of a 32-bit word in RAM.
+ * @param bit An unsigned 32-bit integer representing the bit position to write,
+ * ranging from 0 to 31.
+ * @param val An unsigned 32-bit integer representing the value to set the bit
+ * to, either 0 or 1.
+ * @return The function does not return a value; it modifies the 32-bit word at
+ * the specified RAM address in place.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_bus_ram_write_bit(volatile uint32_t *addr,
                                               uint32_t bit,
@@ -69,15 +73,15 @@ __STATIC_INLINE void sl_hal_bus_ram_write_bit(volatile uint32_t *addr,
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform a single-bit read operation on a 32-bit word in RAM.
+ * @brief The function `sl_hal_bus_ram_read_bit` reads a specific bit from a
+ * 32-bit word in RAM and returns its value.
  *
- * @param[in] addr RAM address.
- *
- * @param[in] bit A bit position to read, 0-31.
- *
- * @return
- *     The requested bit shifted to bit position 0 in the return value.
+ * @param addr A pointer to a volatile constant 32-bit unsigned integer
+ * representing the address of a 32-bit word in RAM.
+ * @param bit An unsigned 32-bit integer representing the bit position to read,
+ * ranging from 0 to 31.
+ * @return The function returns an unsigned integer representing the value of
+ * the specified bit, either 0 or 1.
  ******************************************************************************/
 __STATIC_INLINE unsigned int sl_hal_bus_ram_read_bit(volatile const uint32_t *addr,
                                                      uint32_t bit)
@@ -101,6 +105,20 @@ __STATIC_INLINE unsigned int sl_hal_bus_ram_read_bit(volatile const uint32_t *ad
  * @param[in] val A value to set bit to, 0 or 1.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_HAL_COMMON, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The `sl_hal_bus_reg_write_bit` function performs an atomic write
+ * operation to set or clear a specific bit in a 32-bit peripheral
+ * register using alias addressing if available.
+ *
+ * @param addr A pointer to a volatile 32-bit unsigned integer representing the
+ * address of the peripheral register.
+ * @param bit An unsigned 32-bit integer specifying the bit position (0-31) to
+ * be written.
+ * @param val An unsigned 32-bit integer representing the value to set the bit
+ * to, either 0 or 1.
+ * @return The function does not return a value; it performs an in-place
+ * modification of the specified bit in the peripheral register.
+ ******************************************************************************/
 __STATIC_INLINE void sl_hal_bus_reg_write_bit(volatile uint32_t *addr,
                                               uint32_t bit,
                                               uint32_t val)
@@ -124,15 +142,15 @@ __STATIC_INLINE void sl_hal_bus_reg_write_bit(volatile uint32_t *addr,
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform a single-bit atomic read operation on a peripheral register.
+ * @brief The function `sl_hal_bus_reg_read_bit` reads a specific bit from a
+ * 32-bit peripheral register and returns its value.
  *
- * @param[in] addr A peripheral register address.
- *
- * @param[in] bit A bit position to read, 0-31.
- *
- * @return
- *     The requested bit shifted to bit position 0 in the return value.
+ * @param addr A pointer to a volatile constant 32-bit unsigned integer
+ * representing the address of the peripheral register.
+ * @param bit An unsigned 32-bit integer specifying the bit position to read,
+ * ranging from 0 to 31.
+ * @return The function returns the value of the specified bit, shifted to the
+ * least significant bit position, as an unsigned integer (0 or 1).
  ******************************************************************************/
 __STATIC_INLINE unsigned int sl_hal_bus_reg_read_bit(volatile const uint32_t *addr,
                                                      uint32_t bit)
@@ -141,23 +159,16 @@ __STATIC_INLINE unsigned int sl_hal_bus_reg_read_bit(volatile const uint32_t *ad
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform an atomic masked set operation on a peripheral register address.
+ * @brief The `sl_hal_bus_reg_set_mask` function performs an atomic masked set
+ * operation on a peripheral register address, setting bits specified by
+ * the mask to 1.
  *
- * @details
- *   A peripheral register masked set provides a set operation of a bit-mask
- *   in a peripheral register. All 1s in the mask are set to 1 in the register.
- *   All 0s in the mask are not changed in the register.
- *   RAMs and special peripherals are not supported.
- *
- * @note
- *   This function uses built-in hardware 4K-aliased addressing that allows to
- *   perform an atomic read-modify-write operation.
- *   See the reference manual for more details about alias addressing.
- *
- * @param[in] addr A peripheral register address.
- *
- * @param[in] mask A mask to set.
+ * @param addr A pointer to a volatile 32-bit unsigned integer representing the
+ * peripheral register address.
+ * @param mask A 32-bit unsigned integer representing the bit mask to set in the
+ * register.
+ * @return The function does not return a value; it modifies the register at the
+ * given address by setting bits specified in the mask.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_bus_reg_set_mask(volatile uint32_t *addr,
                                              uint32_t mask)
@@ -175,23 +186,16 @@ __STATIC_INLINE void sl_hal_bus_reg_set_mask(volatile uint32_t *addr,
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform an atomic masked clear operation on the peripheral register address.
+ * @brief The `sl_hal_bus_reg_clear_mask` function performs an atomic masked
+ * clear operation on a peripheral register address, clearing bits
+ * specified by the mask.
  *
- * @details
- *   A peripheral register masked clear provides a clear operation of a bit-mask
- *   in a peripheral register. All 1s in the mask are set to 0 in the register.
- *   All 0s in the mask are not changed in the register.
- *   RAMs and special peripherals are not supported.
- *
- * @note
- *   This function uses built-in hardware 4K-aliased addressing that allows to
- *   perform an atomic read-modify-write operation.
- *   See the reference manual for more details about alias addressing.
- *
- * @param[in] addr A peripheral register address.
- *
- * @param[in] mask A mask to clear.
+ * @param addr A pointer to a volatile 32-bit unsigned integer representing the
+ * peripheral register address.
+ * @param mask A 32-bit unsigned integer mask specifying which bits to clear in
+ * the register.
+ * @return The function does not return a value; it modifies the register at the
+ * given address by clearing the bits specified in the mask.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_bus_reg_clear_mask(volatile uint32_t *addr,
                                                uint32_t mask)
@@ -209,28 +213,18 @@ __STATIC_INLINE void sl_hal_bus_reg_clear_mask(volatile uint32_t *addr,
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform peripheral register masked write.
+ * @brief The function `sl_hal_bus_reg_write_mask` performs an atomic masked
+ * write operation on a peripheral register, updating only the bits
+ * specified by the mask with the provided value.
  *
- * @details
- *   This function first reads the peripheral register and updates only bits
- *   that are set in the mask with content of val. Typically, the mask is a
- *   bit-field in the register and the value val is within the mask.
- *
- * @note
- *   The read-modify-write operation is executed in a critical section to
- *   guarantee atomicity. Note that atomicity can only be guaranteed if register
- *   is modified only by the core, and not by other peripherals (like DMA).
- *
- * @param[in] addr A peripheral register address.
- *
- * @param[in] mask A peripheral register mask.
- *
- * @param[in] val  A peripheral register value. The value must be shifted to the
-                  correct bit position in the register corresponding to the field
-                  defined by the mask parameter. The register value must be
-                  contained in the field defined by the mask parameter. The
-                  register value is masked to prevent involuntary spillage.
+ * @param addr A pointer to a volatile 32-bit unsigned integer representing the
+ * address of the peripheral register to be modified.
+ * @param mask A 32-bit unsigned integer representing the bitmask that specifies
+ * which bits in the register should be updated.
+ * @param val A 32-bit unsigned integer containing the value to be written to
+ * the register, masked and aligned according to the mask.
+ * @return The function does not return a value; it modifies the register at the
+ * specified address in place.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_bus_reg_write_mask(volatile uint32_t *addr,
                                                uint32_t mask,
@@ -243,21 +237,16 @@ __STATIC_INLINE void sl_hal_bus_reg_write_mask(volatile uint32_t *addr,
 }
 
 /***************************************************************************//**
- * @brief
- *   Perform a peripheral register masked read.
+ * @brief The `sl_hal_bus_reg_read_mask` function performs a masked read
+ * operation on a peripheral register, returning the masked value.
  *
- * @details
- *   Read an unshifted and masked value from a peripheral register.
- *
- * @note
- *   This operation is not hardware accelerated.
- *
- * @param[in] addr A peripheral register address.
- *
- * @param[in] mask A peripheral register mask.
- *
- * @return
- *   An unshifted and masked register value.
+ * @param addr A pointer to a volatile constant 32-bit unsigned integer
+ * representing the address of the peripheral register to be read.
+ * @param mask A 32-bit unsigned integer representing the mask to be applied to
+ * the register value.
+ * @return The function returns a 32-bit unsigned integer which is the result of
+ * the masked read operation, i.e., the value at the specified address
+ * with the mask applied.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_bus_reg_read_mask(volatile const uint32_t *addr,
                                                   uint32_t mask)

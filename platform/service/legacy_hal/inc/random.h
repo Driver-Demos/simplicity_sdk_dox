@@ -32,25 +32,35 @@
 #ifndef __RANDOM_H__
 #define __RANDOM_H__
 
-/** @brief Seeds the ::halCommonGetRandom() pseudorandom number
- * generator.
+/***************************************************************************//**
+ * @brief This function initializes the pseudorandom number generator used by
+ * the stack, ensuring that subsequent calls to generate random numbers
+ * produce different sequences. It should be called during the stack
+ * initialization process, typically with a seed value obtained from the
+ * radio. The function ensures that the seed values are non-zero by
+ * substituting default values if necessary, which helps maintain
+ * randomness in the generated sequences.
  *
- * Called by the stack during initialization with a seed from the radio.
- *
- * @param seed  A seed for the pseudorandom number generator.
- */
+ * @param seed A 32-bit unsigned integer used to seed the pseudorandom number
+ * generator. The lower 16 bits and the upper 16 bits are used
+ * separately. If either part is zero, a default non-zero value is
+ * substituted to ensure proper seeding.
+ * @return None
+ ******************************************************************************/
 void halStackSeedRandom(uint32_t seed);
 
-/** @brief Runs a standard LFSR to generate pseudorandom numbers.
+/***************************************************************************//**
+ * @brief This function provides a 16-bit pseudorandom number, which can be used
+ * in various applications requiring randomization, such as selecting
+ * random backoff slots in network protocols. It is designed to be called
+ * frequently and should return quickly to avoid performance bottlenecks.
+ * The function relies on an internal state that must be seeded using
+ * `halStackSeedRandom` before use to ensure randomness. It is suitable
+ * for applications where hardware acceleration is not available or
+ * necessary.
  *
- * Called by the MAC in the stack to choose random backoff slots.
- *
- * Complicated implementations may improve the MAC's
- * ability to avoid collisions in large networks, but it is \b critical to
- * implement this function to return quickly.
- *
- * @return random number.
- */
+ * @return Returns a 16-bit unsigned integer representing a pseudorandom number.
+ ******************************************************************************/
 uint16_t halCommonGetRandom(void);
 
 /** @} (end addtogroup random) */

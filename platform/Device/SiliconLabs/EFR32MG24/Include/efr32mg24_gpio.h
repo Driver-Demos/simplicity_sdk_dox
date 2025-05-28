@@ -38,12 +38,39 @@
 
 #include "efr32mg24_gpio_port.h"
 
+/***************************************************************************//**
+ * @brief The GPIO_ACMPROUTE_TypeDef is a structure that defines the
+ * configuration for routing the Analog Comparator (ACMP) output pins in
+ * a microcontroller. It includes fields to enable the ACMP0 pin and to
+ * select the port and pin for the ACMPOUT signal, with an additional
+ * reserved field for potential future extensions.
+ *
+ * @param ROUTEEN ACMP0 pin enable.
+ * @param ACMPOUTROUTE ACMPOUT port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_acmproute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< ACMP0 pin enable                                   */
   __IOM uint32_t ACMPOUTROUTE;                       /**< ACMPOUT port/pin select                            */
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_ACMPROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_CMUROUTE_TypeDef is a structure that defines the
+ * configuration for routing clock signals in a microcontroller unit
+ * (MCU). It includes fields for enabling the CMU pin and selecting
+ * ports/pins for various clock inputs and outputs, such as CLKIN0 and
+ * CLKOUT0-2. The structure also contains reserved fields for potential
+ * future extensions, ensuring compatibility with future hardware
+ * updates.
+ *
+ * @param ROUTEEN CMU pin enable.
+ * @param CLKIN0ROUTE CLKIN0 port/pin select.
+ * @param CLKOUT0ROUTE CLKOUT0 port/pin select.
+ * @param CLKOUT1ROUTE CLKOUT1 port/pin select.
+ * @param CLKOUT2ROUTE CLKOUT2 port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_cmuroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< CMU pin enable                                     */
   __IOM uint32_t CLKIN0ROUTE;                        /**< CLKIN0 port/pin select                             */
@@ -53,6 +80,22 @@ typedef struct gpio_cmuroute_typedef{
   uint32_t       RESERVED0[2U];                      /**< Reserved for future use                            */
 } GPIO_CMUROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_EUSARTROUTE_TypeDef is a structure that defines the routing
+ * configuration for EUSART0 pins, including enabling the EUSART0 pin and
+ * selecting the ports and pins for various EUSART signals such as CS,
+ * CTS, RTS, RX, SCLK, and TX. It also includes a reserved field for
+ * future use, ensuring compatibility with potential future extensions.
+ *
+ * @param ROUTEEN EUSART0 pin enable.
+ * @param CSROUTE CS port/pin select.
+ * @param CTSROUTE CTS port/pin select.
+ * @param RTSROUTE RTS port/pin select.
+ * @param RXROUTE RX port/pin select.
+ * @param SCLKROUTE SCLK port/pin select.
+ * @param TXROUTE TX port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_eusartroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< EUSART0 pin enable                                 */
   __IOM uint32_t CSROUTE;                            /**< CS port/pin select                                 */
@@ -64,6 +107,20 @@ typedef struct gpio_eusartroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_EUSARTROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_FRCROUTE_TypeDef is a structure that defines the routing
+ * configuration for GPIO pins related to FRC (Flexible Routing
+ * Controller). It includes fields to enable the FRC pin and to select
+ * the port/pin for DCLK, DFRAME, and DOUT signals. The structure also
+ * contains a reserved field for potential future extensions, ensuring
+ * compatibility with future updates.
+ *
+ * @param ROUTEEN FRC pin enable.
+ * @param DCLKROUTE DCLK port/pin select.
+ * @param DFRAMEROUTE DFRAME port/pin select.
+ * @param DOUTROUTE DOUT port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_frcroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< FRC pin enable                                     */
   __IOM uint32_t DCLKROUTE;                          /**< DCLK port/pin select                               */
@@ -72,6 +129,19 @@ typedef struct gpio_frcroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_FRCROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_I2CROUTE_TypeDef is a structure that defines the routing
+ * configuration for I2C pins in a microcontroller. It includes fields to
+ * enable the I2C0 pins and to select the ports and pins for the SCL
+ * (Serial Clock Line) and SDA (Serial Data Line) signals. The structure
+ * also contains a reserved field for potential future extensions,
+ * ensuring compatibility with future updates.
+ *
+ * @param ROUTEEN I2C0 pin enable.
+ * @param SCLROUTE SCL port/pin select.
+ * @param SDAROUTE SDA port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_i2croute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< I2C0 pin enable                                    */
   __IOM uint32_t SCLROUTE;                           /**< SCL port/pin select                                */
@@ -79,6 +149,32 @@ typedef struct gpio_i2croute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_I2CROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_KEYSCANROUTE_TypeDef is a structure that defines the routing
+ * configuration for a key scanning interface, specifying which GPIO pins
+ * are used for column outputs and row sensing. It includes fields for
+ * enabling the key scan pins and selecting the specific ports and pins
+ * for each column output and row sense line. The structure also includes
+ * a reserved field for potential future use, ensuring compatibility with
+ * future hardware or software updates.
+ *
+ * @param ROUTEEN KEYSCAN pin enable.
+ * @param COLOUT0ROUTE COLOUT0 port/pin select.
+ * @param COLOUT1ROUTE COLOUT1 port/pin select.
+ * @param COLOUT2ROUTE COLOUT2 port/pin select.
+ * @param COLOUT3ROUTE COLOUT3 port/pin select.
+ * @param COLOUT4ROUTE COLOUT4 port/pin select.
+ * @param COLOUT5ROUTE COLOUT5 port/pin select.
+ * @param COLOUT6ROUTE COLOUT6 port/pin select.
+ * @param COLOUT7ROUTE COLOUT7 port/pin select.
+ * @param ROWSENSE0ROUTE ROWSENSE0 port/pin select.
+ * @param ROWSENSE1ROUTE ROWSENSE1 port/pin select.
+ * @param ROWSENSE2ROUTE ROWSENSE2 port/pin select.
+ * @param ROWSENSE3ROUTE ROWSENSE3 port/pin select.
+ * @param ROWSENSE4ROUTE ROWSENSE4 port/pin select.
+ * @param ROWSENSE5ROUTE ROWSENSE5 port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_keyscanroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< KEYSCAN pin enable                                 */
   __IOM uint32_t COLOUT0ROUTE;                       /**< COLOUT0 port/pin select                            */
@@ -98,6 +194,17 @@ typedef struct gpio_keyscanroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_KEYSCANROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_LETIMERROUTE_TypeDef is a structure that defines the routing
+ * configuration for LETIMER pins, including enabling the pins and
+ * selecting the ports and pins for OUT0 and OUT1. It includes a reserved
+ * field for potential future extensions.
+ *
+ * @param ROUTEEN LETIMER pin enable.
+ * @param OUT0ROUTE OUT0 port/pin select.
+ * @param OUT1ROUTE OUT1 port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_letimerroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< LETIMER pin enable                                 */
   __IOM uint32_t OUT0ROUTE;                          /**< OUT0 port/pin select                               */
@@ -105,6 +212,34 @@ typedef struct gpio_letimerroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_LETIMERROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_MODEMROUTE_TypeDef is a structure that defines the routing
+ * configuration for various modem-related pins in a system. It includes
+ * fields for enabling the modem pin and selecting ports/pins for
+ * different antenna routes, data clock, data input, and data output. The
+ * structure is designed to facilitate the configuration of GPIO pins for
+ * modem operations, with a reserved field for potential future
+ * extensions.
+ *
+ * @param ROUTEEN MODEM pin enable.
+ * @param ANT0ROUTE ANT0 port/pin select.
+ * @param ANT1ROUTE ANT1 port/pin select.
+ * @param ANTROLLOVERROUTE ANTROLLOVER port/pin select.
+ * @param ANTRR0ROUTE ANTRR0 port/pin select.
+ * @param ANTRR1ROUTE ANTRR1 port/pin select.
+ * @param ANTRR2ROUTE ANTRR2 port/pin select.
+ * @param ANTRR3ROUTE ANTRR3 port/pin select.
+ * @param ANTRR4ROUTE ANTRR4 port/pin select.
+ * @param ANTRR5ROUTE ANTRR5 port/pin select.
+ * @param ANTSWENROUTE ANTSWEN port/pin select.
+ * @param ANTSWUSROUTE ANTSWUS port/pin select.
+ * @param ANTTRIGROUTE ANTTRIG port/pin select.
+ * @param ANTTRIGSTOPROUTE ANTTRIGSTOP port/pin select.
+ * @param DCLKROUTE DCLK port/pin select.
+ * @param DINROUTE DIN port/pin select.
+ * @param DOUTROUTE DOUT port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_modemroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< MODEM pin enable                                   */
   __IOM uint32_t ANT0ROUTE;                          /**< ANT0 port/pin select                               */
@@ -126,6 +261,18 @@ typedef struct gpio_modemroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_MODEMROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_PCNTROUTE_TypeDef is a structure used to define the routing
+ * configuration for GPIO pins, specifically for selecting ports and pins
+ * for S0IN and S1IN signals. It includes reserved fields for future
+ * expansion, ensuring compatibility with potential future updates or
+ * changes in the hardware design.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param S0INROUTE S0IN port/pin select.
+ * @param S1INROUTE S1IN port/pin select.
+ * @param RESERVED1 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_pcntroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
   __IOM uint32_t S0INROUTE;                          /**< S0IN port/pin select                               */
@@ -133,6 +280,38 @@ typedef struct gpio_pcntroute_typedef{
   uint32_t       RESERVED1[1U];                      /**< Reserved for future use                            */
 } GPIO_PCNTROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The `GPIO_PRSROUTE_TypeDef` is a structure that defines the routing
+ * configuration for GPIO pins in a microcontroller, specifically for the
+ * Peripheral Reflex System (PRS). It includes fields for enabling PRS0
+ * pins and selecting ports/pins for asynchronous and synchronous routes,
+ * allowing for flexible configuration of signal routing. The structure
+ * also includes a reserved field for potential future use, ensuring
+ * compatibility with future hardware updates.
+ *
+ * @param ROUTEEN PRS0 pin enable.
+ * @param ASYNCH0ROUTE ASYNCH0 port/pin select.
+ * @param ASYNCH1ROUTE ASYNCH1 port/pin select.
+ * @param ASYNCH2ROUTE ASYNCH2 port/pin select.
+ * @param ASYNCH3ROUTE ASYNCH3 port/pin select.
+ * @param ASYNCH4ROUTE ASYNCH4 port/pin select.
+ * @param ASYNCH5ROUTE ASYNCH5 port/pin select.
+ * @param ASYNCH6ROUTE ASYNCH6 port/pin select.
+ * @param ASYNCH7ROUTE ASYNCH7 port/pin select.
+ * @param ASYNCH8ROUTE ASYNCH8 port/pin select.
+ * @param ASYNCH9ROUTE ASYNCH9 port/pin select.
+ * @param ASYNCH10ROUTE ASYNCH10 port/pin select.
+ * @param ASYNCH11ROUTE ASYNCH11 port/pin select.
+ * @param ASYNCH12ROUTE ASYNCH12 port/pin select.
+ * @param ASYNCH13ROUTE ASYNCH13 port/pin select.
+ * @param ASYNCH14ROUTE ASYNCH14 port/pin select.
+ * @param ASYNCH15ROUTE ASYNCH15 port/pin select.
+ * @param SYNCH0ROUTE SYNCH0 port/pin select.
+ * @param SYNCH1ROUTE SYNCH1 port/pin select.
+ * @param SYNCH2ROUTE SYNCH2 port/pin select.
+ * @param SYNCH3ROUTE SYNCH3 port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_prsroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< PRS0 pin enable                                    */
   __IOM uint32_t ASYNCH0ROUTE;                       /**< ASYNCH0 port/pin select                            */
@@ -158,6 +337,19 @@ typedef struct gpio_prsroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_PRSROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_RACROUTE_TypeDef is a structure used to define the routing
+ * configuration for GPIO pins related to the RAC (Radio Controller) in a
+ * microcontroller. It includes fields for enabling the RAC pins and
+ * selecting the ports and pins for LNAEN (Low Noise Amplifier Enable)
+ * and PAEN (Power Amplifier Enable). The structure also contains a
+ * reserved field for potential future extensions.
+ *
+ * @param ROUTEEN RAC pin enable.
+ * @param LNAENROUTE LNAEN port/pin select.
+ * @param PAENROUTE PAEN port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_racroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< RAC pin enable                                     */
   __IOM uint32_t LNAENROUTE;                         /**< LNAEN port/pin select                              */
@@ -165,12 +357,40 @@ typedef struct gpio_racroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_RACROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_SYXOROUTE_TypeDef is a structure used to define the routing
+ * configuration for GPIO operations, specifically for asynchronous
+ * buffer output requests. It includes a field for selecting the port and
+ * pin for the BUFOUTREQINASYNC operation, with additional reserved
+ * fields for potential future extensions or compatibility.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param BUFOUTREQINASYNCROUTE Selects the port/pin for BUFOUTREQINASYNC.
+ * @param RESERVED1 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_syxoroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
   __IOM uint32_t BUFOUTREQINASYNCROUTE;              /**< BUFOUTREQINASYNC port/pin select                   */
   uint32_t       RESERVED1[1U];                      /**< Reserved for future use                            */
 } GPIO_SYXOROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_TIMERROUTE_TypeDef is a structure that defines the routing
+ * configuration for TIMER0 and its associated channels and pins. It
+ * includes fields for enabling the TIMER0 pin and selecting the ports
+ * and pins for CC0, CC1, CC2, and CDTI channels. The structure also
+ * contains a reserved field for potential future use, ensuring
+ * compatibility with future extensions or modifications.
+ *
+ * @param ROUTEEN TIMER0 pin enable.
+ * @param CC0ROUTE CC0 port/pin select.
+ * @param CC1ROUTE CC1 port/pin select.
+ * @param CC2ROUTE CC2 port/pin select.
+ * @param CDTI0ROUTE CDTI0 port/pin select.
+ * @param CDTI1ROUTE CDTI1 port/pin select.
+ * @param CDTI2ROUTE CDTI2 port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_timerroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< TIMER0 pin enable                                  */
   __IOM uint32_t CC0ROUTE;                           /**< CC0 port/pin select                                */
@@ -182,6 +402,21 @@ typedef struct gpio_timerroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_TIMERROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_USARTROUTE_TypeDef is a structure that defines the routing
+ * configuration for USART pins, including enabling the USART0 pin and
+ * selecting ports/pins for CS, CTS, RTS, RX, SCLK, and TX signals. It
+ * includes a reserved field for potential future extensions.
+ *
+ * @param ROUTEEN USART0 pin enable.
+ * @param CSROUTE CS port/pin select.
+ * @param CTSROUTE CTS port/pin select.
+ * @param RTSROUTE RTS port/pin select.
+ * @param RXROUTE RX port/pin select.
+ * @param CLKROUTE SCLK port/pin select.
+ * @param TXROUTE TX port/pin select.
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct gpio_usartroute_typedef{
   __IOM uint32_t ROUTEEN;                            /**< USART0 pin enable                                  */
   __IOM uint32_t CSROUTE;                            /**< CS port/pin select                                 */
@@ -193,6 +428,248 @@ typedef struct gpio_usartroute_typedef{
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
 } GPIO_USARTROUTE_TypeDef;
 
+/***************************************************************************//**
+ * @brief The GPIO_TypeDef structure is a comprehensive representation of a
+ * General Purpose Input/Output (GPIO) peripheral in a microcontroller.
+ * It includes various registers for configuring and controlling GPIO
+ * ports, managing interrupts, and setting up bus allocations. The
+ * structure is designed to support operations such as setting, clearing,
+ * and toggling of GPIO configurations, with numerous reserved fields for
+ * future expansion. It also includes route configuration registers for
+ * different peripherals like ACMP, CMU, EUSART, and others, allowing for
+ * flexible peripheral routing and control.
+ *
+ * @param IPVERSION Indicates the version of the IP.
+ * @param RESERVED0 Reserved for future use.
+ * @param P Array of GPIO_PORT_TypeDef representing GPIO ports.
+ * @param RESERVED1 Reserved for future use.
+ * @param LOCK Register to lock GPIO configuration.
+ * @param RESERVED2 Reserved for future use.
+ * @param GPIOLOCKSTATUS Indicates the lock status of GPIO.
+ * @param RESERVED3 Reserved for future use.
+ * @param ABUSALLOC Allocation for A Bus.
+ * @param BBUSALLOC Allocation for B Bus.
+ * @param CDBUSALLOC Allocation for CD Bus.
+ * @param RESERVED4 Reserved for future use.
+ * @param EXTIPSELL Selects external interrupt port for low pins.
+ * @param EXTIPSELH Selects external interrupt port for high pins.
+ * @param EXTIPINSELL Selects external interrupt pin for low pins.
+ * @param EXTIPINSELH Selects external interrupt pin for high pins.
+ * @param EXTIRISE Configures rising edge trigger for external interrupts.
+ * @param EXTIFALL Configures falling edge trigger for external interrupts.
+ * @param RESERVED5 Reserved for future use.
+ * @param IF Interrupt flag register.
+ * @param IEN Interrupt enable register.
+ * @param RESERVED6 Reserved for future use.
+ * @param EM4WUEN Enable for EM4 wakeup.
+ * @param EM4WUPOL Polarity for EM4 wakeup.
+ * @param RESERVED7 Reserved for future use.
+ * @param DBGROUTEPEN Enables debugger route pin.
+ * @param TRACEROUTEPEN Enables trace route pin.
+ * @param RESERVED8 Reserved for future use.
+ * @param ACMPROUTE Array of ACMP route configuration registers.
+ * @param CMUROUTE CMU route configuration register.
+ * @param RESERVED9 Reserved for future use.
+ * @param EUSARTROUTE Array of EUSART route configuration registers.
+ * @param FRCROUTE FRC route configuration register.
+ * @param I2CROUTE Array of I2C route configuration registers.
+ * @param KEYSCANROUTE Keyscan route configuration register.
+ * @param LETIMERROUTE LETIMER route configuration register.
+ * @param MODEMROUTE Modem route configuration register.
+ * @param PCNTROUTE Array of PCNT route configuration registers.
+ * @param PRSROUTE Array of PRS route configuration registers.
+ * @param RACROUTE RAC route configuration register.
+ * @param RESERVED10 Reserved for future use.
+ * @param SYXOROUTE Array of SYXO route configuration registers.
+ * @param TIMERROUTE Array of TIMER route configuration registers.
+ * @param USARTROUTE Array of USART route configuration registers.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_SET Indicates the version of the IP (set operation).
+ * @param RESERVED12 Reserved for future use.
+ * @param P_SET Array of GPIO_PORT_TypeDef representing GPIO ports (set
+ * operation).
+ * @param RESERVED13 Reserved for future use.
+ * @param LOCK_SET Register to lock GPIO configuration (set operation).
+ * @param RESERVED14 Reserved for future use.
+ * @param GPIOLOCKSTATUS_SET Indicates the lock status of GPIO (set operation).
+ * @param RESERVED15 Reserved for future use.
+ * @param ABUSALLOC_SET Allocation for A Bus (set operation).
+ * @param BBUSALLOC_SET Allocation for B Bus (set operation).
+ * @param CDBUSALLOC_SET Allocation for CD Bus (set operation).
+ * @param RESERVED16 Reserved for future use.
+ * @param EXTIPSELL_SET Selects external interrupt port for low pins (set
+ * operation).
+ * @param EXTIPSELH_SET Selects external interrupt port for high pins (set
+ * operation).
+ * @param EXTIPINSELL_SET Selects external interrupt pin for low pins (set
+ * operation).
+ * @param EXTIPINSELH_SET Selects external interrupt pin for high pins (set
+ * operation).
+ * @param EXTIRISE_SET Configures rising edge trigger for external interrupts
+ * (set operation).
+ * @param EXTIFALL_SET Configures falling edge trigger for external interrupts
+ * (set operation).
+ * @param RESERVED17 Reserved for future use.
+ * @param IF_SET Interrupt flag register (set operation).
+ * @param IEN_SET Interrupt enable register (set operation).
+ * @param RESERVED18 Reserved for future use.
+ * @param EM4WUEN_SET Enable for EM4 wakeup (set operation).
+ * @param EM4WUPOL_SET Polarity for EM4 wakeup (set operation).
+ * @param RESERVED19 Reserved for future use.
+ * @param DBGROUTEPEN_SET Enables debugger route pin (set operation).
+ * @param TRACEROUTEPEN_SET Enables trace route pin (set operation).
+ * @param RESERVED20 Reserved for future use.
+ * @param ACMPROUTE_SET Array of ACMP route configuration registers (set
+ * operation).
+ * @param CMUROUTE_SET CMU route configuration register (set operation).
+ * @param RESERVED21 Reserved for future use.
+ * @param EUSARTROUTE_SET Array of EUSART route configuration registers (set
+ * operation).
+ * @param FRCROUTE_SET FRC route configuration register (set operation).
+ * @param I2CROUTE_SET Array of I2C route configuration registers (set
+ * operation).
+ * @param KEYSCANROUTE_SET Keyscan route configuration register (set operation).
+ * @param LETIMERROUTE_SET LETIMER route configuration register (set operation).
+ * @param MODEMROUTE_SET Modem route configuration register (set operation).
+ * @param PCNTROUTE_SET Array of PCNT route configuration registers (set
+ * operation).
+ * @param PRSROUTE_SET Array of PRS route configuration registers (set
+ * operation).
+ * @param RACROUTE_SET RAC route configuration register (set operation).
+ * @param RESERVED22 Reserved for future use.
+ * @param SYXOROUTE_SET Array of SYXO route configuration registers (set
+ * operation).
+ * @param TIMERROUTE_SET Array of TIMER route configuration registers (set
+ * operation).
+ * @param USARTROUTE_SET Array of USART route configuration registers (set
+ * operation).
+ * @param RESERVED23 Reserved for future use.
+ * @param IPVERSION_CLR Indicates the version of the IP (clear operation).
+ * @param RESERVED24 Reserved for future use.
+ * @param P_CLR Array of GPIO_PORT_TypeDef representing GPIO ports (clear
+ * operation).
+ * @param RESERVED25 Reserved for future use.
+ * @param LOCK_CLR Register to lock GPIO configuration (clear operation).
+ * @param RESERVED26 Reserved for future use.
+ * @param GPIOLOCKSTATUS_CLR Indicates the lock status of GPIO (clear
+ * operation).
+ * @param RESERVED27 Reserved for future use.
+ * @param ABUSALLOC_CLR Allocation for A Bus (clear operation).
+ * @param BBUSALLOC_CLR Allocation for B Bus (clear operation).
+ * @param CDBUSALLOC_CLR Allocation for CD Bus (clear operation).
+ * @param RESERVED28 Reserved for future use.
+ * @param EXTIPSELL_CLR Selects external interrupt port for low pins (clear
+ * operation).
+ * @param EXTIPSELH_CLR Selects external interrupt port for high pins (clear
+ * operation).
+ * @param EXTIPINSELL_CLR Selects external interrupt pin for low pins (clear
+ * operation).
+ * @param EXTIPINSELH_CLR Selects external interrupt pin for high pins (clear
+ * operation).
+ * @param EXTIRISE_CLR Configures rising edge trigger for external interrupts
+ * (clear operation).
+ * @param EXTIFALL_CLR Configures falling edge trigger for external interrupts
+ * (clear operation).
+ * @param RESERVED29 Reserved for future use.
+ * @param IF_CLR Interrupt flag register (clear operation).
+ * @param IEN_CLR Interrupt enable register (clear operation).
+ * @param RESERVED30 Reserved for future use.
+ * @param EM4WUEN_CLR Enable for EM4 wakeup (clear operation).
+ * @param EM4WUPOL_CLR Polarity for EM4 wakeup (clear operation).
+ * @param RESERVED31 Reserved for future use.
+ * @param DBGROUTEPEN_CLR Enables debugger route pin (clear operation).
+ * @param TRACEROUTEPEN_CLR Enables trace route pin (clear operation).
+ * @param RESERVED32 Reserved for future use.
+ * @param ACMPROUTE_CLR Array of ACMP route configuration registers (clear
+ * operation).
+ * @param CMUROUTE_CLR CMU route configuration register (clear operation).
+ * @param RESERVED33 Reserved for future use.
+ * @param EUSARTROUTE_CLR Array of EUSART route configuration registers (clear
+ * operation).
+ * @param FRCROUTE_CLR FRC route configuration register (clear operation).
+ * @param I2CROUTE_CLR Array of I2C route configuration registers (clear
+ * operation).
+ * @param KEYSCANROUTE_CLR Keyscan route configuration register (clear
+ * operation).
+ * @param LETIMERROUTE_CLR LETIMER route configuration register (clear
+ * operation).
+ * @param MODEMROUTE_CLR Modem route configuration register (clear operation).
+ * @param PCNTROUTE_CLR Array of PCNT route configuration registers (clear
+ * operation).
+ * @param PRSROUTE_CLR Array of PRS route configuration registers (clear
+ * operation).
+ * @param RACROUTE_CLR RAC route configuration register (clear operation).
+ * @param RESERVED34 Reserved for future use.
+ * @param SYXOROUTE_CLR Array of SYXO route configuration registers (clear
+ * operation).
+ * @param TIMERROUTE_CLR Array of TIMER route configuration registers (clear
+ * operation).
+ * @param USARTROUTE_CLR Array of USART route configuration registers (clear
+ * operation).
+ * @param RESERVED35 Reserved for future use.
+ * @param IPVERSION_TGL Indicates the version of the IP (toggle operation).
+ * @param RESERVED36 Reserved for future use.
+ * @param P_TGL Array of GPIO_PORT_TypeDef representing GPIO ports (toggle
+ * operation).
+ * @param RESERVED37 Reserved for future use.
+ * @param LOCK_TGL Register to lock GPIO configuration (toggle operation).
+ * @param RESERVED38 Reserved for future use.
+ * @param GPIOLOCKSTATUS_TGL Indicates the lock status of GPIO (toggle
+ * operation).
+ * @param RESERVED39 Reserved for future use.
+ * @param ABUSALLOC_TGL Allocation for A Bus (toggle operation).
+ * @param BBUSALLOC_TGL Allocation for B Bus (toggle operation).
+ * @param CDBUSALLOC_TGL Allocation for CD Bus (toggle operation).
+ * @param RESERVED40 Reserved for future use.
+ * @param EXTIPSELL_TGL Selects external interrupt port for low pins (toggle
+ * operation).
+ * @param EXTIPSELH_TGL Selects external interrupt port for high pins (toggle
+ * operation).
+ * @param EXTIPINSELL_TGL Selects external interrupt pin for low pins (toggle
+ * operation).
+ * @param EXTIPINSELH_TGL Selects external interrupt pin for high pins (toggle
+ * operation).
+ * @param EXTIRISE_TGL Configures rising edge trigger for external interrupts
+ * (toggle operation).
+ * @param EXTIFALL_TGL Configures falling edge trigger for external interrupts
+ * (toggle operation).
+ * @param RESERVED41 Reserved for future use.
+ * @param IF_TGL Interrupt flag register (toggle operation).
+ * @param IEN_TGL Interrupt enable register (toggle operation).
+ * @param RESERVED42 Reserved for future use.
+ * @param EM4WUEN_TGL Enable for EM4 wakeup (toggle operation).
+ * @param EM4WUPOL_TGL Polarity for EM4 wakeup (toggle operation).
+ * @param RESERVED43 Reserved for future use.
+ * @param DBGROUTEPEN_TGL Enables debugger route pin (toggle operation).
+ * @param TRACEROUTEPEN_TGL Enables trace route pin (toggle operation).
+ * @param RESERVED44 Reserved for future use.
+ * @param ACMPROUTE_TGL Array of ACMP route configuration registers (toggle
+ * operation).
+ * @param CMUROUTE_TGL CMU route configuration register (toggle operation).
+ * @param RESERVED45 Reserved for future use.
+ * @param EUSARTROUTE_TGL Array of EUSART route configuration registers (toggle
+ * operation).
+ * @param FRCROUTE_TGL FRC route configuration register (toggle operation).
+ * @param I2CROUTE_TGL Array of I2C route configuration registers (toggle
+ * operation).
+ * @param KEYSCANROUTE_TGL Keyscan route configuration register (toggle
+ * operation).
+ * @param LETIMERROUTE_TGL LETIMER route configuration register (toggle
+ * operation).
+ * @param MODEMROUTE_TGL Modem route configuration register (toggle operation).
+ * @param PCNTROUTE_TGL Array of PCNT route configuration registers (toggle
+ * operation).
+ * @param PRSROUTE_TGL Array of PRS route configuration registers (toggle
+ * operation).
+ * @param RACROUTE_TGL RAC route configuration register (toggle operation).
+ * @param RESERVED46 Reserved for future use.
+ * @param SYXOROUTE_TGL Array of SYXO route configuration registers (toggle
+ * operation).
+ * @param TIMERROUTE_TGL Array of TIMER route configuration registers (toggle
+ * operation).
+ * @param USARTROUTE_TGL Array of USART route configuration registers (toggle
+ * operation).
+ ******************************************************************************/
 typedef struct gpio_typedef{
   __IM uint32_t             IPVERSION;               /**< main                                               */
   uint32_t                  RESERVED0[11U];          /**< Reserved for future use                            */

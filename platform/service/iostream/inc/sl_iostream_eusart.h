@@ -112,6 +112,35 @@ SL_ENUM(sl_iostream_eusart_uart_flow_control_t) {
 };
 
 /// @brief Struct representing an I/O Stream EUSART configuration.
+/***************************************************************************//**
+ * @brief The `sl_iostream_eusart_config_t` structure is used to configure the
+ * Enhanced Universal Synchronous/Asynchronous Receiver/Transmitter
+ * (EUSART) for I/O streaming in embedded systems. It includes settings
+ * for the EUSART peripheral, such as the peripheral number, baud rate,
+ * parity, stop bits, and flow control options. Additionally, it manages
+ * clock settings and GPIO routing for transmit and receive operations,
+ * as well as flow control pins. This structure is essential for
+ * initializing and managing EUSART configurations in systems that
+ * require serial communication.
+ *
+ * @param eusart EUSART peripheral.
+ * @param eusart_nbr EUSART peripheral number.
+ * @param baudrate UART baudrate.
+ * @param parity UART parity.
+ * @param stop_bits UART stop bits.
+ * @param flow_control Flow control.
+ * @param enable_high_frequency Used for legacy clock management.
+ * @param bus_clock Peripheral Clock.
+ * @param port_index Port index for GPIO routing (conditional on EUSART_COUNT).
+ * @param tx_port Transmit port.
+ * @param tx_pin Transmit pin.
+ * @param rx_port Receive port.
+ * @param rx_pin Receive pin.
+ * @param cts_port Flow control, CTS port.
+ * @param cts_pin Flow control, CTS pin.
+ * @param rts_port Flow control, RTS port.
+ * @param rts_pin Flow control, RTS pin.
+ ******************************************************************************/
 typedef struct {
   sl_peripheral_t eusart;                               ///< EUSART peripheral
   uint8_t eusart_nbr;                                   ///< EUSART peripheral number
@@ -135,6 +164,31 @@ typedef struct {
 } sl_iostream_eusart_config_t;
 
 /// @brief Struct representing an I/O Stream EUSART context.
+/***************************************************************************//**
+ * @brief The `sl_iostream_eusart_context_t` structure is designed to
+ * encapsulate the context for an Enhanced Universal
+ * Synchronous/Asynchronous Receiver/Transmitter (EUSART) I/O stream. It
+ * includes fields for managing the UART context, EUSART peripheral, and
+ * associated bus clock. Additionally, it specifies the ports and pins
+ * for transmission, reception, and flow control (CTS and RTS). The
+ * structure also contains configuration flags and, conditionally, a node
+ * for power management integration, making it suitable for managing
+ * EUSART operations in embedded systems.
+ *
+ * @param context Holds the UART context information.
+ * @param eusart Represents the EUSART peripheral.
+ * @param bus_clock Specifies the peripheral clock.
+ * @param tx_port Indicates the transmit port number.
+ * @param tx_pin Indicates the transmit pin number.
+ * @param rx_port Indicates the receive port number.
+ * @param rx_pin Indicates the receive pin number.
+ * @param cts_port Indicates the CTS flow control port number.
+ * @param cts_pin Indicates the CTS flow control pin number.
+ * @param rts_port Indicates the RTS flow control port number.
+ * @param rts_pin Indicates the RTS flow control pin number.
+ * @param flags Stores configuration flags.
+ * @param node Optional node for power management integration.
+ ******************************************************************************/
 typedef struct {
   sl_iostream_uart_context_t context;           ///< context
   sl_peripheral_t eusart;                       ///< eusart
@@ -157,26 +211,56 @@ typedef struct {
 // Prototypes
 
 /***************************************************************************//**
- * EUSART Stream init.
+ * @brief This function sets up an Enhanced Universal Synchronous/Asynchronous
+ * Receiver/Transmitter (EUSART) for UART communication, configuring it
+ * according to the provided settings. It must be called before using the
+ * EUSART for data transmission or reception. The function configures the
+ * EUSART peripheral, sets up GPIO pins for transmission and reception,
+ * and applies the specified UART settings such as baud rate, parity,
+ * stop bits, and flow control. It also integrates with the power
+ * management system to ensure proper energy mode requirements during
+ * operation. The function returns a status code indicating success or
+ * failure of the initialization process.
  *
- * @param[in] iostream_uart  I/O Stream UART handle.
- *
- * @param[in] uart_config  I/O Stream UART config.
- *
- * @param[in] eusart_config  EUSART configuration.
- *
- * @param[in] eusart_context  EUSART Instance context.
- *
- * @return  Status result
+ * @param iostream_uart A pointer to an sl_iostream_uart_t structure that
+ * represents the I/O Stream UART handle. Must not be null.
+ * @param uart_config A pointer to an sl_iostream_uart_config_t structure
+ * containing the UART configuration settings. Must not be
+ * null.
+ * @param eusart_config A pointer to an sl_iostream_eusart_config_t structure
+ * containing the EUSART configuration settings, including
+ * baud rate, parity, stop bits, and flow control. Must not
+ * be null.
+ * @param eusart_context A pointer to an sl_iostream_eusart_context_t structure
+ * that will be used to store the EUSART instance context.
+ * Must not be null.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process.
  ******************************************************************************/
 sl_status_t sl_iostream_eusart_init(sl_iostream_uart_t *iostream_uart,
                                     sl_iostream_uart_config_t *uart_config,
                                     sl_iostream_eusart_config_t *eusart_config,
                                     sl_iostream_eusart_context_t *eusart_context);
 
-/*******************************************************************************
- * EUSART interrupt handler.
- * @param[in] iostream_uart   I/O Stream UART handle.
+/***************************************************************************//**
+ * @brief This function is used to manage interrupts associated with an Enhanced
+ * Universal Synchronous/Asynchronous Receiver/Transmitter (EUSART) for a
+ * specified UART stream. It should be called within an interrupt service
+ * routine when an EUSART interrupt occurs. The function processes
+ * specific interrupt flags and ensures that the appropriate actions are
+ * taken, such as clearing the interrupt flags and handling transmit
+ * complete events. It is important to ensure that the `iostream_uart`
+ * parameter is correctly initialized and associated with a valid EUSART
+ * context before calling this function. The function assumes that the
+ * necessary configurations and initializations have been performed prior
+ * to its invocation.
+ *
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the I/O Stream UART handle. This parameter
+ * must not be null and should be properly initialized with
+ * a valid EUSART context. If the parameter is invalid, the
+ * behavior is undefined.
+ * @return None
  ******************************************************************************/
 void sl_iostream_eusart_irq_handler(sl_iostream_uart_t *iostream_uart);
 

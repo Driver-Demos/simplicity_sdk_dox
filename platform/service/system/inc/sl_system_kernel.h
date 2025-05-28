@@ -39,9 +39,17 @@
 extern "C" {
 #endif
 
-/**
- * Start the kernel
- */
+/***************************************************************************//**
+ * @brief This function initiates the system kernel, transitioning the system
+ * from an initialization state to a running state. It should be called
+ * once all necessary system configurations and initializations are
+ * complete, as it typically does not return control to the caller. This
+ * function is essential for starting the main execution loop of the
+ * system, and it is expected to be called in the main function or
+ * equivalent entry point of the application.
+ *
+ * @return None
+ ******************************************************************************/
 void sl_system_kernel_start(void);
 
 #ifdef __cplusplus

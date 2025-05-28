@@ -100,7 +100,20 @@ extern "C" {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initializes Oscillators and Clock branches.
+ * @brief This function is used to initialize the oscillators and clock branches
+ * required for the system's clock management. It should be called during
+ * the system initialization phase to ensure that all necessary clock
+ * sources are properly configured and enabled. The function handles
+ * various clock sources and oscillators based on the system's
+ * configuration and returns a status indicating the success or failure
+ * of the initialization process. It is important to check the return
+ * status to ensure that the initialization was successful before
+ * proceeding with operations that depend on the clock configuration.
+ *
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process. SL_STATUS_OK is returned on success, while
+ * other status codes indicate specific errors encountered during
+ * initialization.
  ******************************************************************************/
 sl_status_t sli_clock_manager_hal_init(void);
 

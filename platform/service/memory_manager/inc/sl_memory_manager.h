@@ -529,12 +529,47 @@ extern "C" {
 // DATA TYPES
 
 /// @brief Block type.
+/***************************************************************************//**
+ * @brief The `sl_memory_block_type_t` is an enumeration that defines two types
+ * of memory blocks: long-term and short-term. This enumeration is used
+ * within the memory management system to categorize memory allocations
+ * based on their expected duration of use. Long-term blocks are intended
+ * for allocations that persist for the duration of the application,
+ * while short-term blocks are for temporary allocations that are
+ * expected to be freed quickly. This distinction helps in managing
+ * memory more efficiently by reducing fragmentation and optimizing
+ * allocation strategies.
+ *
+ * @param BLOCK_TYPE_LONG_TERM Represents a long-term memory block type with a
+ * value of 0.
+ * @param BLOCK_TYPE_SHORT_TERM Represents a short-term memory block type with a
+ * value of 1.
+ ******************************************************************************/
 typedef enum {
   BLOCK_TYPE_LONG_TERM = 0,   ///< Long-term block type.
   BLOCK_TYPE_SHORT_TERM = 1   ///< Short-term block type.
 } sl_memory_block_type_t;
 
 /// @brief General purpose heap information.
+/***************************************************************************//**
+ * @brief The `sl_memory_heap_info_t` structure provides detailed information
+ * about the current state of a memory heap, including its base address,
+ * total size, and the sizes and counts of both used and free memory
+ * blocks. This structure is essential for monitoring and managing memory
+ * usage, allowing developers to understand the distribution and
+ * fragmentation of memory within the heap.
+ *
+ * @param base_addr Heap base address.
+ * @param used_size Used size (in bytes), independently of alignment.
+ * @param free_size Free size (in bytes), independently of alignment.
+ * @param total_size Total heap size (in bytes).
+ * @param free_block_count Number of free blocks.
+ * @param free_block_largest_size Largest free block size (in bytes).
+ * @param free_block_smallest_size Smallest free block size (in bytes).
+ * @param used_block_count Number of used blocks.
+ * @param used_block_largest_size Largest used block size (in bytes).
+ * @param used_block_smallest_size Smallest used block size (in bytes).
+ ******************************************************************************/
 typedef struct {
   uint32_t base_addr;               ///< Heap base address.
   size_t used_size;                 ///< Used size (in bytes), independently of alignment.
@@ -549,12 +584,41 @@ typedef struct {
 } sl_memory_heap_info_t;
 
 /// @brief Memory block reservation handle.
+/***************************************************************************//**
+ * @brief The `sl_memory_reservation_t` structure is used to represent a
+ * reserved block of memory within the memory management system. It
+ * contains a pointer to the base address of the reserved memory block
+ * and the size of the block in bytes. This structure is typically used
+ * in conjunction with functions that reserve and release memory blocks,
+ * allowing for efficient management of memory resources in applications.
+ *
+ * @param block_address Reserved block base address.
+ * @param block_size Reserved block size (in bytes).
+ ******************************************************************************/
 typedef struct {
   void *block_address;                 ///< Reserved block base address.
   size_t block_size;                   ///< Reserved block size (in bytes).
 } sl_memory_reservation_t;
 
 /// @brief Memory pool handle.
+/***************************************************************************//**
+ * @brief The `sl_memory_pool_t` structure is a memory pool handle used in the
+ * Silicon Labs Memory Manager to manage a collection of fixed-size
+ * memory blocks. It supports both power-aware and non-power-aware
+ * configurations, indicated by the presence of a reservation handle or a
+ * block address, respectively. The structure maintains a list of free
+ * blocks, the total number of blocks, and the size of each block,
+ * facilitating efficient memory allocation and deallocation within a
+ * defined pool.
+ *
+ * @param reservation Pointer to reservation handle, used when
+ * SL_MEMORY_POOL_POWER_AWARE is defined.
+ * @param block_address Reserved block base address, used when
+ * SL_MEMORY_POOL_POWER_AWARE is not defined.
+ * @param block_free Pointer to the pool's free blocks list.
+ * @param block_count Maximum number of blocks in the pool.
+ * @param block_size Size of each block in the pool.
+ ******************************************************************************/
 typedef struct {
 #if defined(SL_MEMORY_POOL_POWER_AWARE)
   sl_memory_reservation_t *reservation; ///< Pointer to reservation handle.
@@ -579,19 +643,26 @@ typedef struct {
 sl_status_t sl_memory_init(void);
 
 /***************************************************************************//**
- * Reserves a memory block that will never need retention in EM2.
+ * @brief This function reserves a block of memory with a specified size and
+ * alignment, ensuring that the block does not require retention in low-
+ * energy modes. It is suitable for applications where memory retention
+ * is not needed, such as temporary data storage. The function must be
+ * called with a valid pointer for the block parameter, and it should be
+ * used when the memory manager is properly initialized. The alignment
+ * must be a power of two, and the size should be within the available
+ * heap limits. If the allocation fails, the block pointer will be set to
+ * NULL, and an appropriate error code will be returned.
  *
- * @param[in]  size   Size of the block, in bytes.
- * @param[in]  align  Required alignment for the block, in bytes.
- * @param[out] block  Pointer to variable that will receive the start address
- *                    of the allocated block. NULL in case of error condition.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note  Required alignment of memory block (in bytes) MUST be a power of 2
- *        and can range from 1 to 512 bytes.
- *        The define SL_MEMORY_BLOCK_ALIGN_DEFAULT can be specified to select
- *        the default alignment.
+ * @param size Specifies the size of the memory block in bytes. Must be greater
+ * than 0 and less than the total heap size.
+ * @param align Specifies the required alignment for the block in bytes. Must be
+ * a power of two and can range from 1 to 512 bytes, or use
+ * SL_MEMORY_BLOCK_ALIGN_DEFAULT for default alignment.
+ * @param block Pointer to a variable that will receive the start address of the
+ * allocated block. Must not be null. Will be set to NULL if
+ * allocation fails.
+ * @return Returns SL_STATUS_OK if successful, or an error code if the
+ * allocation fails.
  ******************************************************************************/
 sl_status_t sl_memory_reserve_no_retention(size_t size,
                                            size_t align,
@@ -756,20 +827,29 @@ sl_status_t sl_memory_realloc(void *ptr,
                               void **block);
 
 /***************************************************************************//**
- * Dynamically reserves a block of memory.
+ * @brief This function is used to reserve a block of memory dynamically,
+ * ensuring it meets the specified size and alignment requirements. It is
+ * particularly useful when a specific memory alignment is needed for
+ * performance or hardware compatibility reasons. The function must be
+ * called with a valid reservation handle and a pointer to receive the
+ * block address. It returns an error if the handle or block pointer is
+ * null, if the block already exists, or if the requested size is zero or
+ * exceeds the available heap size. Proper alignment must be a power of
+ * two and within the allowed range.
  *
- * @param[in]  size    Size of the block, in bytes.
- * @param[in]  align   Required alignment for the block, in bytes.
- * @param[in]  handle  Handle to the reserved block.
- * @param[out] block   Pointer to variable that will receive the start address
- *                     of the allocated block. NULL in case of error condition.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note  Required alignment of memory block (in bytes) MUST be a power of 2
- *        and can range from 1 to 512 bytes.
- *        The define SL_MEMORY_BLOCK_ALIGN_DEFAULT can be specified to select
- *        the default alignment.
+ * @param size The size of the memory block to reserve, in bytes. Must be
+ * greater than zero and less than the total heap size.
+ * @param align The required alignment for the memory block, in bytes. Must be a
+ * power of two and can range from 1 to 512 bytes, or use
+ * SL_MEMORY_BLOCK_ALIGN_DEFAULT for default alignment.
+ * @param handle A pointer to an sl_memory_reservation_t structure that will
+ * hold the reservation details. Must not be null and should not
+ * point to an existing block.
+ * @param block A pointer to a void pointer that will receive the address of the
+ * reserved block. Must not be null.
+ * @return Returns an sl_status_t indicating success or the type of error
+ * encountered, such as SL_STATUS_NULL_POINTER, SL_STATUS_FAIL,
+ * SL_STATUS_INVALID_PARAMETER, or SL_STATUS_ALLOCATION_FAILED.
  ******************************************************************************/
 sl_status_t sl_memory_reserve_block(size_t size,
                                     size_t align,
@@ -777,36 +857,70 @@ sl_status_t sl_memory_reserve_block(size_t size,
                                     void **block);
 
 /***************************************************************************//**
- * Frees a dynamically reserved block of memory.
+ * @brief This function is used to release a memory block that was previously
+ * reserved using a reservation handle. It should be called when the
+ * reserved block is no longer needed, allowing the memory to be reused.
+ * The function ensures that adjacent free blocks are merged to minimize
+ * fragmentation. It is important to ensure that the handle is not null
+ * before calling this function, as passing a null handle will result in
+ * an error. After successful execution, the handle is invalidated,
+ * meaning it should not be used again without reinitialization.
  *
- * @param[in] handle  Handle to the reserved block.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
+ * @param handle A pointer to the sl_memory_reservation_t structure representing
+ * the reserved block. Must not be null. If null, the function
+ * returns SL_STATUS_NULL_POINTER.
+ * @return Returns SL_STATUS_OK if the block is successfully released, or an
+ * error code if the operation fails.
  ******************************************************************************/
 sl_status_t sl_memory_release_block(sl_memory_reservation_t *handle);
 
 /***************************************************************************//**
- * Dynamically allocates a block reservation handle.
+ * @brief This function is used to allocate a handle for a memory reservation,
+ * which is necessary for managing dynamic memory reservations. It should
+ * be called when a new reservation handle is needed, typically before
+ * reserving a memory block. The function must be called after the memory
+ * manager has been initialized. If the allocation is successful, the
+ * handle will be initialized and ready for use; otherwise, an error code
+ * will be returned.
  *
- * @param[out] handle  Handle to the reserved block.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
+ * @param handle A pointer to a pointer of type sl_memory_reservation_t. This
+ * parameter will receive the address of the newly allocated
+ * reservation handle. It must not be null, and the caller is
+ * responsible for managing the memory pointed to by this handle.
+ * @return Returns SL_STATUS_OK if the handle is successfully allocated, or an
+ * error code if the allocation fails.
  ******************************************************************************/
 sl_status_t sl_memory_reservation_handle_alloc(sl_memory_reservation_t **handle);
 
 /***************************************************************************//**
- * Frees a dynamically allocated block reservation handle.
+ * @brief This function is used to free a memory reservation handle that was
+ * previously allocated. It should be called after the reserved block has
+ * been released to ensure proper cleanup of resources. The function
+ * checks if the block associated with the handle has been released
+ * before proceeding to free the handle. If the block is still allocated,
+ * the function will return an error status, indicating that the handle
+ * cannot be freed until the block is properly released.
  *
- * @param[in] handle  Handle to the reserved block.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
+ * @param handle A pointer to the memory reservation handle to be freed. The
+ * handle must not be null, and the associated block must be fully
+ * released (block_size should be 0 and block_address should be
+ * NULL) before calling this function. If these conditions are not
+ * met, the function will return an error status.
+ * @return Returns SL_STATUS_OK if the handle is successfully freed, or
+ * SL_STATUS_FAIL if the block associated with the handle has not been
+ * released.
  ******************************************************************************/
 sl_status_t sl_memory_reservation_handle_free(sl_memory_reservation_t *handle);
 
 /***************************************************************************//**
- * Gets the size of the memory reservation handle structure.
+ * @brief This function provides the size, in bytes, of the memory reservation
+ * handle structure used within the memory manager. It is useful when you
+ * need to allocate memory for a reservation handle or when you need to
+ * understand the memory footprint of reservation handles in your
+ * application. This function can be called at any time and does not
+ * require any prior initialization of the memory manager.
  *
- * @return  Memory reservation handle structure's size in bytes.
+ * @return The size of the memory reservation handle structure in bytes.
  ******************************************************************************/
 uint32_t sl_memory_reservation_handle_get_size(void);
 
@@ -867,36 +981,70 @@ sl_status_t sl_memory_pool_free(sl_memory_pool_t *pool_handle,
                                 void *block);
 
 /***************************************************************************//**
- * Dynamically allocates a memory pool handle.
+ * @brief This function is used to allocate a memory pool handle, which is
+ * necessary for managing memory pools dynamically. It should be called
+ * when a new memory pool is needed, and the handle will be used in
+ * subsequent memory pool operations. The function must be called after
+ * the memory manager has been initialized. If the allocation fails, an
+ * error code is returned, and the handle will be set to NULL.
  *
- * @param[out] pool_handle Handle to the memory pool.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
+ * @param pool_handle A pointer to a pointer of type sl_memory_pool_t, which
+ * will receive the address of the allocated memory pool
+ * handle. Must not be null, and will be set to NULL if
+ * allocation fails.
+ * @return Returns an sl_status_t indicating success or an error code if the
+ * allocation fails.
  ******************************************************************************/
 sl_status_t sl_memory_pool_handle_alloc(sl_memory_pool_t **pool_handle);
 
 /***************************************************************************//**
- * Frees a dynamically allocated memory pool handle.
+ * @brief This function is used to release a memory pool handle that was
+ * previously allocated dynamically. It should be called when the memory
+ * pool handle is no longer needed, ensuring that resources are properly
+ * freed. The function returns a status code indicating success or
+ * failure, which should be checked to handle any potential errors. This
+ * function is typically used in conjunction with
+ * sl_memory_pool_handle_alloc() to manage memory pool handles
+ * dynamically.
  *
- * @param[in] pool_handle Handle to the memory pool.
- *
- * @return  SL_STATUS_OK if successful. Error code otherwise.
+ * @param pool_handle A pointer to the memory pool handle to be freed. This
+ * handle must have been allocated dynamically using
+ * sl_memory_pool_handle_alloc(). Passing an invalid or null
+ * pointer may result in undefined behavior.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * operation. SL_STATUS_OK is returned if the operation is successful;
+ * otherwise, an error code is returned.
  ******************************************************************************/
 sl_status_t sl_memory_pool_handle_free(sl_memory_pool_t *pool_handle);
 
 /***************************************************************************//**
- * Gets the size of the memory pool handle structure.
+ * @brief This function provides the size, in bytes, of the memory pool handle
+ * structure used in the memory manager. It is useful when you need to
+ * allocate memory for a pool handle dynamically or when you need to
+ * understand the memory footprint of a pool handle. This function can be
+ * called at any time and does not require any prior initialization of
+ * the memory manager.
  *
- * @return  Memory pool handle structure's size.
+ * @return The function returns the size of the memory pool handle structure as
+ * a 32-bit unsigned integer.
  ******************************************************************************/
 uint32_t sl_memory_pool_handle_get_size(void);
 
 /***************************************************************************//**
- * Gets the total count of blocks in a memory pool.
+ * @brief This function is used to obtain the total number of blocks that a
+ * specified memory pool can contain. It is useful for understanding the
+ * capacity of a memory pool, which can help in managing memory
+ * allocations and ensuring that the pool is appropriately sized for the
+ * application's needs. The function should be called with a valid memory
+ * pool handle, and it will return zero if the provided handle is null,
+ * indicating an invalid or uninitialized pool.
  *
- * @param[in] pool_handle Handle to the memory pool.
- *
- * @return  Total number of blocks.
+ * @param pool_handle A pointer to an sl_memory_pool_t structure representing
+ * the memory pool. It must not be null, as a null pointer
+ * will result in the function returning zero.
+ * @return The function returns the total number of blocks in the specified
+ * memory pool as a uint32_t. If the pool_handle is null, it returns
+ * zero.
  ******************************************************************************/
 uint32_t sl_memory_pool_get_total_block_count(const sl_memory_pool_t *pool_handle);
 
@@ -910,55 +1058,104 @@ uint32_t sl_memory_pool_get_total_block_count(const sl_memory_pool_t *pool_handl
 uint32_t sl_memory_pool_get_free_block_count(const sl_memory_pool_t *pool_handle);
 
 /***************************************************************************//**
- * Gets the count of used blocks in a memory pool.
+ * @brief This function is used to determine how many blocks are currently in
+ * use within a specified memory pool. It is useful for monitoring memory
+ * usage and ensuring that the pool is not over-allocated. The function
+ * should be called with a valid memory pool handle, and it will return
+ * zero if the provided handle is null, indicating that no blocks are in
+ * use.
  *
- * @param[in] pool_handle Handle to the memory pool.
- *
- * @return  Number of used blocks.
+ * @param pool_handle A pointer to a constant sl_memory_pool_t structure
+ * representing the memory pool. It must not be null for
+ * valid operation; otherwise, the function returns zero.
+ * @return The function returns a uint32_t value representing the number of
+ * blocks currently in use in the specified memory pool.
  ******************************************************************************/
 uint32_t sl_memory_pool_get_used_block_count(const sl_memory_pool_t *pool_handle);
 
 /***************************************************************************//**
- * Populates an sl_memory_heap_info_t{} structure with the current status of
- * the heap.
+ * @brief This function is used to retrieve detailed information about the
+ * current state of the heap, including sizes and counts of used and free
+ * memory blocks. It is useful for monitoring memory usage and diagnosing
+ * memory-related issues. The function must be called with a valid
+ * pointer to an `sl_memory_heap_info_t` structure, which will be
+ * populated with the heap statistics. If the provided pointer is null,
+ * the function returns an error status. This function is thread-safe and
+ * can be called at any time after the memory manager has been
+ * initialized.
  *
- * @param[in] heap_info Pointer to structure that will receive further heap
- *                      information data.
- *
- * @return SL_STATUS_OK if successful. Error code otherwise.
+ * @param heap_info Pointer to an `sl_memory_heap_info_t` structure that will be
+ * filled with heap information. Must not be null. If null, the
+ * function returns `SL_STATUS_NULL_POINTER`.
+ * @return Returns `SL_STATUS_OK` if successful, or `SL_STATUS_NULL_POINTER` if
+ * the input pointer is null.
  ******************************************************************************/
 sl_status_t sl_memory_get_heap_info(sl_memory_heap_info_t *heap_info);
 
 /***************************************************************************//**
- * Gets the total size of the heap.
+ * @brief This function provides the total size of the heap managed by the
+ * memory manager, which can be useful for monitoring memory usage or for
+ * debugging purposes. It can be called at any time to get the current
+ * total heap size, and it does not require any prior initialization or
+ * setup beyond the standard memory manager initialization. This function
+ * is thread-safe and can be used in both RTOS and non-RTOS environments.
  *
- * @return  Heap's size in bytes.
+ * @return Returns the total size of the heap in bytes as a size_t value.
  ******************************************************************************/
 size_t sl_memory_get_total_heap_size(void);
 
 /***************************************************************************//**
- * Gets the current free heap size.
+ * @brief This function provides the current amount of free memory available in
+ * the heap, which can be useful for monitoring memory usage and ensuring
+ * that sufficient memory is available for future allocations. It is
+ * typically used in scenarios where memory management is critical, such
+ * as embedded systems or applications with dynamic memory allocation.
+ * The function does not require any initialization or configuration to
+ * be called, and it is thread-safe, making it suitable for use in multi-
+ * threaded environments.
  *
- * @return  Free heap size in bytes.
+ * @return The function returns the size of the free heap in bytes as a size_t
+ * value.
  ******************************************************************************/
 size_t sl_memory_get_free_heap_size(void);
 
 /***************************************************************************//**
- * Gets the current used heap size.
+ * @brief This function provides the current amount of heap memory that is
+ * actively used by the application. It is useful for monitoring memory
+ * usage and ensuring that the application does not exceed available
+ * resources. This function can be called at any time to get a snapshot
+ * of the heap usage, and it is thread-safe, making it suitable for use
+ * in multi-threaded environments.
  *
- * @return  Used heap size in bytes.
+ * @return The function returns the size of the used heap in bytes as a size_t
+ * value.
  ******************************************************************************/
 size_t sl_memory_get_used_heap_size(void);
 
 /***************************************************************************//**
- * Gets heap high watermark.
+ * @brief This function retrieves the highest amount of heap memory that has
+ * been used at any point since the system started or since the last
+ * reset of the high watermark. It is useful for monitoring memory usage
+ * patterns and ensuring that the system does not exceed its memory
+ * limits. This function can be called at any time to check the peak
+ * memory usage, and it is thread-safe, making it suitable for use in
+ * multi-threaded environments.
  *
- * @return  Highest heap usage in bytes recorded.
+ * @return Returns the highest heap usage in bytes recorded as a size_t value.
  ******************************************************************************/
 size_t sl_memory_get_heap_high_watermark(void);
 
 /***************************************************************************//**
- * Reset heap high watermark to the current heap used.
+ * @brief This function is used to reset the recorded highest heap usage to the
+ * current amount of heap memory that is in use. It is useful for
+ * monitoring and managing memory usage over time, allowing developers to
+ * track peak memory usage after the reset point. This function should be
+ * called when you want to start a new measurement period for heap usage,
+ * such as after a significant change in application state or after
+ * initialization. It is thread-safe and can be used in environments
+ * where memory usage needs to be closely monitored.
+ *
+ * @return None
  ******************************************************************************/
 void sl_memory_reset_heap_high_watermark(void);
 

@@ -56,21 +56,18 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize LFXO
+/***************************************************************************//**
+ * @brief This function configures the low frequency crystal oscillator (LFXO)
+ * using predefined settings from a configuration header. It is typically
+ * used during the device initialization phase to ensure that the LFXO is
+ * set up with the correct parameters for optimal performance. The
+ * function adjusts the oscillator's tuning based on available
+ * calibration data, ensuring precision as required by certain wireless
+ * protocols. It must be called before any operations that depend on the
+ * LFXO's timing accuracy.
  *
- * @details
- * Configure the low frequency crystal oscillator using settings in the
- * configuration header `sl_device_init_lfxo_config.h`.
- *
- * The precision of the oscillator can be indicated using the configuration
- * option `SL_DEVICE_INIT_LFXO_PRECISION`. This is used by certain wireless
- * stacks to optimize wakeup time for scheduled events (such as Bluetooth
- * advertising).
- *
- * @return Status code
- * @retval SL_STATUS_OK LFXO initialized successfully
- */
+ * @return Returns SL_STATUS_OK if the LFXO is initialized successfully.
+ ******************************************************************************/
 sl_status_t sl_device_init_lfxo(void);
 
 /**

@@ -84,9 +84,28 @@
  */
 #define EEPROM_ERR_NO_ERASE_SUPPORT 0x88U
 
-/** @brief This structure defines a variety of information about the attached
- *          external EEPROM device.
- */
+/***************************************************************************//**
+ * @brief The `HalEepromInformationType` structure provides detailed information
+ * about an external EEPROM device, including its version, capabilities,
+ * and timing characteristics. It includes fields for the size of
+ * erasable pages and the entire EEPROM, as well as a description of the
+ * EEPROM and the word size in bytes. This structure is essential for
+ * understanding the operational parameters and capabilities of the
+ * EEPROM, facilitating its integration and use in applications.
+ *
+ * @param version The version of this data structure.
+ * @param capabilitiesMask A bitmask describing the capabilities of this
+ * particular external EEPROM.
+ * @param pageEraseMs Maximum time it takes to erase a page, measured in 1024Hz
+ * milliseconds.
+ * @param partEraseTime Maximum time it takes to erase the entire part, measured
+ * in 1024Hz milliseconds or seconds.
+ * @param pageSize The size of a single erasable page in bytes.
+ * @param partSize The total size of the external EEPROM in bytes.
+ * @param partDescription Pointer to a string describing the attached external
+ * EEPROM.
+ * @param wordSizeBytes The number of bytes in a word for the external EEPROM.
+ ******************************************************************************/
 typedef struct {
   /** The version of this data structure */
   uint32_t version;
@@ -154,21 +173,34 @@ typedef struct {
  */
 #define EEPROM_CAPABILITIES_PART_ERASE_SECONDS (0x0010U)
 
-/** @brief Call this function to get information about the external EEPROM
- *          and its capabilities.
+/***************************************************************************//**
+ * @brief The `halEepromInfo` function returns a pointer to a
+ * `HalEepromInformationType` structure, which contains detailed
+ * information about the attached external EEPROM device. This includes
+ * versioning, capabilities, timing, size, and description of the EEPROM.
  *
- *         The format of this call must not be altered. However, the content
- *          can be changed to work with a different device.
- *
- *  @return A pointer to a HalEepromInformationType data structure, or NULL
- *           if the driver does not support this API
- */
+ * @details This function is used to retrieve and provide information about the
+ * external EEPROM's characteristics and capabilities.
+ ******************************************************************************/
 const HalEepromInformationType *halEepromInfo(void);
 
-/**
- * @brief This structure holds information about where we left off when last
- * accessing the eeprom.
- */
+/***************************************************************************//**
+ * @brief The EepromStateType structure is designed to maintain the state of an
+ * EEPROM operation, including the current address, the number of pages,
+ * and buffer management details. It includes fields for tracking the
+ * current position within a page buffer and the length of data in the
+ * buffer, as well as the buffer itself, which is used to temporarily
+ * store data during EEPROM operations.
+ *
+ * @param address A 32-bit unsigned integer representing the EEPROM address.
+ * @param pages A 16-bit unsigned integer indicating the number of pages.
+ * @param pageBufFinger A 16-bit unsigned integer used as a pointer or index
+ * within the page buffer.
+ * @param pageBufLen A 16-bit unsigned integer representing the length of the
+ * page buffer.
+ * @param pageBuf An array of bytes with size EEPROM_PAGE_SIZE used as a buffer
+ * for page data.
+ ******************************************************************************/
 typedef struct {
   uint32_t address;                                ///< address
   uint16_t pages;                                  ///< pages

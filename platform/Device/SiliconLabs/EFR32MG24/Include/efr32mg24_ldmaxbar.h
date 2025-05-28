@@ -41,12 +41,42 @@
  * @brief EFR32MG24 LDMAXBAR Register Declaration.
  *****************************************************************************/
 
-/** LDMAXBAR CH Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `LDMAXBAR_CH_TypeDef` is a structure representing a channel in the
+ * LDMAXBAR register group, specifically designed for the EFR32MG24
+ * microcontroller. It contains a single member, `REQSEL`, which is used
+ * to select the peripheral request for a DMA channel. This structure is
+ * part of a larger set of registers that manage DMA channel
+ * configurations, allowing for efficient data transfers between
+ * peripherals and memory.
+ *
+ * @param REQSEL Channel Peripheral Request Select Register.
+ ******************************************************************************/
 typedef struct ldmaxbar_ch_typedef{
   __IOM uint32_t REQSEL;                             /**< Channel Peripheral Request Select Reg...           */
 } LDMAXBAR_CH_TypeDef;
 
-/** LDMAXBAR Register Declaration. */
+/***************************************************************************//**
+ * @brief The LDMAXBAR_TypeDef is a complex data structure representing the
+ * register layout for the LDMAXBAR peripheral in the EFR32MG24
+ * microcontroller. It includes multiple arrays of DMA channel registers,
+ * each associated with different operations such as set, clear, and
+ * toggle, as well as several reserved spaces for future use. The
+ * structure also contains multiple IP version identifiers, which are
+ * used to track the version of the IP for different operations.
+ *
+ * @param IPVERSION Holds the IP version ID.
+ * @param CH Array of 8 DMA Channel Registers.
+ * @param RESERVED0 Reserved space for future use.
+ * @param IPVERSION_SET Holds the IP version ID for set operations.
+ * @param CH_SET Array of 8 DMA Channel Registers for set operations.
+ * @param RESERVED1 Reserved space for future use.
+ * @param IPVERSION_CLR Holds the IP version ID for clear operations.
+ * @param CH_CLR Array of 8 DMA Channel Registers for clear operations.
+ * @param RESERVED2 Reserved space for future use.
+ * @param IPVERSION_TGL Holds the IP version ID for toggle operations.
+ * @param CH_TGL Array of 8 DMA Channel Registers for toggle operations.
+ ******************************************************************************/
 typedef struct ldmaxbar_typedef{
   __IM uint32_t       IPVERSION;                /**< IP veersion ID                                     */
   LDMAXBAR_CH_TypeDef CH[8U];                   /**< DMA Channel Registers                              */

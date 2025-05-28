@@ -41,7 +41,57 @@
  * @brief EFR32MG24 KEYSCAN Register Declaration.
  *****************************************************************************/
 
-/** KEYSCAN Register Declaration. */
+/***************************************************************************//**
+ * @brief The `KEYSCAN_TypeDef` is a comprehensive structure representing the
+ * register map for the KEYSCAN module in the EFR32MG24 microcontroller.
+ * It includes registers for controlling and monitoring the module's
+ * operation, such as enabling/disabling the module, resetting it,
+ * configuring its settings, issuing commands, and handling delays. The
+ * structure also provides registers for reading the module's status and
+ * managing interrupts. Additionally, it includes set, clear, and toggle
+ * variants of these registers to facilitate bit manipulation operations.
+ * Reserved fields are included for future expansion.
+ *
+ * @param IPVERSION Holds the IP version of the KEYSCAN module.
+ * @param EN Controls the enable state of the KEYSCAN module.
+ * @param SWRST Triggers a software reset of the KEYSCAN module.
+ * @param CFG Contains configuration settings for the KEYSCAN module.
+ * @param CMD Holds command instructions for the KEYSCAN module.
+ * @param DELAY Specifies delay settings for the KEYSCAN module.
+ * @param STATUS Reflects the current status of the KEYSCAN module.
+ * @param IF Holds interrupt flags for the KEYSCAN module.
+ * @param IEN Controls interrupt enable settings for the KEYSCAN module.
+ * @param RESERVED0 Reserved space for future use.
+ * @param IPVERSION_SET Set register for IP version.
+ * @param EN_SET Set register for enabling the module.
+ * @param SWRST_SET Set register for software reset.
+ * @param CFG_SET Set register for configuration settings.
+ * @param CMD_SET Set register for command instructions.
+ * @param DELAY_SET Set register for delay settings.
+ * @param STATUS_SET Set register for status.
+ * @param IF_SET Set register for interrupt flags.
+ * @param IEN_SET Set register for interrupt enables.
+ * @param RESERVED1 Reserved space for future use.
+ * @param IPVERSION_CLR Clear register for IP version.
+ * @param EN_CLR Clear register for enabling the module.
+ * @param SWRST_CLR Clear register for software reset.
+ * @param CFG_CLR Clear register for configuration settings.
+ * @param CMD_CLR Clear register for command instructions.
+ * @param DELAY_CLR Clear register for delay settings.
+ * @param STATUS_CLR Clear register for status.
+ * @param IF_CLR Clear register for interrupt flags.
+ * @param IEN_CLR Clear register for interrupt enables.
+ * @param RESERVED2 Reserved space for future use.
+ * @param IPVERSION_TGL Toggle register for IP version.
+ * @param EN_TGL Toggle register for enabling the module.
+ * @param SWRST_TGL Toggle register for software reset.
+ * @param CFG_TGL Toggle register for configuration settings.
+ * @param CMD_TGL Toggle register for command instructions.
+ * @param DELAY_TGL Toggle register for delay settings.
+ * @param STATUS_TGL Toggle register for status.
+ * @param IF_TGL Toggle register for interrupt flags.
+ * @param IEN_TGL Toggle register for interrupt enables.
+ ******************************************************************************/
 typedef struct keyscan_typedef{
   __IM uint32_t  IPVERSION;                     /**< IPVERSION                                          */
   __IOM uint32_t EN;                            /**< Enable                                             */

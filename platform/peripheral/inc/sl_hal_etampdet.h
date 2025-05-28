@@ -359,7 +359,28 @@ SL_ENUM(sl_hal_etampdet_lower_clk_presc_t) {
  *******************************   STRUCTS   ***********************************
  ******************************************************************************/
 
-/** ETAMPDET channel configuration structure. */
+/***************************************************************************//**
+ * @brief The `sl_hal_etampdet_config_channel_t` structure is used to configure
+ * a channel for the External Tamper Detection (ETAMPDET) peripheral. It
+ * includes settings for the channel's seed value, filter window size,
+ * and mismatch threshold, as well as options to enable features like
+ * driving pad, tamper detect filtering, and clock delay. Additionally,
+ * it can be configured to trigger an EM4 wakeup when tamper detection is
+ * set.
+ *
+ * @param channel_seed_val Seed value to load into channel LFSR.
+ * @param channel Channel id.
+ * @param channel_filt_win_size Channel Filter moving window size.
+ * @param channel_cnt_mismatch Channel filter threshold value where a tamper
+ * detect will be triggered.
+ * @param channel_pad_en Enable channel driving pad.
+ * @param channel_tampdet_filt_en Enable channel tamper detect filtering
+ * feature.
+ * @param channel_cmp_dly_en Enable 1 clock delay to the TX value used for
+ * comparison.
+ * @param em4_wakeup_en Set to enable EM4 wakeup when channel tamper detect is
+ * set.
+ ******************************************************************************/
 typedef struct {
   /** Seed value to load into channel LFSR. */
   uint32_t channel_seed_val;
@@ -387,7 +408,18 @@ typedef struct {
   bool em4_wakeup_en;
 } sl_hal_etampdet_config_channel_t;
 
-/** ETAMPDET configuration structure. */
+/***************************************************************************//**
+ * @brief The `sl_hal_etampdet_config_t` structure is used to configure the
+ * clock prescaler values for the External Tamper Detection (ETAMPDET)
+ * peripheral. It contains two members, `upper_clk_presc_val` and
+ * `lower_clk_presc_val`, which define the prescaler settings for the
+ * upper and lower parts of the clock divider, respectively. This
+ * configuration is crucial for setting the timing characteristics of the
+ * tamper detection mechanism.
+ *
+ * @param upper_clk_presc_val Specifies the upper clock prescaler value.
+ * @param lower_clk_presc_val Specifies the lower clock prescaler value.
+ ******************************************************************************/
 typedef struct {
   /** Upper clock prescaler value. */
   sl_hal_etampdet_upper_clk_presc_t upper_clk_presc_val;
@@ -435,17 +467,31 @@ typedef struct {
 void sl_hal_etampdet_init(const sl_hal_etampdet_config_t *config);
 
 /***************************************************************************//**
- * Initialize ETAMPDET channel.
+ * @brief This function configures an ETAMPDET channel based on the settings
+ * provided in the `config_channel` structure. It should be called after
+ * the ETAMPDET peripheral has been initialized using
+ * `sl_hal_etampdet_init()`. The function sets various parameters such as
+ * channel enablement, tamper detection filtering, and EM4 wakeup
+ * enablement. It also configures the seed value for the channel's LFSR.
+ * Ensure that the `config_channel` pointer is valid and points to a
+ * properly initialized configuration structure before calling this
+ * function.
  *
- * @param[in] config_channel  The pointer to the  channel initialization structure.
- *
- * @note User should call @ref sl_hal_etampdet_init() for full initialization.
+ * @param config_channel A pointer to a `sl_hal_etampdet_config_channel_t`
+ * structure containing the channel configuration. The
+ * structure must be fully initialized with valid values
+ * before calling this function. The caller retains
+ * ownership of the memory.
+ * @return None
  ******************************************************************************/
 void sl_hal_etampdet_init_channel(const sl_hal_etampdet_config_channel_t *config_channel);
 
 /***************************************************************************//**
- * Wait for the ETAMPDET to complete all synchronization of register changes
- * and commands.
+ * @brief The `sl_hal_etampdet_wait_sync` function waits for the ETAMPDET
+ * peripheral to complete all ongoing synchronizations.
+ *
+ * @return The function does not return any value; it simply ensures that all
+ * synchronizations are complete before proceeding.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_wait_sync(void)
 {
@@ -455,7 +501,12 @@ __STATIC_INLINE void sl_hal_etampdet_wait_sync(void)
 }
 
 /***************************************************************************//**
- * Wait for the ETAMPDET to complete disabling procedure.
+ * @brief The `sl_hal_etampdet_wait_ready` function waits for the ETAMPDET
+ * peripheral to complete its disabling process and synchronization of
+ * register changes.
+ *
+ * @return The function does not return any value; it simply ensures that the
+ * ETAMPDET is ready by waiting for certain conditions to be met.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_wait_ready(void)
 {
@@ -471,7 +522,11 @@ __STATIC_INLINE void sl_hal_etampdet_wait_ready(void)
 }
 
 /***************************************************************************//**
- * Enable ETAMPDET.
+ * @brief The `sl_hal_etampdet_enable` function enables the External Tamper
+ * Detection (ETAMPDET) peripheral by setting the appropriate enable
+ * register after ensuring synchronization is complete.
+ *
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_enable(void)
 {
@@ -483,7 +538,10 @@ __STATIC_INLINE void sl_hal_etampdet_enable(void)
 }
 
 /***************************************************************************//**
- * Disable ETAMPDET.
+ * @brief The `sl_hal_etampdet_disable` function disables the External Tamper
+ * Detection (ETAMPDET) peripheral if it is currently enabled.
+ *
+ * @return The function does not return any value or output.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_disable(void)
 {
@@ -496,9 +554,13 @@ __STATIC_INLINE void sl_hal_etampdet_disable(void)
 }
 
 /***************************************************************************//**
- * Load seed value into channel LFSR.
+ * @brief The `sl_hal_etampdet_load` function loads a seed value into the Linear
+ * Feedback Shift Register (LFSR) of a specified ETAMPDET channel after
+ * ensuring synchronization is complete.
  *
- * @param[in] channel  The channel number.
+ * @param channel An enumeration value of type `sl_hal_etampdet_channel_t`
+ * representing the ETAMPDET channel to load the seed value into.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_load(sl_hal_etampdet_channel_t channel)
 {
@@ -509,9 +571,13 @@ __STATIC_INLINE void sl_hal_etampdet_load(sl_hal_etampdet_channel_t channel)
 }
 
 /***************************************************************************//**
- * Start ETAMPDET channel.
+ * @brief The `sl_hal_etampdet_start` function initiates the operation of a
+ * specified ETAMPDET channel after ensuring synchronization is complete.
  *
- * @param[in] channel  The channel number.
+ * @param channel An enumeration value of type `sl_hal_etampdet_channel_t`
+ * representing the ETAMPDET channel to start.
+ * @return This function does not return a value; it performs a hardware
+ * register operation to start the specified ETAMPDET channel.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_start(sl_hal_etampdet_channel_t channel)
 {
@@ -522,9 +588,13 @@ __STATIC_INLINE void sl_hal_etampdet_start(sl_hal_etampdet_channel_t channel)
 }
 
 /***************************************************************************//**
- * Stop ETAMPDET channel.
+ * @brief The `sl_hal_etampdet_stop` function stops a specified ETAMPDET channel
+ * by issuing a stop command after ensuring synchronization is complete.
  *
- * @param[in] channel  The channel number.
+ * @param channel The ETAMPDET channel to stop, specified as an
+ * `sl_hal_etampdet_channel_t` enum value.
+ * @return This function does not return a value; it performs an action to stop
+ * the specified ETAMPDET channel.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_stop(sl_hal_etampdet_channel_t channel)
 {
@@ -535,9 +605,12 @@ __STATIC_INLINE void sl_hal_etampdet_stop(sl_hal_etampdet_channel_t channel)
 }
 
 /***************************************************************************//**
- * Enable ETAMPDET interrupts.
+ * @brief The function `sl_hal_etampdet_enable_interrupts` enables specified
+ * interrupt flags for the ETAMPDET peripheral.
  *
- * @param[in] interrupts  The interrupts flags to enable.
+ * @param interrupts A 32-bit unsigned integer representing the interrupt flags
+ * to be enabled.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_enable_interrupts(uint32_t interrupts)
 {
@@ -545,9 +618,12 @@ __STATIC_INLINE void sl_hal_etampdet_enable_interrupts(uint32_t interrupts)
 }
 
 /***************************************************************************//**
- * Disable ETAMPDET interrupts.
+ * @brief The function `sl_hal_etampdet_disable_interrupts` disables specified
+ * interrupt flags for the ETAMPDET peripheral.
  *
- * @param[in] interrupts  The interrupts flags to disable.
+ * @param interrupts A 32-bit unsigned integer representing the interrupt flags
+ * to be disabled.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_disable_interrupts(uint32_t interrupts)
 {
@@ -555,9 +631,12 @@ __STATIC_INLINE void sl_hal_etampdet_disable_interrupts(uint32_t interrupts)
 }
 
 /***************************************************************************//**
- * Set ETAMPDET interrupts.
+ * @brief The function `sl_hal_etampdet_set_interrupts` sets specific interrupt
+ * flags for the ETAMPDET peripheral.
  *
- * @param[in] interrupts  The interrupts flags to set.
+ * @param interrupts A 32-bit unsigned integer representing the interrupt flags
+ * to be set.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_set_interrupts(uint32_t interrupts)
 {
@@ -565,9 +644,12 @@ __STATIC_INLINE void sl_hal_etampdet_set_interrupts(uint32_t interrupts)
 }
 
 /***************************************************************************//**
- * Clear ETAMPDET interrupts.
+ * @brief The function `sl_hal_etampdet_clear_interrupts` clears specified
+ * interrupt flags for the ETAMPDET peripheral.
  *
- * @param[in] interrupts  The interrupts flags to clear.
+ * @param interrupts A 32-bit unsigned integer representing the interrupt flags
+ * to be cleared.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_clear_interrupts(uint32_t interrupts)
 {
@@ -575,13 +657,11 @@ __STATIC_INLINE void sl_hal_etampdet_clear_interrupts(uint32_t interrupts)
 }
 
 /***************************************************************************//**
- * Gets pending ETAMPDET interrupt flags.
+ * @brief The function `sl_hal_etampdet_get_interrupts` retrieves the current
+ * pending interrupt flags for the ETAMPDET peripheral.
  *
- * @note  Event bits are not cleared by using this function.
- *
- * @return  Pending ETAMPDET interrupt sources.
- *          Returns a set of interrupt flags OR-ed together for multiple
- *          interrupt sources.
+ * @return The function returns a `uint32_t` value representing the pending
+ * interrupt flags for the ETAMPDET peripheral.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_etampdet_get_interrupts(void)
 {
@@ -589,15 +669,13 @@ __STATIC_INLINE uint32_t sl_hal_etampdet_get_interrupts(void)
 }
 
 /***************************************************************************//**
- * Gets enabled and pending ETAMPDET interrupt flags.
- * Useful for handling more interrupt sources in the same interrupt handler.
+ * @brief The function `sl_hal_etampdet_get_enabled_interrupts` retrieves the
+ * currently enabled and pending interrupt flags for the ETAMPDET
+ * peripheral.
  *
- * @note  Interrupt flags are not cleared by using this function.
- *
- * @return  Pending and enabled ETAMPDET interrupt sources.
- *          The return value is the bitwise AND of
- *          - the enabled interrupt sources in ETAMPDET_IEN and
- *          - the pending interrupt flags ETAMPDET_IF.
+ * @return The function returns a `uint32_t` value representing the bitwise AND
+ * of the enabled interrupt sources and the pending interrupt flags,
+ * indicating which enabled interrupts are currently pending.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_etampdet_get_enabled_interrupts(void)
 {
@@ -607,11 +685,10 @@ __STATIC_INLINE uint32_t sl_hal_etampdet_get_enabled_interrupts(void)
 }
 
 /***************************************************************************//**
- * Lock ETAMPDET registers.
+ * @brief The function `sl_hal_etampdet_lock` locks the ETAMPDET registers to
+ * prevent any further modifications.
  *
- * @note  When ETAMPDET registers are locked, ETAMPDET_EN, ETAMPDET_CFG, ETAMPDET_CMD,
- *        ETAMPDET_CHNLSEEDVALx, ETAMPDET_CNTMISMATCHMAX, ETAMPDET_CHNLFILTWINSIZE,
- *        ETAMPDET_EM4WUEN and ETAMPDET_CLKPRESCVAL registers cannot be written to.
+ * @return The function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_lock(void)
 {
@@ -619,9 +696,10 @@ __STATIC_INLINE void sl_hal_etampdet_lock(void)
 }
 
 /***************************************************************************//**
- * Unlock ETAMPDET registers.
+ * @brief The `sl_hal_etampdet_unlock` function unlocks the ETAMPDET registers
+ * to allow them to be writable.
  *
- * @note  When ETAMPDET registers are unlocked, registers are writable.
+ * @return The function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_unlock(void)
 {
@@ -629,9 +707,11 @@ __STATIC_INLINE void sl_hal_etampdet_unlock(void)
 }
 
 /***************************************************************************//**
- * Gets ETAMPDET STATUS register value.
+ * @brief The function `sl_hal_etampdet_get_status` retrieves the current status
+ * from the ETAMPDET peripheral's STATUS register.
  *
- * @return  Current STATUS register value.
+ * @return The function returns a `uint32_t` value representing the current
+ * STATUS register value of the ETAMPDET peripheral.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_etampdet_get_status(void)
 {
@@ -639,14 +719,16 @@ __STATIC_INLINE uint32_t sl_hal_etampdet_get_status(void)
 }
 
 /***************************************************************************//**
- * Set ETAMPDET channel seed value.
+ * @brief The function `sl_hal_etampdet_set_seed_value` sets the seed value for
+ * a specified ETAMPDET channel's LFSR.
  *
- * @param[in] channel  The channel to set seed value.
- *
- * @param[in] seed_value  The seed value to set into LFSR of the channel.
- *
- * @note  It is recommended to get the random seed value using TRNG (True random
- *        Number Generator) peripheral.
+ * @param seed_value A 32-bit unsigned integer representing the seed value to be
+ * set for the channel's LFSR.
+ * @param channel An enumeration of type `sl_hal_etampdet_channel_t` indicating
+ * which ETAMPDET channel (channel_0 or channel_1) to set the
+ * seed value for.
+ * @return The function does not return any value; it performs an inline
+ * operation to set the seed value for the specified channel.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_etampdet_set_seed_value(uint32_t seed_value, sl_hal_etampdet_channel_t channel)
 {
@@ -658,11 +740,14 @@ __STATIC_INLINE void sl_hal_etampdet_set_seed_value(uint32_t seed_value, sl_hal_
 }
 
 /***************************************************************************//**
- * Get ETAMPDET channel seed value.
+ * @brief The function `sl_hal_etampdet_get_seed_value` retrieves the seed value
+ * from the specified ETAMPDET channel's LFSR.
  *
- * @param[in] channel  The channel to get seed value from.
- *
- * @return  The seed value of the channel.
+ * @param channel An enumeration of type `sl_hal_etampdet_channel_t` indicating
+ * which ETAMPDET channel (channel_0 or channel_1) to retrieve
+ * the seed value from.
+ * @return The function returns a `uint32_t` representing the seed value of the
+ * specified ETAMPDET channel.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_etampdet_get_seed_value(sl_hal_etampdet_channel_t channel)
 {

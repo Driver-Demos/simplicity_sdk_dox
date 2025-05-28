@@ -46,9 +46,14 @@ extern "C" {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initializes execution mode feature.
+ * @brief This function sets up the power manager to operate in its standard
+ * execution mode. It is intended for internal use only and should be
+ * called to ensure that the power manager is correctly initialized to
+ * handle execution modes. This function must be used in environments
+ * where the execution modes feature is enabled, as indicated by the
+ * relevant configuration macros.
  *
- * @note FOR INTERNAL USE ONLY.
+ * @return None
  ******************************************************************************/
 void sli_power_manager_executions_modes_hal_init(void);
 
@@ -58,6 +63,18 @@ void sli_power_manager_executions_modes_hal_init(void);
  * @note FOR INTERNAL USE ONLY.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function configures the system to operate in performance mode,
+ * which is intended for scenarios requiring maximum processing power. It
+ * should be used when the system needs to switch to a high-performance
+ * state, typically after ensuring that the necessary hardware
+ * components, such as oscillators, are ready. The function is designed
+ * for internal use only and should be called in contexts where
+ * performance mode is required and supported by the hardware
+ * configuration.
+ *
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_hal_apply_performance_mode(void);
 
 /***************************************************************************//**
@@ -66,6 +83,19 @@ void sli_power_manager_hal_apply_performance_mode(void);
  * @note FOR INTERNAL USE ONLY.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function sets the system clock source to the standard mode, which
+ * is intended for internal use only. It should be called when the system
+ * needs to switch to a standard execution mode, typically to balance
+ * performance and power consumption. The function assumes that the
+ * execution modes feature is enabled and that the system is in a state
+ * where changing the clock source is safe. It asserts that the operation
+ * is successful, which implies that it should be used in environments
+ * where assertions are enabled and failure to set the clock source is
+ * considered critical.
+ *
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_hal_apply_standard_mode(void);
 #endif // (SL_POWER_MANAGER_EXECUTION_MODES_FEATURE_EN)
 

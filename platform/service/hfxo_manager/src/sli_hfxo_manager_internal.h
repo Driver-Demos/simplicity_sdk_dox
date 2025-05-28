@@ -39,7 +39,25 @@ extern "C" {
 #endif
 
 /***************************************************************************//**
- * Updates sleepy crystal settings in specific hardware registers.
+ * @brief This function is used to update the hardware registers with new
+ * settings for the sleepy crystal oscillator. It should be called when
+ * there is a need to change the configuration of the sleepy crystal
+ * oscillator, typically to optimize performance or power consumption.
+ * The function requires that the system supports sleepy crystal
+ * functionality, as indicated by the compile-time configuration. If the
+ * support is not available, the function will return a status indicating
+ * that the operation is not available. It is important to ensure that
+ * the settings provided are within the valid range, as the function will
+ * assert if they are not.
+ *
+ * @param settings A pointer to a structure containing the new settings for the
+ * sleepy crystal oscillator. The structure must not be null,
+ * and the values within must be within the valid range for the
+ * hardware registers. The caller retains ownership of the
+ * memory.
+ * @return Returns SL_STATUS_OK if the settings are successfully updated. If
+ * sleepy crystal support is not available, returns
+ * SL_STATUS_NOT_AVAILABLE.
  ******************************************************************************/
 sl_status_t sli_hfxo_manager_update_sleepy_xtal_settings_hardware(const sl_hfxo_manager_sleepy_xtal_settings_t *settings);
 

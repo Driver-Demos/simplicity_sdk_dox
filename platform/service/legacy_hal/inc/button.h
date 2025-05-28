@@ -61,20 +61,25 @@ void halInternalInitButton(void);
  */
 uint8_t halButtonState(uint8_t button);
 
-/** @brief A callback called in interrupt context whenever a button
- * changes its state.
+/***************************************************************************//**
+ * @brief This function is a callback that must be implemented by the
+ * application to handle button state changes in an interrupt context. It
+ * is called whenever a button configured for interrupt mode changes its
+ * state. The function should contain the logic to be executed in
+ * response to the button state change, such as triggering other
+ * functions or updating application state. It is essential for
+ * applications that need to respond to button presses or releases in
+ * real-time.
  *
- * Must be implemented by the application.  This function should
- * contain the functionality to be executed in response to changes of state
- * in each of the buttons, or callbacks to the appropriate functionality.
- *
- * @param button  The button which has changed state, either BUTTON0 or BUTTON1
- * as defined in the appropriate BOARD_HEADER.
- *
- * @param state   The new state of the button referenced by the button parameter,
- * either ::BUTTON_PRESSED if the button has been pressed or ::BUTTON_RELEASED if
- * the button has been released.
- */
+ * @param button The identifier of the button that has changed state, typically
+ * defined as BUTTON0 or BUTTON1 in the board's header file. The
+ * value must correspond to a valid button configured for
+ * interrupt mode.
+ * @param state The new state of the button, which can be either BUTTON_PRESSED
+ * or BUTTON_RELEASED. This indicates whether the button was
+ * pressed or released.
+ * @return None
+ ******************************************************************************/
 void halButtonIsr(uint8_t button, uint8_t state);
 
 /** @} END addtogroup

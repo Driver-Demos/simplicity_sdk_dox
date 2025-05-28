@@ -47,20 +47,35 @@ extern sl_iostream_instance_info_t sl_iostream_instance_debug_info;
 // Prototypes
 
 /***************************************************************************//**
- * Initialize debug stream component.
+ * @brief This function sets up the debug IO stream, configuring it to use SWO
+ * stimulus 8 for output. It must be called before any debug IO
+ * operations are performed to ensure that the debug stream is properly
+ * initialized and set as the default system IO stream. This function is
+ * typically used in systems where debug output is required, and it
+ * ensures that the debug stream is ready for use. The function returns a
+ * status code indicating the success or failure of the initialization
+ * process.
  *
- * @return  Status Code:
- *            - SL_STATUS_OK
- *            - SL_STATUS_FAIL
+ * @return Returns SL_STATUS_OK on successful initialization or SL_STATUS_FAIL
+ * if the initialization fails.
  ******************************************************************************/
 sl_status_t sl_iostream_debug_init(void);
 
 /***************************************************************************//**
- * Set Debug stream type
+ * @brief This function sets the message type for the debug stream, which
+ * determines the format or type of messages that will be used in the
+ * debug output. It should be called when you need to change the message
+ * type for debugging purposes. The function assumes that the debug
+ * stream has been initialized and is ready to accept a new message type.
+ * It does not perform any validation on the input type, so it is the
+ * caller's responsibility to ensure that the provided type is valid.
  *
- * @return  Status Code:
- *            - SL_STATUS_OK
- *            - SL_STATUS_FAIL
+ * @param type Specifies the message type for the debug stream. The value should
+ * be a valid `sl_iostream_swo_itm_8_msg_type_t` enumeration. The
+ * caller retains ownership of the value, and it must be a valid
+ * type as no validation is performed by the function.
+ * @return Returns `SL_STATUS_OK` to indicate that the message type was set
+ * successfully.
  ******************************************************************************/
 sl_status_t sl_iostream_set_debug_type(sl_iostream_swo_itm_8_msg_type_t type);
 

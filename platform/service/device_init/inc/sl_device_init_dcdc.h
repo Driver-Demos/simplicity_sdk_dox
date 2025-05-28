@@ -65,15 +65,21 @@ extern "C" {
 #define SL_DEVICE_INIT_DCDC_TYPE_BUCK  0  ///< Buck Type
 #define SL_DEVICE_INIT_DCDC_TYPE_BOOST 1  ///< Boost Type
 
-/**
- * Initialize DCDC
+/***************************************************************************//**
+ * @brief This function is used to configure and initialize the DC-DC converter
+ * based on predefined configuration options. It should be called during
+ * the device initialization phase to ensure the DC-DC converter is set
+ * up correctly. The function respects configuration options such as
+ * `SL_DEVICE_INIT_DCDC_ENABLE` to determine whether the converter should
+ * be powered on or off, and `SL_DEVICE_INIT_DCDC_BYPASS` to enable the
+ * bypass mode. It is important to configure these options appropriately
+ * before calling the function, especially on Series 1 devices where DVDD
+ * is externally powered. The function returns a status code indicating
+ * the success of the initialization process.
  *
- * @details
- * Configure and start the DCDC
- *
- * @return Status code
- * @retval SL_STATUS_OK DC-DC converter initialized successfully
- */
+ * @return Returns `SL_STATUS_OK` if the DC-DC converter is initialized
+ * successfully.
+ ******************************************************************************/
 sl_status_t sl_device_init_dcdc(void);
 
 /**

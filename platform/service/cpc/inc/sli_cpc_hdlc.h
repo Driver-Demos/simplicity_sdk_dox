@@ -79,11 +79,13 @@ extern "C"
 #endif
 
 /***************************************************************************//**
- * Gets HDLC header flag value.
+ * @brief The function `sli_cpc_hdlc_get_flag` retrieves the flag value from a
+ * specified position in an HDLC header buffer.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC header flag value.
+ * @param header_buf A pointer to a buffer containing the HDLC header from which
+ * the flag value is to be extracted.
+ * @return The function returns an 8-bit unsigned integer representing the flag
+ * value from the HDLC header.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_flag(const uint8_t *header_buf)
 {
@@ -91,11 +93,13 @@ static inline uint8_t sli_cpc_hdlc_get_flag(const uint8_t *header_buf)
 }
 
 /***************************************************************************//**
- * Gets HDLC header address value.
+ * @brief The function `sli_cpc_hdlc_get_address` retrieves the address value
+ * from a given HDLC header buffer.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC header address value.
+ * @param header_buf A pointer to a buffer containing the HDLC header from which
+ * the address value is to be extracted.
+ * @return The function returns an 8-bit unsigned integer representing the
+ * address value extracted from the HDLC header.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_address(const uint8_t *header_buf)
 {
@@ -103,11 +107,13 @@ static inline uint8_t sli_cpc_hdlc_get_address(const uint8_t *header_buf)
 }
 
 /***************************************************************************//**
- * Gets HDLC header payload length value.
+ * @brief The function `sli_cpc_hdlc_get_length` extracts and returns the
+ * payload length from an HDLC header buffer.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC header payload length value.
+ * @param header_buf A pointer to a buffer containing the HDLC header from which
+ * the payload length is to be extracted.
+ * @return The function returns a 16-bit unsigned integer representing the
+ * payload length extracted from the HDLC header.
  ******************************************************************************/
 static inline uint16_t sli_cpc_hdlc_get_length(const uint8_t *header_buf)
 {
@@ -120,11 +126,13 @@ static inline uint16_t sli_cpc_hdlc_get_length(const uint8_t *header_buf)
 }
 
 /***************************************************************************//**
- * Gets HDLC header control value.
+ * @brief The function `sli_cpc_hdlc_get_control` retrieves the control value
+ * from a specified position in an HDLC header buffer.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC header control value.
+ * @param header_buf A pointer to a buffer containing the HDLC header from which
+ * the control value is to be extracted.
+ * @return The function returns an 8-bit unsigned integer representing the
+ * control value extracted from the HDLC header.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_control(const uint8_t *header_buf)
 {
@@ -132,11 +140,13 @@ static inline uint8_t sli_cpc_hdlc_get_control(const uint8_t *header_buf)
 }
 
 /***************************************************************************//**
- * Gets HDLC header HCS value.
+ * @brief The function `sli_cpc_hdlc_get_hcs` extracts the Header Check Sequence
+ * (HCS) value from a given HDLC header buffer.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC header HCS value.
+ * @param header_buf A pointer to a buffer containing the HDLC header from which
+ * the HCS value is to be extracted.
+ * @return The function returns a 16-bit unsigned integer representing the HCS
+ * value extracted from the HDLC header.
  ******************************************************************************/
 static inline uint16_t sli_cpc_hdlc_get_hcs(const uint8_t *header_buf)
 {
@@ -149,11 +159,15 @@ static inline uint16_t sli_cpc_hdlc_get_hcs(const uint8_t *header_buf)
 }
 
 /***************************************************************************//**
- * Gets HDLC payload FCS value.
+ * @brief The function `sli_cpc_hdlc_get_fcs` extracts the Frame Check Sequence
+ * (FCS) from a given payload buffer in an HDLC frame.
  *
- * @param header_buf Pointer to the buffer that contains the HDLC header.
- *
- * @return HDLC payload FCS value.
+ * @param payload_buf A pointer to the buffer containing the payload from which
+ * the FCS is to be extracted.
+ * @param payload_length The length of the payload, used to locate the position
+ * of the FCS within the buffer.
+ * @return The function returns a 16-bit unsigned integer representing the FCS
+ * extracted from the payload buffer.
  ******************************************************************************/
 static inline uint16_t sli_cpc_hdlc_get_fcs(const uint8_t *payload_buf, uint16_t payload_length)
 {
@@ -166,11 +180,14 @@ static inline uint16_t sli_cpc_hdlc_get_fcs(const uint8_t *payload_buf, uint16_t
 }
 
 /***************************************************************************//**
- * Gets HDLC frame type value.
+ * @brief The function `sli_cpc_hdlc_get_frame_type` extracts and determines the
+ * frame type from a given HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return HDLC frame type value.
+ * @param control A uint8_t representing the control value specified in the HDLC
+ * header.
+ * @return The function returns a uint8_t representing the HDLC frame type,
+ * which is either the extracted type or
+ * SLI_CPC_HDLC_FRAME_TYPE_INFORMATION if the extracted type is 0 or 1.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_frame_type(uint8_t control)
 {
@@ -184,11 +201,13 @@ static inline uint8_t sli_cpc_hdlc_get_frame_type(uint8_t control)
 }
 
 /***************************************************************************//**
- * Gets HDLC frame SEQ value.
+ * @brief The function `sli_cpc_hdlc_get_seq` extracts the sequence number from
+ * a given HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return HDLC frame SEQ value.
+ * @param control A uint8_t value representing the control byte from an HDLC
+ * header.
+ * @return The function returns a uint8_t value representing the sequence number
+ * extracted from the control byte.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_seq(uint8_t control)
 {
@@ -196,11 +215,14 @@ static inline uint8_t sli_cpc_hdlc_get_seq(uint8_t control)
 }
 
 /***************************************************************************//**
- * Gets HDLC frame ACK value.
+ * @brief The function `sli_cpc_hdlc_get_ack` extracts the acknowledgment (ACK)
+ * value from a given HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return HDLC frame ACK value.
+ * @param control A uint8_t representing the control byte from an HDLC header,
+ * which contains various control information including the ACK
+ * value.
+ * @return The function returns a uint8_t value representing the ACK value
+ * extracted from the control byte.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_ack(uint8_t control)
 {
@@ -208,11 +230,13 @@ static inline uint8_t sli_cpc_hdlc_get_ack(uint8_t control)
 }
 
 /***************************************************************************//**
- * Gets HDLC frame supervisory function value.
+ * @brief The function `sli_cpc_hdlc_get_supervisory_function` extracts the
+ * supervisory function ID from a given HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return HDLC frame supervisory function value.
+ * @param control A uint8_t value representing the control byte from an HDLC
+ * header.
+ * @return The function returns a uint8_t value representing the supervisory
+ * function ID extracted from the control byte.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_supervisory_function(uint8_t control)
 {
@@ -220,11 +244,13 @@ static inline uint8_t sli_cpc_hdlc_get_supervisory_function(uint8_t control)
 }
 
 /***************************************************************************//**
- * Gets HDLC u-frame type.
+ * @brief The function `sli_cpc_hdlc_get_unnumbered_type` extracts the
+ * unnumbered type from a given HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return HDLC u-frame type.
+ * @param control A uint8_t value representing the control byte from an HDLC
+ * header.
+ * @return The function returns a uint8_t value representing the unnumbered type
+ * extracted from the control byte.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_get_unnumbered_type(uint8_t control)
 {
@@ -232,14 +258,32 @@ static inline uint8_t sli_cpc_hdlc_get_unnumbered_type(uint8_t control)
 }
 
 /***************************************************************************//**
- * Creates HDLC header.
+ * @brief This function constructs an HDLC header and writes it into the
+ * provided buffer. It should be used when preparing data for
+ * transmission over an HDLC link. The function requires a buffer to
+ * store the header, an address, a payload length, a control value, and a
+ * flag indicating whether to compute the CRC for the header. The buffer
+ * must be large enough to hold the header, and the function will
+ * populate it with the appropriate values. If compute_crc is true, the
+ * function calculates and includes the CRC in the header; otherwise, it
+ * assumes the CRC will be handled externally. This function does not
+ * return a value, and it is the caller's responsibility to ensure the
+ * buffer is valid and sufficiently sized.
  *
- * @param header_buf Pointer to the buffer where to write HDLC header.
- * @param address Address value.
- * @param length Length of payload.
- * @param control Control value.
- * @param compute_crc Set to true if this function shall compute the header
- *                    CRC (HCS). Set to false if DMA generates it automatically.
+ * @param header_buf Pointer to a buffer where the HDLC header will be written.
+ * Must not be null and must have space for at least 7 bytes
+ * if compute_crc is true, otherwise 5 bytes.
+ * @param address The address value to be included in the header. It is an 8-bit
+ * unsigned integer.
+ * @param length The length of the payload, specified as a 16-bit unsigned
+ * integer.
+ * @param control The control value to be included in the header, specified as
+ * an 8-bit unsigned integer.
+ * @param compute_crc Boolean flag indicating whether to compute and include the
+ * CRC in the header. If true, the CRC is computed and
+ * included; if false, it is assumed to be handled
+ * externally.
+ * @return None
  ******************************************************************************/
 void sli_cpc_hdlc_create_header(uint8_t *header_buf,
                                 uint8_t address,
@@ -248,13 +292,17 @@ void sli_cpc_hdlc_create_header(uint8_t *header_buf,
                                 bool compute_crc);
 
 /***************************************************************************//**
- * Creates header control value data frame type.
+ * @brief The function `sli_cpc_hdlc_create_control_data` constructs an HDLC
+ * control byte using sequence, acknowledgment, and poll/final bit
+ * values.
  *
- * @param seq Sequence number.
- * @param ack ACK value.
- * @param poll_final activate P/F bit (Poll/Final)
- *
- * @return HDLC header control value.
+ * @param seq The sequence number to be included in the control byte, shifted to
+ * the appropriate position.
+ * @param ack The acknowledgment number to be included in the control byte.
+ * @param poll_final A boolean indicating whether the poll/final bit should be
+ * set in the control byte.
+ * @return The function returns a uint8_t representing the constructed HDLC
+ * control byte.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_create_control_data(uint8_t seq, uint8_t ack, bool poll_final)
 {
@@ -268,12 +316,17 @@ static inline uint8_t sli_cpc_hdlc_create_control_data(uint8_t seq, uint8_t ack,
 }
 
 /***************************************************************************//**
- * Creates header control value supervisory frame type.
+ * @brief The function `sli_cpc_hdlc_create_control_supervisory` constructs a
+ * control byte for a supervisory HDLC frame using the provided
+ * acknowledgment and supervisory function identifiers.
  *
- * @param ack ACK value.
- * @param supervisory_function Supervisory function ID.
- *
- * @return HDLC header control value.
+ * @param ack An 8-bit unsigned integer representing the acknowledgment value to
+ * be included in the control byte.
+ * @param supervisory_function An 8-bit unsigned integer representing the
+ * supervisory function identifier to be included in
+ * the control byte.
+ * @return The function returns an 8-bit unsigned integer representing the
+ * constructed control byte for a supervisory HDLC frame.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_create_control_supervisory(uint8_t ack, uint8_t supervisory_function)
 {
@@ -286,9 +339,14 @@ static inline uint8_t sli_cpc_hdlc_create_control_supervisory(uint8_t ack, uint8
 }
 
 /***************************************************************************//**
- * Creates header control value unnumbered frame type.
+ * @brief The function `sli_cpc_hdlc_create_control_unnumbered` creates a
+ * control value for an HDLC unnumbered frame by combining a frame type
+ * and a specific unnumbered type.
  *
- * @return HDLC header control value.
+ * @param type A `uint8_t` representing the specific unnumbered type to be
+ * encoded in the control value.
+ * @return The function returns a `uint8_t` representing the control value for
+ * an HDLC unnumbered frame.
  ******************************************************************************/
 static inline uint8_t sli_cpc_hdlc_create_control_unnumbered(uint8_t type)
 {
@@ -300,11 +358,13 @@ static inline uint8_t sli_cpc_hdlc_create_control_unnumbered(uint8_t type)
 }
 
 /***************************************************************************//**
- * Gets HDLC I-Frame poll/final bit.
+ * @brief The function `sli_cpc_hdlc_is_poll_final` checks if the Poll/Final
+ * (P/F) bit is set in the HDLC control byte.
  *
- * @param control Control value specified in HDLC header.
- *
- * @return true if HDLC frame poll/frame bit is set.
+ * @param control A `uint8_t` value representing the control byte from an HDLC
+ * header.
+ * @return A boolean value: `true` if the Poll/Final bit is set in the control
+ * byte, otherwise `false`.
  ******************************************************************************/
 static inline bool sli_cpc_hdlc_is_poll_final(uint8_t control)
 {
@@ -315,7 +375,15 @@ static inline bool sli_cpc_hdlc_is_poll_final(uint8_t control)
 }
 
 /***************************************************************************//**
- * Update the ACK number in a frame's header.
+ * @brief The function `sli_cpc_hdlc_set_control_ack` updates the ACK number in
+ * a frame's control header by modifying specific bits.
+ *
+ * @param control A pointer to a uint8_t variable representing the control byte
+ * of an HDLC frame header.
+ * @param ack A uint8_t value representing the new ACK number to be set in the
+ * control byte.
+ * @return The function does not return a value; it modifies the control byte in
+ * place.
  ******************************************************************************/
 static inline void sli_cpc_hdlc_set_control_ack(uint8_t *control,
                                                 uint8_t ack)
@@ -325,10 +393,21 @@ static inline void sli_cpc_hdlc_set_control_ack(uint8_t *control,
 }
 
 /***************************************************************************//**
- * @brief Extracts the payload size from a HDLC header
+ * @brief This function is used to determine the payload size from a given HDLC
+ * header. It should be called when you need to extract the payload
+ * length from a header that follows the HDLC protocol. The function
+ * first checks if the header contains a valid flag and a correct header
+ * checksum (HCS). If either of these checks fail, the function returns
+ * -1, indicating an invalid header. This function is useful in scenarios
+ * where you need to validate and process HDLC frames.
  *
- * @return
- *   The extracted payload size, or -1 if the header is invalid
+ * @param header A pointer to a buffer containing the HDLC header. The buffer
+ * must not be null and should be at least
+ * SLI_CPC_HDLC_HEADER_SIZE bytes long. The function expects the
+ * header to contain a valid flag and checksum; otherwise, it
+ * returns -1.
+ * @return Returns the payload size as an integer if the header is valid, or -1
+ * if the header is invalid.
  ******************************************************************************/
 int sli_cpc_hdlc_extract_payload_size(const uint8_t *header);
 

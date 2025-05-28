@@ -41,7 +41,151 @@
  * @brief EFR32MG24 SYSRTC Register Declaration.
  *****************************************************************************/
 
-/** SYSRTC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `SYSRTC_TypeDef` is a comprehensive structure representing the
+ * System Real-Time Clock (SYSRTC) module for the EFR32MG24
+ * microcontroller. It includes various registers for controlling and
+ * monitoring the SYSRTC's operation, such as enabling the module,
+ * issuing commands, and configuring settings. The structure also
+ * provides registers for handling interrupts and synchronization, as
+ * well as reserved spaces for future expansion. Additionally, it
+ * supports set, clear, and toggle operations for many of its registers,
+ * allowing for flexible control over the SYSRTC's behavior. This
+ * structure is essential for managing time-based operations in embedded
+ * systems using the EFR32MG24.
+ *
+ * @param IPVERSION Holds the IP version of the SYSRTC module.
+ * @param EN Controls the enable state of the SYSRTC module.
+ * @param SWRST Triggers a software reset of the SYSRTC module.
+ * @param CFG Holds configuration settings for the SYSRTC module.
+ * @param CMD Issues commands to the SYSRTC module.
+ * @param STATUS Reflects the current status of the SYSRTC module.
+ * @param CNT Stores the current counter value of the SYSRTC module.
+ * @param SYNCBUSY Indicates synchronization status of the SYSRTC module.
+ * @param LOCK Manages the lock state for configuration settings.
+ * @param RESERVED0 Reserved for future use.
+ * @param RESERVED1 Reserved for future use.
+ * @param RESERVED2 Reserved for future use.
+ * @param GRP0_IF Holds interrupt flags for group 0.
+ * @param GRP0_IEN Enables interrupts for group 0.
+ * @param GRP0_CTRL Controls settings for group 0.
+ * @param GRP0_CMP0VALUE Stores compare 0 value for group 0.
+ * @param GRP0_CMP1VALUE Stores compare 1 value for group 0.
+ * @param GRP0_CAP0VALUE Holds capture 0 value for group 0.
+ * @param GRP0_SYNCBUSY Indicates synchronization status for group 0.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_SET Holds the IP version of the SYSRTC module for set
+ * operations.
+ * @param EN_SET Controls the enable state of the SYSRTC module for set
+ * operations.
+ * @param SWRST_SET Triggers a software reset of the SYSRTC module for set
+ * operations.
+ * @param CFG_SET Holds configuration settings for the SYSRTC module for set
+ * operations.
+ * @param CMD_SET Issues commands to the SYSRTC module for set operations.
+ * @param STATUS_SET Reflects the current status of the SYSRTC module for set
+ * operations.
+ * @param CNT_SET Stores the current counter value of the SYSRTC module for set
+ * operations.
+ * @param SYNCBUSY_SET Indicates synchronization status of the SYSRTC module for
+ * set operations.
+ * @param LOCK_SET Manages the lock state for configuration settings for set
+ * operations.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param RESERVED10 Reserved for future use.
+ * @param GRP0_IF_SET Holds interrupt flags for group 0 for set operations.
+ * @param GRP0_IEN_SET Enables interrupts for group 0 for set operations.
+ * @param GRP0_CTRL_SET Controls settings for group 0 for set operations.
+ * @param GRP0_CMP0VALUE_SET Stores compare 0 value for group 0 for set
+ * operations.
+ * @param GRP0_CMP1VALUE_SET Stores compare 1 value for group 0 for set
+ * operations.
+ * @param GRP0_CAP0VALUE_SET Holds capture 0 value for group 0 for set
+ * operations.
+ * @param GRP0_SYNCBUSY_SET Indicates synchronization status for group 0 for set
+ * operations.
+ * @param RESERVED11 Reserved for future use.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param RESERVED15 Reserved for future use.
+ * @param IPVERSION_CLR Holds the IP version of the SYSRTC module for clear
+ * operations.
+ * @param EN_CLR Controls the enable state of the SYSRTC module for clear
+ * operations.
+ * @param SWRST_CLR Triggers a software reset of the SYSRTC module for clear
+ * operations.
+ * @param CFG_CLR Holds configuration settings for the SYSRTC module for clear
+ * operations.
+ * @param CMD_CLR Issues commands to the SYSRTC module for clear operations.
+ * @param STATUS_CLR Reflects the current status of the SYSRTC module for clear
+ * operations.
+ * @param CNT_CLR Stores the current counter value of the SYSRTC module for
+ * clear operations.
+ * @param SYNCBUSY_CLR Indicates synchronization status of the SYSRTC module for
+ * clear operations.
+ * @param LOCK_CLR Manages the lock state for configuration settings for clear
+ * operations.
+ * @param RESERVED16 Reserved for future use.
+ * @param RESERVED17 Reserved for future use.
+ * @param RESERVED18 Reserved for future use.
+ * @param GRP0_IF_CLR Holds interrupt flags for group 0 for clear operations.
+ * @param GRP0_IEN_CLR Enables interrupts for group 0 for clear operations.
+ * @param GRP0_CTRL_CLR Controls settings for group 0 for clear operations.
+ * @param GRP0_CMP0VALUE_CLR Stores compare 0 value for group 0 for clear
+ * operations.
+ * @param GRP0_CMP1VALUE_CLR Stores compare 1 value for group 0 for clear
+ * operations.
+ * @param GRP0_CAP0VALUE_CLR Holds capture 0 value for group 0 for clear
+ * operations.
+ * @param GRP0_SYNCBUSY_CLR Indicates synchronization status for group 0 for
+ * clear operations.
+ * @param RESERVED19 Reserved for future use.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param RESERVED22 Reserved for future use.
+ * @param RESERVED23 Reserved for future use.
+ * @param IPVERSION_TGL Holds the IP version of the SYSRTC module for toggle
+ * operations.
+ * @param EN_TGL Controls the enable state of the SYSRTC module for toggle
+ * operations.
+ * @param SWRST_TGL Triggers a software reset of the SYSRTC module for toggle
+ * operations.
+ * @param CFG_TGL Holds configuration settings for the SYSRTC module for toggle
+ * operations.
+ * @param CMD_TGL Issues commands to the SYSRTC module for toggle operations.
+ * @param STATUS_TGL Reflects the current status of the SYSRTC module for toggle
+ * operations.
+ * @param CNT_TGL Stores the current counter value of the SYSRTC module for
+ * toggle operations.
+ * @param SYNCBUSY_TGL Indicates synchronization status of the SYSRTC module for
+ * toggle operations.
+ * @param LOCK_TGL Manages the lock state for configuration settings for toggle
+ * operations.
+ * @param RESERVED24 Reserved for future use.
+ * @param RESERVED25 Reserved for future use.
+ * @param RESERVED26 Reserved for future use.
+ * @param GRP0_IF_TGL Holds interrupt flags for group 0 for toggle operations.
+ * @param GRP0_IEN_TGL Enables interrupts for group 0 for toggle operations.
+ * @param GRP0_CTRL_TGL Controls settings for group 0 for toggle operations.
+ * @param GRP0_CMP0VALUE_TGL Stores compare 0 value for group 0 for toggle
+ * operations.
+ * @param GRP0_CMP1VALUE_TGL Stores compare 1 value for group 0 for toggle
+ * operations.
+ * @param GRP0_CAP0VALUE_TGL Holds capture 0 value for group 0 for toggle
+ * operations.
+ * @param GRP0_SYNCBUSY_TGL Indicates synchronization status for group 0 for
+ * toggle operations.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param RESERVED29 Reserved for future use.
+ * @param RESERVED30 Reserved for future use.
+ ******************************************************************************/
 typedef struct sysrtc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP VERSION                                         */
   __IOM uint32_t EN;                            /**< Module Enable Register                             */

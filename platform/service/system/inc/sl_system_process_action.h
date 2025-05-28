@@ -39,9 +39,18 @@
 extern "C" {
 #endif
 
-/**
- * System processing action
- */
+/***************************************************************************//**
+ * @brief This function should be called to execute a series of predefined
+ * processing actions across various system components. It is typically
+ * used in the main loop of an application to ensure that all necessary
+ * system-level tasks are performed regularly. This function does not
+ * take any parameters and does not return any values, making it
+ * straightforward to integrate into existing code. It is important to
+ * call this function periodically to maintain system stability and
+ * performance.
+ *
+ * @return None
+ ******************************************************************************/
 void sl_system_process_action(void);
 
 #ifdef __cplusplus

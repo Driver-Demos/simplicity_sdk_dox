@@ -41,7 +41,60 @@
  * @brief EFR32MG24 LFXO Register Declaration.
  *****************************************************************************/
 
-/** LFXO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `LFXO_TypeDef` structure represents the Low-Frequency Crystal
+ * Oscillator (LFXO) registers for the EFR32MG24 microcontroller. It
+ * includes control, configuration, status, calibration, interrupt flag,
+ * and enable registers, along with synchronization and lock registers.
+ * The structure also provides set, clear, and toggle versions of these
+ * registers to facilitate atomic operations. Reserved fields are
+ * included for future expansion, ensuring compatibility with future
+ * hardware revisions.
+ *
+ * @param IPVERSION LFXO IP version.
+ * @param CTRL LFXO Control Register.
+ * @param CFG LFXO Configuration Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param STATUS LFXO Status Register.
+ * @param CAL LFXO Calibration Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param SYNCBUSY LFXO Sync Busy Register.
+ * @param LOCK Configuration Lock Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET LFXO IP version.
+ * @param CTRL_SET LFXO Control Register.
+ * @param CFG_SET LFXO Configuration Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param STATUS_SET LFXO Status Register.
+ * @param CAL_SET LFXO Calibration Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param SYNCBUSY_SET LFXO Sync Busy Register.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR LFXO IP version.
+ * @param CTRL_CLR LFXO Control Register.
+ * @param CFG_CLR LFXO Configuration Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param STATUS_CLR LFXO Status Register.
+ * @param CAL_CLR LFXO Calibration Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param SYNCBUSY_CLR LFXO Sync Busy Register.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL LFXO IP version.
+ * @param CTRL_TGL LFXO Control Register.
+ * @param CFG_TGL LFXO Configuration Register.
+ * @param RESERVED6 Reserved for future use.
+ * @param STATUS_TGL LFXO Status Register.
+ * @param CAL_TGL LFXO Calibration Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param SYNCBUSY_TGL LFXO Sync Busy Register.
+ * @param LOCK_TGL Configuration Lock Register.
+ ******************************************************************************/
 typedef struct lfxo_typedef{
   __IM uint32_t  IPVERSION;                     /**< LFXO IP version                                    */
   __IOM uint32_t CTRL;                          /**< LFXO Control Register                              */

@@ -41,14 +41,94 @@
  * @brief EFR32BG22 RTCC Register Declaration.
  *****************************************************************************/
 
-/** RTCC CC Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `RTCC_CC_TypeDef` is a structure that defines a Capture/Compare
+ * (CC) channel for the Real-Time Clock and Calendar (RTCC) module in the
+ * EFR32BG22 microcontroller. It includes control, output compare, and
+ * input capture registers, which are used to configure and manage the
+ * behavior of the CC channel, such as setting output compare values and
+ * capturing input values.
+ *
+ * @param CTRL CC Channel Control Register.
+ * @param OCVALUE Output Compare Value Register.
+ * @param ICVALUE Input Capture Value Register.
+ ******************************************************************************/
 typedef struct rtcc_cc_typedef{
   __IOM uint32_t CTRL;                               /**< CC Channel Control Register                        */
   __IOM uint32_t OCVALUE;                            /**< Output Compare Value Register                      */
   __IM uint32_t  ICVALUE;                            /**< Input Capture Value Register                       */
 } RTCC_CC_TypeDef;
 
-/** RTCC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `RTCC_TypeDef` is a comprehensive structure representing the Real-
+ * Time Counter and Calendar (RTCC) module for the EFR32BG22
+ * microcontroller. It includes registers for enabling the module,
+ * configuring its operation, issuing commands, and monitoring its
+ * status. The structure also provides interrupt management through flags
+ * and enable registers, as well as counter and pre-counter value
+ * registers. Additionally, it includes synchronization and lock
+ * mechanisms to ensure safe configuration changes. The structure
+ * supports set, clear, and toggle operations for most registers,
+ * allowing for flexible control. Capture/Compare channels are also
+ * included, enabling precise timing operations. Reserved fields are
+ * present for future expansion.
+ *
+ * @param IPVERSION IP VERSION.
+ * @param EN Module Enable Register.
+ * @param CFG Configuration Register.
+ * @param CMD Command Register.
+ * @param STATUS Status register.
+ * @param IF RTCC Interrupt Flags.
+ * @param IEN Interrupt Enable Register.
+ * @param PRECNT Pre-Counter Value Register.
+ * @param CNT Counter Value Register.
+ * @param COMBCNT Combined Pre-Counter and Counter Value.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param LOCK Configuration Lock Register.
+ * @param CC Capture/Compare Channel.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP VERSION.
+ * @param EN_SET Module Enable Register.
+ * @param CFG_SET Configuration Register.
+ * @param CMD_SET Command Register.
+ * @param STATUS_SET Status register.
+ * @param IF_SET RTCC Interrupt Flags.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param PRECNT_SET Pre-Counter Value Register.
+ * @param CNT_SET Counter Value Register.
+ * @param COMBCNT_SET Combined Pre-Counter and Counter Value.
+ * @param SYNCBUSY_SET Synchronization Busy Register.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param CC_SET Capture/Compare Channel.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP VERSION.
+ * @param EN_CLR Module Enable Register.
+ * @param CFG_CLR Configuration Register.
+ * @param CMD_CLR Command Register.
+ * @param STATUS_CLR Status register.
+ * @param IF_CLR RTCC Interrupt Flags.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param PRECNT_CLR Pre-Counter Value Register.
+ * @param CNT_CLR Counter Value Register.
+ * @param COMBCNT_CLR Combined Pre-Counter and Counter Value.
+ * @param SYNCBUSY_CLR Synchronization Busy Register.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param CC_CLR Capture/Compare Channel.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP VERSION.
+ * @param EN_TGL Module Enable Register.
+ * @param CFG_TGL Configuration Register.
+ * @param CMD_TGL Command Register.
+ * @param STATUS_TGL Status register.
+ * @param IF_TGL RTCC Interrupt Flags.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param PRECNT_TGL Pre-Counter Value Register.
+ * @param CNT_TGL Counter Value Register.
+ * @param COMBCNT_TGL Combined Pre-Counter and Counter Value.
+ * @param SYNCBUSY_TGL Synchronization Busy Register.
+ * @param LOCK_TGL Configuration Lock Register.
+ * @param CC_TGL Capture/Compare Channel.
+ ******************************************************************************/
 typedef struct rtcc_typedef{
   __IM uint32_t   IPVERSION;                    /**< IP VERSION                                         */
   __IOM uint32_t  EN;                           /**< Module Enable Register                             */

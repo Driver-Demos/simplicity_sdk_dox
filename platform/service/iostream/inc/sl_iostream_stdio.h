@@ -72,9 +72,17 @@ extern sl_iostream_t *sl_iostream_stdio_handle;
 extern sl_iostream_instance_info_t sl_iostream_instance_stdio_info;
 
 /***************************************************************************//**
- * STDIO Stream init.
+ * @brief This function initializes the standard input/output (STDIO) stream and
+ * sets it as the default stream for the system. It is intended for use
+ * in environments where standard I/O operations are required, such as
+ * internal testing in simulation. This function should be called during
+ * the initialization phase of your application if you intend to use the
+ * STDIO stream. Note that if multiple streams are initialized, the last
+ * one initialized will be set as the system default. This function does
+ * not support power management integration, and it is incompatible with
+ * the 'iostream_retarget_stdio' component.
  *
- * @return  Status result
+ * @return Returns SL_STATUS_OK to indicate successful initialization.
  ******************************************************************************/
 sl_status_t sl_iostream_stdio_init(void);
 

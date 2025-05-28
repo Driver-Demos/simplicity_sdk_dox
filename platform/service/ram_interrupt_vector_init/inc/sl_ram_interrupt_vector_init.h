@@ -61,6 +61,18 @@ extern "C" {
  *       is set to this new table.
  ******************************************************************************/
 
+/***************************************************************************//**
+ * @brief This function sets up the interrupt vector table to be located in RAM
+ * by modifying the VTOR register. It should be used when you need the
+ * flexibility of having the interrupt vector table in RAM, such as for
+ * dynamic updates or modifications. The function checks if the vector
+ * table is already in RAM and initializes it only if necessary, ensuring
+ * efficient use of resources. It is important to note that this function
+ * is deprecated as of Simplicity SDK 2024.6, and users are encouraged to
+ * use the API provided in sl_interrupt_manager.h instead.
+ *
+ * @return None
+ ******************************************************************************/
 void sl_ram_interrupt_vector_init(void);
 
 #ifdef __cplusplus

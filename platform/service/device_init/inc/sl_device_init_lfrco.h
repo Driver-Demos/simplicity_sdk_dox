@@ -53,17 +53,20 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize LFRCO
+/***************************************************************************//**
+ * @brief This function initializes the low frequency RC oscillator (LFRCO) on
+ * Silicon Labs devices. It is designed to configure the LFRCO based on
+ * the device series and available features. For Series 2 devices with
+ * precision mode support, the precision mode is set according to the
+ * configuration specified in the `sl_device_init_lfrco_config.h` file.
+ * For Series 1 devices, additional configurations such as ENVREF,
+ * ENCHOP, and ENDEM are applied based on predefined macros. This
+ * function should be called during the device initialization phase to
+ * ensure the LFRCO is properly configured before use. It returns a
+ * status code indicating the success of the initialization process.
  *
- * @details
- * Initialize the low frequency RC oscillator. On devices that support
- * high precision mode, this function configures the precision mode based
- * on the configuration option SL_DEVICE_INIT_LFRCO_PRECISION.
- *
- * @return Status code
- * @retval SL_STATUS_OK LFRCO initialized successfully
- */
+ * @return Returns SL_STATUS_OK if the LFRCO is initialized successfully.
+ ******************************************************************************/
 sl_status_t sl_device_init_lfrco(void);
 
 /**

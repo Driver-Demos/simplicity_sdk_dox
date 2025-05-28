@@ -65,21 +65,44 @@ extern "C" {
  ******************************** TZ SERVICES **********************************
  ******************************************************************************/
 
-/*******************************************************************************
- * @brief
- *   Reads CHIPREV register.
+/***************************************************************************//**
+ * @brief This function retrieves the current chip revision identifier by
+ * reading the CHIPREV register. It is useful for applications that need
+ * to adapt behavior based on the specific chip revision. The function
+ * can be used in both secure and non-secure TrustZone environments,
+ * automatically selecting the appropriate method to access the register.
+ * It is important to ensure that the system configuration is properly
+ * initialized before calling this function to avoid undefined behavior.
+ *
+ * @return Returns a 32-bit unsigned integer representing the chip revision
+ * identifier.
  ******************************************************************************/
 uint32_t sl_hal_syscfg_read_chip_rev(void);
 
-/*******************************************************************************
- * @brief
- *   Set SYSTICEXTCLKEN bit in CFGSYSTIC to one.
+/***************************************************************************//**
+ * @brief This function is used to enable the external clock for the system tick
+ * by setting the SYSTICEXTCLKEN bit in the CFGSYSTIC register. It should
+ * be called when the system requires the external clock for the system
+ * tick functionality. The function handles both secure and non-secure
+ * environments, making it suitable for use in TrustZone-enabled systems.
+ * Ensure that the system configuration is properly initialized before
+ * calling this function to avoid undefined behavior.
+ *
+ * @return None
  ******************************************************************************/
 void sl_hal_syscfg_set_systicextclken_cfgsystic(void);
 
-/*******************************************************************************
- * @brief
- *   Clear SYSTICEXTCLKEN bit in CFGSYSTIC to zero.
+/***************************************************************************//**
+ * @brief This function is used to clear the SYSTICEXTCLKEN bit in the CFGSYSTIC
+ * register, effectively disabling the external clock for the system tick
+ * timer. It should be called when you need to ensure that the system
+ * tick timer does not use an external clock source. This function is
+ * applicable in both secure and non-secure TrustZone configurations,
+ * automatically handling the appropriate context. It is important to
+ * ensure that any necessary configurations or dependencies are managed
+ * before calling this function to avoid unintended behavior.
+ *
+ * @return None
  ******************************************************************************/
 void sl_hal_syscfg_clear_systicextclken_cfgsystic(void);
 

@@ -45,16 +45,21 @@
 extern "C" {
 #endif
 
-/**
- * Initialize USB PLL
+/***************************************************************************//**
+ * @brief This function configures and initializes the USB PLL, ensuring it is
+ * locked and ready for use. It should be called when setting up the USB
+ * subsystem to ensure the PLL is correctly configured based on the
+ * system's high-frequency crystal oscillator (HFXO) frequency. The
+ * function checks if the HFXO frequency is one of the supported values
+ * (38.0 MHz, 38.4 MHz, 39.0 MHz, or 40.0 MHz) and configures the PLL
+ * accordingly. If the frequency is not supported, the function returns
+ * an error status. This function must be called before any USB
+ * operations that depend on the PLL.
  *
- * @details
- * Configures and locks the USB PLL.
- *
- * @return Status code
- * @retval SL_STATUS_OK PLL successfully initialized
- * @retval SL_STATUS_FAIL PLL initialization was unsuccessful
- */
+ * @return Returns SL_STATUS_OK if the PLL is successfully initialized, or
+ * SL_STATUS_FAIL if the initialization fails due to an unsupported HFXO
+ * frequency.
+ ******************************************************************************/
 sl_status_t sl_device_init_usbpll(void);
 
 #ifdef __cplusplus

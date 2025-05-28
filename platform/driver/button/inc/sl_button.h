@@ -56,9 +56,43 @@ extern "C" {
 
 typedef uint8_t sl_button_mode_t;       ///< BUTTON mode
 typedef uint8_t sl_button_state_t;      ///< BUTTON state
+/***************************************************************************//**
+ * @brief The `sl_button_t` structure represents a BUTTON instance in the
+ * Silicon Laboratories button driver. It encapsulates a context pointer
+ * and several function pointers for operations such as initialization,
+ * polling, enabling, disabling, and retrieving the state of the button.
+ * This structure is designed to provide a flexible interface for
+ * managing button hardware, allowing for different modes of operation
+ * such as interrupt-driven or polling-based state management.
+ *
+ * @param context The context for this BUTTON instance.
+ * @param init Member function to initialize BUTTON instance.
+ * @param poll Member function to poll BUTTON.
+ * @param enable Member function to enable BUTTON.
+ * @param disable Member function to disable BUTTON.
+ * @param get_state Member function to retrieve BUTTON state.
+ ******************************************************************************/
 typedef struct sl_button sl_button_t;   ///< BUTTON Instance structure
 
 /// A BUTTON instance
+/***************************************************************************//**
+ * @brief The `sl_button` structure represents a button instance in a button
+ * driver system, encapsulating both the context and the function
+ * pointers necessary for managing the button's lifecycle and state. It
+ * includes function pointers for initializing, polling, enabling,
+ * disabling, and retrieving the state of the button, allowing for
+ * flexible and modular button management. This structure is part of a
+ * platform-level software module designed to handle various types of
+ * buttons, supporting different modes of operation such as interrupt and
+ * polling.
+ *
+ * @param context The context for this BUTTON instance.
+ * @param init Member function to initialize BUTTON instance.
+ * @param poll Member function to poll BUTTON.
+ * @param enable Member function to enable BUTTON.
+ * @param disable Member function to disable BUTTON.
+ * @param get_state Member function to retrieve BUTTON state.
+ ******************************************************************************/
 typedef struct sl_button {
   void                  *context;                       ///< The context for this BUTTON instance
   sl_status_t           (*init)(const sl_button_t *handle);   ///< Member function to initialize BUTTON instance
@@ -73,46 +107,93 @@ typedef struct sl_button {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Button driver init. This function should be called before calling any other
- * button function. Sets up the GPIO. Sets the mode of operation. Sets up the
- * interrupts based on the mode of operation.
+ * @brief This function initializes a button instance, which must be done before
+ * any other operations on the button can be performed. It sets up the
+ * necessary configurations for the button, such as GPIO and mode of
+ * operation, and prepares it for use. The function should be called once
+ * for each button instance before calling any other button-related
+ * functions. If the initialization function pointer within the button
+ * instance is null, the function will return an error status.
  *
- * @param[in] handle            Pointer to button instance
- *
- * @return    Status Code:
- *              - SL_STATUS_OK
+ * @param handle Pointer to a button instance of type sl_button_t. This
+ * parameter must not be null, and the 'init' member function
+ * within the structure must be defined. If 'init' is null, the
+ * function returns SL_STATUS_NULL_POINTER.
+ * @return Returns SL_STATUS_OK if the initialization is successful, or
+ * SL_STATUS_NULL_POINTER if the 'init' function pointer is null.
  ******************************************************************************/
 sl_status_t sl_button_init(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Get button state.
+ * @brief This function is used to obtain the current state of a button
+ * represented by the provided handle. It should be called after the
+ * button has been properly initialized using `sl_button_init`. The
+ * function checks if the `get_state` member function of the button
+ * instance is available and calls it to retrieve the state. If the
+ * `get_state` function is not available, it returns a predefined error
+ * state. This function is essential for applications that need to
+ * monitor button states, especially in event-driven or polling
+ * scenarios.
  *
- * @param[in] handle            Pointer to button instance
- *
- * @return    Button state      Current state of the button
+ * @param handle A pointer to an `sl_button_t` instance representing the button
+ * whose state is to be retrieved. The pointer must not be null,
+ * and the button instance should be properly initialized. If the
+ * `get_state` function pointer within the instance is null, the
+ * function returns an error state.
+ * @return Returns the current state of the button as an `sl_button_state_t`. If
+ * the `get_state` function is not available, it returns `BUTTON_ERROR`.
  ******************************************************************************/
 sl_button_state_t sl_button_get_state(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Enable the button.
+ * @brief This function is used to enable a button instance, allowing it to
+ * respond to interactions. It should be called when you want the button
+ * to start processing input events. The function requires a valid button
+ * instance, which must have been initialized prior to calling this
+ * function. If the button instance's enable function pointer is not set,
+ * the function will have no effect.
  *
- * @param[in] handle            Pointer to button instance
- *
+ * @param handle A pointer to a button instance of type sl_button_t. The handle
+ * must not be null and should point to a properly initialized
+ * button instance. The function will not perform any action if
+ * the enable function pointer within the button instance is null.
+ * @return None
  ******************************************************************************/
 void sl_button_enable(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Disable the button.
+ * @brief Use this function to disable a specific button instance, preventing it
+ * from generating events or being polled. This function should be called
+ * when you want to temporarily deactivate a button without altering its
+ * configuration. It is important to ensure that the button instance has
+ * been properly initialized before calling this function. If the
+ * button's disable function pointer is null, the function will have no
+ * effect.
  *
- * @param[in] handle            Pointer to button instance
- *
+ * @param handle A pointer to an sl_button_t instance representing the button to
+ * be disabled. Must not be null. The function will not perform
+ * any action if the disable function pointer within the handle is
+ * null.
+ * @return None
  ******************************************************************************/
 void sl_button_disable(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Poll the button.
+ * @brief This function is used to poll the state of a button instance by
+ * invoking its associated poll function. It should be called when the
+ * button is configured to operate in polling mode, typically from a
+ * periodic task or main loop. The function requires that the button
+ * instance has been properly initialized and that the poll function
+ * pointer is not null. If the poll function is null, the function does
+ * nothing. This function does not return any value or modify the input
+ * parameters.
  *
- * @param[in] handle            Pointer to button instance
+ * @param handle A pointer to an sl_button_t instance representing the button to
+ * be polled. The pointer must not be null, and the button
+ * instance should be initialized before calling this function. If
+ * the poll function within the button instance is null, the
+ * function will not perform any action.
+ * @return None
  ******************************************************************************/
 void sl_button_poll_step(const sl_button_t *handle);
 

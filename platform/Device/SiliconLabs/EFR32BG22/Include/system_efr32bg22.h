@@ -52,6 +52,19 @@ extern "C" {
  ******************************************************************************/
 
 /* Interrupt vectortable entry */
+/***************************************************************************//**
+ * @brief The `tVectorEntry` is a union data structure used to represent an
+ * entry in an interrupt vector table for the EFR32BG22 system. It can
+ * either hold a function pointer, `VECTOR_TABLE_Type`, which points to
+ * an interrupt handler function, or a `topOfStack` pointer, which points
+ * to the top of the stack. This union allows for flexible representation
+ * of vector table entries, accommodating both function pointers and
+ * stack pointers as needed in the system's interrupt handling mechanism.
+ *
+ * @param VECTOR_TABLE_Type A function pointer to a void function, representing
+ * an entry in the vector table.
+ * @param topOfStack A pointer to void, representing the top of the stack.
+ ******************************************************************************/
 typedef union {
   void (*VECTOR_TABLE_Type)(void);
   void *topOfStack;
@@ -86,7 +99,18 @@ extern uint32_t SystemHfrcoFreq;     /**< System HFRCO frequency */
 
 void Reset_Handler(void);           /**< Reset Handler */
 void NMI_Handler(void);             /**< NMI Handler */
-void HardFault_Handler(void);       /**< Hard Fault Handler */
+/***************************************************************************//**
+ * @brief This function is an interrupt handler that is automatically invoked
+ * when a memory management fault occurs in the system. It is part of the
+ * Cortex-M exception handling mechanism and is typically used to manage
+ * faults related to memory protection unit (MPU) violations. This
+ * function should be used in systems where memory protection is
+ * critical, and it is essential to handle such faults to prevent system
+ * crashes or undefined behavior. It is generally called by the system
+ * and not directly by user code.
+ *
+ * @return None
+ ******************************************************************************/
 void MemManage_Handler(void);       /**< MPU Fault Handler */
 void BusFault_Handler(void);        /**< Bus Fault Handler */
 void UsageFault_Handler(void);      /**< Usage Fault Handler */
@@ -108,21 +132,67 @@ void TIMER0_IRQHandler(void);            /**< TIMER0 IRQ Handler */
 void TIMER1_IRQHandler(void);            /**< TIMER1 IRQ Handler */
 void TIMER2_IRQHandler(void);            /**< TIMER2 IRQ Handler */
 void TIMER3_IRQHandler(void);            /**< TIMER3 IRQ Handler */
-void TIMER4_IRQHandler(void);            /**< TIMER4 IRQ Handler */
+/***************************************************************************//**
+ * @brief This function is the interrupt handler for the Real-Time Counter and
+ * Calendar (RTCC) peripheral. It should be used to process RTCC-related
+ * interrupts, specifically overflow and compare match events. The
+ * function reads the interrupt flags, determines which events have
+ * occurred, clears the relevant interrupt flags, and processes the
+ * events accordingly. It is typically called automatically by the system
+ * when an RTCC interrupt occurs and should not be called directly by
+ * user code. The function operates within an atomic section to ensure
+ * interrupt handling is not disrupted by other interrupts.
+ *
+ * @return None
+ ******************************************************************************/
 void RTCC_IRQHandler(void);              /**< RTCC IRQ Handler */
 void USART0_RX_IRQHandler(void);         /**< USART0_RX IRQ Handler */
 void USART0_TX_IRQHandler(void);         /**< USART0_TX IRQ Handler */
 void USART1_RX_IRQHandler(void);         /**< USART1_RX IRQ Handler */
 void USART1_TX_IRQHandler(void);         /**< USART1_TX IRQ Handler */
-void ICACHE0_IRQHandler(void);           /**< ICACHE0 IRQ Handler */
+/***************************************************************************//**
+ * @brief This function is called to handle the interrupt request for the Backup
+ * Real-Time Counter (BURTC). It processes the interrupt by first
+ * entering an atomic section to safely read and clear the interrupt
+ * flags. The function then processes the timer interrupt based on the
+ * flags that were set. This handler should be used in systems where the
+ * BURTC is utilized, and it is essential to ensure that the interrupt
+ * flags are correctly managed to prevent missed interrupts. The function
+ * does not take any parameters and does not return a value, as it is
+ * designed to be called by the system's interrupt vector table.
+ *
+ * @return None
+ ******************************************************************************/
 void BURTC_IRQHandler(void);             /**< BURTC IRQ Handler */
 void LETIMER0_IRQHandler(void);          /**< LETIMER0 IRQ Handler */
 void SYSCFG_IRQHandler(void);            /**< SYSCFG IRQ Handler */
 void LDMA_IRQHandler(void);              /**< LDMA IRQ Handler */
 void LFXO_IRQHandler(void);              /**< LFXO IRQ Handler */
 void LFRCO_IRQHandler(void);             /**< LFRCO IRQ Handler */
-void ULFRCO_IRQHandler(void);            /**< ULFRCO IRQ Handler */
-void GPIO_ODD_IRQHandler(void);          /**< GPIO_ODD IRQ Handler */
+/***************************************************************************//**
+ * @brief This function is an interrupt handler for odd-numbered GPIO pins. It
+ * should be used in systems where GPIO interrupts are enabled and need
+ * to be managed. The function retrieves all enabled and pending
+ * interrupts for odd GPIO pins, clears them, and then dispatches the
+ * interrupt handling to the appropriate handler. It is typically called
+ * automatically by the system when an odd GPIO interrupt occurs, and it
+ * assumes that the interrupt system and GPIO configuration are properly
+ * set up beforehand.
+ *
+ * @return None
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief This function is an interrupt handler for even-numbered GPIO pins. It
+ * should be used in systems where GPIO interrupts are enabled and need
+ * to be managed. The function retrieves all enabled and pending even
+ * GPIO interrupts, clears them, and then dispatches the interrupt
+ * handling to the appropriate handlers. It is typically called
+ * automatically by the system when an even GPIO interrupt occurs, and it
+ * assumes that the interrupt system and GPIO configuration are properly
+ * set up beforehand.
+ *
+ * @return None
+ ******************************************************************************/
 void GPIO_EVEN_IRQHandler(void);         /**< GPIO_EVEN IRQ Handler */
 void I2C0_IRQHandler(void);              /**< I2C0 IRQ Handler */
 void I2C1_IRQHandler(void);              /**< I2C1 IRQ Handler */
@@ -184,6 +254,13 @@ uint32_t SystemHCLKGet(void);
  *   outside the EMLIB CMU API.
  *****************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SYSTEM, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The `SystemCoreClockGet` function retrieves the current system core
+ * clock frequency by calling `SystemHCLKGet`.
+ *
+ * @return The function returns a `uint32_t` value representing the current
+ * system core clock frequency.
+ ******************************************************************************/
 static __INLINE uint32_t SystemCoreClockGet(void)
 {
   return SystemHCLKGet();
@@ -204,6 +281,15 @@ static __INLINE uint32_t SystemCoreClockGet(void)
  *   outside the EMLIB CMU API.
  *****************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SYSTEM, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The `SystemCoreClockUpdate` function is intended to update the CMSIS
+ * `SystemCoreClock` variable to reflect the current core clock
+ * frequency.
+ *
+ * @return The function does not return any value or directly update the
+ * `SystemCoreClock` variable; it relies on `SystemHCLKGet()` for any
+ * necessary updates.
+ ******************************************************************************/
 static __INLINE void SystemCoreClockUpdate(void)
 {
   SystemHCLKGet();

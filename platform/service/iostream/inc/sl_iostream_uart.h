@@ -151,6 +151,38 @@ extern "C" {
 #define UARTXOFF    0x13                           ///< uartx off
 
 /// @brief I/O Stream UART stream object
+/***************************************************************************//**
+ * @brief The `sl_iostream_uart_t` structure defines a UART stream interface for
+ * I/O operations, providing function pointers for initialization,
+ * deinitialization, and configuration of UART-specific features such as
+ * automatic line conversion and energy mode restrictions. It includes
+ * conditional members that are available based on the presence of a
+ * Power Manager or Kernel, allowing for flexible power management and
+ * read blocking configurations. This structure is part of a larger
+ * framework for managing UART streams in embedded systems, facilitating
+ * efficient data transmission and reception with optional power-saving
+ * features.
+ *
+ * @param stream Represents the base stream interface for the UART.
+ * @param deinit Function pointer for deinitializing the UART stream.
+ * @param set_auto_cr_lf Function pointer to set automatic carriage return and
+ * line feed conversion.
+ * @param get_auto_cr_lf Function pointer to get the status of automatic
+ * carriage return and line feed conversion.
+ * @param set_rx_energy_mode_restriction Function pointer to set energy mode
+ * restrictions for receiving data,
+ * available only with Power Manager.
+ * @param get_rx_energy_mode_restriction Function pointer to get energy mode
+ * restrictions for receiving data,
+ * available only with Power Manager.
+ * @param sleep_on_isr_exit Function pointer to determine sleep behavior on ISR
+ * exit, available only with Power Manager and without
+ * Kernel.
+ * @param set_read_block Function pointer to set read blocking mode, available
+ * only with Kernel.
+ * @param get_read_block Function pointer to get read blocking mode, available
+ * only with Kernel.
+ ******************************************************************************/
 typedef struct {
   sl_iostream_t stream;                                               ///< stream
   sl_status_t (*deinit)(void *stream);                                ///< uart deinit
@@ -170,12 +202,39 @@ typedef struct {
 } sl_iostream_uart_t;
 
 /// @brief I/O Stream (L)DMA Config
+/***************************************************************************//**
+ * @brief The `sl_iostream_dma_config_t` structure is used to configure DMA
+ * (Direct Memory Access) settings for an I/O stream in a UART (Universal
+ * Asynchronous Receiver-Transmitter) context. It contains a peripheral
+ * signal that triggers the DMA transfer and a pointer to the source data
+ * register of the I/O stream peripheral. This configuration is essential
+ * for setting up the DMA to handle data transfers efficiently between
+ * the peripheral and memory, reducing CPU load and improving data
+ * throughput.
+ *
+ * @param peripheral_signal Peripheral signal to trigger a DMA transfer on.
+ * @param src Pointer to IO Stream peripheral data register.
+ ******************************************************************************/
 typedef struct {
   DMADRV_PeripheralSignal_t peripheral_signal;  ///< Peripheral signal to trigger a DMA transfer on
   uint8_t *src;                                 ///< Pointer to IO Stream peripheral data register
 } sl_iostream_dma_config_t;
 
 /// @brief I/O Steam (L)DMA Context
+/***************************************************************************//**
+ * @brief The `sl_iostream_dma_context_t` structure is designed to manage the
+ * context for DMA operations within an IO stream, specifically for UART
+ * interfaces. It includes configuration settings for the DMA, the
+ * channel being used, and descriptors for handling DMA reception and
+ * wrapping operations. This structure is essential for ensuring
+ * efficient data transfer and management in systems utilizing DMA for IO
+ * operations.
+ *
+ * @param cfg DMA Configuration settings for the IO stream.
+ * @param channel Specifies the DMA channel used.
+ * @param rx_resume_desc Descriptor for resuming DMA reception.
+ * @param wrap_desc Descriptor for wrapping DMA operations.
+ ******************************************************************************/
 typedef struct {
   sl_iostream_dma_config_t cfg;                       ///< DMA Configuration
   uint8_t channel;                                    ///< DMA Channel
@@ -189,6 +248,26 @@ typedef struct {
 } sl_iostream_dma_context_t;
 
 /// @brief I/O Stream UART config
+/***************************************************************************//**
+ * @brief The `sl_iostream_uart_config_t` structure is used to configure the
+ * UART stream in the Silicon Labs I/O Stream library. It includes
+ * settings for DMA configuration, interrupt request numbers for both
+ * receiving and transmitting data, and a buffer for receiving UART data.
+ * Additionally, it provides options for line feed conversion, reception
+ * during sleep, and software flow control, allowing for flexible and
+ * efficient UART communication management.
+ *
+ * @param dma_cfg DMA configuration settings for the UART stream.
+ * @param rx_irq_number Interrupt request number for receiving data.
+ * @param tx_irq_number Interrupt request number for transmitting data.
+ * @param rx_buffer Pointer to the buffer used for receiving UART data.
+ * @param rx_buffer_length Length of the UART receive buffer.
+ * @param lf_to_crlf Flag indicating if line feed should be converted to
+ * carriage return line feed.
+ * @param rx_when_sleeping Flag indicating if reception should occur when the
+ * system is sleeping.
+ * @param sw_flow_control Flag indicating if software flow control is enabled.
+ ******************************************************************************/
 typedef struct {
   sl_iostream_dma_config_t dma_cfg;                     ///< DMA Config
   IRQn_Type rx_irq_number;                              ///< rx_irq_number
@@ -201,6 +280,59 @@ typedef struct {
 } sl_iostream_uart_config_t;
 
 /// @brief I/O Stream UART context
+/***************************************************************************//**
+ * @brief The `sl_iostream_uart_context_t` structure is a comprehensive data
+ * structure used to manage UART (Universal Asynchronous Receiver-
+ * Transmitter) operations in an I/O stream context. It includes various
+ * fields for handling DMA operations, buffer management, and function
+ * pointers for transmission and deinitialization. The structure also
+ * supports features like line feed conversion, software flow control,
+ * and energy management, with additional fields for kernel and power
+ * manager integration. This makes it suitable for complex embedded
+ * systems requiring efficient UART communication and power management.
+ *
+ * @param dma DMA Context for managing Direct Memory Access operations.
+ * @param rx_buffer Pointer to the UART receive buffer.
+ * @param rx_buffer_len Length of the UART receive buffer.
+ * @param rx_read_ptr Pointer to the next byte to be read from the receive
+ * buffer.
+ * @param tx Function pointer for transmitting a character.
+ * @param tx_completed Function pointer for handling the Tx Completed event.
+ * @param deinit Function pointer for deinitializing the UART context.
+ * @param lf_to_crlf Flag indicating if line feed should be converted to
+ * carriage return line feed.
+ * @param sw_flow_control Flag indicating if software flow control is enabled.
+ * @param ctrl_char_scan_ptr Pointer to the last control character scan
+ * position.
+ * @param xon Flag indicating if the transmitter is enabled.
+ * @param remote_xon Flag indicating if the remote transmitter is enabled.
+ * @param rx_irq_number Interrupt request number for receiving data.
+ * @param tx_irq_number Interrupt request number for transmitting data,
+ * available when Power Manager is present.
+ * @param tx_idle Flag indicating if the transmitter is idle, available when
+ * Power Manager is present.
+ * @param em_req_added Flag indicating if energy mode request is added,
+ * available when Power Manager is present.
+ * @param rx_em Energy mode for receiving, available when Power Manager is
+ * present.
+ * @param tx_em Energy mode for transmitting, available when Power Manager is
+ * present.
+ * @param block Flag indicating if blocking mode is enabled, available when
+ * kernel is present.
+ * @param read_lock Mutex for read operations, available when kernel is present.
+ * @param read_lock_cb Control block for the read lock mutex, available when
+ * kernel is present.
+ * @param rx_data_flag Event flag for received data, available when kernel is
+ * present.
+ * @param rx_data_flag_cb Control block for the rx data flag, available when
+ * kernel is present.
+ * @param write_lock Mutex for write operations, available when kernel is
+ * present.
+ * @param write_lock_cb Control block for the write lock mutex, available when
+ * kernel is present.
+ * @param sleep Function pointer for handling sleep on ISR exit, available when
+ * kernel is not present and Power Manager is present.
+ ******************************************************************************/
 typedef struct {
   sl_iostream_dma_context_t dma;            ///< DMA Context
   uint8_t *rx_buffer;                       ///< UART Rx Buffer
@@ -239,11 +371,13 @@ typedef struct {
 // Prototypes
 
 /***************************************************************************//**
- * UART Stream De-init.
+ * @brief The `sl_iostream_uart_deinit` function deinitializes a UART stream
+ * object, potentially adjusting power management settings if applicable.
  *
- * @param[in] iostream_uart  UART stream object.
- *
- * @return Status result
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object to be deinitialized.
+ * @return The function returns an `sl_status_t` value indicating the result of
+ * the deinitialization process.
  ******************************************************************************/
 __STATIC_INLINE sl_status_t sl_iostream_uart_deinit(sl_iostream_uart_t *iostream_uart)
 {
@@ -254,11 +388,15 @@ __STATIC_INLINE sl_status_t sl_iostream_uart_deinit(sl_iostream_uart_t *iostream
 }
 
 /***************************************************************************//**
- * Configure Automatic line conversion.
+ * @brief The function `sl_iostream_uart_set_auto_cr_lf` configures a UART
+ * stream to enable or disable automatic conversion of line feed (LF)
+ * characters to carriage return and line feed (CRLF) sequences.
  *
- * @param[in] iostream_uart  UART stream object.
- *
- * @param[in] on  If true, automatic LF to CRLF conversion will be enabled.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @param on A boolean value indicating whether to enable (true) or disable
+ * (false) automatic LF to CRLF conversion.
+ * @return The function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_iostream_uart_set_auto_cr_lf(sl_iostream_uart_t *iostream_uart,
                                                      bool on)
@@ -267,11 +405,14 @@ __STATIC_INLINE void sl_iostream_uart_set_auto_cr_lf(sl_iostream_uart_t *iostrea
 }
 
 /***************************************************************************//**
- * Get Automatic line conversion.
+ * @brief The function `sl_iostream_uart_get_auto_cr_lf` retrieves the current
+ * setting for automatic line conversion from LF to CRLF for a given UART
+ * stream.
  *
- * @param[in] iostream_uart   UART stream object.
- *
- * @return Auto-conversion mode.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @return A boolean value indicating whether automatic LF to CRLF conversion is
+ * enabled for the specified UART stream.
  ******************************************************************************/
 __STATIC_INLINE bool sl_iostream_uart_get_auto_cr_lf(sl_iostream_uart_t *iostream_uart)
 {
@@ -280,28 +421,55 @@ __STATIC_INLINE bool sl_iostream_uart_get_auto_cr_lf(sl_iostream_uart_t *iostrea
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT)
 /***************************************************************************//**
- * Set next byte detect IRQ.
+ * @brief This function is used to prepare a UART stream for entering a low-
+ * power sleep mode. It should be called before the system enters sleep
+ * to ensure that the UART stream is correctly configured to handle new
+ * data detection while in sleep mode. This function is particularly
+ * relevant in systems where power management is a concern and the UART
+ * needs to remain responsive to incoming data even when the system is in
+ * a low-power state. It is important to ensure that the `iostream_uart`
+ * parameter is properly initialized and not null before calling this
+ * function.
  *
- * @param[in] iostream_uart  UART stream object.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream. This parameter must be a
+ * valid, non-null pointer to a properly initialized UART
+ * stream object.
+ * @return None
  ******************************************************************************/
 void sl_iostream_uart_prepare_for_sleep(sl_iostream_uart_t *iostream_uart);
 
 /***************************************************************************//**
- * Restore the UART for normal operation after wakeup.
+ * @brief This function is used to restore the UART stream to its normal
+ * operational state after the system wakes up from a low-power mode. It
+ * should be called when the system resumes from sleep to ensure that the
+ * UART stream is ready to handle data transmission and reception. This
+ * function is particularly relevant in systems where power management is
+ * implemented, and the UART stream might have been paused or altered
+ * during sleep. It is important to ensure that the `iostream_uart`
+ * parameter is properly initialized and not null before calling this
+ * function.
  *
- * @param[in] iostream_uart  UART stream object.
+ * @param iostream_uart A pointer to an initialized `sl_iostream_uart_t`
+ * structure representing the UART stream. Must not be
+ * null. The function assumes that the structure is
+ * properly set up and ready for use.
+ * @return None
  ******************************************************************************/
 void sl_iostream_uart_wakeup(sl_iostream_uart_t *iostream_uart);
 
 /***************************************************************************//**
- * Add or remove energy mode restriction to enable/disable reception when the
- * system goes to sleep.
+ * @brief The function `sl_iostream_uart_set_rx_energy_mode_restriction`
+ * configures the energy mode restriction for receiving data on a UART
+ * stream, allowing or disallowing data reception when the system is in a
+ * low power state.
  *
- * @param[in] iostream_uart  UART context.
- *
- * @param[in] on  If true, will be able to receive data when sleeping. i.e it
- *                affects the lowest power level that the system can go.
- *                Otherwise, it might not be possible to receive data when sleeping.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @param on A boolean value indicating whether to enable (true) or disable
+ * (false) the energy mode restriction for receiving data.
+ * @return The function does not return any value; it performs an action by
+ * configuring the energy mode restriction for the UART stream.
  ******************************************************************************/
 __STATIC_INLINE void sl_iostream_uart_set_rx_energy_mode_restriction(sl_iostream_uart_t *iostream_uart,
                                                                      bool on)
@@ -310,11 +478,15 @@ __STATIC_INLINE void sl_iostream_uart_set_rx_energy_mode_restriction(sl_iostream
 }
 
 /***************************************************************************//**
- * Get reception energy mode restriction configuration.
+ * @brief The function `sl_iostream_uart_get_rx_energy_mode_restriction`
+ * retrieves the current energy mode restriction status for receiving
+ * data on a UART stream.
  *
- * @param[in] iostream_uart  UART context.
- *
- * @return Sleep configuration.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @return The function returns a boolean value indicating whether the energy
+ * mode restriction for receiving data is enabled (true) or disabled
+ * (false).
  ******************************************************************************/
 __STATIC_INLINE bool sl_iostream_uart_get_rx_energy_mode_restriction(sl_iostream_uart_t *iostream_uart)
 {
@@ -324,12 +496,15 @@ __STATIC_INLINE bool sl_iostream_uart_get_rx_energy_mode_restriction(sl_iostream
 
 #if defined(SL_CATALOG_KERNEL_PRESENT)
 /***************************************************************************//**
- * Configure Read blocking mode.
+ * @brief The function `sl_iostream_uart_set_read_block` configures the read
+ * blocking mode of a UART stream.
  *
- * @param[in] iostream_uart  UART context.
- *
- * @param[in] on  If false, the read API will be non-blocking. Otherwise the
- *                read API will block until data is received.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @param on A boolean value indicating whether the read API should be blocking
+ * (`true`) or non-blocking (`false`).
+ * @return This function does not return a value; it modifies the behavior of
+ * the UART stream's read operation.
  ******************************************************************************/
 __STATIC_INLINE void sl_iostream_uart_set_read_block(sl_iostream_uart_t *iostream_uart,
                                                      bool on)
@@ -338,11 +513,13 @@ __STATIC_INLINE void sl_iostream_uart_set_read_block(sl_iostream_uart_t *iostrea
 }
 
 /***************************************************************************//**
- * Get read API block configuration.
+ * @brief The function `sl_iostream_uart_get_read_block` retrieves the current
+ * read blocking mode configuration for a given UART stream.
  *
- * @param[in] iostream_uart  UART context.
- *
- * @return Block mode.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @return A boolean value indicating whether the read API is in blocking mode
+ * (true) or non-blocking mode (false).
  ******************************************************************************/
 __STATIC_INLINE bool sl_iostream_uart_get_read_block(sl_iostream_uart_t *iostream_uart)
 {
@@ -352,14 +529,15 @@ __STATIC_INLINE bool sl_iostream_uart_get_read_block(sl_iostream_uart_t *iostrea
 
 #if defined(SL_CATALOG_POWER_MANAGER_PRESENT) && !defined(SL_CATALOG_KERNEL_PRESENT)
 /***************************************************************************//**
- * Get the UART status on isr exit (sleep, wakeup or ignore).
+ * @brief The function `sl_iostream_uart_sleep_on_isr_exit` determines the power
+ * management action to take upon exiting an ISR for a given UART stream.
  *
- * @param[in] iostream_uart  UART context.
- *
- * @return Sleep status:
- *            SL_POWER_MANAGER_IGNORE; UART has not generated the ISR
- *            SL_POWER_MANAGER_WAKEUP; UART generated the ISR and the system must wakeup
- *            SL_POWER_MANAGER_SLEEP; UART generated the ISR and the system can go back to sleep.
+ * @param iostream_uart A pointer to an `sl_iostream_uart_t` structure
+ * representing the UART stream object.
+ * @return The function returns a value of type
+ * `sl_power_manager_on_isr_exit_t`, which indicates the power
+ * management action to take (e.g., sleep, wakeup, or ignore) after an
+ * ISR exit.
  ******************************************************************************/
 __STATIC_INLINE sl_power_manager_on_isr_exit_t sl_iostream_uart_sleep_on_isr_exit(sl_iostream_uart_t *iostream_uart)
 {

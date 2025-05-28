@@ -41,7 +41,130 @@
  * @brief EFR32BG22 USART Register Declaration.
  *****************************************************************************/
 
-/** USART Register Declaration. */
+/***************************************************************************//**
+ * @brief The `USART_TypeDef` structure is a comprehensive representation of the
+ * Universal Synchronous/Asynchronous Receiver/Transmitter (USART)
+ * peripheral in the EFR32BG22 microcontroller. It includes a wide array
+ * of registers that control various aspects of USART operation, such as
+ * enabling/disabling the USART, configuring frame formats, managing
+ * interrupts, and handling data transmission and reception. The
+ * structure also provides set, clear, and toggle versions of many
+ * registers, allowing for flexible manipulation of the USART's state and
+ * configuration. Additionally, it includes reserved spaces for future
+ * expansion, ensuring compatibility with potential future updates.
+ *
+ * @param IPVERSION Indicates the version of the IP.
+ * @param EN Controls the enable state of the USART.
+ * @param CTRL Holds control settings for the USART.
+ * @param FRAME Defines the frame format for USART communication.
+ * @param TRIGCTRL Manages trigger control settings for USART.
+ * @param CMD Contains command settings for USART operations.
+ * @param STATUS Reflects the current status of the USART.
+ * @param CLKDIV Controls the clock division settings for USART.
+ * @param RXDATAX Holds extended data for the RX buffer.
+ * @param RXDATA Contains data from the RX buffer.
+ * @param RXDOUBLEX Holds extended double data for the RX buffer.
+ * @param RXDOUBLE Contains double data from the RX FIFO.
+ * @param RXDATAXP Provides a peek at extended data in the RX buffer.
+ * @param RXDOUBLEXP Provides a peek at extended double data in the RX buffer.
+ * @param TXDATAX Holds extended data for the TX buffer.
+ * @param TXDATA Contains data for the TX buffer.
+ * @param TXDOUBLEX Holds extended double data for the TX buffer.
+ * @param TXDOUBLE Contains double data for the TX buffer.
+ * @param IF Holds interrupt flags for USART events.
+ * @param IEN Enables interrupts for USART events.
+ * @param IRCTRL Controls IrDA settings for USART.
+ * @param I2SCTRL Manages I2S control settings for USART.
+ * @param TIMING Contains timing settings for USART operations.
+ * @param CTRLX Holds extended control settings for USART.
+ * @param TIMECMP0 Contains timer compare settings for channel 0.
+ * @param TIMECMP1 Contains timer compare settings for channel 1.
+ * @param TIMECMP2 Contains timer compare settings for channel 2.
+ * @param RESERVED0 Reserved space for future use.
+ * @param IPVERSION_SET Set version of the IP.
+ * @param EN_SET Set enable state of the USART.
+ * @param CTRL_SET Set control settings for the USART.
+ * @param FRAME_SET Set frame format for USART communication.
+ * @param TRIGCTRL_SET Set trigger control settings for USART.
+ * @param CMD_SET Set command settings for USART operations.
+ * @param STATUS_SET Set status of the USART.
+ * @param CLKDIV_SET Set clock division settings for USART.
+ * @param RXDATAX_SET Set extended data for the RX buffer.
+ * @param RXDATA_SET Set data for the RX buffer.
+ * @param RXDOUBLEX_SET Set extended double data for the RX buffer.
+ * @param RXDOUBLE_SET Set double data for the RX FIFO.
+ * @param RXDATAXP_SET Set peek at extended data in the RX buffer.
+ * @param RXDOUBLEXP_SET Set peek at extended double data in the RX buffer.
+ * @param TXDATAX_SET Set extended data for the TX buffer.
+ * @param TXDATA_SET Set data for the TX buffer.
+ * @param TXDOUBLEX_SET Set extended double data for the TX buffer.
+ * @param TXDOUBLE_SET Set double data for the TX buffer.
+ * @param IF_SET Set interrupt flags for USART events.
+ * @param IEN_SET Set interrupt enable for USART events.
+ * @param IRCTRL_SET Set IrDA control settings for USART.
+ * @param I2SCTRL_SET Set I2S control settings for USART.
+ * @param TIMING_SET Set timing settings for USART operations.
+ * @param CTRLX_SET Set extended control settings for USART.
+ * @param TIMECMP0_SET Set timer compare settings for channel 0.
+ * @param TIMECMP1_SET Set timer compare settings for channel 1.
+ * @param TIMECMP2_SET Set timer compare settings for channel 2.
+ * @param RESERVED1 Reserved space for future use.
+ * @param IPVERSION_CLR Clear version of the IP.
+ * @param EN_CLR Clear enable state of the USART.
+ * @param CTRL_CLR Clear control settings for the USART.
+ * @param FRAME_CLR Clear frame format for USART communication.
+ * @param TRIGCTRL_CLR Clear trigger control settings for USART.
+ * @param CMD_CLR Clear command settings for USART operations.
+ * @param STATUS_CLR Clear status of the USART.
+ * @param CLKDIV_CLR Clear clock division settings for USART.
+ * @param RXDATAX_CLR Clear extended data for the RX buffer.
+ * @param RXDATA_CLR Clear data for the RX buffer.
+ * @param RXDOUBLEX_CLR Clear extended double data for the RX buffer.
+ * @param RXDOUBLE_CLR Clear double data for the RX FIFO.
+ * @param RXDATAXP_CLR Clear peek at extended data in the RX buffer.
+ * @param RXDOUBLEXP_CLR Clear peek at extended double data in the RX buffer.
+ * @param TXDATAX_CLR Clear extended data for the TX buffer.
+ * @param TXDATA_CLR Clear data for the TX buffer.
+ * @param TXDOUBLEX_CLR Clear extended double data for the TX buffer.
+ * @param TXDOUBLE_CLR Clear double data for the TX buffer.
+ * @param IF_CLR Clear interrupt flags for USART events.
+ * @param IEN_CLR Clear interrupt enable for USART events.
+ * @param IRCTRL_CLR Clear IrDA control settings for USART.
+ * @param I2SCTRL_CLR Clear I2S control settings for USART.
+ * @param TIMING_CLR Clear timing settings for USART operations.
+ * @param CTRLX_CLR Clear extended control settings for USART.
+ * @param TIMECMP0_CLR Clear timer compare settings for channel 0.
+ * @param TIMECMP1_CLR Clear timer compare settings for channel 1.
+ * @param TIMECMP2_CLR Clear timer compare settings for channel 2.
+ * @param RESERVED2 Reserved space for future use.
+ * @param IPVERSION_TGL Toggle version of the IP.
+ * @param EN_TGL Toggle enable state of the USART.
+ * @param CTRL_TGL Toggle control settings for the USART.
+ * @param FRAME_TGL Toggle frame format for USART communication.
+ * @param TRIGCTRL_TGL Toggle trigger control settings for USART.
+ * @param CMD_TGL Toggle command settings for USART operations.
+ * @param STATUS_TGL Toggle status of the USART.
+ * @param CLKDIV_TGL Toggle clock division settings for USART.
+ * @param RXDATAX_TGL Toggle extended data for the RX buffer.
+ * @param RXDATA_TGL Toggle data for the RX buffer.
+ * @param RXDOUBLEX_TGL Toggle extended double data for the RX buffer.
+ * @param RXDOUBLE_TGL Toggle double data for the RX FIFO.
+ * @param RXDATAXP_TGL Toggle peek at extended data in the RX buffer.
+ * @param RXDOUBLEXP_TGL Toggle peek at extended double data in the RX buffer.
+ * @param TXDATAX_TGL Toggle extended data for the TX buffer.
+ * @param TXDATA_TGL Toggle data for the TX buffer.
+ * @param TXDOUBLEX_TGL Toggle extended double data for the TX buffer.
+ * @param TXDOUBLE_TGL Toggle double data for the TX buffer.
+ * @param IF_TGL Toggle interrupt flags for USART events.
+ * @param IEN_TGL Toggle interrupt enable for USART events.
+ * @param IRCTRL_TGL Toggle IrDA control settings for USART.
+ * @param I2SCTRL_TGL Toggle I2S control settings for USART.
+ * @param TIMING_TGL Toggle timing settings for USART operations.
+ * @param CTRLX_TGL Toggle extended control settings for USART.
+ * @param TIMECMP0_TGL Toggle timer compare settings for channel 0.
+ * @param TIMECMP1_TGL Toggle timer compare settings for channel 1.
+ * @param TIMECMP2_TGL Toggle timer compare settings for channel 2.
+ ******************************************************************************/
 typedef struct usart_typedef{
   __IM uint32_t  IPVERSION;                     /**< IPVERSION                                          */
   __IOM uint32_t EN;                            /**< USART Enable                                       */

@@ -47,6 +47,18 @@ extern "C" {
 // TYPEDEFS
 
 /// Define peripheral structure.
+/***************************************************************************//**
+ * @brief The `sl_peripheral_val_t` structure is used to define a peripheral in
+ * a device, encapsulating its base address, clock branch, and bus clock.
+ * This structure is part of the device abstraction layer, allowing for
+ * the management and configuration of device peripherals by providing
+ * essential information about the peripheral's hardware interface and
+ * clocking requirements.
+ *
+ * @param base Peripheral base address.
+ * @param clk_branch Peripheral clock branch.
+ * @param bus_clock Peripheral bus clock.
+ ******************************************************************************/
 typedef struct sl_peripheral {
   uint32_t base;                 ///< Peripheral base address.
   sl_clock_branch_t clk_branch;  ///< Peripheral clock branch.

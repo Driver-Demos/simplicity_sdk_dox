@@ -52,18 +52,22 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize DPLL
+/***************************************************************************//**
+ * @brief This function configures and locks the Digital Phase-Locked Loop
+ * (DPLL) based on settings defined in the `sl_device_init_dpll_config.h`
+ * configuration header. It should be used to initialize the DPLL with
+ * specific parameters such as reference frequency, target frequency, and
+ * lock mode, which are crucial for the proper operation of the device.
+ * The function must be called during the device initialization phase,
+ * and it is essential to ensure that the system clock is not running
+ * from the HFRCO during this process to avoid over-clocking. The
+ * function returns a status code indicating whether the DPLL was
+ * successfully locked.
  *
- * @details
- * Configures and locks the Digital PLL using the configuration in the
- * configuration header `sl_device_init_dpll_config.h`, where settings including
- * reference frequency, target frequency and lock mode are available.
- *
- * @return Status code
- * @retval SL_STATUS_OK DPLL successfully initialized and locked
- * @retval SL_STATUS_FAIL DPLL lock was unsuccessful
- */
+ * @return Returns `SL_STATUS_OK` if the DPLL is successfully initialized and
+ * locked, otherwise returns `SL_STATUS_FAIL` if the lock was
+ * unsuccessful.
+ ******************************************************************************/
 sl_status_t sl_device_init_dpll(void);
 
 /**

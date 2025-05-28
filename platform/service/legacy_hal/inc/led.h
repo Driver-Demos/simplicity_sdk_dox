@@ -17,6 +17,25 @@
 #ifndef __LED_H__
 #define __LED_H__
 
+/***************************************************************************//**
+ * @brief The HalBoardLedPins enumeration defines symbolic names for LED pins on
+ * a board, with values that depend on the number of LEDs available
+ * (BSP_LED_COUNT). It provides a flexible way to reference LED pins,
+ * allowing for different configurations based on the number of LEDs, and
+ * includes aliases for activity and heartbeat LEDs to standardize their
+ * usage across different board setups.
+ *
+ * @param BOARDLED0 Represents the first LED pin, always set to 0.
+ * @param BOARDLED1 Represents the second LED pin, varies based on
+ * BSP_LED_COUNT.
+ * @param BOARDLED2 Represents the third LED pin, varies based on BSP_LED_COUNT.
+ * @param BOARDLED3 Represents the fourth LED pin, varies based on
+ * BSP_LED_COUNT.
+ * @param BOARD_ACTIVITY_LED Alias for the activity LED, typically set to
+ * BOARDLED0.
+ * @param BOARD_HEARTBEAT_LED Alias for the heartbeat LED, typically set to
+ * BOARDLED1.
+ ******************************************************************************/
 enum HalBoardLedPins {
 #if BSP_LED_COUNT <= 1
   BOARDLED0 = 0,
@@ -77,6 +96,27 @@ void halInternalInitLed(void);
 #if defined(STACK) || defined(MINIMAL_HAL)
 typedef uint8_t HalBoardLed;
 #else
+/***************************************************************************//**
+ * @brief The `HalBoardLed` is an enumeration that defines symbolic names for
+ * LED pins on a board, allowing for flexible configuration based on the
+ * number of available LEDs. It provides a standardized way to reference
+ * LED pins, ensuring that the correct pin is used for board activity and
+ * heartbeat indications. The enumeration adapts to different board
+ * configurations by assigning values to the LED pins based on the number
+ * of LEDs defined by `BSP_LED_COUNT`.
+ *
+ * @param BOARDLED0 Represents the first LED pin, assigned the value 0.
+ * @param BOARDLED1 Represents the second LED pin, with a value that varies
+ * based on the number of LEDs.
+ * @param BOARDLED2 Represents the third LED pin, typically assigned the same
+ * value as BOARDLED0.
+ * @param BOARDLED3 Represents the fourth LED pin, typically assigned the same
+ * value as BOARDLED1.
+ * @param BOARD_ACTIVITY_LED Alias for BOARDLED0, used to indicate board
+ * activity.
+ * @param BOARD_HEARTBEAT_LED Alias for BOARDLED1, used to indicate a heartbeat
+ * signal.
+ ******************************************************************************/
 typedef enum HalBoardLedPins HalBoardLed;
 #endif
 // Note: Even though many compilers will use 16 bits for an enum instead of 8,
@@ -84,15 +124,22 @@ typedef enum HalBoardLedPins HalBoardLed;
 //  affect stack-based parameters and local variables, which is the
 //  general case for led paramters.
 
-/** @brief Called by the stack to indicate activity over the radio (for
- *  both transmission and reception). It is called once with \c turnOn true and
- *  shortly thereafter with \c turnOn false.
+/***************************************************************************//**
+ * @brief This function is used to signal radio activity by turning an LED on or
+ * off, typically to provide visual feedback of transmission or reception
+ * events. It should be called with a boolean value to indicate whether
+ * the LED should be turned on or off. The function is designed to be
+ * called twice in quick succession, first with the parameter set to true
+ * to turn the LED on, and then with it set to false to turn the LED off.
+ * This function is only effective if the hardware configuration includes
+ * an activity LED and the necessary LED control definitions are present.
  *
- *  Typically does something interesting, such as change the state of
- *  an LED.
- *
- *  @param turnOn  See Usage.
- */
+ * @param turnOn A boolean value indicating whether to turn the activity LED on
+ * (true) or off (false). The parameter must be provided, but its
+ * effect depends on the presence of the appropriate hardware and
+ * configuration.
+ * @return None
+ ******************************************************************************/
 void halStackIndicateActivity(bool turnOn);
 
 /** @} (end addtogroup led) */

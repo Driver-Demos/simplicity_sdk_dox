@@ -41,7 +41,115 @@
  * @brief EFR32BG22 DCDC Register Declaration.
  *****************************************************************************/
 
-/** DCDC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `DCDC_TypeDef` structure is a comprehensive representation of the
+ * DCDC (DC-DC converter) module's register map for the EFR32BG22
+ * microcontroller. It includes various control and status registers,
+ * such as `EN` for enabling the module, `CTRL` for control settings, and
+ * `STATUS` for monitoring the module's state. The structure also
+ * provides set, clear, and toggle operations for these registers,
+ * allowing for flexible manipulation of the DCDC module's configuration.
+ * Additionally, the structure contains numerous reserved fields for
+ * future expansion, ensuring compatibility with potential future
+ * updates.
+ *
+ * @param IPVERSION Holds the IP version of the DCDC module.
+ * @param EN Controls the enable state of the DCDC module.
+ * @param CTRL Contains control settings for the DCDC module.
+ * @param RESERVED0 Reserved for future use.
+ * @param EM01CTRL0 Controls settings specific to EM01 energy mode.
+ * @param EM23CTRL0 Controls settings specific to EM23 energy mode.
+ * @param RESERVED1 Reserved for future use.
+ * @param IF Holds interrupt flags for the DCDC module.
+ * @param IEN Enables interrupts for the DCDC module.
+ * @param STATUS Provides status information about the DCDC module.
+ * @param RESERVED2 Reserved for future use.
+ * @param LOCK Contains lock settings for the DCDC module.
+ * @param LOCKSTATUS Indicates the lock status of the DCDC module.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_SET Holds the IP version of the DCDC module for set
+ * operations.
+ * @param EN_SET Controls the enable state of the DCDC module for set
+ * operations.
+ * @param CTRL_SET Contains control settings for the DCDC module for set
+ * operations.
+ * @param RESERVED8 Reserved for future use.
+ * @param EM01CTRL0_SET Controls settings specific to EM01 energy mode for set
+ * operations.
+ * @param EM23CTRL0_SET Controls settings specific to EM23 energy mode for set
+ * operations.
+ * @param RESERVED9 Reserved for future use.
+ * @param IF_SET Holds interrupt flags for the DCDC module for set operations.
+ * @param IEN_SET Enables interrupts for the DCDC module for set operations.
+ * @param STATUS_SET Provides status information about the DCDC module for set
+ * operations.
+ * @param RESERVED10 Reserved for future use.
+ * @param LOCK_SET Contains lock settings for the DCDC module for set
+ * operations.
+ * @param LOCKSTATUS_SET Indicates the lock status of the DCDC module for set
+ * operations.
+ * @param RESERVED11 Reserved for future use.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param RESERVED15 Reserved for future use.
+ * @param IPVERSION_CLR Holds the IP version of the DCDC module for clear
+ * operations.
+ * @param EN_CLR Controls the enable state of the DCDC module for clear
+ * operations.
+ * @param CTRL_CLR Contains control settings for the DCDC module for clear
+ * operations.
+ * @param RESERVED16 Reserved for future use.
+ * @param EM01CTRL0_CLR Controls settings specific to EM01 energy mode for clear
+ * operations.
+ * @param EM23CTRL0_CLR Controls settings specific to EM23 energy mode for clear
+ * operations.
+ * @param RESERVED17 Reserved for future use.
+ * @param IF_CLR Holds interrupt flags for the DCDC module for clear operations.
+ * @param IEN_CLR Enables interrupts for the DCDC module for clear operations.
+ * @param STATUS_CLR Provides status information about the DCDC module for clear
+ * operations.
+ * @param RESERVED18 Reserved for future use.
+ * @param LOCK_CLR Contains lock settings for the DCDC module for clear
+ * operations.
+ * @param LOCKSTATUS_CLR Indicates the lock status of the DCDC module for clear
+ * operations.
+ * @param RESERVED19 Reserved for future use.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param RESERVED22 Reserved for future use.
+ * @param RESERVED23 Reserved for future use.
+ * @param IPVERSION_TGL Holds the IP version of the DCDC module for toggle
+ * operations.
+ * @param EN_TGL Controls the enable state of the DCDC module for toggle
+ * operations.
+ * @param CTRL_TGL Contains control settings for the DCDC module for toggle
+ * operations.
+ * @param RESERVED24 Reserved for future use.
+ * @param EM01CTRL0_TGL Controls settings specific to EM01 energy mode for
+ * toggle operations.
+ * @param EM23CTRL0_TGL Controls settings specific to EM23 energy mode for
+ * toggle operations.
+ * @param RESERVED25 Reserved for future use.
+ * @param IF_TGL Holds interrupt flags for the DCDC module for toggle
+ * operations.
+ * @param IEN_TGL Enables interrupts for the DCDC module for toggle operations.
+ * @param STATUS_TGL Provides status information about the DCDC module for
+ * toggle operations.
+ * @param RESERVED26 Reserved for future use.
+ * @param LOCK_TGL Contains lock settings for the DCDC module for toggle
+ * operations.
+ * @param LOCKSTATUS_TGL Indicates the lock status of the DCDC module for toggle
+ * operations.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param RESERVED29 Reserved for future use.
+ * @param RESERVED30 Reserved for future use.
+ ******************************************************************************/
 typedef struct dcdc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IPVERSION                                          */
   __IOM uint32_t EN;                            /**< Enable                                             */

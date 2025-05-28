@@ -136,12 +136,18 @@ enum
   SL_ZIGBEE_JOINED_NETWORK,
 };
 
-/** @brief Holds network parameters.
+/***************************************************************************//**
+ * @brief The `EmberNetworkParameters` structure is used to hold essential
+ * network parameters for a Zigbee network, including the PAN identifier,
+ * transmission power, and radio channel. These parameters are crucial
+ * for configuring and managing the network's communication settings,
+ * ensuring that devices can communicate effectively within the specified
+ * network environment.
  *
- * For information about power settings and radio channels,
- * see the technical specification for the
- * RF communication module in your Developer Kit.
- */
+ * @param panId The network's PAN identifier.
+ * @param radioTxPower A power setting, in dBm.
+ * @param radioChannel A radio channel, ensuring it is supported by the radio.
+ ******************************************************************************/
 typedef struct {
   /** The network's PAN identifier.*/
   uint16_t  panId;
@@ -202,10 +208,24 @@ enum
   SL_ZIGBEE_OPTIONS_INDIRECT                 = 0x08,
 };
 
-/**
- * @brief An instance of this structure is passed to
- * sli_zigbee_stack_incoming_message_handler(). It describes the incoming message.
- */
+/***************************************************************************//**
+ * @brief The `EmberIncomingMessage` structure is used to describe an incoming
+ * message in a Zigbee network. It contains information about the message
+ * options, source node ID, destination endpoint, received signal
+ * strength indicator (RSSI), message length, and a pointer to the
+ * message payload. This structure is typically used in the context of
+ * handling incoming messages within the Zigbee stack, providing
+ * essential details needed for processing and responding to the message.
+ *
+ * @param options An sl_802154_message_options_t value indicating the options
+ * used for the incoming packet.
+ * @param source An sl_802154_short_addr_t value indicating source node ID.
+ * @param endpoint The endpoint the message is destined to.
+ * @param rssi The RSSI in dBm the packet was received with.
+ * @param length An sl_802154_message_length_t value indicating the length in
+ * bytes of the incoming message.
+ * @param payload A pointer to the message payload.
+ ******************************************************************************/
 typedef struct {
   /**
    * An sl_802154_message_options_t value indicating the options used for the incoming
@@ -235,10 +255,32 @@ typedef struct {
   uint8_t *payload;
 } EmberIncomingMessage;
 
-/**
- * @brief An instance of this structure is passed to sli_zigbee_stack_message_sent_handler().
- * It describes the outgoing packet.
- */
+/***************************************************************************//**
+ * @brief The `EmberOutgoingMessage` structure is used to describe an outgoing
+ * message in a Zigbee network. It contains fields for specifying
+ * transmission options, destination address, endpoint, and a tag for
+ * matching message send calls with their corresponding handlers.
+ * Additionally, it includes the message length, a pointer to the
+ * payload, and the RSSI of the acknowledgment if requested. This
+ * structure is essential for managing outgoing communications in Zigbee
+ * applications, providing detailed control over message transmission
+ * parameters.
+ *
+ * @param options An sl_802154_message_options_t value indicating the options
+ * used for transmitting the outgoing message.
+ * @param destination An sl_802154_short_addr_t value indicating the destination
+ * short ID.
+ * @param endpoint The endpoint the message is destined to.
+ * @param tag A tag value the application can use to match emberMessageSend()
+ * calls to the corresponding sli_zigbee_stack_message_sent_handler()
+ * calls.
+ * @param length An sl_802154_message_length_t value indicating the length in
+ * bytes of the incoming message.
+ * @param payload A pointer to the message payload.
+ * @param ackRssi The RSSI in dBm of the ACK corresponding to this message,
+ * meaningful only if SL_ZIGBEE_OPTIONS_ACK_REQUESTED flag is set
+ * in the options field.
+ ******************************************************************************/
 typedef struct {
   /**
    * An sl_802154_message_options_t value indicating the options used for transmitting
@@ -290,9 +332,19 @@ enum
   SL_802154_ADDRESS_MODE_LONG  = 0x03,
 };
 
-/**
- * @brief A structure that stores an 802.15.4 address.
- */
+/***************************************************************************//**
+ * @brief The `sl_802154_mac_addr_t` structure is used to represent an 802.15.4
+ * MAC address, which can be either a long (EUI64) or short address. It
+ * includes a union to store the address and a mode to specify which type
+ * of address is being used. This structure is essential for handling
+ * MAC-level addressing in 802.15.4 networks, allowing for flexible
+ * address representation depending on the network configuration.
+ *
+ * @param addr A union that can store either a long address (EUI64) or a short
+ * address.
+ * @param mode An enumeration indicating the addressing mode, either short or
+ * long.
+ ******************************************************************************/
 typedef struct {
   union {
     uint8_t longAddress[EUI64_SIZE];
@@ -302,10 +354,28 @@ typedef struct {
   sl_802154_mac_addr_mode_t mode;                        ///< mode
 } sl_802154_mac_addr_t;
 
-/**
- * @brief A structure that describes the addressing fields of a 802.15.4
- * frame.
- */
+/***************************************************************************//**
+ * @brief The `sl_802154_mac_frame_t` structure is used to describe the
+ * addressing fields of an 802.15.4 MAC frame, including source and
+ * destination addresses and PAN IDs. It contains fields for both short
+ * and long addresses, as well as flags to indicate whether the source
+ * and destination PAN IDs are specified. This structure is essential for
+ * managing MAC-level communication in 802.15.4 networks, allowing for
+ * the specification of both source and destination addressing
+ * information.
+ *
+ * @param srcAddress An sl_802154_mac_addr_t structure indicating the source
+ * address of a MAC frame.
+ * @param dstAddress An sl_802154_mac_addr_t structure indicating the
+ * destination address of a MAC frame.
+ * @param srcPanId An sl_802154_pan_id_t struct indicating the source PAN ID of
+ * a MAC frame, meaningful only if srcPanIdSpecified is true.
+ * @param dstPanId An sl_802154_pan_id_t struct indicating the destination PAN
+ * ID of a MAC frame, meaningful only if dstPanIdSpecified is
+ * true.
+ * @param srcPanIdSpecified Boolean indicating if the srcPanId field is set.
+ * @param dstPanIdSpecified Boolean indicating if the dstPanId field is set.
+ ******************************************************************************/
 typedef struct {
   /**
    * An sl_802154_mac_addr_t structure indicating the source address of a MAC frame.
@@ -336,10 +406,27 @@ typedef struct {
   bool dstPanIdSpecified;
 } sl_802154_mac_frame_t;
 
-/**
- * @brief An instance of this structure is passed to
- * emberIncomingMacMessageHandler(). It describes the incoming MAC frame.
- */
+/***************************************************************************//**
+ * @brief The `sl_802154_incoming_mac_message_t` structure is used to describe
+ * an incoming MAC frame in the 802.15.4 protocol. It contains
+ * information about the message options, source and destination
+ * addresses, PAN IDs, signal strength (RSSI), link quality (LQI),
+ * security frame counter, payload length, and a pointer to the payload
+ * itself. This structure is essential for handling and processing
+ * incoming messages in a Zigbee network, providing all necessary details
+ * to interpret the received data correctly.
+ *
+ * @param options An sl_802154_message_options_t value indicating the options
+ * used for the incoming packet.
+ * @param macFrame An sl_802154_mac_frame_t structure indicating the source and
+ * destination addresses and source and destination PAN IDs.
+ * @param rssi The RSSI in dBm the packet was received with.
+ * @param lqi The LQI the packet was received with.
+ * @param frameCounter The security MAC frame counter (if any).
+ * @param length An sl_802154_message_length_t value indicating the length in
+ * bytes of the MAC payload of the incoming message.
+ * @param payload A pointer to the message MAC payload.
+ ******************************************************************************/
 typedef struct {
   /**
    * An sl_802154_message_options_t value indicating the options used for the incoming
@@ -374,10 +461,33 @@ typedef struct {
   uint8_t *payload;
 } sl_802154_incoming_mac_message_t;
 
-/**
- * @brief An instance of this structure is passed to
- * emberMacMessageSentHandler(). It describes the outgoing MAC frame.
- */
+/***************************************************************************//**
+ * @brief The `sl_802154_outgoing_mac_message_t` structure is used to describe
+ * an outgoing MAC message in the 802.15.4 protocol. It contains various
+ * fields that specify the transmission options, addressing information,
+ * and payload details of the message. The structure includes a tag for
+ * matching send and sent handler calls, a frame counter for security
+ * purposes, and an optional RSSI value for the acknowledgment message.
+ * This structure is essential for managing outgoing MAC frames in a
+ * Zigbee network, ensuring that messages are transmitted with the
+ * correct options and addressing information.
+ *
+ * @param options An sl_802154_message_options_t value indicating the options
+ * used for transmitting the outgoing message.
+ * @param macFrame An sl_802154_mac_frame_t struct indicating the source and
+ * destination addresses and source and destination PAN IDs of
+ * the outgoing MAC frame.
+ * @param tag A tag value the application can use to match emberMacMessageSend()
+ * calls to the corresponding emberMacMessageSentHandler() calls.
+ * @param frameCounter The security frame counter of the outgoing MAC frame (if
+ * any).
+ * @param length An sl_802154_message_length_t value indicating the length in
+ * bytes of the incoming message.
+ * @param payload A pointer to the message payload.
+ * @param ackRssi The RSSI in dBm of the ACK corresponding to this message,
+ * meaningful only if SL_ZIGBEE_OPTIONS_ACK_REQUESTED flag is set
+ * in the options field.
+ ******************************************************************************/
 typedef struct {
   /**
    * An sl_802154_message_options_t value indicating the options used for transmitting
@@ -415,8 +525,19 @@ typedef struct {
   int8_t ackRssi;
 } sl_802154_outgoing_mac_message_t;
 
-/** @brief This data structure contains the key data that is passed
- *   into various other functions. */
+/***************************************************************************//**
+ * @brief The `EmberKeyData` structure is designed to hold encryption key data
+ * used in Zigbee communication. It contains a single member, `contents`,
+ * which is an array of bytes that stores the key. The size of this array
+ * is determined by the constant `SL_ZIGBEE_ENCRYPTION_KEY_SIZE`,
+ * ensuring it is appropriately sized for encryption purposes. This
+ * structure is typically used in functions that require access to
+ * encryption keys, providing a standardized way to handle key data
+ * within the Zigbee stack.
+ *
+ * @param contents An array of bytes representing the key data, with a size
+ * defined by SL_ZIGBEE_ENCRYPTION_KEY_SIZE.
+ ******************************************************************************/
 typedef struct {
   /** This is the key byte data. */
   uint8_t contents[SL_ZIGBEE_ENCRYPTION_KEY_SIZE];
@@ -474,6 +595,22 @@ struct EventQueue_s;
  * event queue.
  */
 
+/***************************************************************************//**
+ * @brief The `EventActions` structure defines the static properties and actions
+ * associated with an event in an event-driven system. It includes a
+ * pointer to the event queue, a handler function to execute when the
+ * event is triggered, an optional marker function, and a name for
+ * debugging purposes. This structure is used to manage and execute
+ * events within a queue, providing a mechanism for handling asynchronous
+ * operations in a structured manner.
+ *
+ * @param queue A pointer to the EventQueue_s structure where this event is
+ * queued.
+ * @param handler A function pointer that is called when the event is triggered.
+ * @param marker A function pointer for marking the event, which can be NULL.
+ * @param name A constant character pointer used for debugging to identify the
+ * event by name.
+ ******************************************************************************/
 typedef const struct {
   struct EventQueue_s *queue;           ///< the queue this event goes on
   void (*handler)(struct Event_s *);    ///< called when the event fires
@@ -481,6 +618,24 @@ typedef const struct {
   const char *name;                     ///< event name for debugging purposes
 } EventActions;
 
+/***************************************************************************//**
+ * @brief The `Event` structure is used to represent an event in a queue,
+ * containing information about the event's actions, its position in the
+ * queue, and the time it is scheduled to execute. It is part of an
+ * event-driven system where events are managed in a queue and executed
+ * based on their scheduled time. The `actions` member points to an
+ * `EventActions` structure that defines the queue, handler, marker, and
+ * name for debugging purposes. The `next` member is used internally to
+ * link events in a queue, and `timeToExecute` specifies when the event
+ * should be executed.
+ *
+ * @param actions A pointer to an EventActions structure containing static data
+ * for the event.
+ * @param next A pointer to the next Event in the list, which must be
+ * initialized to NULL.
+ * @param timeToExecute A 32-bit unsigned integer representing the time at which
+ * the event is scheduled to execute.
+ ******************************************************************************/
 typedef struct Event_s {
   EventActions *actions;                ///< static data
 
@@ -490,20 +645,38 @@ typedef struct Event_s {
   uint32_t timeToExecute;                          ///< time To Execute
 } Event;
 
-/** @brief An event queue is currently just a list of events ordered by
- * execution time.
- */
+/***************************************************************************//**
+ * @brief The `EventQueue` structure is designed to manage a list of events,
+ * both those triggered by interrupt service routines (ISR) and regular
+ * events, in a queue format. It contains two pointers, `isrEvents` and
+ * `events`, which point to the respective lists of events. This
+ * structure is essential for organizing and processing events in a
+ * timely manner, ensuring that both ISR and regular events are handled
+ * efficiently within an embedded system.
+ *
+ * @param isrEvents Pointer to a list of events that are triggered by interrupt
+ * service routines.
+ * @param events Pointer to a list of regular events in the queue.
+ ******************************************************************************/
 typedef struct EventQueue_s {
   Event *isrEvents;                                ///< isr Events
   Event *events;                                   ///< events
 } EventQueue;
 
-/** @brief Control structure for events.
+/***************************************************************************//**
+ * @brief The `EmberEventControl` structure is used to manage events within the
+ * Ember framework, specifically for scheduling and controlling when
+ * events should be executed. It contains information about the event's
+ * current status, the task it is associated with, and the time remaining
+ * before the event is triggered. This structure is crucial for event-
+ * driven programming, allowing for precise timing and task management in
+ * embedded systems.
  *
- * This structure should not be accessed directly.
- * It holds the event status (one of the @e EMBER_EVENT_ values)
- * and the time left before the event fires.
- */
+ * @param status The event's status, either inactive or the units for
+ * timeToExecute.
+ * @param taskid The task ID this event belongs to.
+ * @param timeToExecute How long before the event fires, always in milliseconds.
+ ******************************************************************************/
 typedef struct {
   /** The event's status, either inactive or the units for timeToExecute. */
   EmberEventUnits status;
@@ -520,13 +693,18 @@ typedef struct {
 // tests.  Disable them with an #if 0 but leave them here for
 // completeness of information.
 #if 0
-/** @brief Complete events with a control and a handler procedure.
+/***************************************************************************//**
+ * @brief The `EmberEventData` structure is used to define events within the
+ * Ember framework. It consists of a control structure,
+ * `EmberEventControl`, which manages the event's status and timing, and
+ * a handler function pointer that specifies the procedure to execute
+ * when the event is triggered. This structure is typically used in
+ * conjunction with event queues to manage and execute scheduled tasks in
+ * a Zigbee network.
  *
- * An application typically creates an array of events
- * along with their handlers.
- * The main loop passes the array to sl_zigbee_run_events() to call
- * the handlers of any events whose time has arrived.
- */
+ * @param control The control structure for the event.
+ * @param handler The procedure to call when the event fires.
+ ******************************************************************************/
 typedef const struct EmberEventData_S {
   /** The control structure for the event. */
   EmberEventControl *control;
@@ -534,10 +712,21 @@ typedef const struct EmberEventData_S {
   void (*handler)(void);
 } EmberEventData;
 
-/** @brief Control structure for tasks.
+/***************************************************************************//**
+ * @brief The `EmberTaskControl` structure is used to manage tasks within the
+ * Ember framework. It contains information about when the next event for
+ * a task is scheduled to occur, a list of events associated with the
+ * task, and a flag indicating whether the task has other activities to
+ * perform beyond handling events. This structure is crucial for
+ * scheduling and managing task execution in a system that relies on
+ * event-driven programming.
  *
- * This structure should not be accessed directly.
- */
+ * @param nextEventTime The time when the next event associated with this task
+ * will fire.
+ * @param events The list of events associated with this task.
+ * @param busy A flag that indicates the task has something to do other than
+ * events.
+ ******************************************************************************/
 typedef struct {
   // The time when the next event associated with this task will fire
   uint32_t nextEventTime;
@@ -688,6 +877,23 @@ typedef uint16_t sli_buffer_manager_buffer_t;
 
 #define NULL_BUFFER 0x0000u
 
+/***************************************************************************//**
+ * @brief The `EmOutgoingPacket` structure is used to describe an outgoing
+ * packet in a Zigbee network. It contains information about the
+ * destination address, the endpoint for the message, a tag for matching
+ * send calls to handler calls, the payload of the message, and
+ * transmission options that dictate how the message should be sent, such
+ * as whether it should be encrypted or if an acknowledgment is
+ * requested.
+ *
+ * @param destination A short address indicating the destination of the packet.
+ * @param endpoint The endpoint to which the message is destined.
+ * @param tag A tag value used to match message send calls to corresponding
+ * handler calls.
+ * @param payload A buffer containing the message payload.
+ * @param txOptions Options used for transmitting the outgoing message, such as
+ * encryption or acknowledgment requests.
+ ******************************************************************************/
 typedef struct {
   sl_802154_short_addr_t destination;
   uint8_t endpoint;
@@ -705,6 +911,23 @@ enum {
   SL_ZIGBEE_PACKET_TRACE_TX_STATUS_SUCCESS      = 0x80
 };
 
+/***************************************************************************//**
+ * @brief The EmberMessageTrace structure is used to store information about a
+ * message trace in a Zigbee network. It includes fields for the status
+ * of the message, the received signal strength indicator (RSSI), the
+ * channel on which the message was received, the length of the packet,
+ * and a pointer to the packet data itself. This structure is useful for
+ * debugging and analyzing message transmissions within the network.
+ *
+ * @param status A uint8_t representing the status of the message trace.
+ * @param rssi An int8_t representing the received signal strength indicator in
+ * dBm.
+ * @param channel A uint8_t indicating the channel on which the message was
+ * received.
+ * @param packetLength A sl_802154_message_length_t indicating the length of the
+ * packet.
+ * @param packet A pointer to a uint8_t array containing the packet data.
+ ******************************************************************************/
 typedef struct {
   uint8_t status;
   int8_t rssi;
@@ -713,6 +936,23 @@ typedef struct {
   uint8_t *packet;
 } EmberMessageTrace;
 
+/***************************************************************************//**
+ * @brief The `EmberChildEntry` structure is used to store information about a
+ * child node in a Zigbee network. It includes fields for tracking the
+ * last time the child was seen, its frame counter for security, and both
+ * its short and long addresses. Additionally, it contains flags for
+ * various child attributes and a leave count to monitor how often the
+ * child has left the network. This structure is essential for managing
+ * child nodes and ensuring secure communication within the network.
+ *
+ * @param lastSeen Stores the timestamp of when the child was last seen.
+ * @param frameCounter Holds the frame counter for security purposes.
+ * @param shortId Represents the short address of the child node.
+ * @param longId Represents the long address (EUI64) of the child node.
+ * @param flags Contains flags that provide additional information about the
+ * child.
+ * @param leaveCount Tracks the number of times the child has left the network.
+ ******************************************************************************/
 typedef struct {
   uint32_t lastSeen;
   uint32_t frameCounter;

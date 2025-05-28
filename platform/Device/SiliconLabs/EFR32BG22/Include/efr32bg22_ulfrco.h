@@ -41,7 +41,44 @@
  * @brief EFR32BG22 ULFRCO Register Declaration.
  *****************************************************************************/
 
-/** ULFRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The ULFRCO_TypeDef is a structure representing the Ultra Low Frequency
+ * RC Oscillator (ULFRCO) registers for the EFR32BG22 microcontroller. It
+ * includes fields for IP version, status, interrupt flags, and interrupt
+ * enable registers, with multiple reserved fields for future use. The
+ * structure also provides set, clear, and toggle versions of these
+ * registers, allowing for flexible manipulation of the oscillator's
+ * configuration and status. This design facilitates efficient control
+ * and monitoring of the ULFRCO's operation within the microcontroller.
+ *
+ * @param IPVERSION IP version.
+ * @param RESERVED0 Reserved for future use.
+ * @param STATUS Status Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_SET IP version.
+ * @param RESERVED3 Reserved for future use.
+ * @param STATUS_SET Status Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_CLR IP version.
+ * @param RESERVED6 Reserved for future use.
+ * @param STATUS_CLR Status Register.
+ * @param RESERVED7 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED8 Reserved for future use.
+ * @param IPVERSION_TGL IP version.
+ * @param RESERVED9 Reserved for future use.
+ * @param STATUS_TGL Status Register.
+ * @param RESERVED10 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ ******************************************************************************/
 typedef struct ulfrco_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version                                         */
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */

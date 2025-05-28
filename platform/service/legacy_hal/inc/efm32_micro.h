@@ -139,40 +139,81 @@ enum {
 #define EM2XX_RESET_BOOTLOADER            9        ///< EM2XX reset bootloader
 #define EM2XX_RESET_SOFTWARE              11       ///< EM2XX reset software
 
-/**
- * @brief Records the specified reset cause then forces a reboot.
+/***************************************************************************//**
+ * @brief This function is used to record a specific reset cause and then
+ * immediately trigger a system reset on the microcontroller. It is
+ * typically called when a reset is required due to a specific condition
+ * or event that needs to be logged for diagnostic purposes. The function
+ * must be called with a valid extended reset cause code, which combines
+ * both a base type and an extended classification. This function should
+ * be used with caution, as it will immediately reset the system,
+ * interrupting any ongoing processes.
  *
- * @param extendedCause
- */
+ * @param extendedCause A 16-bit value representing the extended reset cause.
+ * The upper 8 bits contain the base type, and the lower 8
+ * bits contain the extended classification. The caller
+ * must ensure this value is valid and meaningful for the
+ * system's reset cause logging.
+ * @return None
+ ******************************************************************************/
 void halInternalSysReset(uint16_t extendedCause);
 
-/**
- * @brief Returns the Extended Reset Cause information
+/***************************************************************************//**
+ * @brief This function provides a 16-bit code that identifies both the base and
+ * extended cause of the last reset event. It is useful for diagnosing
+ * the reason for a reset, which can include various hardware and
+ * software triggers. This function should be called when detailed reset
+ * information is required, beyond what is provided by simpler reset
+ * cause functions. It is particularly useful in debugging scenarios
+ * where understanding the specific reset cause is critical.
  *
- * @return A 16-bit code identifying the base and extended cause of the reset
- */
+ * @return A 16-bit unsigned integer representing the base and extended reset
+ * cause.
+ ******************************************************************************/
 uint16_t halGetExtendedResetInfo(void);
 
-/** @brief Calls ::halGetExtendedResetInfo() and translates the EM35x
- *  reset code to the corresponding value used by the EM2XX HAL. Any reset codes
- * not present in the EM2XX are returned after being OR'ed with 0x80.
+/***************************************************************************//**
+ * @brief This function retrieves the reset cause of the system and translates
+ * it into a format compatible with the EM2XX HAL. It should be used when
+ * a platform-independent reset code is required, particularly for EZSP
+ * host applications. The function maps known reset causes to their EM2XX
+ * equivalents and returns them. If the reset cause is not recognized or
+ * not supported by EM2XX, the function returns the platform-specific
+ * code with the most significant bit set. This function assumes that the
+ * system has already been initialized and that reset information is
+ * available.
  *
- * Used by the EZSP host as a platform-independent NCP reset code.
- *
- * @return The EM2XX-compatible reset code. If not supported by the EM2XX,
- *         return the platform-specific code with B7 set.
- */
+ * @return The function returns an 8-bit unsigned integer representing the
+ * EM2XX-compatible reset code. If the reset cause is not supported by
+ * EM2XX, the return value is the platform-specific code with the most
+ * significant bit set.
+ ******************************************************************************/
 uint8_t halGetEm2xxResetInfo(void);
 
-/** @brief Calls ::halGetExtendedResetInfo() and supplies a string describing
- *  the extended cause of the reset.  halGetResetString() should also be called
- *  to get the string for the base reset cause
+/***************************************************************************//**
+ * @brief This function provides a human-readable string that describes the
+ * extended cause of the last reset event for diagnostic purposes. It
+ * should be used after system initialization to understand the specific
+ * reset condition that occurred. The function relies on the extended
+ * reset information obtained from `halGetExtendedResetInfo()`. It is
+ * useful for logging or debugging to provide insight into the reset
+ * causes. The function assumes that the reset information is valid and
+ * mapped to a corresponding string.
  *
- * Useful for diagnostic printing of text just after program
- * initialization.
+ * @return A pointer to a constant character string that describes the extended
+ * reset cause.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `halGetExtendedResetString` function returns a pointer to a string
+ * that describes the extended cause of a reset event in the EFM32
+ * microcontroller. This function is part of the utility and convenience
+ * functions provided for the EFM32 microcontroller, specifically for
+ * diagnostic purposes.
  *
- * @return A pointer to a program space string.
- */
+ * @details This function is used to obtain a human-readable string that
+ * describes the extended reset cause, which can be useful for logging
+ * or debugging purposes.
+ ******************************************************************************/
 const char * halGetExtendedResetString(void);
 
 #endif //__EFM_MICRO_H__

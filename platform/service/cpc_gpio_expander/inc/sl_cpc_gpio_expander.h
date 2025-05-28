@@ -39,6 +39,19 @@
  **************************   STRUCTS   ****************************************
  ******************************************************************************/
 /// @brief Struct representing a cpc gpio expander handle.
+/***************************************************************************//**
+ * @brief The `sl_cpc_gpio_expander_handle_t` is a structure that encapsulates
+ * the details necessary to manage a GPIO expander handle in a CPC
+ * (Communication Protocol Controller) system. It includes information
+ * about the specific GPIO port and pin, a name identifier, and
+ * configuration settings, allowing for organized and efficient
+ * management of GPIO resources in embedded systems.
+ *
+ * @param port Represents the GPIO port associated with the expander handle.
+ * @param pin Specifies the pin number on the GPIO port.
+ * @param name Holds a string representing the name of the GPIO expander handle.
+ * @param config Stores configuration settings for the GPIO expander handle.
+ ******************************************************************************/
 typedef struct {
   const GPIO_Port_TypeDef port;                    ///< port
   const uint32_t pin;                              ///< pin
@@ -52,12 +65,31 @@ extern "C"
 #endif
 
 /***************************************************************************//**
- * GPIO endpoint init
+ * @brief This function sets up the CPC GPIO expander endpoint, preparing it for
+ * operation. It must be called before any other operations on the GPIO
+ * expander are performed. If the system is running with an operating
+ * system kernel, it initializes necessary OS resources such as threads
+ * and semaphores. In non-OS environments, it performs basic endpoint
+ * initialization. The function returns a status code indicating success
+ * or failure, which should be checked to ensure the initialization was
+ * successful.
+ *
+ * @return Returns SL_STATUS_OK on successful initialization or
+ * SL_STATUS_ALLOCATION_FAILED if resource allocation fails.
  ******************************************************************************/
 sl_status_t sl_cpc_gpio_expander_init(void);
 
-/***************************************************************************/ /**
- * GPIO endpoint process action
+/***************************************************************************//**
+ * @brief This function should be called to handle the current state of the CPC
+ * GPIO endpoint. It processes various endpoint states, such as
+ * initialization, write completion, and reply readiness, and performs
+ * the necessary actions like reading or transmitting packets. It must be
+ * called regularly in the main loop to ensure the endpoint operates
+ * correctly. If a restart is required, the function will handle it and
+ * return immediately. This function does not take any parameters and
+ * does not return a value.
+ *
+ * @return None
  ******************************************************************************/
 void sl_cpc_gpio_expander_process_action(void);
 

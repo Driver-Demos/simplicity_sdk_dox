@@ -121,6 +121,28 @@ extern "C" {
 // SLI_BLOCK_ALLOC_MIN_ALIGN for other details) or at least multiple of CPU data size
 // (e.g. 4 bytes for 32-bit CPU).
 // 'length' is expressed in double words unit. It can described a block up to 512 KB (65535 * 8 bytes).
+/***************************************************************************//**
+ * @brief The `sli_block_metadata_t` structure is used to store metadata about
+ * memory blocks managed by the memory manager. It includes flags for
+ * block usage and alignment, a block type indicator (when SystemView is
+ * enabled), and reserved bits for future use. The structure also
+ * contains fields for the block's size and offsets to neighboring
+ * blocks, facilitating the management of a linked list of memory blocks.
+ * This metadata is crucial for implementing an explicit free blocks list
+ * and ensuring efficient memory allocation and deallocation.
+ *
+ * @param block_in_use Flag indicating if the block is allocated or not.
+ * @param heap_start_align Flag indicating if the first block at heap start has
+ * undergone a data payload adjustment.
+ * @param block_type Block type (LT or ST), only defined if
+ * SLI_MEMORY_MANAGER_ENABLE_SYSTEMVIEW is enabled.
+ * @param reserved Unallocated bits reserved for future usage.
+ * @param length Block size in double words (64-bit), excluding metadata.
+ * @param offset_neighbour_prev Offset to the previous neighbor block in double
+ * words, including metadata and payload sizes.
+ * @param offset_neighbour_next Offset to the next neighbor block in double
+ * words.
+ ******************************************************************************/
 typedef struct {
   uint16_t block_in_use : 1;        // Flag indicating if block allocated or not.
   uint16_t heap_start_align : 1;    // Flag indicating if first block at heap start undergone a data payload adjustment.
@@ -164,26 +186,44 @@ extern const char sli_mm_heap_reservation_name[];
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initializes a memory block metadata to some reset values.
+ * @brief This function is used to reset a memory block metadata structure to
+ * its default state, setting all fields to zero. It is typically called
+ * before using a new or existing `sli_block_metadata_t` structure to
+ * ensure it starts with a known state. This function must be called
+ * before the metadata is used in any memory management operations to
+ * prevent undefined behavior. The caller must ensure that the
+ * `block_metadata` pointer is valid and not null before calling this
+ * function.
  *
- * @param[in] block_metadata  Pointer to block metadata.
+ * @param block_metadata Pointer to a `sli_block_metadata_t` structure that will
+ * be initialized. Must not be null. The caller retains
+ * ownership of the memory.
+ * @return None
  ******************************************************************************/
 void sli_memory_metadata_init(sli_block_metadata_t *block_metadata);
 
 /***************************************************************************//**
- * Gets pointer to the first free block of adequate size.
+ * @brief This function searches for a free memory block that meets the
+ * specified size and alignment requirements, and is suitable for either
+ * long-term or short-term use. It is useful when allocating memory
+ * dynamically, ensuring that the block is properly aligned and of
+ * adequate size. The function must be called with a valid block type and
+ * alignment, and it will return the size of the block adjusted for
+ * alignment. If no suitable block is found, the function returns 0 and
+ * sets the block pointer to NULL.
  *
- * @param[in]  size               Size of the block, in bytes.
- * @param[in]  align              Required alignment for the block, in bytes.
- * @param[in]  type               Type of block (long-term or short term).
- *                                  BLOCK_TYPE_LONG_TERM
- *                                  BLOCK_TYPE_SHORT_TERM
- * @param[in]  block_reservation  Indicates if the free block is for a dynamic
- *                                reservation.
- * @param[out] block              Pointer to variable that will receive the
- *                                start address of the free block.
- *
- * @return    Size of the block adjusted with the alignment.
+ * @param size The size of the block in bytes. Must be a positive value.
+ * @param align The required alignment for the block in bytes. Must be a power
+ * of two and at least the minimum alignment defined by the system.
+ * @param type The type of block, either long-term or short-term. Must be a
+ * valid enumeration value of sl_memory_block_type_t.
+ * @param block_reservation A boolean indicating if the block is for a dynamic
+ * reservation. True if reservation is needed, false
+ * otherwise.
+ * @param block A pointer to a pointer that will receive the address of the free
+ * block. Must not be null.
+ * @return Returns the size of the block adjusted for alignment, or 0 if no
+ * suitable block is found.
  ******************************************************************************/
 size_t sli_memory_find_free_block(size_t size,
                                   size_t align,
@@ -192,46 +232,80 @@ size_t sli_memory_find_free_block(size_t size,
                                   sli_block_metadata_t **block);
 
 /***************************************************************************//**
- * Finds the next free block that will become the long-term or short-term head
- * pointer.
+ * @brief This function searches for the next available free memory block of the
+ * specified type, either long-term or short-term, starting from a given
+ * block or from a default location based on the block type. It is useful
+ * for memory management tasks where identifying free blocks is necessary
+ * for allocation or reallocation purposes. The function should be called
+ * when there are free blocks available, as indicated by a non-zero free
+ * block count. If no starting block is provided, the search begins from
+ * the heap start for long-term blocks or near the heap end for short-
+ * term blocks. The function returns a pointer to the free block or NULL
+ * if no suitable block is found.
  *
- * @param[in]  type  Type of block (long-term or short term).
- *                     BLOCK_TYPE_LONG_TERM
- *                     BLOCK_TYPE_SHORT_TERM
- *
- * @param[in]  block_start_from  Pointer to block where to start searching.
- *                               NULL pointer means start from one of heap
- *                               ends according to the block type.
- *
- * @return     Pointer to the new free block.
+ * @param type Specifies the type of memory block to search for, either
+ * BLOCK_TYPE_LONG_TERM or BLOCK_TYPE_SHORT_TERM. This determines
+ * the direction of the search within the memory heap.
+ * @param block_start_from Pointer to the block from which to start the search.
+ * If NULL, the search begins from a default location
+ * based on the block type. The caller retains ownership
+ * and must ensure the pointer is valid if not NULL.
+ * @return Returns a pointer to the next free block of the specified type, or
+ * NULL if no free block is found.
  ******************************************************************************/
 sli_block_metadata_t *sli_memory_find_head_free_block(sl_memory_block_type_t type,
                                                       sli_block_metadata_t *block_start_from);
 
 /***************************************************************************//**
- * Gets long-term head pointer to the first free block.
+ * @brief Use this function to obtain a pointer to the first available block in
+ * the long-term memory free list. This is useful when managing memory
+ * allocations that are intended to persist for a longer duration. The
+ * function does not require any parameters and can be called at any time
+ * to check the current head of the long-term free list. It is important
+ * to ensure that the memory manager is properly initialized before
+ * calling this function to avoid undefined behavior.
  *
- * @return    Pointer to first free long-term block.
+ * @return Returns a pointer to the first free long-term memory block, or NULL
+ * if no such block is available.
  ******************************************************************************/
 void *sli_memory_get_longterm_head_ptr(void);
 
 /***************************************************************************//**
- * Gets short-term head pointer to the first free block.
+ * @brief This function provides access to the head of the list of free short-
+ * term memory blocks managed by the memory manager. It is useful for
+ * applications that need to inspect or manipulate the list of available
+ * short-term memory blocks. The function does not modify any state or
+ * perform any allocation; it simply returns the current head pointer. It
+ * should be called when the caller needs to know the starting point of
+ * the free short-term memory blocks.
  *
- * @return    Pointer to first free short-term block.
+ * @return Returns a pointer to the first free short-term memory block, or NULL
+ * if no such block exists.
  ******************************************************************************/
 void *sli_memory_get_shortterm_head_ptr(void);
 
 /***************************************************************************//**
- * Update free lists heads (short and long terms)
+ * @brief This function updates the head pointers of the free block lists for
+ * both long-term and short-term memory blocks. It should be used when
+ * there is a need to adjust the starting points of these lists, either
+ * by searching for a new head or by directly setting a new head based on
+ * a condition. The function can either search for a new head if the
+ * current head matches a specified condition or directly update the head
+ * pointers based on the provided free block. It is important to ensure
+ * that the `free_head` and `condition_block` parameters are valid
+ * pointers to block metadata, and the function should be called in
+ * contexts where the memory manager's state is consistent and not
+ * concurrently modified.
  *
- * @param[in]  free_head  Block from where to start searching or next free block.
- *
- * @param[in]  condition_block  Block condition to check if update is necessary
- *             or not.
- *
- * @param[in]  search  Boolean condition to check if searching the heap for a free
- *                     block is necessary.
+ * @param free_head Pointer to the block metadata that serves as the new head or
+ * starting point for searching. Must not be null.
+ * @param condition_block Pointer to the block metadata used as a condition to
+ * determine if the head should be updated. Can be null,
+ * in which case the function will always search for a
+ * new head.
+ * @param search Boolean flag indicating whether to search for a new head (true)
+ * or to update the head directly based on the condition (false).
+ * @return None
  ******************************************************************************/
 void sli_update_free_list_heads(sli_block_metadata_t *free_head,
                                 const sli_block_metadata_t *condition_block,
@@ -239,96 +313,193 @@ void sli_update_free_list_heads(sli_block_metadata_t *free_head,
 
 #ifdef SLI_MEMORY_MANAGER_ENABLE_TEST_UTILITIES
 /***************************************************************************//**
- * Gets the pointer to sl_memory_reservation_t{} by block address.
+ * @brief This function is used to obtain a pointer to a memory reservation
+ * handle associated with a given block address. It is useful when you
+ * need to manage or query the reservation details of a specific memory
+ * block. The function should be called with a valid address that
+ * corresponds to a reserved memory block. If the address does not match
+ * any known reservation, the function returns NULL, indicating that no
+ * reservation handle is associated with the provided address.
  *
- * @param[in]  addr  Pointer to the block reservation.
- *
- * @return    Pointer to reservation handle.
+ * @param addr A pointer to the block reservation. It must be a valid address of
+ * a reserved memory block. If the address is invalid or does not
+ * correspond to any reservation, the function returns NULL.
+ * @return A pointer to the sl_memory_reservation_t structure associated with
+ * the given address, or NULL if no reservation is found for the
+ * address.
  ******************************************************************************/
 sl_memory_reservation_t *sli_memory_get_reservation_handle_by_addr(void *addr);
 
 /***************************************************************************//**
- * Gets the size of a reservation by block address.
+ * @brief This function retrieves the size of a memory reservation associated
+ * with a given address. It is useful for determining the amount of
+ * memory reserved at a specific location. The function should be called
+ * with a valid address that is expected to be part of a memory
+ * reservation. If the address does not correspond to a valid
+ * reservation, the function returns 0, indicating no reservation is
+ * associated with the address. This function is typically used in memory
+ * management scenarios where understanding the size of reserved blocks
+ * is necessary.
  *
- * @param[in]  addr  Pointer to the block reservation.
- *
- * @return    Size of the reservation in bytes.
+ * @param addr A pointer to the address of the memory block whose reservation
+ * size is to be retrieved. The address must be part of a valid
+ * memory reservation. If the address is not associated with a
+ * reservation, the function returns 0.
+ * @return The function returns the size of the memory reservation in bytes if
+ * the address is valid and part of a reservation. If the address is not
+ * associated with a reservation, it returns 0.
  ******************************************************************************/
 uint32_t sli_memory_get_reservation_size_by_addr(void *addr);
 
 /***************************************************************************//**
- * Get the alignment of a reservation by block address.
+ * @brief This function is used to obtain the alignment in bytes of a memory
+ * reservation given its address. It is useful when you need to verify or
+ * utilize the alignment property of a reserved memory block. The
+ * function should be called with a valid address that corresponds to a
+ * memory reservation. If the address does not correspond to a valid
+ * reservation, the function returns 0, indicating that no alignment
+ * information is available for the given address.
  *
- * @param[in]  addr  Pointer to the block reservation.
- *
- * @return    Alignment of the reservation in bytes.
+ * @param addr A pointer to the block reservation. It must be a valid address
+ * corresponding to a memory reservation. If the address is invalid
+ * or does not correspond to a reservation, the function returns 0.
+ * @return Returns the alignment of the reservation in bytes if the address is
+ * valid; otherwise, returns 0.
  ******************************************************************************/
 uint32_t sli_memory_get_reservation_align_by_addr(void *addr);
 
 /***************************************************************************//**
- * Bookkeeps a reservation for profiling purposes.
+ * @brief This function is used to store a memory reservation handle along with
+ * its alignment for profiling purposes. It should be called when a new
+ * reservation is made, and the handle needs to be tracked. The function
+ * attempts to find an available slot to store the reservation handle and
+ * its alignment. If successful, it returns a success status; otherwise,
+ * it indicates that the storage is full. This function is typically used
+ * in environments where memory reservations need to be monitored or
+ * logged.
  *
- * @param[in]  reservation_handle_ptr  Pointer to the reservation handle.
- * @param[in]  align                   Alignment of the reservation.
- *
- * @return    SL_STATUS_FULL if record is full.
+ * @param reservation_handle_ptr A pointer to the memory reservation handle to
+ * be stored. Must not be null, and the caller
+ * retains ownership of the memory.
+ * @param align The alignment of the reservation in bytes. It should be a valid
+ * alignment value, typically a power of two.
+ * @return Returns SL_STATUS_OK if the reservation handle is successfully
+ * stored, or SL_STATUS_FULL if there is no available space to store the
+ * handle.
  ******************************************************************************/
 sl_status_t sli_memory_save_reservation_handle(sl_memory_reservation_t *reservation_handle_ptr,
                                                uint32_t align);
 
 /***************************************************************************//**
- * Removes a reservation from records.
+ * @brief This function is used to remove a memory reservation handle from the
+ * internal records. It should be called when a reservation is no longer
+ * needed and must be removed from the system's tracking. The function
+ * expects a valid pointer to a reservation handle. If the handle is
+ * found in the records, it is removed, and the function returns a
+ * success status. If the handle is not found, the function returns a not
+ * found status. This function does not modify the memory associated with
+ * the reservation handle, only the internal tracking records.
  *
- * @param[in]  reservation_handle_ptr  Pointer to the reservation handle.
- *
- * @return    SL_STATUS_NOT_FOUND if reservation is does not exist in records.
+ * @param reservation_handle_ptr A pointer to the memory reservation handle to
+ * be removed. Must not be null. If the handle is
+ * not found in the records, the function returns
+ * SL_STATUS_NOT_FOUND.
+ * @return Returns SL_STATUS_OK if the reservation handle is successfully
+ * removed, or SL_STATUS_NOT_FOUND if the handle does not exist in the
+ * records.
  ******************************************************************************/
 sl_status_t sli_memory_remove_reservation_handle(sl_memory_reservation_t *reservation_handle_ptr);
 
 /***************************************************************************//**
- * Bookkeeps a reservation (no retention) for profiling purposes.
+ * @brief This function is used to register a memory block reservation that does
+ * not require retention, meaning the reservation is temporary and not
+ * preserved across system resets or power cycles. It should be called
+ * when a temporary reservation is needed for a block of memory with a
+ * specified size and alignment. The function attempts to find an
+ * available reservation slot and, if successful, records the reservation
+ * details. If no slots are available, it returns an error status. This
+ * function is typically used in scenarios where memory management needs
+ * to track temporary allocations without long-term retention.
  *
- * @param[in]  block_address  Pointer to the block reservation.
- * @param[in]  block_size  Size of the reservation.
- * @param[in]  align  Alignment of the reservation.
- *
- * @return    SL_STATUS_NOT_FOUND if reservation is does not exist in records.
+ * @param block_address Pointer to the start address of the memory block to be
+ * reserved. Must not be null, and the caller retains
+ * ownership of the memory.
+ * @param block_size Size of the memory block to be reserved, in bytes. Must be
+ * a positive integer.
+ * @param align Alignment requirement for the memory block, in bytes. Must be a
+ * power of two and at least the minimum alignment defined by the
+ * system.
+ * @return Returns SL_STATUS_OK if the reservation is successfully recorded, or
+ * SL_STATUS_FULL if no reservation slots are available.
  ******************************************************************************/
 sl_status_t sli_memory_save_reservation_no_retention(void * block_address, uint32_t block_size, uint32_t align);
 
 /***************************************************************************//**
- * Gets the size of a reservation (no retention) by block address.
+ * @brief This function is used to obtain the size of a memory reservation that
+ * does not retain data across power cycles, based on the provided memory
+ * address. It is useful when managing memory reservations that are
+ * temporary and do not require data retention. The function should be
+ * called with a valid memory address that corresponds to a non-retention
+ * reservation. If the address does not correspond to such a reservation,
+ * the function returns a size of 0, indicating no reservation is
+ * associated with the address.
  *
- * @param[in]  addr  Pointer to the block reservation.
- *
- * @return    Size of the reservation (no retention) in bytes.
+ * @param addr A pointer to the memory address for which the reservation size is
+ * being queried. The address must correspond to a valid non-
+ * retention reservation. If the address is invalid or does not
+ * correspond to a reservation, the function returns 0.
+ * @return The function returns the size of the non-retention reservation in
+ * bytes. If the address does not correspond to a reservation, it
+ * returns 0.
  ******************************************************************************/
 uint32_t sli_memory_get_reservation_no_retention_size(void * addr);
 
 /***************************************************************************//**
- * Gets the alignment of a reservation (no retention) by block address.
+ * @brief This function is used to obtain the alignment of a memory reservation
+ * that does not retain its state across power cycles, identified by a
+ * given address. It is useful in scenarios where alignment information
+ * is needed for memory management or debugging purposes. The function
+ * should be called with a valid address that corresponds to a non-
+ * retention reservation. If the address does not correspond to a valid
+ * reservation, the function returns 0, indicating no alignment
+ * information is available.
  *
- * @param[in]  addr  Pointer to the block reservation.
- *
- * @return    Alignment of the reservation in bytes.
+ * @param addr A pointer to the memory reservation whose alignment is to be
+ * retrieved. The address must correspond to a valid non-retention
+ * reservation. If the address is invalid or does not correspond to
+ * a reservation, the function returns 0.
+ * @return Returns the alignment of the specified non-retention reservation in
+ * bytes, or 0 if the address is invalid or not associated with a
+ * reservation.
  ******************************************************************************/
 uint32_t sli_memory_get_reservation_no_retention_align(void * addr);
 
 /***************************************************************************//**
- * Does a heap integrity check forwards from sli_free_lt_list_head and return
- * the pointer to the corrupted sli_block_metadata_t{} (if applicable).
- * This could go past reservations so there are checks.
+ * @brief This function performs a forward integrity check of the heap starting
+ * from the head of the free list. It is used to detect any corruption in
+ * the heap structure by verifying the consistency of block metadata and
+ * ensuring that the end of the heap matches the expected address. The
+ * function should be called when there is a need to validate the heap's
+ * integrity, such as during debugging or before performing operations
+ * that depend on a consistent heap state. If corruption is detected, the
+ * function returns a pointer to the corrupted block's metadata.
  *
- * @return    Pointer to the corrupted sli_block_metadata_t{}.
+ * @return Returns a pointer to the corrupted block's metadata if corruption is
+ * detected, otherwise returns NULL.
  ******************************************************************************/
 sli_block_metadata_t * sli_memory_check_heap_integrity_forwards(void);
 
 /***************************************************************************//**
- * Does a heap integrity check backwards from sli_free_st_list_head and return
- * the pointer to the corrupted sli_block_metadata_t{} (if applicable).
- * This should not go past any reservations, hence there are no checks.
+ * @brief This function performs a backward integrity check of the heap starting
+ * from the head of the short-term free list. It is used to detect any
+ * corruption in the heap structure by verifying the consistency of block
+ * metadata. The function should be called when there is a need to ensure
+ * the heap's integrity, especially after operations that modify the
+ * heap. It returns a pointer to the first corrupted block metadata if
+ * any corruption is detected, or NULL if the heap is intact.
  *
- * @return    Pointer to the corrupted sli_block_metadata_t{}.
+ * @return Returns a pointer to the corrupted sli_block_metadata_t if corruption
+ * is detected, otherwise returns NULL.
  ******************************************************************************/
 sli_block_metadata_t *sli_memory_check_heap_integrity_backwards(void);
 #endif /* SLI_MEMORY_MANAGER_ENABLE_TEST_UTILITIES */

@@ -95,67 +95,72 @@ extern "C" {
 #endif // SL_CLI_HELP_DESCRIPTION_ENABLED
 
 /***************************************************************************//**
- * @brief
- *   Add a new command group.
+ * @brief This function is used to add a new command group to a specified CLI
+ * instance. It should be called when you want to extend the command set
+ * available in a CLI by adding a new group of commands. The command
+ * group structure must not be in use and should be properly initialized
+ * with NULL in all elements except the command table before calling this
+ * function. If the command group is successfully added, the function
+ * returns true; otherwise, it returns false. This function does not
+ * modify the CLI instance or command group in any other way.
  *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in] command_group
- *   A pointer to a command group structure.
- *   Note that the structure must initially have NULL in all elements except
- *   the command_table.
- *
- * @return
- *   Returns true if the command_group could be added, false otherwise.
+ * @param handle A handle to a CLI instance. This parameter must be a valid,
+ * initialized CLI handle, and the caller retains ownership.
+ * @param command_group A pointer to a command group structure. The structure
+ * must not be null, must not be in use, and should have
+ * NULL in all elements except the command table. The
+ * caller retains ownership, and the function will set the
+ * 'in_use' flag to true if the group is added
+ * successfully.
+ * @return Returns true if the command group is successfully added; otherwise,
+ * returns false.
  ******************************************************************************/
 bool sl_cli_command_add_command_group(sl_cli_handle_t handle, sl_cli_command_group_t *command_group);
 
 /***************************************************************************//**
- * @brief
- *   Remove a command group.
+ * @brief Use this function to remove a command group from a CLI instance when
+ * it is no longer needed or should be disabled. The function requires a
+ * valid CLI handle and a pointer to the command group to be removed. The
+ * command group must be currently in use for the removal to succeed.
+ * This function will return false if the command group is null or not in
+ * use, indicating that the removal was unsuccessful.
  *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in] command_group
- *   A pointer to a command group structure.
- *
- * @return
- *   Returns true if the command_group could be removed, false otherwise.
+ * @param handle A handle to a CLI instance. It must be a valid, initialized
+ * handle that the command group is associated with.
+ * @param command_group A pointer to the command group structure to be removed.
+ * The command group must not be null and should be
+ * currently marked as in use for the removal to succeed.
+ * @return Returns true if the command group was successfully removed, false
+ * otherwise.
  ******************************************************************************/
 bool sl_cli_command_remove_command_group(sl_cli_handle_t handle, sl_cli_command_group_t *command_group);
 
 /***************************************************************************//**
- * @brief
- *   Find a command given the command groups and input arguments.
+ * @brief This function searches for a command entry within the command groups
+ * associated with a given CLI handle, using the provided tokenized
+ * input. It is typically used to identify and retrieve the command entry
+ * that matches the user's input, which can then be executed or further
+ * processed. The function updates several output parameters to indicate
+ * the position of the first command argument, whether a specific command
+ * was detected, and if a help command was issued. It is important to
+ * ensure that the CLI handle and tokenized input are valid before
+ * calling this function.
  *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in] token_c
- *   A number of arguments given.
- *
- * @param[in] token_v
- *   An array containing the token_v obtained from tokenization.
- *
- * @param[out] arg_ofs
- *   An integer that will get the index to the first command argument.
- *   Whether the command is in a group or not will affect the arg_ofs value.
- *
- * @param[out] single_flag
- *   Boolean that is set to true if a specific command is detected.
- *   For help, the function may return a pointer to a command entry table
- *   or NULL, and in these cases the single_flag is set to false.
- *
- * @param[out] help_flag
- *   Boolean that is set to true if "help" is detected, else set to false.
- *
- * @return
- *   A pointer to a command entry for the given command.
- *   If the command is not found, the returned value can be NULL. If a
- *   help command is issued, the returned value may point to a command entry
- *   table.
+ * @param handle A handle to a CLI instance. Must be a valid, initialized CLI
+ * handle.
+ * @param token_c A pointer to an integer representing the number of tokens in
+ * the token_v array. Must not be null.
+ * @param token_v An array of strings representing the tokenized input. Each
+ * string must be null-terminated.
+ * @param arg_ofs A pointer to an integer that will be set to the index of the
+ * first command argument. Must not be null.
+ * @param single_flag A pointer to a boolean that will be set to true if a
+ * specific command is detected. Must not be null.
+ * @param help_flag A pointer to a boolean that will be set to true if a 'help'
+ * command is detected. Must not be null.
+ * @return A pointer to the command entry that matches the input tokens, or NULL
+ * if no match is found. If a help command is issued, the return value
+ * may point to a command entry table.
  ******************************************************************************/
 const sl_cli_command_entry_t *sl_cli_command_find(sl_cli_handle_t handle,
                                                   int *token_c,
@@ -165,20 +170,24 @@ const sl_cli_command_entry_t *sl_cli_command_find(sl_cli_handle_t handle,
                                                   bool *help_flag);
 
 /***************************************************************************//**
- * @brief
- *   Find and execute a command given the string input and the command table.
+ * @brief This function is used to interpret a command string and execute the
+ * corresponding command function with the decoded parameters. It should
+ * be called when a command needs to be executed from a given input
+ * string. The input string is modified in-place during processing, so it
+ * must be a mutable, null-terminated C-string. The function returns a
+ * status indicating the success or failure of the command execution,
+ * which can be used to handle errors or confirm successful execution.
  *
- * @note
- *   The input string will be modified in-place.
- *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in, out] input
- *   C-string containing the user input. Must be '\0'-terminated.
- *
- * @return
- *   Status of the execution.
+ * @param handle A handle to a CLI instance. The caller must ensure that this
+ * handle is valid and properly initialized before calling the
+ * function.
+ * @param input A mutable, null-terminated C-string containing the user input.
+ * The string will be modified in-place, so it must not be a string
+ * literal or constant.
+ * @return Returns a status code of type sl_status_t indicating the result of
+ * the command execution. Possible return values include success,
+ * command not found, or errors during tokenization or argument
+ * conversion.
  ******************************************************************************/
 sl_status_t sl_cli_command_execute(sl_cli_handle_t handle,
                                    char *input);
@@ -207,6 +216,33 @@ sl_status_t sl_cli_command_execute(sl_cli_handle_t handle,
  *   A number of possible matches found in the command table.
  ******************************************************************************/
 #if SL_CLI_ADVANCED_INPUT_HANDLING
+/***************************************************************************//**
+ * @brief This function is used to identify and list potential command matches
+ * based on the current input buffer of a CLI instance. It is
+ * particularly useful for implementing command auto-completion or
+ * suggestions. The function requires a valid CLI handle and outputs a
+ * string of possible matches, along with the length and position of the
+ * last word in the input buffer. It should be called when the input
+ * buffer is populated with a command string, and the caller must ensure
+ * that the possible_matches buffer is large enough to hold the results.
+ * The function returns the number of matches found.
+ *
+ * @param handle A handle to a CLI instance. Must be a valid, initialized
+ * handle.
+ * @param possible_matches A buffer to store the possible command matches. The
+ * caller must ensure it is large enough to hold the
+ * results.
+ * @param possible_matches_size The size of the possible_matches buffer. Must be
+ * sufficient to store the expected matches.
+ * @param input_length A pointer to an integer where the function will store the
+ * length of the last word in the input buffer. Must not be
+ * null.
+ * @param input_position A pointer to an integer where the function will store
+ * the starting position of the last word in the input
+ * buffer. Must not be null.
+ * @return Returns the number of possible command matches found in the command
+ * table.
+ ******************************************************************************/
 int sl_cli_command_find_matches(sl_cli_handle_t handle,
                                 char *possible_matches,
                                 size_t possible_matches_size,

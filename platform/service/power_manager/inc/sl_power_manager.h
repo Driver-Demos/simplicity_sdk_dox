@@ -240,6 +240,21 @@ extern "C" {
 // Data Types
 
 /// @brief Energy modes
+/***************************************************************************//**
+ * @brief The `sl_power_manager_em_t` is an enumeration that defines various
+ * energy modes for a power management system. Each enumerator represents
+ * a specific energy mode, ranging from full operation (Run Mode) to
+ * complete shutdown (Shutoff Mode). This enumeration is used to manage
+ * and transition between different energy states in a system, allowing
+ * for efficient power usage by selecting the appropriate mode based on
+ * system requirements and activity.
+ *
+ * @param SL_POWER_MANAGER_EM0 Run Mode (Energy Mode 0).
+ * @param SL_POWER_MANAGER_EM1 Sleep Mode (Energy Mode 1).
+ * @param SL_POWER_MANAGER_EM2 Deep Sleep Mode (Energy Mode 2).
+ * @param SL_POWER_MANAGER_EM3 Stop Mode (Energy Mode 3).
+ * @param SL_POWER_MANAGER_EM4 Shutoff Mode (Energy Mode 4).
+ ******************************************************************************/
 typedef  enum  {
   SL_POWER_MANAGER_EM0 = 0,   ///< Run Mode (Energy Mode 0)
   SL_POWER_MANAGER_EM1,       ///< Sleep Mode (Energy Mode 1)
@@ -262,12 +277,40 @@ typedef void (*sl_power_manager_em_transition_on_event_t)(sl_power_manager_em_t 
                                                           sl_power_manager_em_t to);
 
 /// @brief Struct representing energy mode transition event information
+/***************************************************************************//**
+ * @brief The `sl_power_manager_em_transition_event_info_t` structure is used to
+ * define information related to energy mode transition events in the
+ * power management system. It contains a mask specifying which
+ * transitions should trigger a callback and a function pointer to the
+ * callback that should be executed when the specified transitions occur.
+ * This structure is integral to the power manager's ability to notify
+ * other software components of changes in energy modes, allowing for
+ * context saving or other operations as needed.
+ *
+ * @param event_mask Mask of the transitions on which the callback should be
+ * called.
+ * @param on_event Function that must be called when the event occurs.
+ ******************************************************************************/
 typedef struct {
   const sl_power_manager_em_transition_event_t event_mask;  ///< Mask of the transitions on which the callback should be called.
   const sl_power_manager_em_transition_on_event_t on_event; ///< Function that must be called when the event occurs.
 } sl_power_manager_em_transition_event_info_t;
 
 /// @brief Struct representing energy mode transition event handle
+/***************************************************************************//**
+ * @brief The `sl_power_manager_em_transition_event_handle_t` is a structure
+ * used in the Power Manager API to represent a handle for energy mode
+ * transition events. It contains a list node (`node`) for linking in a
+ * singly linked list and a pointer to an
+ * `sl_power_manager_em_transition_event_info_t` structure (`info`) that
+ * holds information about the event, such as the event mask and the
+ * callback function to be called when the event occurs. This structure
+ * is essential for managing and subscribing to energy mode transition
+ * events within the power management system.
+ *
+ * @param node List node.
+ * @param info Handle event info.
+ ******************************************************************************/
 typedef struct {
   sl_slist_node_t node;                                     ///< List node.
   const sl_power_manager_em_transition_event_info_t *info;  ///< Handle event info.
@@ -283,6 +326,25 @@ SL_ENUM(sl_power_manager_on_isr_exit_t) {
 // -----------------------------------------------------------------------------
 // Internal Prototypes only to be used by Power Manager module
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function adjusts the requirement counter for a specified energy
+ * mode, either incrementing or decrementing it based on the provided
+ * parameters. It is used to manage the system's energy mode requirements
+ * dynamically, ensuring that the system transitions to the appropriate
+ * energy mode based on current needs. The function must be called with a
+ * valid energy mode greater than EM0 and less than EM3, and it handles
+ * edge cases where the counter might overflow or underflow by asserting
+ * and returning without making changes.
+ *
+ * @param em Specifies the energy mode for which the requirement is being
+ * updated. Must be greater than SL_POWER_MANAGER_EM0 and less than
+ * SL_POWER_MANAGER_EM3. Invalid values will trigger an assertion.
+ * @param add A boolean indicating whether to add (true) or remove (false) a
+ * requirement for the specified energy mode. If adding would cause
+ * the counter to exceed 255 or removing would cause it to drop below
+ * 0, the function will assert and return without making changes.
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_update_em_requirement(sl_power_manager_em_t em,
                                              bool  add);
 
@@ -292,6 +354,25 @@ void sli_power_manager_update_em_requirement(sl_power_manager_em_t em,
 // the debug feature is enable or not for binary compatibility.
 #if (SL_POWER_MANAGER_DEBUG == 1)
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to log or remove a debug requirement for a
+ * specified energy mode, provided that the debug feature is enabled. It
+ * is intended for use in debugging scenarios where tracking energy mode
+ * requirements is necessary. The function does nothing if the energy
+ * mode is SL_POWER_MANAGER_EM0 or if the debug feature is disabled. It
+ * should be called when adding or removing energy mode requirements to
+ * maintain accurate debug logs.
+ *
+ * @param em Specifies the energy mode for which the requirement is being logged
+ * or removed. Must be a valid energy mode other than
+ * SL_POWER_MANAGER_EM0. If SL_POWER_MANAGER_EM0 is passed, the
+ * function does nothing.
+ * @param add A boolean indicating whether to add (true) or remove (false) the
+ * requirement for the specified energy mode.
+ * @param name A string representing the name of the module or requirement
+ * owner. Must not be null if the debug feature is enabled.
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_debug_log_em_requirement(sl_power_manager_em_t em,
                                                 bool                  add,
                                                 const char            *name);
@@ -303,8 +384,18 @@ void sli_power_manager_debug_log_em_requirement(sl_power_manager_em_t em,
 // Prototypes
 
 /***************************************************************************//**
- * Initialize Power Manager module.
- * @return Status code
+ * @brief This function sets up the Power Manager module, which is essential for
+ * managing the system's energy modes. It should be called before using
+ * any other power manager API functions, unless the system is
+ * initialized using sl_system_init(). The function ensures that
+ * necessary hardware components are initialized and configured for power
+ * management. It must be called after clock initialization if done
+ * manually, as it checks oscillator usage during setup. The function
+ * returns a status code indicating success or failure of the
+ * initialization process.
+ *
+ * @return Returns a status code of type sl_status_t indicating the success or
+ * failure of the initialization process.
  ******************************************************************************/
 sl_status_t sl_power_manager_init(void);
 
@@ -339,6 +430,20 @@ sl_status_t sl_power_manager_init(void);
  * ```
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to transition the system into the lowest
+ * possible energy mode when the processor has no tasks to execute,
+ * effectively reducing power consumption. It should be called when the
+ * system is idle and ready to enter a sleep state. The function checks
+ * if it is permissible to sleep and handles any necessary pre-sleep
+ * operations. It must not be called from an interrupt service routine
+ * (ISR) and should only be invoked when interrupts are enabled, meaning
+ * both BASEPRI and PRIMASK must be set to 0. This function is typically
+ * used in a main loop to ensure the system enters a low-power state when
+ * idle.
+ *
+ * @return None
+ ******************************************************************************/
 void sl_power_manager_sleep(void);
 
 /***************************************************************************//**
@@ -353,6 +458,16 @@ void sl_power_manager_sleep(void);
  *       (EM2/EM3) in the absence of EM1 requirements.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The function `sl_power_manager_add_em_requirement` adds a requirement
+ * for a specified energy mode to the power manager, ensuring that the
+ * system does not enter a lower energy mode than specified.
+ *
+ * @param em An energy mode of type `sl_power_manager_em_t` that specifies which
+ * energy mode requirement to add, such as SL_POWER_MANAGER_EM1.
+ * @return The function does not return a value; it performs its operations to
+ * update the power manager's state and logs the action for debugging.
+ ******************************************************************************/
 __STATIC_INLINE void sl_power_manager_add_em_requirement(sl_power_manager_em_t em)
 {
   CORE_DECLARE_IRQ_STATE;
@@ -376,6 +491,15 @@ __STATIC_INLINE void sl_power_manager_add_em_requirement(sl_power_manager_em_t e
  *       (EM2/EM3) in the absence of EM1 requirements.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The function `sl_power_manager_remove_em_requirement` removes a
+ * previously set energy mode requirement in a critical section.
+ *
+ * @param em An energy mode of type `sl_power_manager_em_t` from which the
+ * requirement is to be removed.
+ * @return The function does not return any value; it performs its operation as
+ * a side effect.
+ ******************************************************************************/
 __STATIC_INLINE void sl_power_manager_remove_em_requirement(sl_power_manager_em_t em)
 {
   CORE_DECLARE_IRQ_STATE;
@@ -388,146 +512,127 @@ __STATIC_INLINE void sl_power_manager_remove_em_requirement(sl_power_manager_em_
 }
 
 /***************************************************************************//**
- * Registers a callback to be called on given Energy Mode transition(s).
+ * @brief This function allows a software module to subscribe to notifications
+ * for energy mode transitions by registering a callback function. It
+ * should be used when a module needs to perform specific actions during
+ * transitions between energy modes, such as saving or restoring context.
+ * The function requires a persistent event handle and event information
+ * structure, which must remain valid until the callback is triggered. It
+ * is important to note that adding or removing energy mode requirements
+ * from within a transition event callback is not supported. Deprecated
+ * events, such as those related to EM3 transitions, should not be used.
  *
- * @param event_handle  Event handle (no initialization needed).
- *
- * @param event_info    Event info structure that contains the event mask and the
- *                      callback that must be called.
- *
- * @note Adding and removing requirement(s) from a callback on a transition event
- *       is not supported.
- *
- * @note The parameters passed must be persistent, meaning that they need to survive
- *       until the callback fires.
- *
- * @note SL_POWER_MANAGER_EVENT_TRANSITION_ENTERING_EM3 and
- *       SL_POWER_MANAGER_EVENT_TRANSITION_LEAVING_EM3 are now DEPRECATED and should
- *       not be used in the event_info argument.
- *
- * Usage example:
- *
- * ```c
- * #define EM_EVENT_MASK_ALL      (  SL_POWER_MANAGER_EVENT_TRANSITION_ENTERING_EM0 \
- *                                 | SL_POWER_MANAGER_EVENT_TRANSITION_LEAVING_EM0  \
- *                                 | SL_POWER_MANAGER_EVENT_TRANSITION_ENTERING_EM1 \
- *                                 | SL_POWER_MANAGER_EVENT_TRANSITION_LEAVING_EM1  \
- *                                 | SL_POWER_MANAGER_EVENT_TRANSITION_ENTERING_EM2 \
- *                                 | SL_POWER_MANAGER_EVENT_TRANSITION_LEAVING_EM2)
- *
- * sl_power_manager_em_transition_event_handle_t event_handle;
- * sl_power_manager_em_transition_event_info_t event_info = {
- *   .event_mask = EM_EVENT_MASK_ALL,
- *   .on_event = my_callback,
- * };
- *
- * void my_callback(sl_power_manager_em_t from,
- *                  sl_power_manager_em_t to)
- * {
- *   [...]
- * }
- *
- * void main(void)
- * {
- *   sl_power_manager_init();
- *   sl_power_manager_subscribe_em_transition_event(&event_handle, &event_info);
- * }
- * ```
+ * @param event_handle A pointer to an event handle structure that will be used
+ * to manage the subscription. This must not be null and
+ * should be persistent until the event is unsubscribed.
+ * @param event_info A pointer to a structure containing the event mask and the
+ * callback function to be called on transitions. This must
+ * not be null and should be persistent until the event is
+ * unsubscribed. Deprecated events should not be included in
+ * the event mask.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_subscribe_em_transition_event(sl_power_manager_em_transition_event_handle_t     *event_handle,
                                                     const sl_power_manager_em_transition_event_info_t *event_info);
 
 /***************************************************************************//**
- * Unregisters an event callback handle on Energy mode transition.
+ * @brief Use this function to remove a previously registered event callback
+ * handle from the energy mode transition notification system. This is
+ * necessary when you no longer need to receive notifications for energy
+ * mode transitions or before deallocating the event handle. Ensure that
+ * the event handle was previously registered using the appropriate
+ * subscription function. If the handle is not found, an assertion error
+ * will be triggered, indicating a logical error in the program.
  *
- * @param event_handle  Event handle which must be unregistered (must have been
- *                      registered previously).
- *
- * @note  An EFM_ASSERT is thrown if the handle is not found.
+ * @param event_handle A pointer to the event handle that was previously
+ * registered. It must not be null and must have been
+ * successfully registered before calling this function. The
+ * function will assert if the handle is not found,
+ * indicating improper use.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_unsubscribe_em_transition_event(sl_power_manager_em_transition_event_handle_t *event_handle);
 
 /***************************************************************************//**
- * Get configurable overhead value for early restore time in Sleeptimer ticks
- * when a schedule wake-up is set.
+ * @brief This function returns the current overhead value, in Sleeptimer ticks,
+ * used for early restore time when a scheduled wake-up is set. It is
+ * useful for applications that need to account for additional time
+ * required to restore the system state before a scheduled wake-up. This
+ * function should be called after the power manager has been
+ * initialized. If the project includes the power_manager_no_deepsleep
+ * component, which configures the lowest energy mode as EM1, this
+ * function will always return 0, as deep sleep modes are not utilized.
  *
- * @return  Current overhead value for early restore time.
- *
- * @note This function will do nothing when a project contains the
- *       power_manager_no_deepsleep component, which configures the
- *       lowest energy mode as EM1.
+ * @return Returns the current overhead value for early restore time in
+ * Sleeptimer ticks, or 0 if deep sleep modes are not used.
  ******************************************************************************/
 int32_t sl_power_manager_schedule_wakeup_get_restore_overhead_tick(void);
 
 /***************************************************************************//**
- * Set configurable overhead value for early restore time in Sleeptimer ticks
- * used for schedule wake-up.
- * Must be called after initialization else the value will be overwritten.
+ * @brief This function sets the overhead tick value used for early restore time
+ * in scheduled wake-up scenarios. It should be called after the power
+ * manager has been initialized to ensure the value is not overwritten.
+ * The overhead value can be positive or negative, allowing for
+ * adjustment of the restore process timing. This function is ineffective
+ * if the project includes the power_manager_no_deepsleep component,
+ * which restricts the lowest energy mode to EM1.
  *
- * @param overhead_tick Overhead value to set for early restore time.
- *
- * @note The overhead value can also be negative to remove time from the restore
- *       process.
- *
- * @note This function will do nothing when a project contains the
- *       power_manager_no_deepsleep component, which configures the
- *       lowest energy mode as EM1.
+ * @param overhead_tick An integer representing the overhead value in Sleeptimer
+ * ticks for early restore time. It can be positive or
+ * negative. The caller retains ownership, and the function
+ * does not validate the range of this value.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_schedule_wakeup_set_restore_overhead_tick(int32_t overhead_tick);
 
 /***************************************************************************//**
- * Get configurable minimum off-time value for schedule wake-up in Sleeptimer
- * ticks.
+ * @brief This function is used to obtain the current minimum off-time value,
+ * expressed in Sleeptimer ticks, which is relevant when scheduling a
+ * wake-up. It is particularly useful in scenarios where energy
+ * efficiency is critical, as it helps determine whether it is more
+ * energy-efficient to keep the high-frequency clock running or to turn
+ * it off temporarily. This function should be called when the system
+ * needs to make decisions about power management and energy mode
+ * transitions. Note that if the project includes the
+ * power_manager_no_deepsleep component, which sets the lowest energy
+ * mode to EM1, this function will return 0, indicating that the minimum
+ * off-time is not applicable.
  *
- * @return  Current minimum off-time value for schedule wake-up.
- *
- * @note  Turning on external high frequency clock, such as HFXO, requires more
- *        energy since we must supply higher current for the wake-up.
- *        Therefore, when an 'external high frequency clock enable' is scheduled
- *        in 'x' time, there is a threshold 'x' value where turning off the clock
- *        is not worthwhile since the energy consumed by taking into account the
- *        wake-up will be greater than if we just keep the clock on until the next
- *        scheduled clock enabled. This threshold value is what we refer as the
- *        minimum off-time.
- *
- * @note This function will do nothing when a project contains the
- *       power_manager_no_deepsleep component, which configures the
- *       lowest energy mode as EM1.
+ * @return Returns the current minimum off-time value in Sleeptimer ticks, or 0
+ * if the power_manager_no_deepsleep component is present.
  ******************************************************************************/
 uint32_t sl_power_manager_schedule_wakeup_get_minimum_offtime_tick(void);
 
 /***************************************************************************//**
- * Set configurable minimum off-time value for schedule wake-up in Sleeptimer
- * ticks.
+ * @brief This function configures the minimum duration, in Sleeptimer ticks,
+ * that the system should remain off before a scheduled wake-up. It is
+ * useful for optimizing energy consumption by determining when it is
+ * more efficient to keep the high frequency clock off. This function
+ * should be called after the power manager is initialized. If the
+ * project is configured with the power_manager_no_deepsleep component,
+ * which sets the lowest energy mode to EM1, this function will have no
+ * effect.
  *
- * @param minimum_offtime_tick  minimum off-time value to set for schedule
- *                              wake-up.
- *
- * @note  Turning on external high frequency clock, such as HFXO, requires more
- *        energy since we must supply higher current for the wake-up.
- *        Therefore, when an 'external high frequency clock enable' is scheduled
- *        in 'x' time, there is a threshold 'x' value where turning off the clock
- *        is not worthwhile since the energy consumed by taking into account the
- *        wake-up will be greater than if we just keep the clock on until the next
- *        scheduled clock enabled. This threshold value is what we refer as the
- *        minimum off-time.
- *
- * @note This function will do nothing when a project contains the
- *       power_manager_no_deepsleep component, which configures the
- *       lowest energy mode as EM1.
+ * @param minimum_offtime_tick Specifies the minimum off-time in Sleeptimer
+ * ticks. The value should be a non-negative
+ * integer. The function does nothing if the
+ * power_manager_no_deepsleep component is present.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_schedule_wakeup_set_minimum_offtime_tick(uint32_t minimum_offtime_tick);
 
 /***************************************************************************//**
- * Enable or disable fast wake-up in EM2 and EM3
+ * @brief This function allows the user to enable or disable fast wake-up
+ * capabilities when transitioning from energy modes EM2 or EM3 to a
+ * higher energy mode. It should be used when there is a need to optimize
+ * wake-up times from these low energy modes. The function must be called
+ * after the power manager has been initialized. It has no effect if the
+ * project is configured to not support deep sleep modes (EM2/EM3).
  *
- * @param enable True False variable act as a switch for this api
- *
- * @note Will also update the wake up time from EM2 to EM0.
- *
- * @note This function will do nothing when a project contains the
- *       power_manager_no_deepsleep component, which configures the
- *       lowest energy mode as EM1.
+ * @param enable A boolean value where 'true' enables fast wake-up and 'false'
+ * disables it. The parameter must be provided by the caller, and
+ * it is expected to be a valid boolean value.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_em23_voltage_scaling_enable_fast_wakeup(bool enable);
 
@@ -544,41 +649,63 @@ void sl_power_manager_em23_voltage_scaling_enable_fast_wakeup(bool enable);
  *       never sleep at a lower level than EM1.
  *****************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function checks if the most recent wakeup event was triggered by
+ * the high-frequency external oscillator (HFXO) interrupt or if the
+ * early wakeup timer was the only timer to expire during the last
+ * interrupt service routine (ISR). It is useful for determining whether
+ * the system can return to sleep. The function will always return false
+ * if the system is configured to not enter deep sleep (EM1 is the lowest
+ * energy mode allowed). This function should be used in scenarios where
+ * understanding the cause of wakeup is necessary for power management
+ * decisions.
+ *
+ * @return Returns true if the wakeup was due to an HFXO interrupt or early
+ * wakeup timer expiration, allowing the system to return to sleep;
+ * returns false otherwise.
+ ******************************************************************************/
 bool sl_power_manager_is_latest_wakeup_internal(void);
 
 /***************************************************************************//**
- * Enter energy mode 4 (EM4).
+ * @brief This function transitions the system into energy mode 4 (EM4), which
+ * is a deep sleep mode where the device is effectively shut down. It is
+ * intended for use when the system needs to conserve maximum power and
+ * will not perform any further operations until a reset occurs. Once the
+ * device enters EM4, it can only be awakened by a power-on reset or an
+ * external reset pin. This function should be used with caution, as it
+ * does not return under normal circumstances. Ensure that all necessary
+ * operations are completed before calling this function, as it will halt
+ * further execution.
  *
- * @note  You should not expect to return from this function. Once the device
- *        enters EM4, only a power on reset or external reset pin can wake the
- *        device.
- *
- * @note  On xG22 devices, this function re-configures the IADC if EM4 entry
- *        is possible.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_enter_em4(void);
 
 /***************************************************************************//**
- *   When EM4 pin retention is set to power_manager_pin_retention_latch,
- *   then pins are retained through EM4 entry and wakeup. The pin state is
- *   released by calling this function. The feature allows peripherals or
- *   GPIO to be re-initialized after EM4 exit (reset), and when
- *   initialization is done, this function can release pins and return
- *   control to the peripherals or GPIO.
+ * @brief This function is used to release the pin retention state after the
+ * system exits Energy Mode 4 (EM4). It should be called when the EM4 pin
+ * retention feature is enabled and the system has been reset after
+ * exiting EM4. This allows peripherals or GPIOs to be re-initialized and
+ * regain control over the pins. If the EM4 Pin Retention feature is not
+ * available on the device, calling this function will have no effect. It
+ * is typically used in systems where pin states need to be retained
+ * through EM4 entry and wakeup, and then released once the system is
+ * ready to resume normal operation.
  *
- * @note When the EM4 Pin Retention feature is not available on a device,
- *       calling this function will do nothing.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_em4_unlatch_pin_retention(void);
 
 /***************************************************************************//**
- * Energy mode 4 pre-sleep hook function.
+ * @brief This function serves as a pre-sleep hook that is called just before
+ * the device enters Energy Mode 4 (EM4). It is designed to be overridden
+ * by the user if specific actions need to be performed before the device
+ * transitions to EM4. The default implementation does nothing, allowing
+ * developers to redefine it in their application code to suit their
+ * needs. This function is particularly useful for preparing the system
+ * or peripherals for the low-power state of EM4.
  *
- * @note  This function is called by @ref sl_power_manager_enter_em4 just
- *        prior to the sequence of writes to put the device in EM4. The
- *        function  implementation does not perform anything, but it is
- *        SL_WEAK so that it can be re-implemented in application code if
- *        actions are needed.
+ * @return None
  ******************************************************************************/
 void sl_power_manager_em4_presleep_hook(void);
 

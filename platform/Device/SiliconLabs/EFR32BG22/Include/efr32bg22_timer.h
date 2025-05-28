@@ -41,7 +41,24 @@
  * @brief EFR32BG22 TIMER Register Declaration.
  *****************************************************************************/
 
-/** TIMER CC Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The TIMER_CC_TypeDef structure is a data structure used to define the
+ * configuration and control registers for a timer's compare/capture
+ * channel in the EFR32BG22 microcontroller. It includes registers for
+ * configuring the channel, controlling its operation, and storing output
+ * compare and input capture values. The structure also includes reserved
+ * fields for future expansion, ensuring compatibility with potential
+ * future enhancements.
+ *
+ * @param CFG CC Channel Configuration Register.
+ * @param CTRL CC Channel Control Register.
+ * @param OC OC Channel Value Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param OCB OC Channel Value Buffer Register.
+ * @param ICF IC Channel Value Register.
+ * @param ICOF IC Channel Value Overflow Register.
+ * @param RESERVED1 Reserved for future use.
+ ******************************************************************************/
 typedef struct timer_cc_typedef{
   __IOM uint32_t CFG;                                /**< CC Channel Configuration Register                  */
   __IOM uint32_t CTRL;                               /**< CC Channel Control Register                        */
@@ -53,7 +70,119 @@ typedef struct timer_cc_typedef{
   uint32_t       RESERVED1[1U];                      /**< Reserved for future use                            */
 } TIMER_CC_TypeDef;
 
-/** TIMER Register Declaration. */
+/***************************************************************************//**
+ * @brief The `TIMER_TypeDef` is a comprehensive structure representing a timer
+ * peripheral in the EFR32BG22 microcontroller. It includes various
+ * registers for configuration, control, command, status, and interrupt
+ * handling, as well as specific registers for managing the counter and
+ * its top value. The structure also supports multiple compare/capture
+ * channels and includes a set of registers for managing dead-time
+ * insertion (DTI) configurations and faults. The structure is designed
+ * to handle set, clear, and toggle operations for each register,
+ * providing flexibility in managing the timer's behavior. Reserved
+ * fields are included for future expansion, ensuring compatibility with
+ * potential future enhancements.
+ *
+ * @param IPVERSION IP version ID.
+ * @param CFG Configuration Register.
+ * @param CTRL Control Register.
+ * @param CMD Command Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param TOP Counter Top Value Register.
+ * @param TOPB Counter Top Value Buffer Register.
+ * @param CNT Counter Value Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param LOCK TIMER Configuration Lock Register.
+ * @param EN Module enable.
+ * @param RESERVED1 Reserved for future use.
+ * @param CC Compare/Capture Channel.
+ * @param RESERVED2 Reserved for future use.
+ * @param DTCFG DTI Configuration Register.
+ * @param DTTIMECFG DTI Time Configuration Register.
+ * @param DTFCFG DTI Fault Configuration Register.
+ * @param DTCTRL DTI Control Register.
+ * @param DTOGEN DTI Output Generation Enable Register.
+ * @param DTFAULT DTI Fault Register.
+ * @param DTFAULTC DTI Fault Clear Register.
+ * @param DTLOCK DTI Configuration Lock Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param CFG_SET Configuration Register.
+ * @param CTRL_SET Control Register.
+ * @param CMD_SET Command Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param TOP_SET Counter Top Value Register.
+ * @param TOPB_SET Counter Top Value Buffer Register.
+ * @param CNT_SET Counter Value Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param LOCK_SET TIMER Configuration Lock Register.
+ * @param EN_SET Module enable.
+ * @param RESERVED5 Reserved for future use.
+ * @param CC_SET Compare/Capture Channel.
+ * @param RESERVED6 Reserved for future use.
+ * @param DTCFG_SET DTI Configuration Register.
+ * @param DTTIMECFG_SET DTI Time Configuration Register.
+ * @param DTFCFG_SET DTI Fault Configuration Register.
+ * @param DTCTRL_SET DTI Control Register.
+ * @param DTOGEN_SET DTI Output Generation Enable Register.
+ * @param DTFAULT_SET DTI Fault Register.
+ * @param DTFAULTC_SET DTI Fault Clear Register.
+ * @param DTLOCK_SET DTI Configuration Lock Register.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param CFG_CLR Configuration Register.
+ * @param CTRL_CLR Control Register.
+ * @param CMD_CLR Command Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param TOP_CLR Counter Top Value Register.
+ * @param TOPB_CLR Counter Top Value Buffer Register.
+ * @param CNT_CLR Counter Value Register.
+ * @param RESERVED8 Reserved for future use.
+ * @param LOCK_CLR TIMER Configuration Lock Register.
+ * @param EN_CLR Module enable.
+ * @param RESERVED9 Reserved for future use.
+ * @param CC_CLR Compare/Capture Channel.
+ * @param RESERVED10 Reserved for future use.
+ * @param DTCFG_CLR DTI Configuration Register.
+ * @param DTTIMECFG_CLR DTI Time Configuration Register.
+ * @param DTFCFG_CLR DTI Fault Configuration Register.
+ * @param DTCTRL_CLR DTI Control Register.
+ * @param DTOGEN_CLR DTI Output Generation Enable Register.
+ * @param DTFAULT_CLR DTI Fault Register.
+ * @param DTFAULTC_CLR DTI Fault Clear Register.
+ * @param DTLOCK_CLR DTI Configuration Lock Register.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param CFG_TGL Configuration Register.
+ * @param CTRL_TGL Control Register.
+ * @param CMD_TGL Command Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param TOP_TGL Counter Top Value Register.
+ * @param TOPB_TGL Counter Top Value Buffer Register.
+ * @param CNT_TGL Counter Value Register.
+ * @param RESERVED12 Reserved for future use.
+ * @param LOCK_TGL TIMER Configuration Lock Register.
+ * @param EN_TGL Module enable.
+ * @param RESERVED13 Reserved for future use.
+ * @param CC_TGL Compare/Capture Channel.
+ * @param RESERVED14 Reserved for future use.
+ * @param DTCFG_TGL DTI Configuration Register.
+ * @param DTTIMECFG_TGL DTI Time Configuration Register.
+ * @param DTFCFG_TGL DTI Fault Configuration Register.
+ * @param DTCTRL_TGL DTI Control Register.
+ * @param DTOGEN_TGL DTI Output Generation Enable Register.
+ * @param DTFAULT_TGL DTI Fault Register.
+ * @param DTFAULTC_TGL DTI Fault Clear Register.
+ * @param DTLOCK_TGL DTI Configuration Lock Register.
+ ******************************************************************************/
 typedef struct timer_typedef{
   __IM uint32_t    IPVERSION;                   /**< IP version ID                                      */
   __IOM uint32_t   CFG;                         /**< Configuration Register                             */

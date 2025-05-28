@@ -41,7 +41,29 @@
  * @brief EFR32BG22 FSRCO Register Declaration.
  *****************************************************************************/
 
-/** FSRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The FSRCO_TypeDef is a structure that defines the register layout for
+ * the FSRCO (Frequency Synthesizer RC Oscillator) in the EFR32BG22
+ * microcontroller. It includes fields for the IP version and several
+ * reserved arrays for future use, ensuring compatibility with potential
+ * future updates. The structure provides fields for setting, clearing,
+ * and toggling the IP version, which are essential for managing the
+ * oscillator's configuration and operation.
+ *
+ * @param IPVERSION Represents the IP version of the FSRCO.
+ * @param RESERVED0 Array reserved for future use, consisting of 1023 unsigned
+ * 32-bit integers.
+ * @param IPVERSION_SET Represents the IP version of the FSRCO, used for setting
+ * operations.
+ * @param RESERVED1 Array reserved for future use, consisting of 1023 unsigned
+ * 32-bit integers.
+ * @param IPVERSION_CLR Represents the IP version of the FSRCO, used for
+ * clearing operations.
+ * @param RESERVED2 Array reserved for future use, consisting of 1023 unsigned
+ * 32-bit integers.
+ * @param IPVERSION_TGL Represents the IP version of the FSRCO, used for
+ * toggling operations.
+ ******************************************************************************/
 typedef struct fsrco_typedef{
   __IM uint32_t IPVERSION;                      /**< IP Version                                         */
   uint32_t      RESERVED0[1023U];               /**< Reserved for future use                            */

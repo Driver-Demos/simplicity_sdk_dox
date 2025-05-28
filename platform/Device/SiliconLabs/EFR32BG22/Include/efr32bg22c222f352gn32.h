@@ -45,7 +45,122 @@ extern "C" {
  * @{
  *****************************************************************************/
 
-/** Interrupt Number Definition */
+/***************************************************************************//**
+ * @brief The `IRQn_Type` is an enumeration that defines the interrupt numbers
+ * for the Cortex-M processor exceptions and the EFR32BG22 peripheral
+ * interrupts. It includes both negative values for processor exceptions
+ * like Non-Maskable Interrupt and Hard Fault, and positive values for
+ * peripheral interrupts such as CRYPTOACC and TIMER0. This enumeration
+ * is used to identify and manage the various interrupt sources in the
+ * system, allowing for efficient interrupt handling and prioritization.
+ *
+ * @param NonMaskableInt_IRQn Represents the Cortex-M Non Maskable Interrupt
+ * with a value of -14.
+ * @param HardFault_IRQn Represents the Cortex-M Hard Fault Interrupt with a
+ * value of -13.
+ * @param MemoryManagement_IRQn Represents the Cortex-M Memory Management
+ * Interrupt with a value of -12.
+ * @param BusFault_IRQn Represents the Cortex-M Bus Fault Interrupt with a value
+ * of -11.
+ * @param UsageFault_IRQn Represents the Cortex-M Usage Fault Interrupt with a
+ * value of -10.
+ * @param SVCall_IRQn Represents the Cortex-M SV Call Interrupt with a value of
+ * -5.
+ * @param DebugMonitor_IRQn Represents the Cortex-M Debug Monitor Interrupt with
+ * a value of -4.
+ * @param PendSV_IRQn Represents the Cortex-M Pend SV Interrupt with a value of
+ * -2.
+ * @param SysTick_IRQn Represents the Cortex-M System Tick Interrupt with a
+ * value of -1.
+ * @param CRYPTOACC_IRQn Represents the EFR32 CRYPTOACC Interrupt with a value
+ * of 0.
+ * @param TRNG_IRQn Represents the EFR32 TRNG Interrupt with a value of 1.
+ * @param PKE_IRQn Represents the EFR32 PKE Interrupt with a value of 2.
+ * @param SMU_SECURE_IRQn Represents the EFR32 SMU_SECURE Interrupt with a value
+ * of 3.
+ * @param SMU_S_PRIVILEGED_IRQn Represents the EFR32 SMU_S_PRIVILEGED Interrupt
+ * with a value of 4.
+ * @param SMU_NS_PRIVILEGED_IRQn Represents the EFR32 SMU_NS_PRIVILEGED
+ * Interrupt with a value of 5.
+ * @param EMU_IRQn Represents the EFR32 EMU Interrupt with a value of 6.
+ * @param TIMER0_IRQn Represents the EFR32 TIMER0 Interrupt with a value of 7.
+ * @param TIMER1_IRQn Represents the EFR32 TIMER1 Interrupt with a value of 8.
+ * @param TIMER2_IRQn Represents the EFR32 TIMER2 Interrupt with a value of 9.
+ * @param TIMER3_IRQn Represents the EFR32 TIMER3 Interrupt with a value of 10.
+ * @param TIMER4_IRQn Represents the EFR32 TIMER4 Interrupt with a value of 11.
+ * @param RTCC_IRQn Represents the EFR32 RTCC Interrupt with a value of 12.
+ * @param USART0_RX_IRQn Represents the EFR32 USART0_RX Interrupt with a value
+ * of 13.
+ * @param USART0_TX_IRQn Represents the EFR32 USART0_TX Interrupt with a value
+ * of 14.
+ * @param USART1_RX_IRQn Represents the EFR32 USART1_RX Interrupt with a value
+ * of 15.
+ * @param USART1_TX_IRQn Represents the EFR32 USART1_TX Interrupt with a value
+ * of 16.
+ * @param ICACHE0_IRQn Represents the EFR32 ICACHE0 Interrupt with a value of
+ * 17.
+ * @param BURTC_IRQn Represents the EFR32 BURTC Interrupt with a value of 18.
+ * @param LETIMER0_IRQn Represents the EFR32 LETIMER0 Interrupt with a value of
+ * 19.
+ * @param SYSCFG_IRQn Represents the EFR32 SYSCFG Interrupt with a value of 20.
+ * @param LDMA_IRQn Represents the EFR32 LDMA Interrupt with a value of 21.
+ * @param LFXO_IRQn Represents the EFR32 LFXO Interrupt with a value of 22.
+ * @param LFRCO_IRQn Represents the EFR32 LFRCO Interrupt with a value of 23.
+ * @param ULFRCO_IRQn Represents the EFR32 ULFRCO Interrupt with a value of 24.
+ * @param GPIO_ODD_IRQn Represents the EFR32 GPIO_ODD Interrupt with a value of
+ * 25.
+ * @param GPIO_EVEN_IRQn Represents the EFR32 GPIO_EVEN Interrupt with a value
+ * of 26.
+ * @param I2C0_IRQn Represents the EFR32 I2C0 Interrupt with a value of 27.
+ * @param I2C1_IRQn Represents the EFR32 I2C1 Interrupt with a value of 28.
+ * @param EMUDG_IRQn Represents the EFR32 EMUDG Interrupt with a value of 29.
+ * @param EMUSE_IRQn Represents the EFR32 EMUSE Interrupt with a value of 30.
+ * @param AGC_IRQn Represents the EFR32 AGC Interrupt with a value of 31.
+ * @param BUFC_IRQn Represents the EFR32 BUFC Interrupt with a value of 32.
+ * @param FRC_PRI_IRQn Represents the EFR32 FRC_PRI Interrupt with a value of
+ * 33.
+ * @param FRC_IRQn Represents the EFR32 FRC Interrupt with a value of 34.
+ * @param MODEM_IRQn Represents the EFR32 MODEM Interrupt with a value of 35.
+ * @param PROTIMER_IRQn Represents the EFR32 PROTIMER Interrupt with a value of
+ * 36.
+ * @param RAC_RSM_IRQn Represents the EFR32 RAC_RSM Interrupt with a value of
+ * 37.
+ * @param RAC_SEQ_IRQn Represents the EFR32 RAC_SEQ Interrupt with a value of
+ * 38.
+ * @param RDMAILBOX_IRQn Represents the EFR32 RDMAILBOX Interrupt with a value
+ * of 39.
+ * @param RFSENSE_IRQn Represents the EFR32 RFSENSE Interrupt with a value of
+ * 40.
+ * @param PRORTC_IRQn Represents the EFR32 PRORTC Interrupt with a value of 41.
+ * @param SYNTH_IRQn Represents the EFR32 SYNTH Interrupt with a value of 42.
+ * @param WDOG0_IRQn Represents the EFR32 WDOG0 Interrupt with a value of 43.
+ * @param HFXO0_IRQn Represents the EFR32 HFXO0 Interrupt with a value of 44.
+ * @param HFRCO0_IRQn Represents the EFR32 HFRCO0 Interrupt with a value of 45.
+ * @param CMU_IRQn Represents the EFR32 CMU Interrupt with a value of 46.
+ * @param AES_IRQn Represents the EFR32 AES Interrupt with a value of 47.
+ * @param IADC_IRQn Represents the EFR32 IADC Interrupt with a value of 48.
+ * @param MSC_IRQn Represents the EFR32 MSC Interrupt with a value of 49.
+ * @param DPLL0_IRQn Represents the EFR32 DPLL0 Interrupt with a value of 50.
+ * @param PDM_IRQn Represents the EFR32 PDM Interrupt with a value of 51.
+ * @param SW0_IRQn Represents the EFR32 SW0 Interrupt with a value of 52.
+ * @param SW1_IRQn Represents the EFR32 SW1 Interrupt with a value of 53.
+ * @param SW2_IRQn Represents the EFR32 SW2 Interrupt with a value of 54.
+ * @param SW3_IRQn Represents the EFR32 SW3 Interrupt with a value of 55.
+ * @param KERNEL0_IRQn Represents the EFR32 KERNEL0 Interrupt with a value of
+ * 56.
+ * @param KERNEL1_IRQn Represents the EFR32 KERNEL1 Interrupt with a value of
+ * 57.
+ * @param M33CTI0_IRQn Represents the EFR32 M33CTI0 Interrupt with a value of
+ * 58.
+ * @param M33CTI1_IRQn Represents the EFR32 M33CTI1 Interrupt with a value of
+ * 59.
+ * @param EMUEFP_IRQn Represents the EFR32 EMUEFP Interrupt with a value of 60.
+ * @param DCDC_IRQn Represents the EFR32 DCDC Interrupt with a value of 61.
+ * @param EUART0_RX_IRQn Represents the EFR32 EUART0_RX Interrupt with a value
+ * of 62.
+ * @param EUART0_TX_IRQn Represents the EFR32 EUART0_TX Interrupt with a value
+ * of 63.
+ ******************************************************************************/
 typedef enum IRQn{
   /******  Cortex-M Processor Exceptions Numbers ******************************************/
   NonMaskableInt_IRQn    = -14,             /*!< -14 Cortex-M Non Maskable Interrupt      */

@@ -41,7 +41,86 @@
  * @brief EFR32MG24 PCNT Register Declaration.
  *****************************************************************************/
 
-/** PCNT Register Declaration. */
+/***************************************************************************//**
+ * @brief The `PCNT_TypeDef` is a comprehensive structure representing the Pulse
+ * Counter (PCNT) module's register map for the EFR32MG24
+ * microcontroller. It includes various registers for enabling the
+ * module, resetting, configuring, controlling, and issuing commands to
+ * the PCNT. The structure also contains registers for status monitoring,
+ * interrupt handling, and counter value management. Additionally, it
+ * provides set, clear, and toggle versions of these registers to
+ * facilitate atomic operations. The structure is designed to support
+ * advanced features like oversampling control and synchronization, with
+ * reserved spaces for future expansion.
+ *
+ * @param IPVERSION IP version ID.
+ * @param EN Module Enable Register.
+ * @param SWRST Software Reset Register.
+ * @param CFG Configuration Register.
+ * @param CTRL Control Register.
+ * @param CMD Command Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param CNT Counter Value Register.
+ * @param AUXCNT Auxiliary Counter Value Register.
+ * @param TOP Top Value Register.
+ * @param TOPB Counter Top Value Buffer Register.
+ * @param OVSCTRL Oversampling Control Register.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param LOCK Configuration Lock Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param EN_SET Module Enable Register.
+ * @param SWRST_SET Software Reset Register.
+ * @param CFG_SET Configuration Register.
+ * @param CTRL_SET Control Register.
+ * @param CMD_SET Command Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param CNT_SET Counter Value Register.
+ * @param AUXCNT_SET Auxiliary Counter Value Register.
+ * @param TOP_SET Top Value Register.
+ * @param TOPB_SET Counter Top Value Buffer Register.
+ * @param OVSCTRL_SET Oversampling Control Register.
+ * @param SYNCBUSY_SET Synchronization Busy Register.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param EN_CLR Module Enable Register.
+ * @param SWRST_CLR Software Reset Register.
+ * @param CFG_CLR Configuration Register.
+ * @param CTRL_CLR Control Register.
+ * @param CMD_CLR Command Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param CNT_CLR Counter Value Register.
+ * @param AUXCNT_CLR Auxiliary Counter Value Register.
+ * @param TOP_CLR Top Value Register.
+ * @param TOPB_CLR Counter Top Value Buffer Register.
+ * @param OVSCTRL_CLR Oversampling Control Register.
+ * @param SYNCBUSY_CLR Synchronization Busy Register.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param EN_TGL Module Enable Register.
+ * @param SWRST_TGL Software Reset Register.
+ * @param CFG_TGL Configuration Register.
+ * @param CTRL_TGL Control Register.
+ * @param CMD_TGL Command Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param CNT_TGL Counter Value Register.
+ * @param AUXCNT_TGL Auxiliary Counter Value Register.
+ * @param TOP_TGL Top Value Register.
+ * @param TOPB_TGL Counter Top Value Buffer Register.
+ * @param OVSCTRL_TGL Oversampling Control Register.
+ * @param SYNCBUSY_TGL Synchronization Busy Register.
+ * @param LOCK_TGL Configuration Lock Register.
+ ******************************************************************************/
 typedef struct pcnt_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t EN;                            /**< Module Enable Register                             */

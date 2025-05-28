@@ -58,73 +58,83 @@ extern "C" {
 #define SL_CLI_INPUT_DIRECTION_DOWN  (-1)
 
 /***************************************************************************//**
- * @brief
- *   Handle new input char from the terminal, both in terms of writing back to
- *   terminal and writing to the input buffer.
+ * @brief This function handles character input from a terminal, updating the
+ * CLI instance's input buffer and echoing characters back to the
+ * terminal as needed. It should be called whenever a new character is
+ * detected. The function is designed to handle various control
+ * characters, such as backspace and delete, and can process line endings
+ * to signal command completion. The behavior of this function can be
+ * customized through configuration settings. It is important to ensure
+ * that the CLI instance handle is valid and properly initialized before
+ * calling this function.
  *
- * @details
- *   This function should be called every time new input is detected. The
- *   behavior of the function is highly configurable through settings in
- *   cli_config.h.
- *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in] c
- *   Input char to be processed by the function.
- *
- * @return
- *   Returns true if newline or return is detected, false otherwise.
+ * @param handle A handle to a CLI instance, which must be valid and properly
+ * initialized. The function updates the input buffer and state
+ * within this handle.
+ * @param c The character input to be processed. It can be any valid character,
+ * including control characters like newline, backspace, and delete.
+ * @return Returns true if a newline or return character is detected, indicating
+ * command completion; otherwise, returns false.
  ******************************************************************************/
 bool sl_cli_input_char(sl_cli_handle_t handle,
                        char c);
 
 /***************************************************************************//**
- * @brief
- *   Empty the input buffer.
+ * @brief Use this function to reset the input buffer of a CLI instance after
+ * processing the current command. It should be called once a newline has
+ * been detected and the command in the buffer has been executed or
+ * otherwise handled. This ensures that the buffer is empty and ready for
+ * new input, preventing any residual data from affecting subsequent
+ * commands.
  *
- * @details
- *   This function should be called after newline has been detected and the
- *   information in the buffer has been processed.
- *
- * @param[in, out] handle
- *   A handle to a CLI instance.
+ * @param handle A handle to a CLI instance. This parameter must not be null and
+ * should point to a valid CLI instance whose input buffer is to
+ * be cleared. The function will not perform any action if the
+ * handle is invalid.
+ * @return None
  ******************************************************************************/
 void sl_cli_input_clear(sl_cli_handle_t handle);
 
 #if SL_CLI_ADVANCED_INPUT_HANDLING
 /***************************************************************************//**
- * @brief
- *   Auto complete command in the input buffer if a single match is found.
- *   Print a list of matches if several are found.
- *   Do nothing if no matches are found.
+ * @brief This function attempts to auto-complete the current command in the
+ * input buffer of a CLI instance. It should be used when the user
+ * requests auto-completion, typically by pressing a specific key. If a
+ * single match is found, the command is completed in the buffer and
+ * displayed on the terminal. If multiple matches are found, a list of
+ * possible matches is printed, and the longest common prefix is used to
+ * update the buffer and terminal. If no matches are found, the function
+ * does nothing. The function assumes the input buffer is properly
+ * initialized and that the handle is valid.
  *
- * @details
- *   If a cursor position is not at end of input, the whole input buffer will
- *   still be used for matching. This function uses find_command_matches from
- *   the cli_command.c to find matches and number of matches. Space is used
- *   as a delimiter. If extra space is added at the end of the input buffer, no
- *   commands will be found.
- *
- * @param[in, out] handle
- *   A handle to a CLI instance.
+ * @param handle A handle to a CLI instance. It must be a valid, initialized
+ * handle, and the function will modify the input buffer
+ * associated with this handle.
+ * @return None
  ******************************************************************************/
 void sl_cli_input_autocomplete(sl_cli_handle_t handle);
 #endif // SL_CLI_ADVANCED_INPUT_HANDLING
 
 #if SL_CLI_NUM_HISTORY_BYTES
 /***************************************************************************//**
- * @brief
- *   Get data from the history buffer and insert it into the input buffer.
+ * @brief This function is used to navigate through the command history in a
+ * command-line interface (CLI) environment. It should be called when the
+ * user presses the up or down arrow keys, which are typically used to
+ * access previous or next commands stored in the history buffer. The
+ * function updates the input buffer with the command retrieved from the
+ * history, allowing the user to edit or re-execute it. It is important
+ * to ensure that the CLI instance handle is valid and that the history
+ * feature is enabled before calling this function. The function does not
+ * handle invalid direction values, which will result in no action being
+ * taken.
  *
- * @details
- *   This function should be called when up or down arrow is pressed.
- *
- * @param[in, out] handle
- *   A handle to a CLI instance.
- *
- * @param[in] direction
- *   An integer indicating the direction pressed. 1 for up and -1 for down.
+ * @param handle A handle to a CLI instance. This parameter must be a valid,
+ * initialized CLI handle, and the caller retains ownership. It
+ * must not be null.
+ * @param direction An integer indicating the direction to navigate in the
+ * history. Use 1 for up (previous command) and -1 for down
+ * (next command). Invalid values will result in no action.
+ * @return None
  ******************************************************************************/
 void sl_cli_input_get_history(sl_cli_handle_t handle,
                               int direction);

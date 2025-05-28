@@ -101,6 +101,39 @@ extern "C" {
 // Data Types
 
 /// @brief I/O Stream USART config
+/***************************************************************************//**
+ * @brief The `sl_iostream_usart_config_t` structure is used to configure the
+ * USART peripheral for I/O streaming in embedded systems. It includes
+ * pointers to the USART peripheral and its associated clock, as well as
+ * configuration details for the transmit and receive ports and pins.
+ * Additionally, it supports flow control through CTS and RTS ports and
+ * pins, and includes a timeout setting for receive operations. The
+ * structure also accommodates device-specific configurations for USART
+ * location and index, ensuring flexibility across different hardware
+ * platforms.
+ *
+ * @param usart Pointer to USART peripheral.
+ * @param clock Peripheral Clock.
+ * @param tx_port Transmit port.
+ * @param tx_pin Transmit pin.
+ * @param rx_port Receive port.
+ * @param rx_pin Receive pin.
+ * @param cts_port Flow control, CTS port.
+ * @param cts_pin Flow control, CTS pin.
+ * @param rts_port Flow control, RTS port.
+ * @param rts_pin Flow control, RTS pin.
+ * @param rx_timeout Timeout delay between two Rx events.
+ * @param usart_index Usart index, available only on certain devices.
+ * @param usart_tx_location USART Transmit location, available only on certain
+ * devices.
+ * @param usart_rx_location USART Receive location, available only on certain
+ * devices.
+ * @param usart_cts_location USART CTS location, available only on certain
+ * devices.
+ * @param usart_rts_location USART RTS location, available only on certain
+ * devices.
+ * @param usart_location USART location, available only on certain devices.
+ ******************************************************************************/
 typedef struct {
   USART_TypeDef *usart;       ///< Pointer to USART peripheral
   CMU_Clock_TypeDef clock;    ///< Peripheral Clock
@@ -126,6 +159,33 @@ typedef struct {
 } sl_iostream_usart_config_t;
 
 /// @brief I/O Stream USART context
+/***************************************************************************//**
+ * @brief The `sl_iostream_usart_context_t` structure is designed to encapsulate
+ * the context for a USART I/O stream, including configuration details
+ * for the USART peripheral, associated GPIO ports and pins for
+ * transmission and reception, and optional flow control settings. It is
+ * used to manage the state and configuration of a USART instance within
+ * the Silicon Labs I/O Stream framework, supporting both synchronous and
+ * asynchronous communication modes.
+ *
+ * @param context A context structure for UART, providing USART location
+ * information.
+ * @param usart Pointer to the USART peripheral.
+ * @param clock Specifies the peripheral clock type.
+ * @param tx_port Defines the GPIO port used for transmission.
+ * @param tx_pin Specifies the GPIO pin used for transmission.
+ * @param rx_port Defines the GPIO port used for reception.
+ * @param rx_pin Specifies the GPIO pin used for reception.
+ * @param cts_port Defines the GPIO port for CTS flow control (conditional on
+ * series).
+ * @param cts_pin Specifies the GPIO pin for CTS flow control (conditional on
+ * series).
+ * @param rts_port Defines the GPIO port for RTS flow control (conditional on
+ * series).
+ * @param rts_pin Specifies the GPIO pin for RTS flow control (conditional on
+ * series).
+ * @param flags Holds additional configuration flags (conditional on series).
+ ******************************************************************************/
 typedef struct {
   sl_iostream_uart_context_t context; ///< usart_location
   USART_TypeDef *usart;       ///< usart
@@ -147,19 +207,37 @@ typedef struct {
 // Prototypes
 
 /***************************************************************************//**
- * USART Stream init.
+ * @brief This function sets up a USART stream for input and output operations
+ * by configuring the necessary hardware and software parameters. It must
+ * be called before any USART communication can occur, ensuring that the
+ * USART peripheral is properly initialized and ready for use. The
+ * function requires valid configuration structures for both the UART and
+ * USART, as well as a context structure to maintain state information.
+ * It handles enabling clocks, setting GPIO modes, and configuring USART
+ * settings, including optional hardware flow control. The function
+ * returns a status code indicating success or failure, which should be
+ * checked to ensure the initialization was successful.
  *
- * @param[in] iostream_uart  I/O Stream UART handle.
- *
- * @param[in] uart_config  I/O Stream UART config.
- *
- * @param[in] init  USART initialization modes.
- *
- * @param[in] usart_config  USART configuration.
- *
- * @param[in] usart_context  USART Instance context.
- *
- * @return  Status result
+ * @param iostream_uart A pointer to an sl_iostream_uart_t structure. This must
+ * not be null and is used to manage the I/O stream state.
+ * @param uart_config A pointer to an sl_iostream_uart_config_t structure
+ * containing UART configuration settings. This must not be
+ * null and should be properly initialized before calling the
+ * function.
+ * @param init A pointer to a USART_InitAsync_TypeDef structure specifying USART
+ * initialization parameters. This must not be null and should be
+ * configured with desired USART settings.
+ * @param config A pointer to an sl_iostream_usart_config_t structure containing
+ * USART-specific configuration details, including pin and port
+ * settings. This must not be null and should be correctly set up
+ * to match the hardware configuration.
+ * @param usart_context A pointer to an sl_iostream_usart_context_t structure
+ * used to maintain USART state information. This must not
+ * be null and is updated by the function to reflect the
+ * current USART configuration.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process. SL_STATUS_OK is returned on success, while
+ * other status codes indicate specific errors.
  ******************************************************************************/
 sl_status_t sl_iostream_usart_init (sl_iostream_uart_t *iostream_uart,
                                     sl_iostream_uart_config_t *uart_config,
@@ -167,9 +245,20 @@ sl_status_t sl_iostream_usart_init (sl_iostream_uart_t *iostream_uart,
                                     sl_iostream_usart_config_t *usart_config,
                                     sl_iostream_usart_context_t *usart_context);
 
-/*******************************************************************************
- * Usart interrupt handler.
- * @param[in] iostream_uart   I/O Stream UART handle.
+/***************************************************************************//**
+ * @brief This function processes interrupt requests for a USART I/O stream,
+ * ensuring proper handling of transmission events. It should be called
+ * within an interrupt service routine when a USART interrupt occurs. The
+ * function is designed to manage transmission completion events and may
+ * assert if an unhandled interrupt flag is encountered. It is important
+ * to ensure that the USART I/O stream is properly initialized before
+ * invoking this handler.
+ *
+ * @param iostream_uart A pointer to an initialized sl_iostream_uart_t structure
+ * representing the I/O stream UART handle. This parameter
+ * must not be null, and the caller retains ownership. The
+ * function does not modify the contents of this structure.
+ * @return None
  ******************************************************************************/
 void sl_iostream_usart_irq_handler(sl_iostream_uart_t *iostream_uart);
 

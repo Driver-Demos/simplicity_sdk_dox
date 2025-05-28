@@ -131,267 +131,354 @@ extern "C" {
 typedef void(*sl_interrupt_manager_irq_handler_t)(void);
 
 /***************************************************************************//**
- * @brief
- *   Initialize interrupt controller hardware and initialise vector table
- *   in RAM.
+ * @brief This function initializes the interrupt manager, ensuring that the
+ * vector table is set up correctly in RAM if the configuration allows.
+ * It should be called once at the start of the program to prepare the
+ * interrupt system for use. The function is idempotent, meaning
+ * subsequent calls after the first initialization will have no effect.
+ * It sets default priorities for interrupts and, if configured, copies
+ * the vector table from ROM to RAM. This function must be called before
+ * any other interrupt management functions to ensure proper operation.
  *
- * @note
- *   The interrupt manager init function will perform the initialization only
- *   once even if it's called multiple times.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_init(void);
 
 /***************************************************************************//**
- * @brief
- *   Reset the cpu core.
+ * @brief This function is used to reset the CPU core, effectively restarting
+ * the system. It should be called when a system reset is required, such
+ * as in response to a critical error or to apply certain configuration
+ * changes that necessitate a restart. This function does not take any
+ * parameters and does not return a value. It is important to ensure that
+ * any necessary data is saved or state is preserved before calling this
+ * function, as it will not return and the system will restart
+ * immediately.
+ *
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_reset_system(void);
 
 /***************************************************************************//**
- * @brief
- *   Disable interrupts.
+ * @brief Use this function to globally disable all interrupts, ensuring that no
+ * interrupt service routines are executed until interrupts are re-
+ * enabled. This is typically used in critical sections of code where
+ * atomic operations are required, and interrupt interference must be
+ * prevented. It is important to re-enable interrupts after the critical
+ * section to maintain system responsiveness. This function should be
+ * used with caution, as disabling interrupts for extended periods can
+ * lead to missed interrupts and degraded system performance.
+ *
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_disable_interrupts(void);
 
 /***************************************************************************//**
- * @brief
- *   Enable interrupts.
+ * @brief This function is used to enable global interrupts, allowing the system
+ * to respond to interrupt requests. It should be called when the system
+ * is ready to handle interrupts, typically after initialization or when
+ * resuming from a state where interrupts were intentionally disabled.
+ * There are no parameters to configure, and it does not return a value.
+ * This function is essential for systems that rely on interrupt-driven
+ * processing.
+ *
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_enable_interrupts(void);
 
 /***************************************************************************//**
- * @brief
- *   Disable interrupt for an interrupt source.
+ * @brief This function is used to disable a specific interrupt source
+ * identified by its interrupt number. It is typically called when an
+ * interrupt should be temporarily or permanently disabled to prevent it
+ * from being triggered. The function must be called with a valid
+ * interrupt number within the range of available external interrupts. If
+ * the interrupt number is outside the valid range, the behavior is
+ * undefined. This function does not return a value and does not provide
+ * feedback on the success of the operation.
  *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
+ * @param irqn The interrupt number of the interrupt source to be disabled. It
+ * must be a non-negative integer and within the range of available
+ * external interrupts. Passing a value outside this range results
+ * in undefined behavior.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_disable_irq(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Enable interrupt for an interrupt source.
+ * @brief This function is used to enable an interrupt for a given interrupt
+ * source identified by its interrupt number. It is essential to ensure
+ * that the interrupt number provided is within the valid range, which is
+ * from 0 to EXT_IRQ_COUNT inclusive. This function should be called when
+ * you want to allow the specified interrupt to be triggered and handled
+ * by the system. It is important to note that the function does not
+ * return any value, and it assumes that the interrupt number is valid as
+ * per the precondition.
  *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
+ * @param irqn The interrupt number of the interrupt source to be enabled. It
+ * must be a non-negative integer and should not exceed
+ * EXT_IRQ_COUNT. If the value is outside this range, the behavior
+ * is undefined.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_enable_irq(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Check if an interrupt is disabled.
+ * @brief This function determines whether a given interrupt, identified by its
+ * interrupt number, is currently disabled. It is useful for checking the
+ * status of an interrupt before attempting operations that require the
+ * interrupt to be disabled. The function should be called with a valid
+ * interrupt number within the range of available external interrupts. If
+ * the provided interrupt number is outside the valid range, the behavior
+ * is undefined. This function does not modify any state or have side
+ * effects.
  *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @return
- *   True if the interrupt is disabled.
+ * @param irqn The interrupt number of the interrupt source. It must be a non-
+ * negative integer and less than the total number of external
+ * interrupts (EXT_IRQ_COUNT). Providing an invalid interrupt number
+ * results in undefined behavior.
+ * @return Returns true if the specified interrupt is disabled, otherwise
+ * returns false.
  ******************************************************************************/
 bool sl_interrupt_manager_is_irq_disabled(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Check if a specific interrupt is blocked.
+ * @brief This function determines whether a given interrupt is currently
+ * blocked, which can occur if the interrupt is disabled, masked by
+ * priority, or if a higher priority interrupt is active. It is useful
+ * for checking the status of an interrupt before attempting operations
+ * that require it to be unblocked. The function should be called with a
+ * valid interrupt number, and it assumes that the interrupt manager has
+ * been properly initialized.
  *
- * @note
- *   The function return true if the IRQ is disabled.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @return
- *   True if the interrupt is disabled or blocked.
+ * @param irqn The interrupt number of the interrupt source. It must be within
+ * the valid range for the platform, specifically between
+ * MemoryManagement_IRQn and EXT_IRQ_COUNT for Cortex-M3 and above,
+ * or between SVCall_IRQn and EXT_IRQ_COUNT for other platforms.
+ * Invalid values will trigger an assertion failure.
+ * @return Returns true if the interrupt is blocked due to being disabled,
+ * masked by priority, or if a higher priority interrupt is active;
+ * otherwise, returns false.
  ******************************************************************************/
 bool sl_interrupt_manager_is_irq_blocked(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Get Pending Interrupt
+ * @brief Use this function to determine if a given interrupt, identified by its
+ * interrupt number, is currently pending. This is useful for checking
+ * the status of an interrupt before taking action based on its state.
+ * The function should be called with a non-negative interrupt number, as
+ * negative values will result in a return value of false, indicating
+ * that the interrupt is not pending. This function does not modify any
+ * state or have side effects.
  *
- * @note
- *   Read the pending status of a specified interrupt and returns it status.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @return
- *   false  Interrupt status is not pending.
- *   true   Interrupt status is pending.
+ * @param irqn The interrupt number to check. Must be a non-negative integer. If
+ * a negative value is provided, the function will return false,
+ * indicating the interrupt is not pending.
+ * @return Returns a boolean value: true if the specified interrupt is pending,
+ * false otherwise.
  ******************************************************************************/
 bool sl_interrupt_manager_is_irq_pending(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Set interrupt status to pending.
+ * @brief This function is used to set the pending status of a specified
+ * interrupt, identified by its interrupt number. It is typically called
+ * when an interrupt needs to be marked as pending, which means it is
+ * ready to be serviced by the processor. The function should only be
+ * called with a non-negative interrupt number, as negative values are
+ * not valid and will result in no action being taken. This function does
+ * not return a value and does not provide feedback if the operation was
+ * successful or not.
  *
- * @note
- *   Sets an interrupt pending status to true.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
+ * @param irqn The interrupt number of the interrupt source. Must be a non-
+ * negative integer. If a negative value is provided, the function
+ * will not perform any action.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_set_irq_pending(int32_t irqn);
 
 /***************************************************************************//**
-*  @brief
-*    Clear Pending Interrupt
-*
-*  @details
-*   Clear an interrupt pending status
-*
-* @param[in] irqn
-*   The interrupt number of the interrupt source.
-*
-*  @note
-*   irqn must not be negative.
-*******************************************************************************/
+ * @brief Use this function to clear the pending status of an interrupt,
+ * effectively resetting its pending state. This is useful when you want
+ * to ensure that an interrupt is not erroneously triggered due to a
+ * previously set pending status. The function should be called with a
+ * valid interrupt number, which must be non-negative. If the interrupt
+ * number is negative, the function will not perform any action. This
+ * function is typically used in interrupt management scenarios where
+ * precise control over interrupt states is required.
+ *
+ * @param irqn The interrupt number of the interrupt source. It must be a non-
+ * negative integer. If a negative value is provided, the function
+ * will not clear any pending status.
+ * @return None
+ ******************************************************************************/
 void sl_interrupt_manager_clear_irq_pending(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Set the interrupt handler of an interrupt source.
+ * @brief This function assigns a new interrupt handler to a specified interrupt
+ * source, provided that the interrupt vector table is located in RAM. It
+ * is essential to ensure that the interrupt manager is properly
+ * initialized and configured to use a RAM-based vector table before
+ * calling this function. The function will return an error if the
+ * interrupt number is invalid or if the vector table is not in RAM. It
+ * is typically used when you need to change the behavior of an interrupt
+ * dynamically during runtime.
  *
- * @note
- *   This function depends on a RAM based interrupt vector table, i.e.
- *   SL_INTERRUPT_MANAGER_S2_INTERRUPTS_IN_RAM must be true. Or the device
- *   must be Series 3.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @param[in] handler
- *   The new interrupt handler for the interrupt source.
- *
- * @return
- *   The prior interrupt handler for the interrupt source.
+ * @param irqn The interrupt number of the source for which the handler is being
+ * set. It must be a non-negative integer and less than the total
+ * number of external interrupts (EXT_IRQ_COUNT). If the value is
+ * out of range, the function returns SL_STATUS_INVALID_PARAMETER.
+ * @param handler A function pointer to the new interrupt handler. This handler
+ * will be called when the specified interrupt occurs. The caller
+ * retains ownership of the function pointer, and it must not be
+ * null.
+ * @return Returns SL_STATUS_OK on success, SL_STATUS_INVALID_PARAMETER if the
+ * interrupt number is invalid, SL_STATUS_NOT_INITIALIZED if the vector
+ * table is not in RAM, or SL_STATUS_INVALID_CONFIGURATION if the
+ * configuration does not support RAM-based vector tables.
  ******************************************************************************/
 sl_status_t sl_interrupt_manager_set_irq_handler(int32_t irqn,
                                                  sl_interrupt_manager_irq_handler_t handler);
 
 /***************************************************************************//**
- * @brief
- *   Get the interrupt preemption priority of an interrupt source.
+ * @brief Use this function to obtain the preemption priority of a specific
+ * interrupt source identified by its interrupt number. This function is
+ * useful when you need to check the current priority level of an
+ * interrupt to make decisions based on its urgency or to compare it with
+ * other interrupts. Ensure that the interrupt number provided is within
+ * the valid range for your platform, as the function expects the
+ * interrupt number to be between -CORTEX_INTERRUPTS and EXT_IRQ_COUNT.
+ * The function will assert if the interrupt number is out of this range.
  *
- * @note
- *   The number of priority levels is platform dependent.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @return
- *   The interrupt priority for the interrupt source.
- *   Value 0 denotes the highest priority.
+ * @param irqn The interrupt number of the interrupt source. It must be within
+ * the range of -CORTEX_INTERRUPTS to EXT_IRQ_COUNT. If the value is
+ * outside this range, the function will assert.
+ * @return Returns the priority of the specified interrupt as a uint32_t value,
+ * where a lower number indicates a higher priority.
  ******************************************************************************/
 uint32_t sl_interrupt_manager_get_irq_priority(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Set the interrupt preemption priority of an interrupt source.
+ * @brief This function is used to assign a new preemption priority to a
+ * specific interrupt source. It is essential to ensure that the
+ * interrupt number and priority values are within valid ranges before
+ * calling this function. The function should be used when there is a
+ * need to change the priority level of an interrupt to manage its
+ * execution order relative to other interrupts. It is important to note
+ * that the priority level is platform-dependent, and the function
+ * assumes that the interrupt manager has been properly initialized.
  *
- * @note
- *   The number of priority levels is platform dependent.
- *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @param[in] priority
- *   The new interrupt priority for the interrupt source.
- *   Value 0 denotes the highest priority.
+ * @param irqn The interrupt number of the interrupt source. It must be within
+ * the range of valid interrupt numbers, specifically between
+ * -CORTEX_INTERRUPTS and EXT_IRQ_COUNT inclusive. Invalid values
+ * will trigger an assertion failure.
+ * @param priority The new priority level for the interrupt. It must be a non-
+ * negative value not exceeding LOWEST_NVIC_PRIORITY. Invalid
+ * values will trigger an assertion failure.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_set_irq_priority(int32_t irqn, uint32_t priority);
 
 /***************************************************************************//**
- * @brief
- *   Increase the interrupt preemption priority of an interrupt source.
- *   relative to the default priority.
+ * @brief This function adjusts the priority of a specified interrupt by
+ * decreasing its priority value relative to the default priority,
+ * effectively increasing its preemption priority. It is useful for
+ * making architecture-agnostic priority adjustments. The function should
+ * be called when you need to elevate the priority of an interrupt beyond
+ * its default setting. Ensure that the interrupt number is valid and
+ * that the resulting priority does not exceed platform-specific limits.
  *
- * @details
- *   This function is useful to be architecture agnostic with priority values.
- *
- *   Usage:
- *   new_prio = sl_interrupt_manager_increase_irq_priority_from_default(IRQn, 1);
- *
- *   This will increase the priority of IRQn by 1.
- *
- * @param[in] irqn
- *   The irq to change the priority.
- *
- * @param[in] diff
- *   The relative difference.
+ * @param irqn The interrupt number of the source whose priority is to be
+ * increased. It must be a valid interrupt number for the platform.
+ * @param diff The amount by which to increase the priority, specified as a
+ * positive integer. The function will subtract this value from the
+ * default priority to determine the new priority.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_increase_irq_priority_from_default(int32_t irqn, uint32_t diff);
 
 /***************************************************************************//**
- * @brief
- *   Decrease the interrupt preemption priority of an interrupt source
- *   relative to the default priority.
+ * @brief This function is used to decrease the preemption priority of a
+ * specified interrupt source by a given amount relative to its default
+ * priority. It is useful for adjusting interrupt priorities in a
+ * platform-independent manner. The function should be called when you
+ * need to lower the priority of an interrupt, making it less urgent
+ * compared to others. Ensure that the interrupt number is valid and that
+ * the priority adjustment does not exceed platform-specific limits.
  *
- * @details
- *   This function is useful to be architecture agnostic with priority values.
- *
- *   Usage:
- *   new_prio = sl_interrupt_manager_decrease_irq_priority_from_default(IRQn, 1);
- *
- *   This will decrease the priority of IRQn by 1.
- *
- * @param[in] irqn
- *   The irq to change the priority.
- *
- * @param[in] diff
- *   The relative difference.
+ * @param irqn The interrupt number of the source whose priority is to be
+ * changed. It must be a valid interrupt number for the platform.
+ * @param diff The amount by which to decrease the interrupt's priority. It
+ * should be a non-negative value, and care should be taken to
+ * ensure the resulting priority remains within valid bounds.
+ * @return None
  ******************************************************************************/
 void sl_interrupt_manager_decrease_irq_priority_from_default(int32_t irqn, uint32_t diff);
 
 /***************************************************************************//**
- * @brief
- *   Get the default interrupt preemption priority value.
+ * @brief Use this function to obtain the default priority level for interrupt
+ * preemption, which is useful for configuring or comparing interrupt
+ * priorities within the system. This function can be called at any time
+ * to retrieve the default priority value, which is a constant defined in
+ * the system. It is particularly useful when setting or adjusting
+ * interrupt priorities relative to the default.
  *
- * @return
- *   The default priority.
+ * @return Returns the default interrupt preemption priority as a 32-bit
+ * unsigned integer.
  ******************************************************************************/
 uint32_t sl_interrupt_manager_get_default_priority(void);
 
 /***************************************************************************//**
- * @brief
- *   Get the highest interrupt preemption priority value.
+ * @brief This function returns the highest possible interrupt preemption
+ * priority value that can be set within the system. It is useful for
+ * determining the upper bound of priority levels when configuring
+ * interrupts. This function does not require any initialization or
+ * configuration to be called and has no side effects.
  *
- * @return
- *   The highest priority value.
+ * @return The function returns a uint32_t representing the highest interrupt
+ * preemption priority value.
  ******************************************************************************/
 uint32_t sl_interrupt_manager_get_highest_priority(void);
 
 /***************************************************************************//**
- * @brief
- *   Get the lowest interrupt preemption priority value.
+ * @brief This function is used to obtain the lowest possible interrupt
+ * preemption priority value within the system. It is useful when
+ * configuring or comparing interrupt priorities to ensure that a given
+ * interrupt is set to the lowest priority level available. This function
+ * can be called at any time and does not require any prior
+ * initialization of the interrupt manager. It is a read-only operation
+ * and does not modify any system state.
  *
- * @return
- *   The lowest priority value.
+ * @return Returns the lowest interrupt preemption priority value as a uint32_t.
  ******************************************************************************/
 uint32_t sl_interrupt_manager_get_lowest_priority(void);
 
 /***************************************************************************//**
- * @brief
- *   Get the interrupt active status.
+ * @brief This function checks whether a specific interrupt, identified by its
+ * interrupt number, is currently active. It is useful for determining if
+ * an interrupt is being serviced at the moment. The function should be
+ * called with a valid interrupt number, and it will return a non-zero
+ * value if the interrupt is active, or zero if it is not. It is
+ * important to ensure that the interrupt number provided is non-
+ * negative, as negative values will result in a return value of zero,
+ * indicating the interrupt is not active.
  *
- * @param[in] irqn
- *   The interrupt number of the interrupt source.
- *
- * @return
- *   The interrupt active status.
+ * @param irqn The interrupt number of the interrupt source. It must be a non-
+ * negative integer. If a negative value is provided, the function
+ * will return zero, indicating the interrupt is not active.
+ * @return Returns a non-zero value if the specified interrupt is active,
+ * otherwise returns zero.
  ******************************************************************************/
 uint32_t sl_interrupt_manager_get_active_irq(int32_t irqn);
 
 /***************************************************************************//**
- * @brief
- *   Get the current ISR table.
+ * @brief This function returns a pointer to the current Interrupt Service
+ * Routine (ISR) table, which may reside in RAM or FLASH depending on the
+ * configuration of the Interrupt Manager. The table may also include
+ * ISRs wrapped with enter/exit hooks if such hooks are enabled. This
+ * function is useful for accessing the current configuration of
+ * interrupt handlers, especially in systems where the ISR table location
+ * or wrapping behavior can change based on compile-time settings.
  *
- * @details
- *   Depending on the configuration of the Interrupt Manager, this table of
- *   ISRs may be in RAM or in FLASH, and each ISR may or may not be wrapped by
- *   enter/exit hooks.
- *
- * @return
- *   The current ISR table.
+ * @return A pointer to the current ISR table, which is an array of interrupt
+ * handler functions.
  ******************************************************************************/
 sl_interrupt_manager_irq_handler_t* sl_interrupt_manager_get_isr_table(void);
 

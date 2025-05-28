@@ -41,7 +41,201 @@
  * @brief EFR32BG22 CMU Register Declaration.
  *****************************************************************************/
 
-/** CMU Register Declaration. */
+/***************************************************************************//**
+ * @brief The `CMU_TypeDef` is a comprehensive structure representing the Clock
+ * Management Unit (CMU) for the EFR32BG22 microcontroller. It contains
+ * numerous registers for managing and controlling various clock sources
+ * and configurations, including system clocks, peripheral clocks, and
+ * calibration controls. The structure includes fields for setting,
+ * clearing, and toggling register values, as well as reserved fields for
+ * future use. This design allows for flexible and precise control over
+ * the clocking system, essential for optimizing power consumption and
+ * performance in embedded applications.
+ *
+ * @param IPVERSION IP version ID.
+ * @param RESERVED0 Reserved for future use.
+ * @param STATUS Status Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param LOCK Configuration Lock Register.
+ * @param WDOGLOCK WDOG Configuration Lock Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param CALCMD Calibration Command Register.
+ * @param CALCTRL Calibration Control Register.
+ * @param CALCNT Calibration Result Counter Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param CLKEN0 Clock Enable Register 0.
+ * @param CLKEN1 Clock Enable Register 1.
+ * @param RESERVED5 Reserved for future use.
+ * @param SYSCLKCTRL System Clock Control.
+ * @param RESERVED6 Reserved for future use.
+ * @param TRACECLKCTRL Debug Trace Clock Control.
+ * @param RESERVED7 Reserved for future use.
+ * @param EXPORTCLKCTRL Export Clock Control.
+ * @param RESERVED8 Reserved for future use.
+ * @param DPLLREFCLKCTRL Digital PLL Reference Clock Control.
+ * @param RESERVED9 Reserved for future use.
+ * @param EM01GRPACLKCTRL EM01 Peripheral Group A Clock Control.
+ * @param EM01GRPBCLKCTRL EM01 Peripheral Group B Clock Control.
+ * @param RESERVED10 Reserved for future use.
+ * @param EM23GRPACLKCTRL EM23 Peripheral Group A Clock Control.
+ * @param RESERVED11 Reserved for future use.
+ * @param EM4GRPACLKCTRL EM4 Peripheral Group A Clock Control.
+ * @param RESERVED12 Reserved for future use.
+ * @param IADCCLKCTRL IADC Clock Control.
+ * @param RESERVED13 Reserved for future use.
+ * @param WDOG0CLKCTRL Watchdog0 Clock Control.
+ * @param RESERVED14 Reserved for future use.
+ * @param EUART0CLKCTRL UART Clock Control.
+ * @param RESERVED15 Reserved for future use.
+ * @param RTCCCLKCTRL RTCC Clock Control.
+ * @param RESERVED16 Reserved for future use.
+ * @param PRORTCCLKCTRL Protocol RTC Clock Control.
+ * @param RESERVED17 Reserved for future use.
+ * @param CRYPTOACCCLKCTRL CRYPTOACC Clock Control.
+ * @param RESERVED18 Reserved for future use.
+ * @param RADIOCLKCTRL Radio Clock Control.
+ * @param RESERVED19 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param RESERVED20 Reserved for future use.
+ * @param STATUS_SET Status Register.
+ * @param RESERVED21 Reserved for future use.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param WDOGLOCK_SET WDOG Configuration Lock Register.
+ * @param RESERVED22 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED23 Reserved for future use.
+ * @param CALCMD_SET Calibration Command Register.
+ * @param CALCTRL_SET Calibration Control Register.
+ * @param CALCNT_SET Calibration Result Counter Register.
+ * @param RESERVED24 Reserved for future use.
+ * @param CLKEN0_SET Clock Enable Register 0.
+ * @param CLKEN1_SET Clock Enable Register 1.
+ * @param RESERVED25 Reserved for future use.
+ * @param SYSCLKCTRL_SET System Clock Control.
+ * @param RESERVED26 Reserved for future use.
+ * @param TRACECLKCTRL_SET Debug Trace Clock Control.
+ * @param RESERVED27 Reserved for future use.
+ * @param EXPORTCLKCTRL_SET Export Clock Control.
+ * @param RESERVED28 Reserved for future use.
+ * @param DPLLREFCLKCTRL_SET Digital PLL Reference Clock Control.
+ * @param RESERVED29 Reserved for future use.
+ * @param EM01GRPACLKCTRL_SET EM01 Peripheral Group A Clock Control.
+ * @param EM01GRPBCLKCTRL_SET EM01 Peripheral Group B Clock Control.
+ * @param RESERVED30 Reserved for future use.
+ * @param EM23GRPACLKCTRL_SET EM23 Peripheral Group A Clock Control.
+ * @param RESERVED31 Reserved for future use.
+ * @param EM4GRPACLKCTRL_SET EM4 Peripheral Group A Clock Control.
+ * @param RESERVED32 Reserved for future use.
+ * @param IADCCLKCTRL_SET IADC Clock Control.
+ * @param RESERVED33 Reserved for future use.
+ * @param WDOG0CLKCTRL_SET Watchdog0 Clock Control.
+ * @param RESERVED34 Reserved for future use.
+ * @param EUART0CLKCTRL_SET UART Clock Control.
+ * @param RESERVED35 Reserved for future use.
+ * @param RTCCCLKCTRL_SET RTCC Clock Control.
+ * @param RESERVED36 Reserved for future use.
+ * @param PRORTCCLKCTRL_SET Protocol RTC Clock Control.
+ * @param RESERVED37 Reserved for future use.
+ * @param CRYPTOACCCLKCTRL_SET CRYPTOACC Clock Control.
+ * @param RESERVED38 Reserved for future use.
+ * @param RADIOCLKCTRL_SET Radio Clock Control.
+ * @param RESERVED39 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param RESERVED40 Reserved for future use.
+ * @param STATUS_CLR Status Register.
+ * @param RESERVED41 Reserved for future use.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param WDOGLOCK_CLR WDOG Configuration Lock Register.
+ * @param RESERVED42 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED43 Reserved for future use.
+ * @param CALCMD_CLR Calibration Command Register.
+ * @param CALCTRL_CLR Calibration Control Register.
+ * @param CALCNT_CLR Calibration Result Counter Register.
+ * @param RESERVED44 Reserved for future use.
+ * @param CLKEN0_CLR Clock Enable Register 0.
+ * @param CLKEN1_CLR Clock Enable Register 1.
+ * @param RESERVED45 Reserved for future use.
+ * @param SYSCLKCTRL_CLR System Clock Control.
+ * @param RESERVED46 Reserved for future use.
+ * @param TRACECLKCTRL_CLR Debug Trace Clock Control.
+ * @param RESERVED47 Reserved for future use.
+ * @param EXPORTCLKCTRL_CLR Export Clock Control.
+ * @param RESERVED48 Reserved for future use.
+ * @param DPLLREFCLKCTRL_CLR Digital PLL Reference Clock Control.
+ * @param RESERVED49 Reserved for future use.
+ * @param EM01GRPACLKCTRL_CLR EM01 Peripheral Group A Clock Control.
+ * @param EM01GRPBCLKCTRL_CLR EM01 Peripheral Group B Clock Control.
+ * @param RESERVED50 Reserved for future use.
+ * @param EM23GRPACLKCTRL_CLR EM23 Peripheral Group A Clock Control.
+ * @param RESERVED51 Reserved for future use.
+ * @param EM4GRPACLKCTRL_CLR EM4 Peripheral Group A Clock Control.
+ * @param RESERVED52 Reserved for future use.
+ * @param IADCCLKCTRL_CLR IADC Clock Control.
+ * @param RESERVED53 Reserved for future use.
+ * @param WDOG0CLKCTRL_CLR Watchdog0 Clock Control.
+ * @param RESERVED54 Reserved for future use.
+ * @param EUART0CLKCTRL_CLR UART Clock Control.
+ * @param RESERVED55 Reserved for future use.
+ * @param RTCCCLKCTRL_CLR RTCC Clock Control.
+ * @param RESERVED56 Reserved for future use.
+ * @param PRORTCCLKCTRL_CLR Protocol RTC Clock Control.
+ * @param RESERVED57 Reserved for future use.
+ * @param CRYPTOACCCLKCTRL_CLR CRYPTOACC Clock Control.
+ * @param RESERVED58 Reserved for future use.
+ * @param RADIOCLKCTRL_CLR Radio Clock Control.
+ * @param RESERVED59 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param RESERVED60 Reserved for future use.
+ * @param STATUS_TGL Status Register.
+ * @param RESERVED61 Reserved for future use.
+ * @param LOCK_TGL Configuration Lock Register.
+ * @param WDOGLOCK_TGL WDOG Configuration Lock Register.
+ * @param RESERVED62 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param RESERVED63 Reserved for future use.
+ * @param CALCMD_TGL Calibration Command Register.
+ * @param CALCTRL_TGL Calibration Control Register.
+ * @param CALCNT_TGL Calibration Result Counter Register.
+ * @param RESERVED64 Reserved for future use.
+ * @param CLKEN0_TGL Clock Enable Register 0.
+ * @param CLKEN1_TGL Clock Enable Register 1.
+ * @param RESERVED65 Reserved for future use.
+ * @param SYSCLKCTRL_TGL System Clock Control.
+ * @param RESERVED66 Reserved for future use.
+ * @param TRACECLKCTRL_TGL Debug Trace Clock Control.
+ * @param RESERVED67 Reserved for future use.
+ * @param EXPORTCLKCTRL_TGL Export Clock Control.
+ * @param RESERVED68 Reserved for future use.
+ * @param DPLLREFCLKCTRL_TGL Digital PLL Reference Clock Control.
+ * @param RESERVED69 Reserved for future use.
+ * @param EM01GRPACLKCTRL_TGL EM01 Peripheral Group A Clock Control.
+ * @param EM01GRPBCLKCTRL_TGL EM01 Peripheral Group B Clock Control.
+ * @param RESERVED70 Reserved for future use.
+ * @param EM23GRPACLKCTRL_TGL EM23 Peripheral Group A Clock Control.
+ * @param RESERVED71 Reserved for future use.
+ * @param EM4GRPACLKCTRL_TGL EM4 Peripheral Group A Clock Control.
+ * @param RESERVED72 Reserved for future use.
+ * @param IADCCLKCTRL_TGL IADC Clock Control.
+ * @param RESERVED73 Reserved for future use.
+ * @param WDOG0CLKCTRL_TGL Watchdog0 Clock Control.
+ * @param RESERVED74 Reserved for future use.
+ * @param EUART0CLKCTRL_TGL UART Clock Control.
+ * @param RESERVED75 Reserved for future use.
+ * @param RTCCCLKCTRL_TGL RTCC Clock Control.
+ * @param RESERVED76 Reserved for future use.
+ * @param PRORTCCLKCTRL_TGL Protocol RTC Clock Control.
+ * @param RESERVED77 Reserved for future use.
+ * @param CRYPTOACCCLKCTRL_TGL CRYPTOACC Clock Control.
+ * @param RESERVED78 Reserved for future use.
+ * @param RADIOCLKCTRL_TGL Radio Clock Control.
+ ******************************************************************************/
 typedef struct cmu_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */

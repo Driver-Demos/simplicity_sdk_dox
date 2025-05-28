@@ -658,6 +658,24 @@ typedef uint16_t EmberPhyEnum;
   #define PHY SL_ZIGBEE_PHY_DUALRAIL
 #endif
 
+/***************************************************************************//**
+ * @brief The EmberChipTypeStruct is a data structure that encapsulates
+ * information about a specific chip configuration, including its
+ * platform, microcontroller, and physical layer. This structure is used
+ * to define the characteristics of the chip on which the code is
+ * running, allowing for platform-specific configurations and
+ * optimizations. Each member of the struct is an enumeration that
+ * provides a standardized way to represent the platform,
+ * microcontroller, and physical layer types, facilitating compatibility
+ * and integration across different hardware setups.
+ *
+ * @param platform Represents the platform type using the EmberPlatformEnum
+ * enumeration.
+ * @param micro Represents the microcontroller type using the EmberMicroEnum
+ * enumeration.
+ * @param phy Represents the physical layer type using the EmberPhyEnum
+ * enumeration.
+ ******************************************************************************/
 typedef struct {
   EmberPlatformEnum platform;
   EmberMicroEnum micro;

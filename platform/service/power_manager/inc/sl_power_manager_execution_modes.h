@@ -53,12 +53,35 @@ extern "C" {
  * @note FOR INTERNAL USE ONLY.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function adjusts the requirement for the performance execution
+ * mode by either incrementing or decrementing a counter based on the
+ * provided boolean parameter. It is intended for internal use only and
+ * should be used when there is a need to modify the execution mode
+ * requirements, such as when entering or exiting a performance-critical
+ * section. The function ensures that the counter does not exceed its
+ * bounds, preventing wraparound errors. It should be called only when
+ * the execution modes feature is enabled.
+ *
+ * @param add A boolean value indicating whether to add (true) or remove (false)
+ * a requirement for the performance execution mode. The parameter
+ * must be used carefully to avoid exceeding the counter's limits.
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_update_execution_mode_requirement(bool  add);
 
 /***************************************************************************//**
  * Adds requirement on performance execution mode.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The function `sl_power_manager_add_performance_mode_requirement` adds
+ * a requirement for the system to operate in performance execution mode.
+ *
+ * @return There is no direct output from this function as it is a void
+ * function, but it modifies the system's execution mode requirements by
+ * adding a performance mode requirement.
+ ******************************************************************************/
 __INLINE void sl_power_manager_add_performance_mode_requirement(void)
 {
   sli_power_manager_update_execution_mode_requirement(true);
@@ -68,15 +91,29 @@ __INLINE void sl_power_manager_add_performance_mode_requirement(void)
  * Removes requirement on performance execution mode.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief The function `sl_power_manager_remove_performance_mode_requirement`
+ * removes the requirement for the performance execution mode by updating
+ * the execution mode requirement to false.
+ *
+ * @return The function does not return any value; it performs an action by
+ * calling another function to update the execution mode requirement.
+ ******************************************************************************/
 __INLINE void sl_power_manager_remove_performance_mode_requirement(void)
 {
   sli_power_manager_update_execution_mode_requirement(false);
 }
 
 /***************************************************************************//**
- * Initializes execution mode feature.
+ * @brief This function sets up the execution mode feature within the power
+ * manager system. It is intended for internal use only and should be
+ * called to ensure that the execution modes are properly initialized
+ * before any execution mode requirements are added or removed. This
+ * function does not take any parameters and does not return any values.
+ * It must be called before any other execution mode management functions
+ * are used to ensure proper operation.
  *
- * @note FOR INTERNAL USE ONLY.
+ * @return None
  ******************************************************************************/
 void sli_power_manager_executions_modes_init(void);
 
@@ -86,6 +123,17 @@ void sli_power_manager_executions_modes_init(void);
  * @note FOR INTERNAL USE ONLY.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_POWER_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to ensure that the appropriate execution mode is
+ * applied when the system wakes up from a low-power state. It checks the
+ * current system clock source and the performance mode requirements, and
+ * applies the necessary changes to the execution mode if they have not
+ * already been implemented. This function is intended for internal use
+ * only and should be called during the wakeup process to ensure that the
+ * system operates in the correct mode based on the current requirements.
+ *
+ * @return None
+ ******************************************************************************/
 void sli_power_manager_implement_execution_mode_on_wakeup(void);
 
 #ifdef __cplusplus

@@ -41,7 +41,70 @@
  * @brief EFR32MG24 MPAHBRAM Register Declaration.
  *****************************************************************************/
 
-/** MPAHBRAM Register Declaration. */
+/***************************************************************************//**
+ * @brief The `MPAHBRAM_TypeDef` is a complex data structure representing a
+ * memory-mapped peripheral register set for the EFR32MG24
+ * microcontroller. It includes various registers for managing IP
+ * versioning, command execution, control settings, error correction code
+ * (ECC) error addresses, multiple ECC error indications, interrupt
+ * flags, and interrupt enable settings. The structure also provides set,
+ * clear, and toggle variants for these registers, allowing for flexible
+ * manipulation of the register values. Additionally, it contains several
+ * reserved fields for future use, ensuring compatibility with potential
+ * future extensions.
+ *
+ * @param IPVERSION IP version ID.
+ * @param CMD Command register.
+ * @param CTRL Control register.
+ * @param ECCERRADDR0 ECC Error Address 0.
+ * @param ECCERRADDR1 ECC Error Address 1.
+ * @param ECCERRADDR2 ECC Error Address 2.
+ * @param ECCERRADDR3 ECC Error Address 3.
+ * @param ECCMERRIND Multiple ECC error indication.
+ * @param IF Interrupt Flags.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED0 Reserved for future use.
+ * @param RESERVED1 Reserved for future use.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param CMD_SET Command register.
+ * @param CTRL_SET Control register.
+ * @param ECCERRADDR0_SET ECC Error Address 0.
+ * @param ECCERRADDR1_SET ECC Error Address 1.
+ * @param ECCERRADDR2_SET ECC Error Address 2.
+ * @param ECCERRADDR3_SET ECC Error Address 3.
+ * @param ECCMERRIND_SET Multiple ECC error indication.
+ * @param IF_SET Interrupt Flags.
+ * @param IEN_SET Interrupt Enable.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param CMD_CLR Command register.
+ * @param CTRL_CLR Control register.
+ * @param ECCERRADDR0_CLR ECC Error Address 0.
+ * @param ECCERRADDR1_CLR ECC Error Address 1.
+ * @param ECCERRADDR2_CLR ECC Error Address 2.
+ * @param ECCERRADDR3_CLR ECC Error Address 3.
+ * @param ECCMERRIND_CLR Multiple ECC error indication.
+ * @param IF_CLR Interrupt Flags.
+ * @param IEN_CLR Interrupt Enable.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param CMD_TGL Command register.
+ * @param CTRL_TGL Control register.
+ * @param ECCERRADDR0_TGL ECC Error Address 0.
+ * @param ECCERRADDR1_TGL ECC Error Address 1.
+ * @param ECCERRADDR2_TGL ECC Error Address 2.
+ * @param ECCERRADDR3_TGL ECC Error Address 3.
+ * @param ECCMERRIND_TGL Multiple ECC error indication.
+ * @param IF_TGL Interrupt Flags.
+ * @param IEN_TGL Interrupt Enable.
+ * @param RESERVED9 Reserved for future use.
+ * @param RESERVED10 Reserved for future use.
+ ******************************************************************************/
 typedef struct mpahbram_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t CMD;                           /**< Command register                                   */

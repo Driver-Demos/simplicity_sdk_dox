@@ -41,12 +41,39 @@
  * @brief EFR32MG24 BURAM Register Declaration.
  *****************************************************************************/
 
-/** BURAM RET Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `BURAM_RET_TypeDef` is a structure that defines a single retention
+ * register, which is a 32-bit memory location used to store data that
+ * needs to be retained across power cycles or resets. This structure is
+ * part of the BURAM (Backup RAM) module, which is typically used in
+ * embedded systems to maintain critical data when the main power is off.
+ * The `__IOM` qualifier indicates that the register is both readable and
+ * writable, allowing for data manipulation as needed.
+ *
+ * @param REG A 32-bit retention register used for storing data persistently.
+ ******************************************************************************/
 typedef struct buram_ret_typedef{
   __IOM uint32_t REG;                                /**< Retention Register                                 */
 } BURAM_RET_TypeDef;
 
-/** BURAM Register Declaration. */
+/***************************************************************************//**
+ * @brief The BURAM_TypeDef structure is designed to manage a set of retention
+ * registers within the EFR32MG24 microcontroller. It includes arrays for
+ * standard retention operations (RET), as well as specialized arrays for
+ * setting (RET_SET), clearing (RET_CLR), and toggling (RET_TGL) register
+ * values. The structure also reserves space for future expansion or
+ * additional features, as indicated by the RESERVED arrays. This design
+ * allows for efficient manipulation of retention registers, which are
+ * crucial for maintaining state across power cycles.
+ *
+ * @param RET An array of 32 retention registers.
+ * @param RESERVED0 An array of 992 reserved 32-bit integers for future use.
+ * @param RET_SET An array of 32 retention registers for setting values.
+ * @param RESERVED1 An array of 992 reserved 32-bit integers for future use.
+ * @param RET_CLR An array of 32 retention registers for clearing values.
+ * @param RESERVED2 An array of 992 reserved 32-bit integers for future use.
+ * @param RET_TGL An array of 32 retention registers for toggling values.
+ ******************************************************************************/
 typedef struct buram_typedef{
   BURAM_RET_TypeDef RET[32U];                   /**< RetentionReg                                       */
   uint32_t          RESERVED0[992U];            /**< Reserved for future use                            */

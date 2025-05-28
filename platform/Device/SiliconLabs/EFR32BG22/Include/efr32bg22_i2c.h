@@ -41,7 +41,90 @@
  * @brief EFR32BG22 I2C Register Declaration.
  *****************************************************************************/
 
-/** I2C Register Declaration. */
+/***************************************************************************//**
+ * @brief The `I2C_TypeDef` structure represents the register layout for the I2C
+ * peripheral in the EFR32BG22 microcontroller. It includes various
+ * registers for controlling and monitoring the I2C interface, such as
+ * enabling the module, setting control parameters, issuing commands, and
+ * handling interrupts. The structure also provides registers for
+ * managing data transmission and reception, including single and double
+ * data buffers. Additionally, it includes reserved spaces for future use
+ * and multiple versions of each register for setting, clearing, and
+ * toggling their values, allowing for flexible control over the I2C
+ * operations.
+ *
+ * @param IPVERSION IP VERSION Register.
+ * @param EN Enable Register.
+ * @param CTRL Control Register.
+ * @param CMD Command Register.
+ * @param STATE State Register.
+ * @param STATUS Status Register.
+ * @param CLKDIV Clock Division Register.
+ * @param SADDR Follower Address Register.
+ * @param SADDRMASK Follower Address Mask Register.
+ * @param RXDATA Receive Buffer Data Register.
+ * @param RXDOUBLE Receive Buffer Double Data Register.
+ * @param RXDATAP Receive Buffer Data Peek Register.
+ * @param RXDOUBLEP Receive Buffer Double Data Peek Register.
+ * @param TXDATA Transmit Buffer Data Register.
+ * @param TXDOUBLE Transmit Buffer Double Data Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP VERSION Register.
+ * @param EN_SET Enable Register.
+ * @param CTRL_SET Control Register.
+ * @param CMD_SET Command Register.
+ * @param STATE_SET State Register.
+ * @param STATUS_SET Status Register.
+ * @param CLKDIV_SET Clock Division Register.
+ * @param SADDR_SET Follower Address Register.
+ * @param SADDRMASK_SET Follower Address Mask Register.
+ * @param RXDATA_SET Receive Buffer Data Register.
+ * @param RXDOUBLE_SET Receive Buffer Double Data Register.
+ * @param RXDATAP_SET Receive Buffer Data Peek Register.
+ * @param RXDOUBLEP_SET Receive Buffer Double Data Peek Register.
+ * @param TXDATA_SET Transmit Buffer Data Register.
+ * @param TXDOUBLE_SET Transmit Buffer Double Data Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP VERSION Register.
+ * @param EN_CLR Enable Register.
+ * @param CTRL_CLR Control Register.
+ * @param CMD_CLR Command Register.
+ * @param STATE_CLR State Register.
+ * @param STATUS_CLR Status Register.
+ * @param CLKDIV_CLR Clock Division Register.
+ * @param SADDR_CLR Follower Address Register.
+ * @param SADDRMASK_CLR Follower Address Mask Register.
+ * @param RXDATA_CLR Receive Buffer Data Register.
+ * @param RXDOUBLE_CLR Receive Buffer Double Data Register.
+ * @param RXDATAP_CLR Receive Buffer Data Peek Register.
+ * @param RXDOUBLEP_CLR Receive Buffer Double Data Peek Register.
+ * @param TXDATA_CLR Transmit Buffer Data Register.
+ * @param TXDOUBLE_CLR Transmit Buffer Double Data Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP VERSION Register.
+ * @param EN_TGL Enable Register.
+ * @param CTRL_TGL Control Register.
+ * @param CMD_TGL Command Register.
+ * @param STATE_TGL State Register.
+ * @param STATUS_TGL Status Register.
+ * @param CLKDIV_TGL Clock Division Register.
+ * @param SADDR_TGL Follower Address Register.
+ * @param SADDRMASK_TGL Follower Address Mask Register.
+ * @param RXDATA_TGL Receive Buffer Data Register.
+ * @param RXDOUBLE_TGL Receive Buffer Double Data Register.
+ * @param RXDATAP_TGL Receive Buffer Data Peek Register.
+ * @param RXDOUBLEP_TGL Receive Buffer Double Data Peek Register.
+ * @param TXDATA_TGL Transmit Buffer Data Register.
+ * @param TXDOUBLE_TGL Transmit Buffer Double Data Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ ******************************************************************************/
 typedef struct i2c_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP VERSION Register                                */
   __IOM uint32_t EN;                            /**< Enable Register                                    */

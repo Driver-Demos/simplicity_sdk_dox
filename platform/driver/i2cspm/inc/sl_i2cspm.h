@@ -148,6 +148,29 @@ extern "C" {
  ******************************************************************************/
 #if defined(_SILICON_LABS_32B_SERIES_3)
 /// I2C transfer events.
+/***************************************************************************//**
+ * @brief The `I2C_TransferReturn_TypeDef` is an enumeration that defines the
+ * possible return statuses of an I2C transfer operation. It provides a
+ * set of constants that represent different states or outcomes of an I2C
+ * transfer, such as whether the transfer is still in progress, completed
+ * successfully, or encountered various types of errors like NACK, bus
+ * errors, arbitration loss, or usage faults. This enumeration is used to
+ * communicate the result of an I2C transfer operation to the calling
+ * function, allowing it to handle each specific case appropriately.
+ *
+ * @param i2cTransferInProgress Indicates that the I2C transfer is currently in
+ * progress.
+ * @param i2cTransferDone Indicates that the I2C data transfer has been
+ * completed successfully.
+ * @param i2cTransferNack Indicates that a NACK (Not Acknowledge) was received
+ * during the I2C transfer.
+ * @param i2cTransferBusErr Indicates that a bus error occurred during the I2C
+ * transfer.
+ * @param i2cTransferArbLost Indicates that arbitration was lost during the I2C
+ * transfer.
+ * @param i2cTransferUsageFault Indicates a usage fault occurred during the I2C
+ * transfer.
+ ******************************************************************************/
 typedef enum {
   i2cTransferInProgress,                            ///< I2C Transfer in progress.
   i2cTransferDone,                                  ///< I2C data transfer complete.
@@ -158,6 +181,18 @@ typedef enum {
 } I2C_TransferReturn_TypeDef;
 
 /// Clock low to high ratio settings.
+/***************************************************************************//**
+ * @brief The `I2C_ClockHLR_TypeDef` is an enumeration that defines the clock
+ * low to high ratio settings for I2C communication. It provides three
+ * different configurations: standard, asymmetric, and fast, each
+ * represented by a specific ratio of low to high clock periods. These
+ * settings are used to control the timing characteristics of the I2C
+ * bus, allowing for different speed modes in I2C communication.
+ *
+ * @param i2cClockHLRStandard Represents a clock low to high ratio of 4:4.
+ * @param i2cClockHLRAsymetric Represents a clock low to high ratio of 6:3.
+ * @param i2cClockHLRFast Represents a clock low to high ratio of 11:3.
+ ******************************************************************************/
 typedef enum {
   i2cClockHLRStandard  = _I2C_CTRL_CLHR_STANDARD,      /**< Ratio is 4:4 */
   i2cClockHLRAsymetric = _I2C_CTRL_CLHR_ASYMMETRIC,    /**< Ratio is 6:3 */
@@ -172,6 +207,24 @@ typedef enum {
 /// I2C driver instance initialization structure. This data structure contains a number of I2C
 /// configuration options required for driver instance initialization.This struct is passed to
 /// @ref I2CSPM_Init() when initializing a I2CSPM instance.
+/***************************************************************************//**
+ * @brief The `I2CSPM_Init_TypeDef` structure is used to initialize an I2C
+ * Simple Polled Master (I2CSPM) instance. It contains configuration
+ * parameters such as the peripheral port, pin numbers for SCL and SDA,
+ * reference and maximum frequencies for the I2C bus, and clock low/high
+ * ratio settings. This structure is essential for setting up the I2C
+ * interface in master mode, ensuring proper communication settings are
+ * applied for the specific hardware configuration.
+ *
+ * @param port Pointer to the I2C peripheral port.
+ * @param sclPort Port number for the SCL pin.
+ * @param sclPin Pin number for the SCL pin.
+ * @param sdaPort Port number for the SDA pin.
+ * @param sdaPin Pin number for the SDA pin.
+ * @param i2cRefFreq Reference clock frequency for the I2C.
+ * @param i2cMaxFreq Maximum bus frequency for the I2C.
+ * @param i2cClhr Control for the clock low/high ratio.
+ ******************************************************************************/
 typedef struct {
   I2C_TypeDef           *port;          ///< Peripheral port.
   sl_gpio_port_t        sclPort;        ///< SCL pin port number.
@@ -190,6 +243,23 @@ typedef struct {
 /// #I2C_FLAG_WRITE - Data written from buf[0].data,
 /// #I2C_FLAG_WRITE_READ - Data written from buf[0].data and read into buf[1].data
 /// #I2C_FLAG_WRITE_WRITE - Data written from buf[0].data and buf[1].data.
+/***************************************************************************//**
+ * @brief The `I2C_TransferSeq_TypeDef` structure is used to define a complete
+ * I2C transfer sequence in master mode, from start to stop. It includes
+ * an address field for specifying the I2C device address, a flags field
+ * to indicate the type of I2C operation (such as read, write, or
+ * combined operations), and an array of two buffers for holding data to
+ * be transmitted or received. This structure supports various I2C
+ * operations by allowing data to be written from or read into the
+ * specified buffers, facilitating complex I2C communication sequences.
+ *
+ * @param addr Address to use after (repeated) start, formatted for 7 or 10 bit
+ * addresses.
+ * @param flags Flags defining sequence type and details, using I2C_FLAG_
+ * defines.
+ * @param buf Array of two buffers used to hold data to send from or receive
+ * into, depending on sequence type.
+ ******************************************************************************/
 typedef struct {
   /// Address to use after (repeated) start.
   /// Layout details, A = Address bit, X = don't care bit (set to 0):
@@ -223,32 +293,47 @@ typedef I2C_TypeDef sl_i2cspm_t;
  ******************************************************************************/
 
 /***************************************************************************//**
- * @brief
- *   Initialize I2C peripheral.
+ * @brief This function sets up the I2C peripheral for master mode operation,
+ * configuring both the I2C module and any necessary board-specific
+ * settings to enable I2C communication. It must be called before any I2C
+ * transactions are performed. The function requires a valid
+ * initialization structure to be passed, which specifies the I2C port,
+ * pin configurations, and clock settings. It ensures that the I2C bus is
+ * in a known state by sending clock pulses if necessary. The function is
+ * designed for single bus-master configurations and assumes the caller
+ * has correctly populated the initialization structure.
  *
- * @details
- *   This driver supports master mode only, single bus-master. In addition
- *   to configuring the I2C peripheral module, it also configures DK/STK
- *   specific setup in order to use the I2C bus.
- *
- * @param[in] init
- *   Pointer to I2C initialization structure.
+ * @param init A pointer to an I2CSPM_Init_TypeDef structure containing the
+ * configuration settings for the I2C peripheral. This includes the
+ * I2C port, SCL and SDA pin configurations, reference frequency,
+ * maximum frequency, and clock low/high ratio. The pointer must not
+ * be null, and the structure must be properly initialized before
+ * calling this function.
+ * @return None
  ******************************************************************************/
 void I2CSPM_Init(I2CSPM_Init_TypeDef *init);
 
 /***************************************************************************//**
- * @brief
- *   Perform I2C transfer.
+ * @brief This function initiates an I2C transfer on the specified peripheral
+ * port using the provided transfer sequence. It supports various types
+ * of I2C operations, including read, write, and combined write-read or
+ * write-write sequences. The function blocks until the transfer is
+ * complete, making it suitable for use in environments where polling is
+ * acceptable. It is important to ensure that the sequence structure
+ * remains valid for the duration of the transfer. The function handles
+ * different I2C flags to determine the type of operation and returns a
+ * status indicating the result of the transfer.
  *
- * @param[in] i2c
- *   Pointer to the peripheral port
- *
- * @param[in] seq
- *   Pointer to sequence structure defining the I2C transfer to take place. The
- *   referenced structure must exist until the transfer has fully completed.
- *
- * @return
- *   Returns status of ongoing transfer.
+ * @param i2c Pointer to the I2C peripheral port to be used for the transfer.
+ * Must not be null.
+ * @param seq Pointer to an I2C_TransferSeq_TypeDef structure that defines the
+ * transfer sequence, including the address, flags, and data buffers.
+ * The structure must remain valid until the transfer is complete.
+ * Invalid sequences, such as a read with zero bytes, result in a
+ * usage fault.
+ * @return Returns an I2C_TransferReturn_TypeDef value indicating the status of
+ * the transfer, such as success, in progress, or various error
+ * conditions.
  ******************************************************************************/
 I2C_TransferReturn_TypeDef I2CSPM_Transfer(I2C_TypeDef *i2c, I2C_TransferSeq_TypeDef *seq);
 

@@ -85,11 +85,133 @@ typedef int64_t int64s;
 #define ALIGNMENT(__alignmentBytes) \
   __attribute__ ((aligned(__alignmentBytes)))
 
+/***************************************************************************//**
+ * @brief The `__StackLimit` variable is an external global variable of type
+ * `uint32_t` that represents the lower boundary of the stack memory
+ * segment in the system. It is used in conjunction with `__StackTop` to
+ * define the stack's memory range.
+ *
+ * @details `__StackLimit` is used to determine the starting address of the
+ * stack segment, which is crucial for stack management and memory
+ * allocation.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `__StackTop` variable is an external global variable of type
+ * `uint32_t` that represents the top of the stack in a memory segment.
+ * It is typically used in embedded systems to define the boundary of the
+ * stack memory area.
+ *
+ * @details `__StackTop` is used to mark the end of the stack segment, helping
+ * to manage stack memory allocation and prevent stack overflows.
+ ******************************************************************************/
 extern uint32_t __StackTop, __StackLimit;
+/***************************************************************************//**
+ * @brief The `linker_code_begin` is a global variable of type `uint32_t` that
+ * represents the starting address of the code segment in memory. It is
+ * declared as an external variable, indicating that its definition is
+ * expected to be provided elsewhere, typically by the linker script.
+ *
+ * @details This variable is used to mark the beginning of the code segment in
+ * memory, facilitating memory management and access to the code
+ * section.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `linker_code_end` is a global variable of type `uint32_t` that
+ * represents the end address of the code segment in memory. It is
+ * declared as an external variable, indicating that its definition is
+ * expected to be provided elsewhere, typically by the linker script.
+ *
+ * @details This variable is used to mark the boundary of the code segment,
+ * allowing the program to determine where the code section ends in
+ * memory.
+ ******************************************************************************/
 extern uint32_t linker_code_begin, linker_code_end;
+/***************************************************************************//**
+ * @brief The `__NO_INIT__begin` variable is an external global variable of type
+ * `uint32_t` that marks the beginning of the `.noinit` segment in
+ * memory. This segment is typically used to store variables that should
+ * not be initialized during the startup process, allowing them to retain
+ * their values across resets.
+ *
+ * @details It is used to reference the start address of the `.noinit` memory
+ * segment, which is crucial for managing memory regions that should
+ * persist without initialization.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `__NO_INIT__end` is a global variable of type `uint32_t` that
+ * marks the end address of the `.noinit` segment in memory. This segment
+ * is typically used to store variables that should not be initialized
+ * during the startup process, allowing them to retain their values
+ * across resets.
+ *
+ * @details It is used to determine the boundary of the `.noinit` segment for
+ * memory management purposes.
+ ******************************************************************************/
 extern uint32_t __NO_INIT__begin, __NO_INIT__end;
+/***************************************************************************//**
+ * @brief The `linker_storage_begin` is a global variable of type `uint32_t`
+ * that represents the starting address of a memory segment used for
+ * internal storage. It is typically defined by the linker script and
+ * used in embedded systems to manage memory layout.
+ *
+ * @details This variable is used to mark the beginning of the internal storage
+ * segment in the memory map, facilitating memory management and access
+ * in embedded applications.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `linker_storage_end` is a global variable of type `uint32_t` that
+ * represents the end address of a specific memory segment used for
+ * internal storage. It is declared as an external variable, indicating
+ * that its definition is expected to be provided elsewhere, typically by
+ * the linker script.
+ *
+ * @details This variable is used to mark the end boundary of the internal
+ * storage segment in memory, facilitating memory management and access
+ * within the program.
+ ******************************************************************************/
 extern uint32_t linker_storage_begin, linker_storage_end;
+/***************************************************************************//**
+ * @brief The `__bss_start__` variable is an external symbol representing the
+ * start address of the BSS segment in memory. The BSS segment is used to
+ * store uninitialized global and static variables in a program.
+ *
+ * @details It is used to define the beginning of the BSS segment, which is
+ * crucial for memory management and initialization of uninitialized
+ * variables.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `__bss_end__` variable is an external global variable of type
+ * `uint32_t` that marks the end address of the BSS (Block Started by
+ * Symbol) segment in memory. The BSS segment typically contains
+ * uninitialized static and global variables.
+ *
+ * @details It is used to determine the boundary of the BSS segment, often for
+ * memory management or initialization purposes.
+ ******************************************************************************/
 extern uint32_t __bss_start__, __bss_end__;
+/***************************************************************************//**
+ * @brief The `linker_nvm_begin` is a global variable of type `uint32_t` that
+ * represents the starting address of the non-volatile memory (NVM)
+ * segment in the memory layout of the program. It is declared as an
+ * external variable, indicating that its actual definition and
+ * initialization occur elsewhere, typically in a linker script or
+ * another source file.
+ *
+ * @details This variable is used to reference the beginning of the NVM segment,
+ * which is crucial for memory management and operations involving non-
+ * volatile storage.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `linker_nvm_end` is a global variable of type `uint32_t` that
+ * represents the end address of the non-volatile memory (NVM) segment in
+ * the memory layout of the program. It is declared as an external
+ * variable, indicating that its definition is expected to be provided
+ * elsewhere, typically by the linker script.
+ *
+ * @details This variable is used to mark the boundary of the NVM segment,
+ * allowing the program to manage memory allocation and access within
+ * this segment.
+ ******************************************************************************/
 extern uint32_t linker_nvm_begin, linker_nvm_end;
 
 #define _CSTACK_SEGMENT_BEGIN           (&__StackLimit)

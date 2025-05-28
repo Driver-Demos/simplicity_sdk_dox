@@ -46,6 +46,17 @@ extern "C" {
 // DATA TYPES
 
 /// @brief Memory region structure.
+/***************************************************************************//**
+ * @brief The `sl_memory_region_t` structure is used to represent a contiguous
+ * block of memory, with a pointer to the start of the region and a size
+ * indicating the total number of bytes in the region. This structure is
+ * useful for managing memory allocations, such as those for the heap and
+ * stack, by providing a standardized way to describe the location and
+ * extent of memory regions.
+ *
+ * @param addr Pointer to the beginning of the memory region, which can be NULL.
+ * @param size Size of this memory region.
+ ******************************************************************************/
 typedef struct sl_memory_region_t {
   void * addr; ///< Pointer to the beginning of the memory region. Can be NULL.
   size_t size; ///< Size of this memory region.

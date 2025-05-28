@@ -38,6 +38,19 @@
  **************************   STRUCTS   ****************************************
  ******************************************************************************/
 /// @brief Struct representing a cpc nvm3 handle.
+/***************************************************************************//**
+ * @brief The `sl_cpc_nvm3_handle_t` is a simple structure that encapsulates a
+ * single member, a constant character pointer named `name`. This
+ * structure is used to represent a handle for CPC NVM3 operations,
+ * likely serving as an identifier or label for a specific NVM3 instance
+ * or configuration within the CPC (Co-Processor Communication)
+ * framework. The use of a constant pointer suggests that the name is
+ * intended to be immutable after initialization, ensuring the integrity
+ * of the handle's identity throughout its lifecycle.
+ *
+ * @param name A constant character pointer representing the name associated
+ * with the NVM3 handle.
+ ******************************************************************************/
 typedef struct {
   const char *name;
 } sl_cpc_nvm3_handle_t;
@@ -48,12 +61,34 @@ extern "C"
 #endif
 
 /***************************************************************************//**
- * CPC-NVM3 endpoint init
+ * @brief This function initializes the CPC NVM3 endpoint, preparing it for
+ * subsequent operations. It must be called before any other operations
+ * on the CPC NVM3 endpoint are performed. If the system is configured
+ * with an operating system kernel, it sets up necessary threading and
+ * synchronization primitives. In non-kernel environments, it performs
+ * basic endpoint initialization. The function returns a status code
+ * indicating success or failure, which should be checked to ensure the
+ * initialization was successful.
+ *
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process. Possible return values include SL_STATUS_OK
+ * for success and SL_STATUS_ALLOCATION_FAILED if resource allocation
+ * fails.
  ******************************************************************************/
 sl_status_t sl_cpc_nvm3_init(void);
 
-/***************************************************************************/ /**
- * CPC-NVM3 endpoint process action
+/***************************************************************************//**
+ * @brief This function should be called to handle any pending actions or state
+ * transitions for the CPC-NVM3 endpoint. It is typically used in a loop
+ * to continuously process endpoint actions, ensuring that commands are
+ * executed and responses are transmitted as needed. The function manages
+ * state changes and handles command completion, ensuring that the
+ * endpoint operates correctly. It must be called after the endpoint has
+ * been initialized with `sl_cpc_nvm3_init`. The function does not take
+ * any parameters and does not return a value, but it may internally
+ * manage state and buffer data for transmission.
+ *
+ * @return None
  ******************************************************************************/
 void sl_cpc_nvm3_process_action(void);
 

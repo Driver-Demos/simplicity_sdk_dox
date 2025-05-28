@@ -305,10 +305,18 @@ SL_ENUM(sl_clock_manager_clock_calibration_t) {
 // Prototypes
 
 /***************************************************************************//**
- * Performs Clock Manager runtime initialization.
+ * @brief This function is used to initialize the runtime components of the
+ * Clock Manager, which is essential for managing the device's
+ * oscillators and clock tree during operation. It should be called as
+ * part of the system's initialization sequence to ensure that the
+ * runtime functionalities of the Clock Manager are properly set up. If
+ * the SL System component is used, this function will be automatically
+ * included in the initialization sequence. The function returns a status
+ * code indicating success or failure, which should be checked to ensure
+ * that the initialization was successful.
  *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @return Returns a status code of type sl_status_t, indicating SL_STATUS_OK if
+ * the initialization is successful, or an error code otherwise.
  ******************************************************************************/
 sl_status_t sl_clock_manager_runtime_init(void);
 
@@ -323,18 +331,46 @@ sl_status_t sl_clock_manager_runtime_init(void);
  *          SL_STATUS_OK if successful. Error code otherwise.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to obtain the frequency of a given oscillator in
+ * Hertz. It is essential to ensure that the `frequency` parameter is not
+ * null before calling this function, as a null pointer will result in an
+ * error. This function is typically used in scenarios where precise
+ * frequency information of an oscillator is required for further
+ * processing or configuration. It is important to handle the return
+ * status to check for successful execution or to identify any errors
+ * that may occur.
+ *
+ * @param oscillator Specifies the oscillator whose frequency is to be
+ * retrieved. It must be a valid oscillator identifier as
+ * defined in the system.
+ * @param frequency A pointer to a uint32_t where the oscillator's frequency
+ * will be stored. Must not be null, as passing a null pointer
+ * will result in an SL_STATUS_NULL_POINTER error.
+ * @return Returns an sl_status_t code indicating success (SL_STATUS_OK) or an
+ * error code if the operation fails.
+ ******************************************************************************/
 sl_status_t sl_clock_manager_get_oscillator_frequency(sl_oscillator_t oscillator,
                                                       uint32_t *frequency);
 
 /***************************************************************************//**
- * Gets precision of given oscillator.
+ * @brief This function is used to obtain the precision of a given oscillator in
+ * parts per million (PPM). It is essential to ensure that the
+ * `precision` parameter is not null before calling this function, as a
+ * null pointer will result in an error. This function is typically used
+ * in scenarios where precise oscillator characteristics are required for
+ * system operations or diagnostics. It is important to handle the return
+ * status to check for successful execution or to identify any errors.
  *
- * @param[in] oscillator  Oscillator
- *
- * @param[out] precision  Oscillator's precision in PPM
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param oscillator Specifies the oscillator for which precision is to be
+ * retrieved. It must be a valid oscillator identifier as
+ * defined in the system.
+ * @param precision A pointer to a uint16_t where the precision of the
+ * oscillator will be stored. Must not be null, as passing a
+ * null pointer will result in an SL_STATUS_NULL_POINTER error.
+ * @return Returns an sl_status_t indicating the success or failure of the
+ * operation. SL_STATUS_OK is returned on success, while
+ * SL_STATUS_NULL_POINTER is returned if the precision pointer is null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_oscillator_precision(sl_oscillator_t oscillator,
                                                       uint16_t *precision);
@@ -350,65 +386,113 @@ sl_status_t sl_clock_manager_get_oscillator_precision(sl_oscillator_t oscillator
  *          SL_STATUS_OK if successful. Error code otherwise.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to obtain the frequency of a specified clock
+ * branch in Hertz. It is essential for applications that need to know
+ * the operating frequency of different clock branches for configuration
+ * or monitoring purposes. The function requires a valid clock branch
+ * identifier and a non-null pointer to store the frequency result. If
+ * the frequency pointer is null, the function returns an error status
+ * indicating a null pointer.
+ *
+ * @param clock_branch Specifies the clock branch whose frequency is to be
+ * retrieved. It must be a valid clock branch identifier as
+ * defined in the system.
+ * @param frequency A pointer to a uint32_t where the frequency of the specified
+ * clock branch will be stored. Must not be null. If null, the
+ * function returns SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t indicating success or the type of error
+ * encountered, such as SL_STATUS_NULL_POINTER if the frequency pointer
+ * is null.
+ ******************************************************************************/
 sl_status_t sl_clock_manager_get_clock_branch_frequency(sl_clock_branch_t clock_branch,
                                                         uint32_t *frequency);
 
 /***************************************************************************//**
- * Gets precision of given clock branch.
+ * @brief This function is used to obtain the precision, in parts per million
+ * (PPM), of a specified clock branch. It is essential to ensure that the
+ * `precision` pointer is not null before calling this function, as a
+ * null pointer will result in an error. This function is typically used
+ * in scenarios where precise clock management is required, such as in
+ * timing-sensitive applications. It is important to handle the return
+ * status to ensure that the operation was successful.
  *
- * @param[in] clock_branch  Clock Branch
- *
- * @param[out] precision    Clock Branch's precision in PPM
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param clock_branch Specifies the clock branch whose precision is to be
+ * retrieved. It must be a valid clock branch identifier.
+ * @param precision A pointer to a uint16_t where the precision of the clock
+ * branch will be stored. Must not be null, as passing a null
+ * pointer will result in an SL_STATUS_NULL_POINTER error.
+ * @return Returns an sl_status_t indicating the success or failure of the
+ * operation. SL_STATUS_OK is returned on success, while
+ * SL_STATUS_NULL_POINTER is returned if the precision pointer is null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_clock_branch_precision(sl_clock_branch_t clock_branch,
                                                         uint16_t *precision);
 
 /***************************************************************************//**
- * Enables the given module's bus clock.
+ * @brief This function is used to enable the bus clock for a specific module,
+ * which is necessary before accessing the module's register interface to
+ * avoid triggering a bus fault exception. It should be called whenever a
+ * module's bus clock needs to be activated, typically during the
+ * initialization or configuration phase of a peripheral. The function
+ * returns a status code indicating success or failure, allowing the
+ * caller to handle any errors appropriately.
  *
- * @param[in] module_bus_clock  module's bus clock to enable.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note modules' bus clocks are defined in the
- *       @ref device_clock in the Bus Clock Defines section.
+ * @param module_bus_clock Specifies the bus clock of the module to be enabled.
+ * It must be a valid value defined in the device's Bus
+ * Clock Defines section. Invalid values may result in
+ * an error status being returned.
+ * @return Returns a status code of type sl_status_t, which is SL_STATUS_OK if
+ * the operation is successful, or an error code if it fails.
  ******************************************************************************/
 sl_status_t sl_clock_manager_enable_bus_clock(sl_bus_clock_t module_bus_clock);
 
 /***************************************************************************//**
- * Disables the given module's bus clock.
+ * @brief Use this function to disable the bus clock for a specific module when
+ * it is not needed, which can help reduce power consumption. This
+ * function should be called when the module is not in use to prevent
+ * unnecessary power usage. Ensure that the module's bus clock is not
+ * required for any ongoing operations before disabling it, as this may
+ * lead to a bus fault exception if the module is accessed without an
+ * enabled clock.
  *
- * @param[in] module_bus_clock  module's bus clock to disable.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note modules' bus clocks are defined in the
- *       @ref device_clock in the Bus Clock Defines section.
+ * @param module_bus_clock Specifies the bus clock of the module to be disabled.
+ * It must be a valid sl_bus_clock_t value as defined in
+ * the Bus Clock Defines section of the device_clock
+ * header. Invalid values may result in an error status.
+ * @return Returns an sl_status_t code indicating success (SL_STATUS_OK) or an
+ * error code if the operation fails.
  ******************************************************************************/
 sl_status_t sl_clock_manager_disable_bus_clock(sl_bus_clock_t module_bus_clock);
 
 /***************************************************************************//**
- * Configures one clock export output with specified clock source.
+ * @brief This function is used to export a clock source to a specified GPIO
+ * pin, allowing external devices to utilize the clock signal. It
+ * requires specifying the clock source, the output channel, and the GPIO
+ * port and pin where the clock will be output. The function also allows
+ * setting a divider for the HFEXP clock source, which affects only the
+ * EXPCLK branch frequency. It is important to ensure that the GPIO port
+ * and pin are correctly configured and available for clock output. The
+ * function returns a status code indicating success or the type of error
+ * encountered.
  *
- * @param[in] export_clock_source One of the exportable clock source.
- *
- * @param[in] output_select       Selected export clock output channel.
- *
- * @param[in] hfexp_divider       HFEXP clock divider (1 to 32).
- *                                Note: This parameter only affects the EXPCLK
- *                                      branch frequency.
- *
- * @param[in] port                GPIO port to output exported clock.
- *
- * @param[in] pin                 GPIO pin number to output exported clock.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param export_clock_source Specifies the clock source to be exported. Must be
+ * a valid value from the
+ * sl_clock_manager_export_clock_source_t
+ * enumeration.
+ * @param output_select Specifies the output channel for the clock. Must be a
+ * valid value from the
+ * sl_clock_manager_export_clock_output_select_t
+ * enumeration.
+ * @param hfexp_divider Specifies the divider for the HFEXP clock source. Valid
+ * range is 1 to 32. This parameter only affects the EXPCLK
+ * branch frequency.
+ * @param port Specifies the GPIO port number where the clock will be output.
+ * Must be a valid GPIO port number.
+ * @param pin Specifies the GPIO pin number where the clock will be output. Must
+ * be a valid GPIO pin number.
+ * @return Returns an sl_status_t status code indicating success or the type of
+ * error encountered.
  ******************************************************************************/
 sl_status_t sl_clock_manager_set_gpio_clock_output(sl_clock_manager_export_clock_source_t export_clock_source,
                                                    sl_clock_manager_export_clock_output_select_t output_select,
@@ -417,153 +501,210 @@ sl_status_t sl_clock_manager_set_gpio_clock_output(sl_clock_manager_export_clock
                                                    uint32_t pin);
 
 /***************************************************************************//**
- * Sets the RC oscillator frequency tuning control.
+ * @brief Use this function to adjust the frequency tuning of a specified RC
+ * oscillator during runtime. This is an advanced operation typically
+ * used when environmental conditions, such as temperature, change
+ * significantly and affect oscillator performance. The function should
+ * be used with caution, as it modifies the calibration set during
+ * production. Ensure that the Clock Manager module is initialized before
+ * calling this function.
  *
- * @param[in] oscillator  RC Oscillator to set tuning value for.
- *
- * @param[in] val  The RC oscillator frequency tuning setting to use.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note RC Oscillator tuning is done during production, and the tuning value is
- *       loaded after a reset by the Clock Manager initialization code.
- *       Changing the tuning value from the calibrated value is for more advanced
- *       use. Certain oscillators also have build-in tuning optimization.
- *
- * @note Supported RC oscillators include:
- *        - SL_OSCILLATOR_HFRCODPLL
- *        - SL_OSCILLATOR_HFRCOEM23
- *        - SL_OSCILLATOR_LFRCO
+ * @param oscillator Specifies the RC oscillator to calibrate. Must be a valid
+ * sl_oscillator_t value representing an RC oscillator, such
+ * as SL_OSCILLATOR_HFRCODPLL, SL_OSCILLATOR_HFRCOEM23, or
+ * SL_OSCILLATOR_LFRCO. Invalid values may result in undefined
+ * behavior.
+ * @param val The calibration value to set for the oscillator. This is a 32-bit
+ * unsigned integer representing the desired tuning setting. The
+ * value should be chosen based on the specific requirements and
+ * characteristics of the oscillator.
+ * @return Returns an sl_status_t code indicating success or failure of the
+ * operation. SL_STATUS_OK is returned if the operation is successful;
+ * otherwise, an error code is returned.
  ******************************************************************************/
 sl_status_t sl_clock_manager_set_rc_oscillator_calibration(sl_oscillator_t oscillator,
                                                            uint32_t val);
 
 /***************************************************************************//**
- * Gets the RC oscillator frequency tuning setting.
+ * @brief This function is used to obtain the current frequency tuning setting
+ * of a specified RC oscillator. It is essential for applications that
+ * need to monitor or adjust the oscillator's calibration during runtime.
+ * The function requires a valid oscillator identifier and a non-null
+ * pointer to store the retrieved calibration value. If the pointer is
+ * null, the function returns an error status. This function is
+ * particularly useful in scenarios where precise oscillator calibration
+ * is necessary, such as in temperature-sensitive applications.
  *
- * @param[in] oscillator  An RC oscillator to get tuning value for.
- *
- * @param[out] val The RC oscillator frequency tuning setting in use.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note Supported RC oscillators include:
- *       - SL_OSCILLATOR_HFRCODPLL
- *       - SL_OSCILLATOR_HFRCOEM23
- *       - SL_OSCILLATOR_LFRCO
+ * @param oscillator An identifier for the RC oscillator whose calibration
+ * setting is to be retrieved. Must be a valid RC oscillator
+ * type supported by the system.
+ * @param val A pointer to a uint32_t variable where the current calibration
+ * setting will be stored. Must not be null, or the function will
+ * return SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t code indicating success or the type of error
+ * encountered, such as SL_STATUS_NULL_POINTER if the output pointer is
+ * null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_rc_oscillator_calibration(sl_oscillator_t oscillator,
                                                            uint32_t *val);
 
 /***************************************************************************//**
- * Sets the HFXO calibration value.
+ * @brief Use this function to manually set the calibration value for the High-
+ * Frequency Crystal Oscillator (HFXO). This is typically necessary in
+ * advanced scenarios, such as after an EM4 wake-up, to skip the Core
+ * Bias Optimization stage and reduce initialization time. It should be
+ * called early in the initialization sequence, before the usual clock
+ * initialization function.
  *
- * @param[in] val
- *   The HFXO calibration setting to use.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param val The calibration setting to be applied to the HFXO. The function
+ * expects a valid calibration value, and improper values may lead to
+ * undefined behavior.
+ * @return Returns a status code indicating success or failure of the operation.
  ******************************************************************************/
 sl_status_t sl_clock_manager_set_hfxo_calibration(uint32_t val);
 
 /***************************************************************************//**
- * Gets the HFXO calibration value.
+ * @brief This function is used to obtain the current calibration value of the
+ * High-Frequency Crystal Oscillator (HFXO). It is typically called when
+ * there is a need to save the calibration state, such as before a low-
+ * power mode transition, to restore it later. The function must be
+ * called with a valid pointer to store the retrieved calibration value.
+ * If the provided pointer is null, the function will return an error
+ * status indicating a null pointer.
  *
- * @param[out] val  The current HFXO calibration value.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param val A pointer to a uint32_t where the HFXO calibration value will be
+ * stored. Must not be null. If null, the function returns
+ * SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t indicating success or the type of error
+ * encountered, such as SL_STATUS_NULL_POINTER if the input pointer is
+ * null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_hfxo_calibration(uint32_t *val);
 
 /***************************************************************************//**
- * Sets the HFXO's CTUNE.
+ * @brief This function is used to set the CTUNE value for the High-Frequency
+ * Crystal Oscillator (HFXO), which adjusts the tuning capacitance. It
+ * should be used with caution as changing the CTUNE value while the HFXO
+ * is running can cause significant clock glitches for one clock period.
+ * This function is typically used in scenarios where precise tuning of
+ * the HFXO is required, such as during calibration or when environmental
+ * conditions change. It is important to ensure that the HFXO is not in
+ * use or that the system can tolerate potential glitches when calling
+ * this function.
  *
- * @param[in] ctune  The HFXO's CTUNE value.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note  Sets the XI value to the given ctune value and sets the XO value based
- *        on that same value, but with an offset that is hardware dependent.
- *        Updating CTune while the crystal oscillator is running can
- *        result in significant clock glitches for one XO clock period.
- *        Should be used with caution.
+ * @param ctune The CTUNE value to set for the HFXO. It must be a valid tuning
+ * capacitance value as per the hardware specifications. Invalid
+ * values may result in undefined behavior.
+ * @return Returns an sl_status_t status code indicating success or failure of
+ * the operation.
  ******************************************************************************/
 sl_status_t slx_clock_manager_hfxo_set_ctune(uint32_t ctune);
 
 /***************************************************************************//**
- * Gets the HFXO's CTUNE.
+ * @brief This function is used to obtain the current tuning capacitance (CTUNE)
+ * value for the High-Frequency Crystal Oscillator (HFXO). It is
+ * essential for applications that need to adjust or verify the
+ * oscillator's tuning settings. The function requires a valid pointer to
+ * store the retrieved CTUNE value. It must be called with a non-null
+ * pointer, as passing a null pointer will result in an error status.
+ * This function is typically used in scenarios where precise oscillator
+ * tuning is necessary for optimal performance.
  *
- * @param[out] ctune  The returned HFXO's CTUNE value.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note  This function only returns the CTUNE XI value.
- *        The XO value follows the XI value with a fixed delta that is
- *        hardware dependent.
+ * @param ctune A pointer to a uint32_t where the CTUNE value will be stored.
+ * Must not be null. If null, the function returns
+ * SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t indicating success or failure. SL_STATUS_OK if
+ * successful, or an error code if the input is invalid.
  ******************************************************************************/
 sl_status_t slx_clock_manager_hfxo_get_ctune(uint32_t *ctune);
 
 /***************************************************************************//**
- * Updates the tuning capacitances and calibrate the Core Bias Current.
+ * @brief This function is used to adjust the tuning capacitances of the High-
+ * Frequency Crystal Oscillator (HFXO) by setting the CTUNE value, which
+ * is crucial for maintaining the oscillator's frequency accuracy. It
+ * also calibrates the Core Bias Current, which can optimize the
+ * oscillator's performance. This function should be used with caution as
+ * it can cause clock glitches during the calibration process. It is
+ * typically used in scenarios where precise frequency tuning is
+ * required, such as after significant temperature changes or during
+ * specific operational modes.
  *
- * @param[in] ctune  The HFXO's CTUNE value.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note  Calibrating the CTUNE is time consuming and will cause glitches on the
- *        HFXO's clock. Care and caution should be taken when using this API.
+ * @param ctune The CTUNE value for the HFXO. This parameter is used to set the
+ * tuning capacitance of the oscillator. The value must be chosen
+ * carefully to ensure proper oscillator operation. Invalid values
+ * may lead to incorrect frequency tuning or operational
+ * instability.
+ * @return Returns an sl_status_t status code indicating success or failure of
+ * the calibration process.
  ******************************************************************************/
 sl_status_t slx_clock_manager_hfxo_calibrate_ctune(uint32_t ctune);
 
 /***************************************************************************//**
- * Sets the LFXO frequency tuning control.
+ * @brief This function is used to set the calibration value for the Low-
+ * Frequency Crystal Oscillator (LFXO). It is typically called when there
+ * is a need to adjust the LFXO calibration during runtime, such as in
+ * response to environmental changes like temperature fluctuations. This
+ * function should be used with caution, as incorrect calibration values
+ * can affect the oscillator's performance. It is expected to be called
+ * after the Clock Manager has been initialized.
  *
- * @param[in] val  The LFXO frequency tuning setting to use.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param val The calibration setting for the LFXO. It must be a valid 32-bit
+ * unsigned integer representing the desired calibration value. The
+ * function does not perform validation on this value, so it is the
+ * caller's responsibility to ensure it is appropriate for the
+ * specific hardware and application context.
+ * @return Returns an sl_status_t status code indicating success or failure of
+ * the operation. SL_STATUS_OK is returned if the operation is
+ * successful; otherwise, an error code is returned.
  ******************************************************************************/
 sl_status_t sl_clock_manager_set_lfxo_calibration(uint32_t val);
 
 /***************************************************************************//**
- * Gets the LFXO frequency tuning setting.
+ * @brief This function is used to obtain the current calibration setting for
+ * the Low-Frequency Crystal Oscillator (LFXO). It is typically called
+ * when there is a need to verify or store the calibration value for
+ * later use, such as during system initialization or before entering a
+ * low-power state. The function requires a valid pointer to a uint32_t
+ * variable where the calibration value will be stored. It is important
+ * to ensure that the pointer is not null before calling this function,
+ * as passing a null pointer will result in an error status being
+ * returned.
  *
- * @param[out] val  The LFXO frequency tuning setting to use.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @param val A pointer to a uint32_t variable where the LFXO calibration value
+ * will be stored. Must not be null. If null, the function returns
+ * SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t indicating success or failure. SL_STATUS_OK is
+ * returned on success, while SL_STATUS_NULL_POINTER is returned if the
+ * input pointer is null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_lfxo_calibration(uint32_t *val);
 
 /***************************************************************************//**
- * Configures the RCO calibration.
+ * @brief This function sets up the parameters for the RCO (Resistor-Capacitor
+ * Oscillator) calibration process, which is used to calibrate
+ * oscillators using a high-precision reference clock. It should be
+ * called when you need to adjust the calibration settings, such as the
+ * number of cycles for calibration and the selection of clocks for
+ * counting. The function allows for continuous calibration if specified.
+ * It is important to note that RCO calibration functions are not thread-
+ * safe and should not be used across multiple tasks.
  *
- * @param[in] cycles  Number of cycles to run calibration. Increasing this
- *                    number increases precision, but the calibration will
- *                    take more time.
- *
- * @param[in] down_counter_selection
- *   The clock which will be counted down cycles.
- *
- * @param[in] up_counter_selection
- *   The number of cycles generated by this clock will be counted and
- *   added up, the result can be given with
- *   sl_clock_manager_get_rco_calibration_count().
- *
- * @param[in] continuous_calibration
- *    Flag when true configures continuous calibration.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note RCO calibration related functions are not thread-safe and should
- *       therefore not be called across multiple tasks.
+ * @param cycles Specifies the number of cycles to run the calibration. A higher
+ * number increases precision but also the time taken for
+ * calibration. Must be a positive integer.
+ * @param down_counter_selection Specifies the clock to be used for counting
+ * down cycles. Must be a valid value from the
+ * sl_clock_manager_clock_calibration_t
+ * enumeration.
+ * @param up_counter_selection Specifies the clock whose generated cycles will
+ * be counted and added up. Must be a valid value
+ * from the sl_clock_manager_clock_calibration_t
+ * enumeration.
+ * @param continuous_calibration A boolean flag indicating whether the
+ * calibration should be continuous. If true,
+ * continuous calibration is configured.
+ * @return Returns an sl_status_t status code indicating success or the type of
+ * error encountered.
  ******************************************************************************/
 sl_status_t sl_clock_manager_configure_rco_calibration(uint32_t cycles,
                                                        sl_clock_manager_clock_calibration_t down_counter_selection,
@@ -571,59 +712,85 @@ sl_status_t sl_clock_manager_configure_rco_calibration(uint32_t cycles,
                                                        bool continuous_calibration);
 
 /***************************************************************************//**
- * Starts the RCO calibration.
+ * @brief This function is used to start the RCO (Resistor-Capacitor Oscillator)
+ * calibration process, which is part of the Clock Manager's runtime
+ * functionalities. It should be called when you need to begin
+ * calibrating the RCO using a high-precision reference clock. This
+ * function is not thread-safe, so it should not be invoked from multiple
+ * tasks concurrently. Ensure that the RCO calibration has been properly
+ * configured before calling this function.
  *
- * @note RCO calibration related functions are not thread-safe and should
- *       therefore not be called across multiple tasks.
+ * @return None
  ******************************************************************************/
 void sl_clock_manager_start_rco_calibration(void);
 
 /***************************************************************************//**
- * Stops the RCO calibration.
+ * @brief Use this function to halt the ongoing RCO calibration process when it
+ * is no longer needed or if you need to reconfigure the calibration
+ * settings. This function should be called in a single-threaded context
+ * or with appropriate synchronization, as RCO calibration functions are
+ * not thread-safe. Ensure that the calibration process is actively
+ * running before calling this function to avoid unnecessary calls.
  *
- * @note RCO calibration related functions are not thread-safe and should
- *       therefore not be called across multiple tasks.
+ * @return None
  ******************************************************************************/
 void sl_clock_manager_stop_rco_calibration(void);
 
 /***************************************************************************//**
- * Waits for the RCO calibration to finish.
+ * @brief This function is used to block the calling thread until the RCO
+ * (Resistor-Capacitor Oscillator) calibration process is finished. It
+ * should be called after initiating the RCO calibration to ensure that
+ * the calibration has completed before proceeding with operations that
+ * depend on the calibrated oscillator. This function is not thread-safe,
+ * so it should not be called from multiple tasks concurrently.
  *
- * @note RCO calibration related functions are not thread-safe and should
- *       therefore not be called across multiple tasks.
+ * @return None
  ******************************************************************************/
 void sl_clock_manager_wait_rco_calibration(void);
 
 /***************************************************************************//**
- * Gets calibration count value, returns the value of the up counter.
+ * @brief This function is used to obtain the current calibration count value
+ * from the RCO calibration process. It should be called after the RCO
+ * calibration has been configured and executed to retrieve the result.
+ * The function requires a valid pointer to store the count value, and it
+ * will return an error if the pointer is null. This function is not
+ * thread-safe, so it should not be called concurrently from multiple
+ * tasks.
  *
- * @param[out] count  Calibration count value.
- *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
- *
- * @note RCO calibration related functions are not thread-safe and should
- *       therefore not be called across multiple tasks.
+ * @param count A pointer to a uint32_t where the calibration count value will
+ * be stored. Must not be null. If null, the function returns
+ * SL_STATUS_NULL_POINTER.
+ * @return Returns an sl_status_t indicating success or the type of error
+ * encountered, such as SL_STATUS_NULL_POINTER if the input pointer is
+ * null.
  ******************************************************************************/
 sl_status_t sl_clock_manager_get_rco_calibration_count(uint32_t *count);
 
 /***************************************************************************//**
- * Waits for USBPLL clock to be ready.
+ * @brief This function is used to ensure that the USB Phase-Locked Loop
+ * (USBPLL) clock is ready before proceeding with operations that depend
+ * on it. It should be called when the USBPLL clock is required to be
+ * stable and operational, typically during initialization or before
+ * enabling USB-related functionalities. The function returns a status
+ * code indicating whether the USBPLL clock is ready or if an error
+ * occurred during the wait process.
  *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @return Returns a status code of type sl_status_t, indicating SL_STATUS_OK if
+ * the USBPLL clock is ready, or an error code if it is not.
  ******************************************************************************/
 sl_status_t sl_clock_manager_wait_usbpll(void);
 
 /***************************************************************************//**
- * When this callback function is called, it means that HFXO failed twice in
- * a row to start with normal configurations. This may mean that there is a
- * bad crystal. When getting this callback, HFXO is running but its properties
- * (frequency, precision) are not guaranteed. This should be considered as an
- * error situation.
+ * @brief This function is a callback that is invoked when the High-Frequency
+ * Crystal Oscillator (HFXO) fails to start twice consecutively with
+ * normal configurations. It indicates a potential issue with the
+ * crystal, such as a bad crystal, and should be treated as an error
+ * condition. The function is called only if the
+ * SL_CLOCK_MANAGER_HFXO_SLEEPY_CRYSTAL_SUPPORT configuration is enabled.
+ * When this callback is triggered, the HFXO is running, but its
+ * properties like frequency and precision are not guaranteed.
  *
- * @note This callback will be called only when the
- *       SL_CLOCK_MANAGER_HFXO_SLEEPY_CRYSTAL_SUPPORT config is enabled
+ * @return None
  ******************************************************************************/
 void sl_clock_manager_hfxo_notify_consecutive_failed_startups(void);
 
@@ -639,6 +806,22 @@ void sl_clock_manager_hfxo_notify_consecutive_failed_startups(void);
  *       across multiple tasks.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function configures the oscillator used to clock the external
+ * FLASH memory. It should be used when there is a need to change the
+ * clock source for the external FLASH, typically during system
+ * configuration or when adjusting for different operational conditions.
+ * The function is not thread-safe, so it should not be called
+ * concurrently from multiple tasks. Ensure that the Clock Manager is
+ * properly initialized before calling this function to avoid undefined
+ * behavior.
+ *
+ * @param oscillator Specifies the oscillator to be used for the external FLASH
+ * clock. It must be a valid `sl_oscillator_t` value. Invalid
+ * values may result in an error status being returned.
+ * @return Returns an `sl_status_t` status code, which is `SL_STATUS_OK` if the
+ * operation is successful, or an error code if it fails.
+ ******************************************************************************/
 sl_status_t sl_clock_manager_set_ext_flash_clk(sl_oscillator_t oscillator);
 
 /***************************************************************************//**
@@ -650,6 +833,22 @@ sl_status_t sl_clock_manager_set_ext_flash_clk(sl_oscillator_t oscillator);
  *          SL_STATUS_OK if successful. Error code otherwise.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_CLOCK_MANAGER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief Use this function to obtain the current oscillator that is being used
+ * to clock the external FLASH. This function is useful when you need to
+ * verify or log the current clock source for the external FLASH. It is
+ * important to ensure that the pointer provided is valid and that the
+ * function is called in a context where it is safe to access the clock
+ * manager, as the function is not thread-safe.
+ *
+ * @param oscillator A pointer to an sl_oscillator_t variable where the current
+ * oscillator used for the external FLASH will be stored. Must
+ * not be null, and the caller retains ownership of the
+ * memory.
+ * @return Returns an sl_status_t indicating the success or failure of the
+ * operation. SL_STATUS_OK is returned if successful, otherwise an error
+ * code is returned.
+ ******************************************************************************/
 sl_status_t sl_clock_manager_get_ext_flash_clk(sl_oscillator_t *oscillator);
 
 /** @} (end addtogroup clock_manager) */

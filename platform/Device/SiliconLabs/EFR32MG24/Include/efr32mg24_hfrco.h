@@ -41,7 +41,53 @@
  * @brief EFR32MG24 HFRCO Register Declaration.
  *****************************************************************************/
 
-/** HFRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `HFRCO_TypeDef` is a complex data structure representing the High-
+ * Frequency RC Oscillator (HFRCO) registers for the EFR32MG24
+ * microcontroller. It includes various registers for controlling and
+ * monitoring the oscillator, such as control, calibration, status,
+ * interrupt flag, and lock registers. The structure also provides set,
+ * clear, and toggle operations for these registers, allowing for
+ * flexible manipulation of the oscillator's configuration and state.
+ * Reserved fields are included for future expansion, ensuring
+ * compatibility with potential future updates.
+ *
+ * @param IPVERSION IP Version ID.
+ * @param CTRL Control Register.
+ * @param CAL Calibration Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param LOCK Lock Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET IP Version ID for set operations.
+ * @param CTRL_SET Control Register for set operations.
+ * @param CAL_SET Calibration Register for set operations.
+ * @param STATUS_SET Status Register for set operations.
+ * @param IF_SET Interrupt Flag Register for set operations.
+ * @param IEN_SET Interrupt Enable Register for set operations.
+ * @param RESERVED2 Reserved for future use.
+ * @param LOCK_SET Lock Register for set operations.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR IP Version ID for clear operations.
+ * @param CTRL_CLR Control Register for clear operations.
+ * @param CAL_CLR Calibration Register for clear operations.
+ * @param STATUS_CLR Status Register for clear operations.
+ * @param IF_CLR Interrupt Flag Register for clear operations.
+ * @param IEN_CLR Interrupt Enable Register for clear operations.
+ * @param RESERVED4 Reserved for future use.
+ * @param LOCK_CLR Lock Register for clear operations.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL IP Version ID for toggle operations.
+ * @param CTRL_TGL Control Register for toggle operations.
+ * @param CAL_TGL Calibration Register for toggle operations.
+ * @param STATUS_TGL Status Register for toggle operations.
+ * @param IF_TGL Interrupt Flag Register for toggle operations.
+ * @param IEN_TGL Interrupt Enable Register for toggle operations.
+ * @param RESERVED6 Reserved for future use.
+ * @param LOCK_TGL Lock Register for toggle operations.
+ ******************************************************************************/
 typedef struct hfrco_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version ID                                      */
   __IOM uint32_t CTRL;                          /**< Ctrl Register                                      */

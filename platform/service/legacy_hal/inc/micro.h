@@ -65,13 +65,15 @@
  */
 uint8_t halGetResetInfo(void);
 
-/** @brief Calls ::halGetResetInfo() and supplies a string describing it.
+/***************************************************************************//**
+ * @brief The `halGetResetString` function returns a pointer to a string that
+ * describes the cause of the microcontroller's reset. This function is
+ * useful for diagnostic purposes, allowing developers to print a human-
+ * readable description of the reset cause after program initialization.
  *
- * Useful for diagnostic printing of text just after program
- * initialization.
- *
- * @return A pointer to a program space string.
- */
+ * @details This function is used to obtain a descriptive string of the reset
+ * cause for diagnostic printing.
+ ******************************************************************************/
 const char * halGetResetString(void);
 
 #ifndef DOXYGEN_SHOULD_SKIP_THIS

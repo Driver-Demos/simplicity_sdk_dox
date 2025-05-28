@@ -41,7 +41,75 @@
  * @brief EFR32MG24 LFRCO Register Declaration.
  *****************************************************************************/
 
-/** LFRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `LFRCO_TypeDef` is a complex data structure representing the Low-
+ * Frequency RC Oscillator (LFRCO) registers for the EFR32MG24
+ * microcontroller. It includes various control, status, and
+ * configuration registers, as well as interrupt flag and enable
+ * registers. The structure is designed to facilitate the manipulation of
+ * the LFRCO's operational parameters, including calibration and command
+ * execution. It also includes multiple reserved fields for future use,
+ * ensuring compatibility with potential future enhancements. The
+ * structure supports set, clear, and toggle operations for most
+ * registers, allowing for flexible and efficient control of the
+ * oscillator's behavior.
+ *
+ * @param IPVERSION IP version.
+ * @param CTRL Control Register.
+ * @param STATUS Status Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param LOCK Configuration Lock Register.
+ * @param CFG Configuration Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param NOMCAL Nominal Calibration Register.
+ * @param NOMCALINV Nominal Calibration Inverted Register.
+ * @param CMD Command Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_SET IP version.
+ * @param CTRL_SET Control Register.
+ * @param STATUS_SET Status Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param CFG_SET Configuration Register.
+ * @param RESERVED6 Reserved for future use.
+ * @param NOMCAL_SET Nominal Calibration Register.
+ * @param NOMCALINV_SET Nominal Calibration Inverted Register.
+ * @param CMD_SET Command Register.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_CLR IP version.
+ * @param CTRL_CLR Control Register.
+ * @param STATUS_CLR Status Register.
+ * @param RESERVED8 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED9 Reserved for future use.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param CFG_CLR Configuration Register.
+ * @param RESERVED10 Reserved for future use.
+ * @param NOMCAL_CLR Nominal Calibration Register.
+ * @param NOMCALINV_CLR Nominal Calibration Inverted Register.
+ * @param CMD_CLR Command Register.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_TGL IP version.
+ * @param CTRL_TGL Control Register.
+ * @param STATUS_TGL Status Register.
+ * @param RESERVED12 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param RESERVED13 Reserved for future use.
+ * @param LOCK_TGL Configuration Lock Register.
+ * @param CFG_TGL Configuration Register.
+ * @param RESERVED14 Reserved for future use.
+ * @param NOMCAL_TGL Nominal Calibration Register.
+ * @param NOMCALINV_TGL Nominal Calibration Inverted Register.
+ * @param CMD_TGL Command Register.
+ ******************************************************************************/
 typedef struct lfrco_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version                                         */
   __IOM uint32_t CTRL;                          /**< Control Register                                   */

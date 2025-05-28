@@ -58,7 +58,16 @@ extern "C" {
 // Prototypes
 
 /***************************************************************************//**
- * Disable standard library buffering
+ * @brief Use this function to disable the buffering of the standard output
+ * stream, which is typically enabled by default in certain library
+ * configurations. This is particularly useful when you need immediate
+ * output to be displayed without waiting for a newline character or
+ * buffer flush. It is important to note that this function may not have
+ * any effect on all platforms, as it is conditionally compiled based on
+ * the presence of specific compiler definitions. Ensure that your
+ * environment supports this operation before relying on it.
+ *
+ * @return None
  ******************************************************************************/
 void sl_iostream_stdlib_disable_buffering(void);
 
