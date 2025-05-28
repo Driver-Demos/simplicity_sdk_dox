@@ -67,6 +67,18 @@ SL_ENUM_GENERIC(sli_cpc_security_binding_request_t, uint8_t)
   ECDH_BINDING_REQUEST = 0x01
 };
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_security_protocol_cmd_info_t` structure is used to
+ * encapsulate information about a security protocol command within the
+ * CPC (Connected Protocol Controller) security framework. It includes
+ * fields for the length of the request and response, as well as a
+ * command identifier, which is crucial for managing and processing
+ * security-related commands in the CPC system.
+ *
+ * @param request_len Specifies the length of the request in bytes.
+ * @param response_len Specifies the length of the response in bytes.
+ * @param command_id Identifies the command using a security ID.
+ ******************************************************************************/
 typedef struct {
   uint16_t request_len;
   uint16_t response_len;
@@ -105,61 +117,123 @@ extern "C"
 {
 #endif
 
-/***************************************************************************/ /**
- * Security endpoint init
+/***************************************************************************//**
+ * @brief This function sets up the security endpoint for the CPC (Co-Processor
+ * Communication) framework, preparing it for secure communication. It
+ * should be called before any security-related operations are performed.
+ * The function can optionally accept a callback to notify the
+ * application of any changes in the security state. It is important to
+ * ensure that the security subsystem is properly configured before
+ * calling this function, as improper configuration may lead to
+ * initialization failure.
+ *
+ * @param state_change_cb A callback function of type
+ * `sli_cpc_on_security_state_change_t` that is invoked
+ * when the security state changes. This parameter can be
+ * `NULL` if no callback is needed. The caller retains
+ * ownership of this function pointer.
+ * @return Returns `SL_STATUS_OK` on successful initialization, or an error code
+ * if initialization fails.
  ******************************************************************************/
 sl_status_t sli_cpc_security_init(sli_cpc_on_security_state_change_t state_change_cb);
 
-/***************************************************************************/ /**
- * Security endpoint process action
+/***************************************************************************//**
+ * @brief This function manages the security operations for the CPC security
+ * endpoint, ensuring that any pending security commands are processed
+ * and that the endpoint is recovered if it encounters an error. It
+ * should be called regularly to maintain the security endpoint's
+ * functionality, especially after initialization. The function handles
+ * reading security commands, processing them, and sending requests if
+ * necessary. It is important to ensure that the security subsystem is
+ * initialized before calling this function to avoid undefined behavior.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_security_process(void);
 
-/***************************************************************************/ /**
- * Encrypt a message.
+/***************************************************************************//**
+ * @brief This function encrypts a message by replacing the content in the
+ * provided payload buffer with encrypted data. It requires the security
+ * subsystem to be initialized beforehand. The function operates on a
+ * specified endpoint and uses the provided header for authenticated but
+ * non-encrypted data. Upon successful encryption, a security tag is
+ * generated and stored in the provided tag buffer. This function is
+ * essential for securing communications over the specified endpoint.
  *
- * The security subsystem must be initialized for this function to work
- * properly. Upon success, the content in the payload buffer is replaced with
- * encrypted content.
- *
- * @param[in] ep                endpoint on which to operate
- * @param[in] header            buffer containing authenticated and non-encrypted data.
- * @param[in] header_len        length of the authenticated data buffer.
- * @param[in,out] payload       buffer containing data to be encrypted.
- * @param[in] payload_len       length of cleartext data in the payload buffer.
- * @param[out] tag              buffer to store the security tag.
- * @param[in] tag_len           length of the security tag buffer.
+ * @param ep A pointer to the sl_cpc_endpoint_t structure representing the
+ * endpoint on which to operate. Must not be null.
+ * @param header A pointer to a buffer containing authenticated and non-
+ * encrypted data. Must not be null.
+ * @param header_len The length of the authenticated data buffer. Must be a
+ * valid size for the provided header.
+ * @param payload A pointer to a buffer containing data to be encrypted. The
+ * buffer is modified in place to contain the encrypted data.
+ * Must not be null.
+ * @param payload_len The length of cleartext data in the payload buffer. Must
+ * be a valid size for the provided payload.
+ * @param tag A pointer to a buffer where the security tag will be stored. Must
+ * not be null.
+ * @param tag_len The length of the security tag buffer. Must be sufficient to
+ * store the generated tag.
+ * @return Returns an sl_status_t indicating the success or failure of the
+ * encryption operation.
  ******************************************************************************/
 sl_status_t sli_cpc_security_encrypt(sl_cpc_endpoint_t *ep,
                                      const uint8_t *header, const size_t header_len,
                                      uint8_t *paylaod, const size_t payload_len,
                                      uint8_t *tag, const size_t tag_len);
 
-/***************************************************************************/ /**
- * Decrypt a message.
+/***************************************************************************//**
+ * @brief This function is used to decrypt a message payload that has been
+ * encrypted, ensuring that the security subsystem is initialized before
+ * calling. It operates on a specified endpoint and requires both the
+ * header and payload buffers. The function will replace the encrypted
+ * content in the payload buffer with the decrypted plaintext if
+ * successful. It is important to provide a buffer size to prevent
+ * overflow during decryption. The function also updates the output
+ * length to reflect the size of the decrypted data.
  *
- * The security subsystem must be initialized for this function to work
- * properly.
- *
- * @param[in] ep                endpoint on which to operate
- * @param[in] header            buffer containing authenticated and non-encrypted data.
- * @param[in] header_len        length of the authenticated data buffer.
- * @param[in,out] payload       buffer containing encrypted data.
- * @param[in] buffer_size       size of payload buffer, to prevent overflow when decrypting.
- * @param[in] payload_len       length of encrypted data in the payload buffer.
- * @param[in,out] output_len    length of the plaintext data upon successful decryption.
+ * @param ep A pointer to the sl_cpc_endpoint_t structure representing the
+ * endpoint on which to operate. Must not be null.
+ * @param header A pointer to a buffer containing authenticated and non-
+ * encrypted data. Must not be null.
+ * @param header_len The length of the authenticated data buffer. Must be a
+ * valid size for the provided header.
+ * @param payload A pointer to a buffer containing the encrypted data. This
+ * buffer will be overwritten with the decrypted data upon
+ * success. Must not be null.
+ * @param buffer_size The size of the payload buffer, used to prevent overflow
+ * during decryption. Must be large enough to hold the
+ * decrypted data.
+ * @param payload_len The length of the encrypted data in the payload buffer.
+ * Must be a valid size for the provided payload.
+ * @param output_len A pointer to a size_t variable where the length of the
+ * decrypted plaintext data will be stored upon successful
+ * decryption. Must not be null.
+ * @return Returns an sl_status_t indicating the success or failure of the
+ * decryption operation. On success, the payload buffer is modified to
+ * contain the decrypted data, and output_len is updated with the length
+ * of the decrypted data.
  ******************************************************************************/
 sl_status_t sli_cpc_security_decrypt(sl_cpc_endpoint_t *ep,
                                      const uint8_t *header, const size_t header_len,
                                      uint8_t *payload, const size_t buffer_size,
                                      const size_t payload_len, size_t *output_len);
 
-/***************************************************************************/ /**
- * Abort a received encrypted message.
+/***************************************************************************//**
+ * @brief This function is used to decrement the frame counter for a specific
+ * endpoint when a received encrypted message is aborted. It should be
+ * called when a message is rejected and not decrypted, ensuring that the
+ * frame counter accurately reflects the number of processed frames. This
+ * function only affects the frame counter if the security subsystem is
+ * in the initialized state. It is important to ensure that the security
+ * subsystem is properly initialized before calling this function.
  *
- * The security subsystem uses a frame_counter to track the amount of frames sent
- * from the remote. When rejecting a frame, we must still take it into account
- * even if it is not decrypted.
+ * @param ep A pointer to an `sl_cpc_endpoint_t` structure representing the
+ * endpoint on which to operate. This parameter must not be null, and
+ * the endpoint should be valid and initialized. If the security state
+ * is not initialized, the function will not modify the frame counter.
+ * @return None
  ******************************************************************************/
 void sli_cpc_security_rollback_decrypt(sl_cpc_endpoint_t *ep);
 

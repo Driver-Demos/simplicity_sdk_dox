@@ -50,16 +50,19 @@ extern "C" {
  * @{
  */
 
-/**
- * Initialize HFRCO
+/***************************************************************************//**
+ * @brief This function configures the frequency band of the High-Frequency RC
+ * Oscillator (HFRCO) using a predefined configuration setting,
+ * SL_DEVICE_INIT_HFRCO_BAND. It is typically called during the device
+ * initialization phase to ensure the HFRCO is set to the desired
+ * frequency band for the application. The function must be called after
+ * the necessary configuration settings are defined, and it returns a
+ * status code indicating the success of the operation. This function is
+ * essential for applications that rely on precise oscillator settings
+ * for proper operation.
  *
- * @details
- * Configure the frequency band of the HFRCO. The configuration define
- * SL_DEVICE_INIT_HFRCO_BAND is used to configure the frequency.
- *
- * @return Status code
- * @retval SL_STATUS_OK HFRCO initialized successfully
- */
+ * @return Returns SL_STATUS_OK if the HFRCO is initialized successfully.
+ ******************************************************************************/
 sl_status_t sl_device_init_hfrco(void);
 
 /**

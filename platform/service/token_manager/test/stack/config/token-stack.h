@@ -208,10 +208,41 @@
 typedef uint16_t tokTypeStackNvdataVersion;
 typedef uint32_t tokTypeStackNonceCounter;
 
+/***************************************************************************//**
+ * @brief The `tokTypeStackKey` structure is designed to hold a network key,
+ * which is a critical component in network security protocols. The
+ * structure contains a single member, `networkKey`, which is an array of
+ * 16 bytes, typically used to store a 128-bit key for encryption or
+ * authentication purposes in network communications. This structure is
+ * part of a larger system of tokens used for managing stack data in a
+ * networked environment, ensuring secure and efficient data handling.
+ *
+ * @param networkKey An array of 16 bytes used to store a network key.
+ ******************************************************************************/
 typedef struct {
   uint8_t networkKey[16];
 } tokTypeStackKey;
 
+/***************************************************************************//**
+ * @brief The `tokTypeStackNodeData` structure is used to store various
+ * configuration and identification parameters for a Zigbee node within a
+ * network. It includes fields for network identification such as `panId`
+ * and `zigbeeNodeId`, radio configuration parameters like `radioTxPower`
+ * and `radioFreqChannel`, and node-specific information such as
+ * `nodeType` and `stackProfile`. The `extendedPanId` is an array that
+ * holds the extended PAN ID, providing a unique identifier for the
+ * network.
+ *
+ * @param panId A 16-bit identifier for the personal area network.
+ * @param radioTxPower An 8-bit signed integer representing the radio
+ * transmission power.
+ * @param radioFreqChannel An 8-bit unsigned integer indicating the radio
+ * frequency channel.
+ * @param stackProfile An 8-bit unsigned integer representing the stack profile.
+ * @param nodeType An 8-bit unsigned integer indicating the type of node.
+ * @param zigbeeNodeId A 16-bit identifier for the Zigbee node.
+ * @param extendedPanId An array of 8 bytes representing the extended PAN ID.
+ ******************************************************************************/
 typedef struct {
   uint16_t panId;
   int8_t radioTxPower;
@@ -222,6 +253,18 @@ typedef struct {
   uint8_t extendedPanId[8];
 } tokTypeStackNodeData;
 
+/***************************************************************************//**
+ * @brief The `tokTypeStackChildTableEntry` structure is used to represent an
+ * entry in a child table within a network stack, containing both long
+ * and short address identifiers along with a set of flags. This
+ * structure is likely used in network protocols to manage and identify
+ * child nodes in a network, providing essential addressing information
+ * and status flags for each child node.
+ *
+ * @param longId A long address identifier of type sl_802154_long_addr_t.
+ * @param shortId A short address identifier of type sl_802154_short_addr_t.
+ * @param flags A uint8_t field used to store flags associated with the entry.
+ ******************************************************************************/
 typedef struct {
   sl_802154_long_addr_t longId;
   sl_802154_short_addr_t shortId;

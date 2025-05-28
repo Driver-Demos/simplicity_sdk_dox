@@ -62,6 +62,30 @@ extern "C" {
 /// @endcond
 
 /// @brief Struct representing an instance of the CLI storage NVM3.
+/***************************************************************************//**
+ * @brief The `cli_storage_nvm3_t` structure is designed to manage the storage
+ * and execution of CLI command lines within NVM3, a non-volatile memory
+ * management system. It holds various fields to track the state and
+ * configuration of command line storage, such as the CLI instance
+ * handle, command prompt, and end string. It also manages key offsets
+ * and counts for NVM3, and flags to indicate the progress of command
+ * definition and execution. The structure supports both bare-metal and
+ * kernel configurations, with an additional execution offset field
+ * available when the kernel is not present.
+ *
+ * @param cli_handle The CLI instance associated with this instance.
+ * @param prompt The command prompt.
+ * @param end_string The string that define the end of definition.
+ * @param key_offset The NVM3 key offset for this instance.
+ * @param key_count The NVM3 key count for this instance.
+ * @param key_next The next key value that will be used.
+ * @param execute_while_define True if the command shell execute when defined.
+ * @param define_in_progress True when definition is in progress.
+ * @param execute_in_progress True when execute is in progress.
+ * @param init_tick True after the initial (first) tick has been executed.
+ * @param exec_offset The script execution offset, only defined if
+ * SL_CATALOG_KERNEL_PRESENT is not defined.
+ ******************************************************************************/
 typedef struct {
   sl_cli_handle_t cli_handle;   ///< The CLI instance associated with this instance.
   char *prompt;                 ///< The command prompt.
@@ -82,88 +106,121 @@ typedef struct {
 typedef cli_storage_nvm3_t *cli_storage_nvm3_handle_t;
 
 /***************************************************************************//**
- * @brief
- *  Clear the command lines stored in nvm3.
- *  This function can be used directly as a cli command handler.
+ * @brief This function is used to remove all command lines that have been
+ * stored in the NVM3 storage associated with a CLI instance. It is
+ * typically used when there is a need to reset or clear the stored
+ * command history or configuration. The function should be called with a
+ * valid set of command arguments, and it will iterate through the keys
+ * associated with the CLI storage instance, deleting each one. This
+ * operation effectively resets the storage to its initial state.
  *
- * @param[in] arguments
- *   A pointer to the command arguments.
+ * @param arguments A pointer to an sl_cli_command_arg_t structure containing
+ * the command arguments. This parameter must not be null and
+ * should contain a valid handle to the CLI storage instance.
+ * If the handle is invalid, the behavior is undefined.
+ * @return None
  ******************************************************************************/
 void sl_cli_storage_nvm3_clear(sl_cli_command_arg_t *arguments);
 
 /***************************************************************************//**
- * @brief
- *  Print the contet of the command lines stored in nvm3.
- *  This function can be used directly as a cli command handler.
+ * @brief This function is used to display the command lines that have been
+ * stored in the NVM3 storage. It is typically used as a CLI command
+ * handler to allow users to view the stored commands. The function must
+ * be called with a valid pointer to a command argument structure, which
+ * includes the handle to the CLI storage instance. It is important to
+ * ensure that the arguments pointer is not null before calling this
+ * function to avoid undefined behavior.
  *
- * @param[in] arguments
- *   A pointer to the command arguments.
+ * @param arguments A pointer to an sl_cli_command_arg_t structure containing
+ * the command arguments. This must include a valid handle to
+ * the CLI storage instance. The pointer must not be null, as
+ * this will lead to undefined behavior.
+ * @return None
  ******************************************************************************/
 void sl_cli_storage_nvm3_list(sl_cli_command_arg_t *arguments);
 
 /***************************************************************************//**
- * @brief
- *  Start defining new command lines that will be stored in nvm3.
- *  This function can be used directly as a cli command handler.
+ * @brief This function initiates the process of defining new command lines that
+ * will be stored in NVM3. It should be used when you want to begin
+ * capturing command lines for later execution or storage. The function
+ * checks if a command execution is currently in progress and, if not,
+ * redirects the command input to the NVM3 storage system. This function
+ * is typically used as a CLI command handler and should be called when
+ * no other command execution is ongoing.
  *
- * @param[in] arguments
- *   A pointer to the command arguments.
+ * @param arguments A pointer to an sl_cli_command_arg_t structure containing
+ * the command arguments. This parameter must not be null, and
+ * it is expected to contain a valid handle for the CLI storage
+ * NVM3 instance.
+ * @return None
  ******************************************************************************/
 void sl_cli_storage_nvm3_define(sl_cli_command_arg_t *arguments);
 
 /***************************************************************************//**
- * @brief
- *  Execute command lines stored in nvm3.
- *  This function can be used directly as a cli command handler.
+ * @brief This function executes command lines that have been previously stored
+ * in NVM3. It can be used directly as a CLI command handler. In a kernel
+ * configuration, all stored commands are executed before the function
+ * returns. In a bare-metal configuration, the function signals that
+ * stored commands should be executed by the `sl_cli_storage_nvm3_tick`
+ * function, with one command executed per tick. The function ensures
+ * that execution is not already in progress before proceeding.
  *
- * @note
- *  The function has a different implementation in a bare-metal vs. kernel
- *  configurations.
- *  In a bare-metal configuration, this function will signal that stored commands
- *  shall be run by the sl_cli_storage_nvm3_tick function. One stored command is
- *  executed for each call to the sl_cli_storage_nvm3_tick function.
- *  In a kernel configuration, all stored commands will be executed before this
- *  function returns.
- *
- * @param[in] arguments
- *   A pointer to the command arguments.
+ * @param arguments A pointer to an `sl_cli_command_arg_t` structure containing
+ * the command arguments. This parameter must not be null, and
+ * the handle within must be valid. If the handle indicates
+ * that execution is already in progress, the function will
+ * return immediately without executing any commands.
+ * @return None
  ******************************************************************************/
 void sl_cli_storage_nvm3_execute(sl_cli_command_arg_t *arguments);
 
 /***************************************************************************//**
- * @brief
- *  Get the number of command lines stored in nvm3.
- *  Note: The number of limits may be limited by the instance configuration.
+ * @brief This function retrieves the count of command lines currently stored in
+ * the NVM3 storage associated with a given CLI handle. It is useful for
+ * determining how many command lines have been saved and are available
+ * for execution or management. The function should be called with a
+ * valid CLI handle that is connected to the CLI storage RAM component.
+ * The count returned may be limited by the configuration of the
+ * instance.
  *
- * @param[in] cli_handle
- *   Handle to the CLI where the cli_storage_ram component is connected.
- *
- * @return
- *   The number of command lines stored in nvm3.
+ * @param cli_handle Handle to the CLI where the CLI storage RAM component is
+ * connected. It must be a valid handle, and passing an
+ * invalid handle may result in undefined behavior.
+ * @return The function returns the number of command lines stored in NVM3 as a
+ * size_t value.
  ******************************************************************************/
 size_t sl_cli_storage_nvm3_count(sl_cli_handle_t cli_handle);
 
 /***************************************************************************//**
- * @brief
- *  Initialize the cli_storage_nvm3 instance.
+ * @brief This function prepares a CLI storage NVM3 instance for use by setting
+ * its internal state to default values. It should be called before any
+ * other operations are performed on the instance to ensure it is in a
+ * known state. This function does not allocate memory or perform any I/O
+ * operations, and it is safe to call multiple times if reinitialization
+ * is needed.
  *
- * @param[in] handle
- *   A handle to the cli_storage_nvm3 instance.
+ * @param handle A pointer to a cli_storage_nvm3_t structure representing the
+ * CLI storage NVM3 instance. The handle must not be null, and the
+ * caller retains ownership of the memory. The function assumes
+ * the structure is properly allocated and accessible.
+ * @return None
  ******************************************************************************/
 void sl_cli_storage_nvm3_init(cli_storage_nvm3_handle_t handle);
 
 /***************************************************************************//**
- * @brief
- *  Execute the command lines stored in nvm3 at program startup and complete
- *  execution of commands started with a call to sl_cli_storage_nvm3_execute
- *  when running in bare-metal configuation.
+ * @brief This function is used to execute command lines stored in NVM3,
+ * particularly in a bare-metal configuration where it processes one
+ * command per call. It should be called after initiating command
+ * execution with sl_cli_storage_nvm3_execute. The function manages the
+ * execution state and returns whether there are more commands to
+ * execute. It is essential in environments without a kernel, as it
+ * handles command execution incrementally.
  *
- * @param[in] cli_handle
- *   A handle to the cli instance.
- *
- * @return
- *   A boolean that is true if there are more stored commands to execute, else
- *   false.
+ * @param cli_handle A handle to the CLI instance associated with the NVM3
+ * storage. It must be a valid handle, and the caller retains
+ * ownership. Invalid handles may lead to undefined behavior.
+ * @return Returns a boolean indicating if there are more commands to execute
+ * (true) or if all commands have been executed (false).
  ******************************************************************************/
 bool sl_cli_storage_nvm3_tick(sl_cli_handle_t cli_handle);
 

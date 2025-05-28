@@ -41,12 +41,51 @@
  * @brief EFR32MG24 MAILBOX Register Declaration.
  *****************************************************************************/
 
-/** MAILBOX MSGPTRS Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MAILBOX_MSGPTRS_TypeDef` is a structure that defines a single
+ * message pointer within a mailbox system, specifically for the
+ * EFR32MG24 series. It contains a single member, `MSGPTR`, which is a
+ * 32-bit register used to point to or reference a message within the
+ * mailbox. This structure is part of a larger set of mailbox register
+ * definitions used for managing message pointers and handling mailbox
+ * operations in embedded systems.
+ *
+ * @param MSGPTR A 32-bit message pointer used to reference a specific message
+ * in the mailbox.
+ ******************************************************************************/
 typedef struct mailbox_msgptrs_typedef{
   __IOM uint32_t MSGPTR;                             /**< Message Pointer                                    */
 } MAILBOX_MSGPTRS_TypeDef;
 
-/** MAILBOX Register Declaration. */
+/***************************************************************************//**
+ * @brief The `MAILBOX_TypeDef` is a complex data structure designed for
+ * managing mailbox operations in the EFR32MG24 microcontroller. It
+ * includes arrays of message pointers and interrupt registers for
+ * standard, set, clear, and toggle operations, interspersed with
+ * reserved spaces for future use. This structure facilitates efficient
+ * handling of message pointers and interrupt flags, enabling robust
+ * communication and control within the system.
+ *
+ * @param MSGPTRS An array of 4 message pointers.
+ * @param RESERVED0 An array of 12 reserved 32-bit integers for future use.
+ * @param IF A 32-bit interrupt flag register.
+ * @param IEN A 32-bit interrupt enable register.
+ * @param RESERVED1 An array of 1006 reserved 32-bit integers for future use.
+ * @param MSGPTRS_SET An array of 4 message pointers for setting operations.
+ * @param RESERVED2 An array of 12 reserved 32-bit integers for future use.
+ * @param IF_SET A 32-bit interrupt flag register for setting operations.
+ * @param IEN_SET A 32-bit interrupt enable register for setting operations.
+ * @param RESERVED3 An array of 1006 reserved 32-bit integers for future use.
+ * @param MSGPTRS_CLR An array of 4 message pointers for clearing operations.
+ * @param RESERVED4 An array of 12 reserved 32-bit integers for future use.
+ * @param IF_CLR A 32-bit interrupt flag register for clearing operations.
+ * @param IEN_CLR A 32-bit interrupt enable register for clearing operations.
+ * @param RESERVED5 An array of 1006 reserved 32-bit integers for future use.
+ * @param MSGPTRS_TGL An array of 4 message pointers for toggling operations.
+ * @param RESERVED6 An array of 12 reserved 32-bit integers for future use.
+ * @param IF_TGL A 32-bit interrupt flag register for toggling operations.
+ * @param IEN_TGL A 32-bit interrupt enable register for toggling operations.
+ ******************************************************************************/
 typedef struct mailbox_typedef{
   MAILBOX_MSGPTRS_TypeDef MSGPTRS[4U];          /**< Message Pointers                                   */
   uint32_t                RESERVED0[12U];       /**< Reserved for future use                            */

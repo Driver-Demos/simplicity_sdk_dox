@@ -46,8 +46,17 @@ extern "C" {
 // Prototypes
 
 /***************************************************************************//**
- * Print a table that describes the current requirements on each energy
- * mode and their owner.
+ * @brief This function outputs a formatted table to the standard output,
+ * detailing the current energy mode (EM) requirements and the modules
+ * that own these requirements. It is useful for debugging purposes to
+ * understand which modules are influencing the power management system's
+ * energy mode decisions. The function should be called when a detailed
+ * view of energy mode dependencies is needed, especially during
+ * development or troubleshooting. If the system has exhausted its debug
+ * entry pool, a warning message is printed, indicating that the report
+ * may be incomplete. This function does not modify any state or data.
+ *
+ * @return None
  ******************************************************************************/
 void sl_power_manager_debug_print_em_requirements(void);
 

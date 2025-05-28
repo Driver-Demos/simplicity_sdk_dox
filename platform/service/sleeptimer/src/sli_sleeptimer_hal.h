@@ -77,6 +77,24 @@ void sleeptimer_hal_set_compare(uint32_t value);
  * @param value Number of ticks to set.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to set a comparator value in the sleep timer
+ * hardware abstraction layer, which triggers a peripheral request signal
+ * to initiate the HFXO startup process. It should be called when there
+ * is a need to synchronize the HFXO startup with a specific timer event.
+ * The function ensures that the comparator value is set with a minimum
+ * difference from the current counter value to avoid immediate
+ * triggering. It also handles enabling the necessary control bits if
+ * they are disabled. This function must be called in a context where
+ * interrupts are managed, as it enters a critical section during
+ * execution.
+ *
+ * @param value An integer representing the number of ticks to set for the
+ * comparator. It can be any 32-bit signed integer, and the
+ * function will adjust it to ensure it meets the minimum required
+ * difference from the current counter value.
+ * @return None
+ ******************************************************************************/
 void sleeptimer_hal_set_compare_prs_hfxo_startup(int32_t value);
 
 /*******************************************************************************
@@ -141,6 +159,18 @@ void sleeptimer_hal_reset_prs_signal(void);
  * @note Not supported by all peripherals Sleeptimer can use.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to disable the Peripheral Reflex System (PRS)
+ * compare and capture channel associated with the sleeptimer. It should
+ * be called when the PRS functionality is no longer needed or before
+ * reconfiguring the PRS settings. The function ensures that the channel
+ * is only disabled if it is currently enabled, preventing unnecessary
+ * operations. This function is not supported by all peripherals that the
+ * sleeptimer can use, so it should be used with caution and
+ * understanding of the specific hardware capabilities.
+ *
+ * @return None
+ ******************************************************************************/
 void sleeptimer_hal_disable_prs_compare_and_capture_channel(void);
 
 /*******************************************************************************
@@ -149,21 +179,37 @@ void sleeptimer_hal_disable_prs_compare_and_capture_channel(void);
  * @param flags Internal interrupt flag.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function handles the processing of timer interrupts by evaluating
+ * the provided interrupt flags. It should be called when a timer
+ * interrupt occurs, with the appropriate flags indicating the type of
+ * interrupt. The function updates internal timer states and manages
+ * expired timers, ensuring that the system can handle timer overflows
+ * and comparator events correctly. It is crucial to ensure that the
+ * function is called within an interrupt context where atomic operations
+ * are supported, as it manipulates shared resources and updates timer
+ * lists.
+ *
+ * @param local_flag A bitmask representing the interrupt flags to process.
+ * Valid flags include SLEEPTIMER_EVENT_OF for overflow events
+ * and SLEEPTIMER_EVENT_COMP for comparator events. The
+ * function expects valid flags to be set; otherwise, it may
+ * not perform any operations.
+ * @return None
+ ******************************************************************************/
 void process_timer_irq(uint8_t local_flag);
 
 /***************************************************************************//**
- * @brief
- *   Convert prescaler divider to a logarithmic value. It only works for even
- *   numbers equal to 2^n.
+ * @brief The function `sleeptimer_hal_presc_to_log2` converts a prescaler value
+ * to its corresponding logarithmic base 2 value, ensuring the prescaler
+ * is a power of two minus one.
  *
- * @param[in] presc
- *   Prescaler value used to set the frequency divider. The divider is equal to
- *   ('presc' + 1). If a divider value is passed for 'presc', 'presc' will be
- *   equal to (divider - 1).
- *
- * @return
- *   Logarithm base 2 (binary) value, i.e. exponent as used by fixed
- *   2^n prescalers.
+ * @param presc A 32-bit unsigned integer representing the prescaler value,
+ * which should be less than 32768 and is used to set the frequency
+ * divider as ('presc' + 1).
+ * @return The function returns a 32-bit unsigned integer representing the
+ * logarithmic base 2 value of the prescaler, which is the exponent n in
+ * 2^n.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sleeptimer_hal_presc_to_log2(uint32_t presc)
 {

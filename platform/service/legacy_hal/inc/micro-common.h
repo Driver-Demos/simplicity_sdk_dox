@@ -48,25 +48,64 @@ void halReboot(void);
 
 #ifdef SL_CATALOG_LEGACY_HAL_WDOG_PRESENT
 
-/** @brief Enables the watchdog timer.
- */
+/***************************************************************************//**
+ * @brief This function is used to enable the watchdog timer on the
+ * microcontroller, which is a safety feature that resets the system if
+ * it becomes unresponsive. It should be called when the system is
+ * initialized or when watchdog functionality is required to ensure
+ * system reliability. The function configures the watchdog with default
+ * settings, including a timeout period and a warning interrupt. It is
+ * important to ensure that the watchdog is enabled in systems where it
+ * is necessary to recover from software malfunctions.
+ *
+ * @return None
+ ******************************************************************************/
 void halInternalEnableWatchDog(void);
 
-/** @brief Disables the watchdog timer.
+/***************************************************************************//**
+ * @brief This function is used to disable the watchdog timer, which is a
+ * hardware feature that resets the microcontroller if it becomes
+ * unresponsive. It should be called when you need to ensure that the
+ * watchdog does not reset the system, such as during critical operations
+ * or debugging. To prevent accidental disabling, the function requires a
+ * specific magic key to be passed as a parameter. This function is only
+ * effective if the watchdog feature is present and enabled in the system
+ * configuration.
  *
- * @note To prevent the watchdog from being disabled accidentally,
- * a magic key must be provided.
- *
- * @param magicKey  A value (::MICRO_DISABLE_WATCH_DOG_KEY) that enables the function.
- */
+ * @param magicKey A uint8_t value that must be set to
+ * MICRO_DISABLE_WATCH_DOG_KEY (0xA5U) to successfully disable
+ * the watchdog timer. If an incorrect value is provided, the
+ * function will not disable the watchdog.
+ * @return None
+ ******************************************************************************/
 void halInternalDisableWatchDog(uint8_t magicKey);
 
-/** @brief Determines whether the watchdog has been enabled or disabled.
+/***************************************************************************//**
+ * @brief This function checks the status of the watchdog timer and returns a
+ * boolean indicating whether it is enabled. It is useful for
+ * applications that need to verify the watchdog's state to ensure system
+ * reliability and prevent unexpected resets. This function should be
+ * called when the watchdog functionality is available, as indicated by
+ * the presence of the SL_CATALOG_LEGACY_HAL_WDOG_PRESENT definition. If
+ * the watchdog is not available, the function will always return false.
  *
- * @return A bool value indicating if the watchdog is current enabled.
- */
+ * @return A boolean value: true if the watchdog timer is enabled, false
+ * otherwise.
+ ******************************************************************************/
 bool halInternalWatchDogEnabled(void);
 
+/***************************************************************************//**
+ * @brief This function is used to reset the watchdog timer, which is a
+ * mechanism to ensure that the system is operating correctly. It should
+ * be called periodically to prevent the watchdog from expiring and
+ * causing a system reset. This function is only effective if the
+ * watchdog timer is enabled and the configuration allows it. It is
+ * typically used in systems where continuous operation is critical and
+ * the watchdog is used as a fail-safe mechanism to reset the system in
+ * case of software malfunctions.
+ *
+ * @return None
+ ******************************************************************************/
 void halResetWatchdog(void);                       ///< hal Reset Watchdog
 
 #else // SL_CATALOG_LEGACY_HAL_WDOG_PRESENT

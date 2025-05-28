@@ -45,7 +45,90 @@ extern "C" {
  * @{
  *****************************************************************************/
 
-/** Interrupt Number Definition */
+/***************************************************************************//**
+ * @brief The `IRQn_Type` is an enumeration that defines the interrupt numbers
+ * for the Cortex-M processor exceptions and the EFR32BG22 peripheral
+ * interrupts. It includes both negative values for processor exceptions
+ * like Non-Maskable Interrupt and Hard Fault, and positive values for
+ * peripheral interrupts such as CRYPTOACC and TIMER0. This enumeration
+ * is used to identify and manage the various interrupt sources in the
+ * system, allowing for efficient interrupt handling and prioritization.
+ *
+ * @param NonMaskableInt_IRQn Cortex-M Non Maskable Interrupt with value -14.
+ * @param HardFault_IRQn Cortex-M Hard Fault Interrupt with value -13.
+ * @param MemoryManagement_IRQn Cortex-M Memory Management Interrupt with value
+ * -12.
+ * @param BusFault_IRQn Cortex-M Bus Fault Interrupt with value -11.
+ * @param UsageFault_IRQn Cortex-M Usage Fault Interrupt with value -10.
+ * @param SVCall_IRQn Cortex-M SV Call Interrupt with value -5.
+ * @param DebugMonitor_IRQn Cortex-M Debug Monitor Interrupt with value -4.
+ * @param PendSV_IRQn Cortex-M Pend SV Interrupt with value -2.
+ * @param SysTick_IRQn Cortex-M System Tick Interrupt with value -1.
+ * @param CRYPTOACC_IRQn EFR32 CRYPTOACC Interrupt with value 0.
+ * @param TRNG_IRQn EFR32 TRNG Interrupt with value 1.
+ * @param PKE_IRQn EFR32 PKE Interrupt with value 2.
+ * @param SMU_SECURE_IRQn EFR32 SMU_SECURE Interrupt with value 3.
+ * @param SMU_S_PRIVILEGED_IRQn EFR32 SMU_S_PRIVILEGED Interrupt with value 4.
+ * @param SMU_NS_PRIVILEGED_IRQn EFR32 SMU_NS_PRIVILEGED Interrupt with value 5.
+ * @param EMU_IRQn EFR32 EMU Interrupt with value 6.
+ * @param TIMER0_IRQn EFR32 TIMER0 Interrupt with value 7.
+ * @param TIMER1_IRQn EFR32 TIMER1 Interrupt with value 8.
+ * @param TIMER2_IRQn EFR32 TIMER2 Interrupt with value 9.
+ * @param TIMER3_IRQn EFR32 TIMER3 Interrupt with value 10.
+ * @param TIMER4_IRQn EFR32 TIMER4 Interrupt with value 11.
+ * @param RTCC_IRQn EFR32 RTCC Interrupt with value 12.
+ * @param USART0_RX_IRQn EFR32 USART0_RX Interrupt with value 13.
+ * @param USART0_TX_IRQn EFR32 USART0_TX Interrupt with value 14.
+ * @param USART1_RX_IRQn EFR32 USART1_RX Interrupt with value 15.
+ * @param USART1_TX_IRQn EFR32 USART1_TX Interrupt with value 16.
+ * @param ICACHE0_IRQn EFR32 ICACHE0 Interrupt with value 17.
+ * @param BURTC_IRQn EFR32 BURTC Interrupt with value 18.
+ * @param LETIMER0_IRQn EFR32 LETIMER0 Interrupt with value 19.
+ * @param SYSCFG_IRQn EFR32 SYSCFG Interrupt with value 20.
+ * @param LDMA_IRQn EFR32 LDMA Interrupt with value 21.
+ * @param LFXO_IRQn EFR32 LFXO Interrupt with value 22.
+ * @param LFRCO_IRQn EFR32 LFRCO Interrupt with value 23.
+ * @param ULFRCO_IRQn EFR32 ULFRCO Interrupt with value 24.
+ * @param GPIO_ODD_IRQn EFR32 GPIO_ODD Interrupt with value 25.
+ * @param GPIO_EVEN_IRQn EFR32 GPIO_EVEN Interrupt with value 26.
+ * @param I2C0_IRQn EFR32 I2C0 Interrupt with value 27.
+ * @param I2C1_IRQn EFR32 I2C1 Interrupt with value 28.
+ * @param EMUDG_IRQn EFR32 EMUDG Interrupt with value 29.
+ * @param EMUSE_IRQn EFR32 EMUSE Interrupt with value 30.
+ * @param AGC_IRQn EFR32 AGC Interrupt with value 31.
+ * @param BUFC_IRQn EFR32 BUFC Interrupt with value 32.
+ * @param FRC_PRI_IRQn EFR32 FRC_PRI Interrupt with value 33.
+ * @param FRC_IRQn EFR32 FRC Interrupt with value 34.
+ * @param MODEM_IRQn EFR32 MODEM Interrupt with value 35.
+ * @param PROTIMER_IRQn EFR32 PROTIMER Interrupt with value 36.
+ * @param RAC_RSM_IRQn EFR32 RAC_RSM Interrupt with value 37.
+ * @param RAC_SEQ_IRQn EFR32 RAC_SEQ Interrupt with value 38.
+ * @param RDMAILBOX_IRQn EFR32 RDMAILBOX Interrupt with value 39.
+ * @param RFSENSE_IRQn EFR32 RFSENSE Interrupt with value 40.
+ * @param PRORTC_IRQn EFR32 PRORTC Interrupt with value 41.
+ * @param SYNTH_IRQn EFR32 SYNTH Interrupt with value 42.
+ * @param WDOG0_IRQn EFR32 WDOG0 Interrupt with value 43.
+ * @param HFXO0_IRQn EFR32 HFXO0 Interrupt with value 44.
+ * @param HFRCO0_IRQn EFR32 HFRCO0 Interrupt with value 45.
+ * @param CMU_IRQn EFR32 CMU Interrupt with value 46.
+ * @param AES_IRQn EFR32 AES Interrupt with value 47.
+ * @param IADC_IRQn EFR32 IADC Interrupt with value 48.
+ * @param MSC_IRQn EFR32 MSC Interrupt with value 49.
+ * @param DPLL0_IRQn EFR32 DPLL0 Interrupt with value 50.
+ * @param PDM_IRQn EFR32 PDM Interrupt with value 51.
+ * @param SW0_IRQn EFR32 SW0 Interrupt with value 52.
+ * @param SW1_IRQn EFR32 SW1 Interrupt with value 53.
+ * @param SW2_IRQn EFR32 SW2 Interrupt with value 54.
+ * @param SW3_IRQn EFR32 SW3 Interrupt with value 55.
+ * @param KERNEL0_IRQn EFR32 KERNEL0 Interrupt with value 56.
+ * @param KERNEL1_IRQn EFR32 KERNEL1 Interrupt with value 57.
+ * @param M33CTI0_IRQn EFR32 M33CTI0 Interrupt with value 58.
+ * @param M33CTI1_IRQn EFR32 M33CTI1 Interrupt with value 59.
+ * @param EMUEFP_IRQn EFR32 EMUEFP Interrupt with value 60.
+ * @param DCDC_IRQn EFR32 DCDC Interrupt with value 61.
+ * @param EUART0_RX_IRQn EFR32 EUART0_RX Interrupt with value 62.
+ * @param EUART0_TX_IRQn EFR32 EUART0_TX Interrupt with value 63.
+ ******************************************************************************/
 typedef enum IRQn{
   /******  Cortex-M Processor Exceptions Numbers ******************************************/
   NonMaskableInt_IRQn    = -14,             /*!< -14 Cortex-M Non Maskable Interrupt      */

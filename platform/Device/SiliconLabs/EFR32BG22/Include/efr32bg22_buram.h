@@ -41,12 +41,37 @@
  * @brief EFR32BG22 BURAM Register Declaration.
  *****************************************************************************/
 
-/** BURAM RET Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `BURAM_RET_TypeDef` is a simple data structure that consists of a
+ * single 32-bit retention register, denoted as `REG`. This register is
+ * used to store data that needs to be retained across power cycles or
+ * resets, making it useful for applications requiring persistent data
+ * storage. The use of `__IOM` indicates that the register is both
+ * readable and writable, allowing for flexible data manipulation.
+ *
+ * @param REG A 32-bit retention register used for storing data persistently.
+ ******************************************************************************/
 typedef struct buram_ret_typedef{
   __IOM uint32_t REG;                                /**< Retention Register                                 */
 } BURAM_RET_TypeDef;
 
-/** BURAM Register Declaration. */
+/***************************************************************************//**
+ * @brief The BURAM_TypeDef structure is designed to manage a set of retention
+ * registers within the EFR32BG22 microcontroller. It includes arrays for
+ * standard retention operations (RET), as well as specialized arrays for
+ * setting (RET_SET), clearing (RET_CLR), and toggling (RET_TGL) register
+ * values. The structure also reserves space for future expansion or
+ * additional features, ensuring compatibility with potential updates or
+ * changes in the hardware design.
+ *
+ * @param RET An array of 32 retention registers.
+ * @param RESERVED0 An array of 992 reserved spaces for future use.
+ * @param RET_SET An array of 32 retention registers for setting values.
+ * @param RESERVED1 An array of 992 reserved spaces for future use.
+ * @param RET_CLR An array of 32 retention registers for clearing values.
+ * @param RESERVED2 An array of 992 reserved spaces for future use.
+ * @param RET_TGL An array of 32 retention registers for toggling values.
+ ******************************************************************************/
 typedef struct buram_typedef{
   BURAM_RET_TypeDef RET[32U];                   /**< RetentionReg                                       */
   uint32_t          RESERVED0[992U];            /**< Reserved for future use                            */

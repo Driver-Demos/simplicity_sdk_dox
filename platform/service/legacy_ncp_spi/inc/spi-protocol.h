@@ -36,70 +36,111 @@
 // Legacy name for the above.
 #define FRAME_TERMINATOR         SPIP_FRAME_TERMINATOR
 
-/**
- *  A pointer to the length byte at the start of the Payload.
- * Upper layers will read the command from this location after
- * halHostSerialTick(false) returns true. The upper layer will write the
- * response to this location before calling halHostSerialTick(true). This
- * pointer is the upper layers' primary access into the command/response buffer.
- */
+/***************************************************************************//**
+ * @brief The `halHostFrame` is a global pointer to a byte that represents the
+ * start of the payload length in the SPI protocol buffer. It is used by
+ * upper layers to read commands and write responses during SPI
+ * communication.
+ *
+ * @details This variable is used as the primary access point for upper layers
+ * to interact with the command/response buffer in the SPI protocol.
+ ******************************************************************************/
 extern uint8_t *halHostFrame;
 
-/**
- *  A flag that is set to true when the Host initiates the wake
- * handshake.
- */
+/***************************************************************************//**
+ * @brief The `spipFlagWakeFallingEdge` is a global boolean variable that
+ * indicates whether the Host has initiated a wake handshake. This flag
+ * is set to true when the wake handshake process begins.
+ *
+ * @details This variable is used to track the state of the wake handshake
+ * process in the SPI protocol implementation.
+ ******************************************************************************/
 extern bool spipFlagWakeFallingEdge;
 
-/**
+/***************************************************************************//**
+ * @brief This function prepares the SPI protocol for communication by
+ * initializing necessary flags and buffers. It should be called during
+ * the system startup to ensure that the SPI protocol is ready for
+ * operation. The function sets up the initial state, including error
+ * response buffers and command buffers, and powers up the serial
+ * interface. It is essential to call this function before any SPI
+ * communication to ensure proper protocol operation.
  *
- *
- * The SPIP Init routine will also set a flag in the SPIP indicating a
- * wakeup handshake should be performed.  The handshake should only be
- * performed on a SerialTick.  Upon the next Tick call, the SPIP can assume
- * we are fully booted and operational and then take control peforming the
- * full handshake.
- */
+ * @return None
+ ******************************************************************************/
 void halHostSerialInit(void);
 
-/**
- * Reinitializes the SPI Protocol when coming out of sleep
- * (powerdown).
- */
+/***************************************************************************//**
+ * @brief This function should be called to reinitialize the SPI protocol when
+ * the system wakes up from a low-power state. It configures the
+ * necessary GPIO pins and SPI settings to ensure proper communication.
+ * This function must be called after the system has been powered up and
+ * before any SPI communication is attempted. It handles the setup of
+ * interrupts and GPIO configurations to manage noise and crosstalk,
+ * ensuring reliable operation.
+ *
+ * @return None
+ ******************************************************************************/
 void halHostSerialPowerup(void);
 
-/**
- * Shuts down the SPI Protocol when entering sleep (powerdown).
- */
+/***************************************************************************//**
+ * @brief This function is used to safely shut down the SPI protocol interface
+ * when the system is entering a low-power sleep mode. It ensures that
+ * any ongoing SPI transmissions are completed before disabling the SPI
+ * driver and associated interrupts. This function should be called
+ * before the system enters sleep to prevent data loss or corruption. It
+ * is important to ensure that the SPI protocol is not in use by other
+ * processes when this function is called.
+ *
+ * @return None
+ ******************************************************************************/
 void halHostSerialPowerdown(void);
 
-/**
+/***************************************************************************//**
+ * @brief This function is used by the upper application to notify the host
+ * about pending callbacks by manipulating the nHOST_INT signal. It
+ * should be called with 'haveData' set to true when there is a callback
+ * to deliver, prompting the SPIP to schedule the assertion of nHOST_INT.
+ * Conversely, it should be called with 'haveData' set to false when
+ * there are no more callbacks pending, allowing the SPIP to deassert
+ * nHOST_INT. The function ensures proper timing and multiplexing of the
+ * nHOST_INT signal with other SPIP-generated assertions. It is important
+ * to call this function appropriately to maintain correct communication
+ * with the host.
  *
- *
- * When the upper application has a callback it needs to deliver to the Host, it
- * calls halHostCallback() at will with haveData set to true. The HAL will
- * indicate to the Host through the nHOST_INT singal that there is a callback
- * pending. The EZSP application must make another call with haveData set to
- * false when there are no more callbacks pending.  The SPIP is responsible
- * for latching this call, timing actual nHOST_INT manipulation, and
- * multiplexing it in with SPIP generated assertions.
- *
- * @param haveData: true indicates there is a callback and the SPIP should
- * schedule nHOST_INT assertion.  false says the SPIP and deassert nHOST_INT.
- */
+ * @param haveData A boolean value where true indicates that there is a callback
+ * pending and nHOST_INT should be asserted, while false
+ * indicates no pending callbacks and nHOST_INT should be
+ * deasserted.
+ * @return None
+ ******************************************************************************/
 void halHostCallback(bool haveData);
 
-/**
- * Returns true if SPIP is busy.
+/***************************************************************************//**
+ * @brief Use this function to determine if the SPI Protocol Interface (SPIP) is
+ * currently engaged in an operation and cannot accept new commands. This
+ * is useful for ensuring that commands are only sent when the interface
+ * is ready, preventing potential data corruption or communication
+ * errors. The function returns a boolean value indicating the busy
+ * status of the SPIP. It is important to check this status before
+ * attempting to initiate communication with the SPIP.
  *
- * @returns true if SPIP is busy.
- */
+ * @return A boolean value: true if the SPIP is busy, false otherwise.
+ ******************************************************************************/
 bool halHostSerialBusy(void);
 
-/**
- * Clears NCP's state flag to signify receipt of nWAKE handshake at
- *  at the application/EZSP level.
- */
+/***************************************************************************//**
+ * @brief Use this function to clear the wake flag of the Network Co-Processor
+ * (NCP) to indicate that the nWAKE handshake has been received at the
+ * application or EZSP level. This function should be called when the
+ * wake handshake process is complete, ensuring that the system state
+ * accurately reflects the handshake status. It is important to ensure
+ * that this function is called in the appropriate context where the wake
+ * flag needs to be reset, as it directly affects the communication state
+ * between the host and the NCP.
+ *
+ * @return None
+ ******************************************************************************/
 void halNcpClearWakeFlag(void);
 
 /**

@@ -41,7 +41,58 @@
  * @brief EFR32MG24 DPLL Register Declaration.
  *****************************************************************************/
 
-/** DPLL Register Declaration. */
+/***************************************************************************//**
+ * @brief The `DPLL_TypeDef` is a comprehensive data structure representing the
+ * Digital Phase-Locked Loop (DPLL) configuration and control registers
+ * for the EFR32MG24 microcontroller. It includes fields for managing the
+ * DPLL's enable state, configuration settings, interrupt flags, and
+ * status, along with set, clear, and toggle operations for each of these
+ * fields. The structure also contains reserved spaces for future
+ * expansion, ensuring compatibility with potential future updates. This
+ * design allows for precise control and monitoring of the DPLL's
+ * operation, crucial for applications requiring stable and synchronized
+ * clock signals.
+ *
+ * @param IPVERSION Represents the IP version of the DPLL.
+ * @param EN Controls the enable state of the DPLL.
+ * @param CFG Holds configuration settings for the DPLL.
+ * @param CFG1 Contains additional configuration settings for the DPLL.
+ * @param IF Indicates the interrupt flag status.
+ * @param IEN Controls the interrupt enable settings.
+ * @param STATUS Reflects the current status of the DPLL.
+ * @param RESERVED0 Reserved for future use.
+ * @param LOCK Manages the lock state of the DPLL.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET Set register for IP version.
+ * @param EN_SET Set register for enabling the DPLL.
+ * @param CFG_SET Set register for configuration settings.
+ * @param CFG1_SET Set register for additional configuration settings.
+ * @param IF_SET Set register for interrupt flag.
+ * @param IEN_SET Set register for interrupt enable.
+ * @param STATUS_SET Set register for status.
+ * @param RESERVED2 Reserved for future use.
+ * @param LOCK_SET Set register for lock state.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR Clear register for IP version.
+ * @param EN_CLR Clear register for enabling the DPLL.
+ * @param CFG_CLR Clear register for configuration settings.
+ * @param CFG1_CLR Clear register for additional configuration settings.
+ * @param IF_CLR Clear register for interrupt flag.
+ * @param IEN_CLR Clear register for interrupt enable.
+ * @param STATUS_CLR Clear register for status.
+ * @param RESERVED4 Reserved for future use.
+ * @param LOCK_CLR Clear register for lock state.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL Toggle register for IP version.
+ * @param EN_TGL Toggle register for enabling the DPLL.
+ * @param CFG_TGL Toggle register for configuration settings.
+ * @param CFG1_TGL Toggle register for additional configuration settings.
+ * @param IF_TGL Toggle register for interrupt flag.
+ * @param IEN_TGL Toggle register for interrupt enable.
+ * @param STATUS_TGL Toggle register for status.
+ * @param RESERVED6 Reserved for future use.
+ * @param LOCK_TGL Toggle register for lock state.
+ ******************************************************************************/
 typedef struct dpll_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version                                         */
   __IOM uint32_t EN;                            /**< Enable                                             */

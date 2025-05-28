@@ -39,18 +39,56 @@
                                  | (1 << RESET_FATAL))
 
 /// @brief Define Hal assert information type
+/***************************************************************************//**
+ * @brief The `HalAssertInfoType` structure is used to store information about
+ * an assertion failure in the code. It contains the file name and line
+ * number where the assertion occurred, which can be used for debugging
+ * purposes to identify the exact location of the failure in the source
+ * code.
+ *
+ * @param file A pointer to a constant character string representing the file
+ * name where the assertion occurred.
+ * @param line An unsigned 32-bit integer representing the line number in the
+ * file where the assertion occurred.
+ ******************************************************************************/
 typedef struct {
   const char * file;                               ///< file
   uint32_t     line;                               ///< line
 } HalAssertInfoType;
 
 /// @brief note that assertInfo and dmaProt are written just before a forced reboot
+/***************************************************************************//**
+ * @brief The `HalCrashSpecificDataType` is a union that encapsulates specific
+ * data related to a crash event in a system. It can store either
+ * assertion information, represented by the `HalAssertInfoType`
+ * structure, which includes the file and line number where an assertion
+ * failed, or DMA protection information, which includes a channel and
+ * address. This union is used to provide additional context about the
+ * crash, aiding in diagnostics and debugging.
+ *
+ * @param assertInfo Contains file and line information for an assertion.
+ * @param dmaProt Contains channel and address information for DMA protection.
+ ******************************************************************************/
 typedef union {
   HalAssertInfoType assertInfo;                    ///< assertInfo
   struct { uint32_t channel; uint32_t address; } dmaProt;                                            ///< dmaProt
 } HalCrashSpecificDataType;
 
 /// @brief Define crash registers as structs so a debugger can display their bit fields
+/***************************************************************************//**
+ * @brief The `HalCrashxPsrType` is a union that encapsulates the processor
+ * status register (xPSR) in a crash diagnostic context. It provides a
+ * detailed view of the processor's state at the time of a crash by
+ * allowing access to individual status bits through a structured bit
+ * field, as well as the entire register as a single 32-bit word. This
+ * dual representation facilitates both detailed analysis and efficient
+ * data handling in crash diagnostics.
+ *
+ * @param bits A struct containing bit fields representing various processor
+ * status flags and exception codes.
+ * @param word A 32-bit unsigned integer representing the entire processor
+ * status register as a single word.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t EXCPT          : 9;  // B0-8
@@ -69,6 +107,20 @@ typedef union {
 } HalCrashxPsrType;
 
 /// @brief  Define crash registers as structs so a debugger can display their bit fields
+/***************************************************************************//**
+ * @brief The `HalCrashIcsrType` is a union that represents the Interrupt
+ * Control and State Register (ICSR) in a microcontroller, providing both
+ * a bit-field structure for accessing individual status flags and a
+ * 32-bit word for accessing the entire register. The bit fields include
+ * flags for active and pending interrupts, return to base level, and
+ * various pending set/clear states, which are crucial for diagnosing and
+ * handling system crashes and interrupts.
+ *
+ * @param bits A struct containing bit fields representing various interrupt and
+ * system state flags.
+ * @param word A 32-bit unsigned integer representing the entire register as a
+ * single value.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t VECTACTIVE     : 9;  // B0-8
@@ -90,6 +142,21 @@ typedef union {
   uint32_t word;                                   ///< word
 } HalCrashIcsrType;
 
+/***************************************************************************//**
+ * @brief The `HalCrashShcsrType` is a union that encapsulates the System
+ * Handler Control and State Register (SHCSR) in a microcontroller,
+ * providing a bit-field representation of various system fault and
+ * exception states. It includes flags for memory management, bus, and
+ * usage faults, as well as system service call and monitor activity,
+ * among others. This structure allows for easy access and manipulation
+ * of individual bits related to system fault handling, while also
+ * providing a complete 32-bit view of the register.
+ *
+ * @param bits A struct containing bit fields representing various system
+ * handler control and state flags.
+ * @param word A 32-bit unsigned integer representing the entire union as a
+ * single word.
+ ******************************************************************************/
 typedef union {
   struct {
 #if defined (_SILICON_LABS_32B_SERIES_1_CONFIG_1)
@@ -967,6 +1034,35 @@ typedef union {
   uint32_t word;
 } HalCrashShcsrType;
 
+/***************************************************************************//**
+ * @brief The `HalCrashCfsrType` is a union data structure used to represent the
+ * Configurable Fault Status Register (CFSR) in a Cortex-M processor. It
+ * provides a detailed breakdown of various fault conditions that can
+ * occur during program execution, such as memory management faults, bus
+ * faults, and usage faults. The union allows access to individual fault
+ * bits through a bit-field structure, as well as access to the entire
+ * 32-bit register as a single word. This structure is crucial for
+ * diagnosing and handling exceptions in embedded systems.
+ *
+ * @param IACCVIOL Indicates an instruction access violation.
+ * @param DACCVIOL Indicates a data access violation.
+ * @param MUNSTKERR Indicates an unstacking error during exception return.
+ * @param MSTKERR Indicates a stacking error during exception entry.
+ * @param MMARVALID Indicates that the MMAR register is valid.
+ * @param IBUSERR Indicates an instruction bus error.
+ * @param PRECISERR Indicates a precise data bus error.
+ * @param IMPRECISERR Indicates an imprecise data bus error.
+ * @param UNSTKERR Indicates an unstacking error during exception return.
+ * @param STKERR Indicates a stacking error during exception entry.
+ * @param BFARVALID Indicates that the BFAR register is valid.
+ * @param UNDEFINSTR Indicates an undefined instruction usage fault.
+ * @param INVSTATE Indicates an invalid state usage fault.
+ * @param INVPC Indicates an invalid PC load usage fault.
+ * @param NOCP Indicates a no coprocessor usage fault.
+ * @param UNALIGNED Indicates an unaligned access usage fault.
+ * @param DIVBYZERO Indicates a divide by zero usage fault.
+ * @param word Represents the entire 32-bit word of the CFSR register.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t IACCVIOL       : 1;  // B0
@@ -996,6 +1092,21 @@ typedef union {
   uint32_t word;
 } HalCrashCfsrType;
 
+/***************************************************************************//**
+ * @brief The `HalCrashHfsrType` is a union data structure used to represent the
+ * Hard Fault Status Register (HFSR) in a system. It provides a way to
+ * access the register either as a whole 32-bit word or through
+ * individual bit fields. The bit fields include `VECTTBL`, which
+ * indicates a vector table read fault, `FORCED`, which indicates a
+ * forced hard fault, and `DEBUGEVT`, which indicates a debug event. This
+ * structure is useful for diagnosing and handling hard faults in
+ * embedded systems.
+ *
+ * @param bits A struct containing bit fields representing specific hard fault
+ * status flags.
+ * @param word A 32-bit unsigned integer representing the entire hard fault
+ * status register.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t                : 1;  // B0
@@ -1008,6 +1119,21 @@ typedef union {
   uint32_t word;
 } HalCrashHfsrType;
 
+/***************************************************************************//**
+ * @brief The `HalCrashDfsrType` is a union that encapsulates the Debug Fault
+ * Status Register (DFSR) used in crash diagnostics. It provides a bit-
+ * field structure to access individual debug fault status flags such as
+ * HALTED, BKPT, DWTTRAP, VCATCH, and EXTERNAL, which indicate specific
+ * types of debug events or faults. Alternatively, the entire register
+ * can be accessed as a single 32-bit word, allowing for efficient
+ * manipulation and examination of the register's state in crash
+ * analysis.
+ *
+ * @param bits A struct containing bit fields representing various debug fault
+ * status flags.
+ * @param word A 32-bit unsigned integer representing the entire debug fault
+ * status register as a single word.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t HALTED         : 1;  // B0
@@ -1021,6 +1147,20 @@ typedef union {
   uint32_t word;
 } HalCrashDfsrType;
 
+/***************************************************************************//**
+ * @brief The `HalCrashAfsrType` is a union that encapsulates the auxiliary
+ * fault status register (AFSR) used in crash diagnostics. It provides a
+ * bit-field structure to access individual fault status flags such as
+ * `MISSED`, `RESERVED`, `PROTECTED`, and `WRONGSIZE`, each occupying a
+ * single bit, while the remaining 28 bits are unused. The union also
+ * allows access to the entire 32-bit register as a single word,
+ * facilitating both detailed and holistic views of the fault status.
+ *
+ * @param bits A struct containing bit fields representing various fault status
+ * flags.
+ * @param word A 32-bit unsigned integer representing the entire auxiliary fault
+ * status register as a single word.
+ ******************************************************************************/
 typedef union {
   struct {
     uint32_t MISSED         : 1;  // B0
@@ -1036,6 +1176,51 @@ typedef union {
 #define NUM_RETURNS     6U
 
 // Define the crash data structure
+/***************************************************************************//**
+ * @brief The `HalCrashInfoType` structure is designed to capture and store
+ * detailed information about a system crash, primarily for diagnostic
+ * purposes. It includes processor register values, stack pointers, and
+ * various status registers that provide insight into the state of the
+ * system at the time of the crash. This structure is critical for
+ * debugging and understanding the cause of system faults, as it records
+ * the state of the processor and memory, including the program counter,
+ * stack usage, and fault status registers. The structure is carefully
+ * organized to ensure compatibility with assembly language fault
+ * handlers, and it includes additional fields for specific crash data
+ * and probable return addresses.
+ *
+ * @param R0 Processor register R0.
+ * @param R1 Processor register R1.
+ * @param R2 Processor register R2.
+ * @param R3 Processor register R3.
+ * @param R4 Processor register R4.
+ * @param R5 Processor register R5.
+ * @param R6 Processor register R6.
+ * @param R7 Processor register R7.
+ * @param R8 Processor register R8.
+ * @param R9 Processor register R9.
+ * @param R10 Processor register R10.
+ * @param R11 Processor register R11.
+ * @param R12 Processor register R12.
+ * @param LR Link register.
+ * @param mainSP Main stack pointer.
+ * @param processSP Process stack pointer.
+ * @param PC Program counter, stacked return value.
+ * @param xPSR Stacked processor status register.
+ * @param mainSPUsed Bytes used in main stack.
+ * @param processSPUsed Bytes used in process stack.
+ * @param mainStackBottom Address of the bottom of the main stack.
+ * @param icsr Interrupt control state register.
+ * @param shcsr System handlers control and state register.
+ * @param intActive IRQ active bit register.
+ * @param cfsr Configurable fault status register.
+ * @param hfsr Hard fault status register.
+ * @param dfsr Debug fault status register.
+ * @param faultAddress Fault address register (MMAR or BFAR).
+ * @param afsr Auxiliary fault status register.
+ * @param returns Probable return addresses found on the stack.
+ * @param data Additional data specific to the crash type.
+ ******************************************************************************/
 typedef struct {
   // ***************************************************************************
   // The components within this first block are written by the assembly
@@ -1080,6 +1265,20 @@ typedef struct {
   HalCrashSpecificDataType data;  // additional data specific to the crash type
 } HalCrashInfoType;
 
+/***************************************************************************//**
+ * @brief The `HalResetCauseType` structure is used to encapsulate information
+ * about the cause of a system reset. It contains two members: `reason`,
+ * which indicates the specific reason for the reset, and `signature`,
+ * which serves as a verification or identification marker for the reset
+ * event. This structure is part of a diagnostic system that helps in
+ * identifying and handling different reset scenarios in embedded
+ * systems.
+ *
+ * @param reason A 16-bit unsigned integer representing the reason for the
+ * reset.
+ * @param signature A 16-bit unsigned integer used as a signature for the reset
+ * cause.
+ ******************************************************************************/
 typedef struct {
   uint16_t reason;
   uint16_t signature;
@@ -1092,19 +1291,103 @@ typedef struct {
   (((1 << halGetResetInfo()) & RESET_CRASH_REASON_MASK) != 0U)
 
 // Print a summary of crash details.
+/***************************************************************************//**
+ * @brief This function is used to output a summary of crash information,
+ * including stack usage and active interrupts, to a specified output
+ * port. It is typically called after a system crash to help diagnose the
+ * cause of the crash. The function does not modify any input parameters
+ * and does not return any value. It is important to ensure that the
+ * output port is correctly configured and available for use before
+ * calling this function.
+ *
+ * @param port Specifies the output port to which the crash summary will be
+ * printed. The parameter is not used in the current implementation,
+ * but it should be a valid port identifier if future
+ * implementations require it. The caller retains ownership and
+ * responsibility for ensuring the port is correctly configured.
+ * @return None
+ ******************************************************************************/
 void halPrintCrashSummary(uint8_t port);
 
 // Print the complete, decoded crash details.
+/***************************************************************************//**
+ * @brief This function is used to output detailed information about the cause
+ * of the last system reset, which can be due to various faults such as
+ * watchdog expiration, hard faults, memory management faults, bus
+ * faults, usage faults, or debug monitor faults. It is useful for
+ * diagnosing the reason behind a system crash by providing specific
+ * details about the fault, including instruction addresses and fault-
+ * specific information. This function should be called when detailed
+ * diagnostic information is needed after a system reset. It does not
+ * modify any input parameters or return any values.
+ *
+ * @param port Specifies the output port to which the crash details will be
+ * printed. The parameter is not used in the current implementation,
+ * and any value can be passed.
+ * @return None
+ ******************************************************************************/
 void halPrintCrashDetails(uint8_t port);
 
 // Print the complete crash data.
+/***************************************************************************//**
+ * @brief This function is used to output detailed crash data to a specified
+ * port, which is useful for debugging purposes. It should be called when
+ * a detailed analysis of crash data is required, typically after a
+ * system reset that was caused by a crash. The function does not perform
+ * any operations based on the port parameter, as it is ignored. It is
+ * important to ensure that the system is in a state where printing to
+ * the standard output is possible, as the function relies on this
+ * capability.
+ *
+ * @param port An unsigned 8-bit integer representing the output port. The
+ * parameter is ignored by the function, so any value is valid. The
+ * caller retains ownership.
+ * @return None
+ ******************************************************************************/
 void halPrintCrashData(uint8_t port);
 
 // If last reset was from an assert, return saved assert information.
+/***************************************************************************//**
+ * @brief This function provides access to the details of the last assertion
+ * failure, if any, by returning a pointer to a structure containing the
+ * file name and line number where the assertion occurred. It is useful
+ * for debugging purposes to identify the location of the failure. The
+ * function should be called after a reset to determine if the reset was
+ * caused by an assertion failure. The returned pointer should not be
+ * modified by the caller.
+ *
+ * @return A pointer to a `HalAssertInfoType` structure containing the file name
+ * and line number of the last assertion failure, or `NULL` if no
+ * assertion failure information is available.
+ ******************************************************************************/
+/***************************************************************************//**
+ * @brief The `halGetAssertInfo` function returns a pointer to a
+ * `HalAssertInfoType` structure, which contains information about the
+ * file and line number where an assert occurred. This is useful for
+ * debugging purposes to identify the location in the code that triggered
+ * an assert condition.
+ *
+ * @details This variable is used to retrieve and provide information about the
+ * last assert condition that occurred, specifically the file and line
+ * number, for diagnostic purposes.
+ ******************************************************************************/
 const HalAssertInfoType *halGetAssertInfo(void);
 
 void halInternalAssertFailed(const char *filename, int linenumber);
 
+/***************************************************************************//**
+ * @brief This function determines the cause of the most recent system reset and
+ * updates internal state to reflect this information. It should be
+ * called during system initialization to ensure that any reset-related
+ * diagnostics or recovery actions can be taken based on the reset cause.
+ * The function handles various reset causes such as power-on, external
+ * pin, software, watchdog expiration, and others, and it updates
+ * internal variables to store this information. It is important to call
+ * this function before any other diagnostics or reset-related functions
+ * to ensure accurate reset cause information is available.
+ *
+ * @return None
+ ******************************************************************************/
 void halInternalClassifyReset(void);
 
 /** @} (end addtogroup diagnostics) */

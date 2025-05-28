@@ -85,53 +85,104 @@ extern "C" {
 #endif
 
 /// @brief Sleepy Crystal settings
+/***************************************************************************//**
+ * @brief The `sl_hfxo_manager_sleepy_xtal_settings_t` structure is used to
+ * define settings for managing sleepy crystals in the High Frequency
+ * Crystal Oscillator (HFXO) module. It contains parameters for tuning
+ * capacitance and core bias current, which are crucial for ensuring
+ * proper oscillation during different stages of the HFXO operation,
+ * especially when dealing with crystals that may exhibit unexpected
+ * changes in their equivalent series resistance (ESR) during startup.
+ * This structure is part of the HFXO Manager API, which is designed to
+ * handle startup failures and optimize settings to wake up crystals from
+ * a sleepy state.
+ *
+ * @param ana_ctune Tuning Capacitance values for XI and XO during startup
+ * intermediate and steady stages.
+ * @param core_bias_current Core Bias current value during all stages.
+ ******************************************************************************/
 typedef struct sl_hfxo_manager_sleepy_xtal_settings {
   uint32_t ana_ctune;         ///< Tuning Capacitance values for XI and XO during startup intermediate and steady stages
   uint32_t core_bias_current; ///< Core Bias current value during all stages
 } sl_hfxo_manager_sleepy_xtal_settings_t;
 
 /***************************************************************************//**
- * HFXO Manager module hardware specific initialization.
+ * @brief This function is used to initialize the hardware-specific components
+ * necessary for the HFXO Manager module to function correctly. It must
+ * be called before any other HFXO initialization functions, such as
+ * emlib CMU_HFXOInit() or sl_device_init_hfxo(), to ensure that the HFXO
+ * interrupts are properly set up. This is a crucial step in the
+ * initialization process of the HFXO Manager, which is responsible for
+ * managing the High Frequency Crystal Oscillator (HFXO) and handling
+ * startup failures, especially in devices with sleepy crystals. Proper
+ * initialization is necessary for the module to manage HFXO startup
+ * failures and to support the Power Manager module when present.
+ *
+ * @return None
  ******************************************************************************/
 void sl_hfxo_manager_init_hardware(void);
 
 /***************************************************************************//**
- * Initialize HFXO Manager module.
+ * @brief This function initializes the HFXO Manager module, which is essential
+ * for managing the High Frequency Crystal Oscillator (HFXO) on Silicon
+ * Labs series 2 devices. It must be called before the system enters
+ * sleep mode to ensure proper HFXO management, including handling
+ * startup failures and integrating with the Sleeptimer module. The
+ * function should be used after initializing the hardware-specific
+ * components with sl_hfxo_manager_init_hardware(). It returns a status
+ * code indicating success or failure, which should be checked to ensure
+ * the initialization was successful.
  *
- * @return Status Code.
+ * @return Returns a status code of type sl_status_t indicating the success or
+ * failure of the initialization process.
  ******************************************************************************/
 sl_status_t sl_hfxo_manager_init(void);
 
 /***************************************************************************//**
- * Updates Sleepy Crystal settings.
+ * @brief This function is used to update the settings for a sleepy crystal
+ * oscillator, which may be necessary if the default settings are
+ * insufficient to wake up the crystal. It should be called when there is
+ * a need to adjust the tuning capacitance and core bias current values
+ * to ensure proper oscillation. The function requires a valid settings
+ * structure and returns a status code indicating the success or failure
+ * of the operation.
  *
- * @param  settings  Pointer to settings structure
- *
- * @return Status Code.
- *
- * @note Those settings are temporarily used to force oscillation on sleepy
- *       crystal.
- *       Default values should be enough to wake-up sleepy crystals. Otherwise,
- *       this function can be used.
+ * @param settings A pointer to a sl_hfxo_manager_sleepy_xtal_settings_t
+ * structure containing the new settings for the sleepy crystal.
+ * The structure must not be null, and it should be properly
+ * initialized with the desired tuning capacitance and core bias
+ * current values.
+ * @return A status code of type sl_status_t indicating the success or failure
+ * of the operation.
  ******************************************************************************/
 sl_status_t sl_hfxo_manager_update_sleepy_xtal_settings(const sl_hfxo_manager_sleepy_xtal_settings_t *settings);
 
 /***************************************************************************//**
- * When this callback function is called, it means that HFXO failed twice in
- * a row to start with normal configurations. This may mean that there is a
- * bad crystal. When getting this callback, HFXO is running but its properties
- * (frequency, precision) are not guaranteed. This should be considered as an
- * error situation.
+ * @brief This function is called when the High Frequency Crystal Oscillator
+ * (HFXO) fails to start twice consecutively with normal configurations,
+ * indicating a potential issue with the crystal. It serves as a callback
+ * to notify the system of this error condition, where the HFXO is
+ * operational but its frequency and precision are not guaranteed. This
+ * function should be used to handle error situations related to HFXO
+ * startup failures, and it is expected to be part of the error
+ * management strategy for systems relying on HFXO.
+ *
+ * @return None
  ******************************************************************************/
 void sl_hfxo_manager_notify_consecutive_failed_startups(void);
 
 /***************************************************************************//**
- * HFXO Manager HFXO interrupt handler.
+ * @brief This function processes interrupts related to the High Frequency
+ * Crystal Oscillator (HFXO) and is essential for the HFXO Manager module
+ * to function correctly. It must be invoked by the HFXO interrupt
+ * handler to manage various interrupt flags such as HFXO_IF_RDY,
+ * HFXO_IF_DNSERR, and HFXO_XTALCTRL_SKIPCOREBIASOPT. This function is
+ * crucial for handling startup failures and ensuring the HFXO operates
+ * correctly, especially in systems with sleepy crystals. It is typically
+ * used in conjunction with the Power Manager module and should be
+ * integrated into applications that require HFXO management.
  *
- * @note  This function must be called by the HFXO interrupt handler in order
- *        to support the HFXO Manager module.
- *        This function handles the HFXO_IF_RDY, HFXO_IF_DNSERR and
- *        HFXO_XTALCTRL_SKIPCOREBIASOPT interrupt flags.
+ * @return None
  ******************************************************************************/
 void sl_hfxo_manager_irq_handler(void);
 

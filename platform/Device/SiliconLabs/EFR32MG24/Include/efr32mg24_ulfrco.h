@@ -41,7 +41,44 @@
  * @brief EFR32MG24 ULFRCO Register Declaration.
  *****************************************************************************/
 
-/** ULFRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The ULFRCO_TypeDef is a structure representing the Ultra Low Frequency
+ * RC Oscillator (ULFRCO) registers for the EFR32MG24 microcontroller. It
+ * includes registers for IP version, status, interrupt flags, and
+ * interrupt enable, along with their respective set, clear, and toggle
+ * operations. The structure is designed to facilitate direct register
+ * access for controlling and monitoring the ULFRCO module, with reserved
+ * spaces for future expansion.
+ *
+ * @param IPVERSION IP version of the ULFRCO module.
+ * @param RESERVED0 Reserved for future use.
+ * @param STATUS Status register indicating the current state of the ULFRCO
+ * module.
+ * @param RESERVED1 Reserved for future use.
+ * @param IF Interrupt Flag Register for ULFRCO.
+ * @param IEN Interrupt Enable Register for ULFRCO.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_SET IP version for set operations.
+ * @param RESERVED3 Reserved for future use.
+ * @param STATUS_SET Status register for set operations.
+ * @param RESERVED4 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register for set operations.
+ * @param IEN_SET Interrupt Enable Register for set operations.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_CLR IP version for clear operations.
+ * @param RESERVED6 Reserved for future use.
+ * @param STATUS_CLR Status register for clear operations.
+ * @param RESERVED7 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register for clear operations.
+ * @param IEN_CLR Interrupt Enable Register for clear operations.
+ * @param RESERVED8 Reserved for future use.
+ * @param IPVERSION_TGL IP version for toggle operations.
+ * @param RESERVED9 Reserved for future use.
+ * @param STATUS_TGL Status register for toggle operations.
+ * @param RESERVED10 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register for toggle operations.
+ * @param IEN_TGL Interrupt Enable Register for toggle operations.
+ ******************************************************************************/
 typedef struct ulfrco_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version                                         */
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */

@@ -93,11 +93,20 @@ extern sl_iostream_instance_info_t sl_iostream_instance_vuart_info;
 // Prototypes
 
 /***************************************************************************//**
- * Initialize VUART stream component.
+ * @brief This function sets up the Virtual UART (VUART) interface, configuring
+ * the necessary input and output channels for communication. It
+ * establishes the RTT buffer for receiving data and configures the SWO
+ * stimulus for transmitting data. Upon successful initialization, the
+ * VUART stream is set as the default I/O stream. This function should be
+ * called during the system initialization phase to ensure the VUART is
+ * ready for use. It is important to note that if multiple streams are
+ * initialized, the last one will be set as the default, so
+ * reconfiguration may be necessary. Additionally, the function
+ * integrates with the power manager to ensure the system remains in a
+ * suitable energy mode for RTT communication.
  *
- * @return  Status Code:
- *            - SL_STATUS_OK
- *            - SL_STATUS_FAIL
+ * @return Returns SL_STATUS_OK on successful initialization or SL_STATUS_FAIL
+ * if an error occurs.
  ******************************************************************************/
 sl_status_t sl_iostream_vuart_init(void);
 

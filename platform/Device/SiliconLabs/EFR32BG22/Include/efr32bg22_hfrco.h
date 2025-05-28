@@ -41,7 +41,53 @@
  * @brief EFR32BG22 HFRCO Register Declaration.
  *****************************************************************************/
 
-/** HFRCO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `HFRCO_TypeDef` is a complex data structure representing the High-
+ * Frequency RC Oscillator (HFRCO) registers for the EFR32BG22
+ * microcontroller. It includes various control, status, calibration, and
+ * interrupt registers, each with set, clear, and toggle variants to
+ * facilitate bit manipulation. The structure also contains reserved
+ * fields for future use, ensuring compatibility with potential future
+ * enhancements. This design allows for efficient management of the
+ * HFRCO's operational parameters and status monitoring, crucial for
+ * applications requiring precise clock management.
+ *
+ * @param IPVERSION IP Version ID.
+ * @param CTRL Control Register.
+ * @param CAL Calibration Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param LOCK Lock Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET IP Version ID.
+ * @param CTRL_SET Control Register.
+ * @param CAL_SET Calibration Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param LOCK_SET Lock Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR IP Version ID.
+ * @param CTRL_CLR Control Register.
+ * @param CAL_CLR Calibration Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param LOCK_CLR Lock Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL IP Version ID.
+ * @param CTRL_TGL Control Register.
+ * @param CAL_TGL Calibration Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param RESERVED6 Reserved for future use.
+ * @param LOCK_TGL Lock Register.
+ ******************************************************************************/
 typedef struct hfrco_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version ID                                      */
   __IOM uint32_t CTRL;                          /**< Ctrl Register                                      */

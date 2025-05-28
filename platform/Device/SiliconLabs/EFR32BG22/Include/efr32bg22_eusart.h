@@ -41,7 +41,101 @@
  * @brief EFR32BG22 EUSART Register Declaration.
  *****************************************************************************/
 
-/** EUSART Register Declaration. */
+/***************************************************************************//**
+ * @brief The `EUSART_TypeDef` is a comprehensive data structure representing
+ * the Enhanced Universal Synchronous/Asynchronous Receiver/Transmitter
+ * (EUSART) registers for the EFR32BG22 microcontroller. It includes a
+ * variety of registers for configuration, control, and status monitoring
+ * of the EUSART module, such as enable, configuration, frame format,
+ * timing, and interrupt management registers. The structure also
+ * provides set, clear, and toggle versions of these registers to
+ * facilitate atomic operations. Reserved fields are included for future
+ * expansion, ensuring compatibility with future hardware revisions.
+ *
+ * @param IPVERSION IP version ID.
+ * @param EN Enable Register.
+ * @param CFG0 Configuration 0 Register.
+ * @param CFG1 Configuration 1 Register.
+ * @param FRAMECFG Frame Format Register.
+ * @param IRHFCFG HF IrDA Mod Config Register.
+ * @param IRLFCFG LF IrDA Pulse Config Register.
+ * @param TIMINGCFG Timing Register.
+ * @param STARTFRAMECFG Start Frame Register.
+ * @param SIGFRAMECFG Signal Frame Register.
+ * @param CLKDIV Clock Divider Register.
+ * @param TRIGCTRL Trigger Control Register.
+ * @param CMD Command Register.
+ * @param RXDATA RX Data Register.
+ * @param RXDATAP RX Data Peek Register.
+ * @param TXDATA TX Data Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param EN_SET Enable Register.
+ * @param CFG0_SET Configuration 0 Register.
+ * @param CFG1_SET Configuration 1 Register.
+ * @param FRAMECFG_SET Frame Format Register.
+ * @param IRHFCFG_SET HF IrDA Mod Config Register.
+ * @param IRLFCFG_SET LF IrDA Pulse Config Register.
+ * @param TIMINGCFG_SET Timing Register.
+ * @param STARTFRAMECFG_SET Start Frame Register.
+ * @param SIGFRAMECFG_SET Signal Frame Register.
+ * @param CLKDIV_SET Clock Divider Register.
+ * @param TRIGCTRL_SET Trigger Control Register.
+ * @param CMD_SET Command Register.
+ * @param RXDATA_SET RX Data Register.
+ * @param RXDATAP_SET RX Data Peek Register.
+ * @param TXDATA_SET TX Data Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param SYNCBUSY_SET Synchronization Busy Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param EN_CLR Enable Register.
+ * @param CFG0_CLR Configuration 0 Register.
+ * @param CFG1_CLR Configuration 1 Register.
+ * @param FRAMECFG_CLR Frame Format Register.
+ * @param IRHFCFG_CLR HF IrDA Mod Config Register.
+ * @param IRLFCFG_CLR LF IrDA Pulse Config Register.
+ * @param TIMINGCFG_CLR Timing Register.
+ * @param STARTFRAMECFG_CLR Start Frame Register.
+ * @param SIGFRAMECFG_CLR Signal Frame Register.
+ * @param CLKDIV_CLR Clock Divider Register.
+ * @param TRIGCTRL_CLR Trigger Control Register.
+ * @param CMD_CLR Command Register.
+ * @param RXDATA_CLR RX Data Register.
+ * @param RXDATAP_CLR RX Data Peek Register.
+ * @param TXDATA_CLR TX Data Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param SYNCBUSY_CLR Synchronization Busy Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param EN_TGL Enable Register.
+ * @param CFG0_TGL Configuration 0 Register.
+ * @param CFG1_TGL Configuration 1 Register.
+ * @param FRAMECFG_TGL Frame Format Register.
+ * @param IRHFCFG_TGL HF IrDA Mod Config Register.
+ * @param IRLFCFG_TGL LF IrDA Pulse Config Register.
+ * @param TIMINGCFG_TGL Timing Register.
+ * @param STARTFRAMECFG_TGL Start Frame Register.
+ * @param SIGFRAMECFG_TGL Signal Frame Register.
+ * @param CLKDIV_TGL Clock Divider Register.
+ * @param TRIGCTRL_TGL Trigger Control Register.
+ * @param CMD_TGL Command Register.
+ * @param RXDATA_TGL RX Data Register.
+ * @param RXDATAP_TGL RX Data Peek Register.
+ * @param TXDATA_TGL TX Data Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param SYNCBUSY_TGL Synchronization Busy Register.
+ ******************************************************************************/
 typedef struct eusart_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t EN;                            /**< Enable Register                                    */

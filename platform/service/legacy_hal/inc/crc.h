@@ -28,35 +28,48 @@
  *@{
  */
 
-/** @brief Calculates 16-bit cyclic redundancy code (CITT CRC 16).
+/***************************************************************************//**
+ * @brief This function computes a 16-bit CRC using the CITT CRC 16 polynomial
+ * on a single byte of data. It is designed to be called iteratively,
+ * starting with an initial CRC value, and then repeatedly for each byte
+ * of data to be processed. This allows for the accumulation of the CRC
+ * result over a sequence of bytes, which is useful for error-checking in
+ * data transmission or storage. The function is suitable for use in
+ * environments where hardware CRC calculation is not available or
+ * desired.
  *
- * Applies the standard CITT CRC 16 polynomial to a
- * single byte. It should support being called first with an initial
- * value, then repeatedly until all data is processed.
- *
- * @param newByte     The new byte to be run through CRC.
- *
- * @param prevResult  The previous CRC result.
- *
- * @return The new CRC result.
- */
+ * @param newByte The new byte to be processed by the CRC calculation. It is an
+ * 8-bit unsigned integer representing the next piece of data in
+ * the sequence.
+ * @param prevResult The previous CRC result, which is a 16-bit unsigned
+ * integer. This value should be the result of the previous
+ * call to this function or an initial CRC value for the first
+ * call.
+ * @return The function returns a 16-bit unsigned integer representing the
+ * updated CRC result after processing the new byte.
+ ******************************************************************************/
 uint16_t halCommonCrc16(uint8_t newByte, uint16_t prevResult);
 
-/** @brief Calculates 32-bit cyclic redundancy code
+/***************************************************************************//**
+ * @brief This function computes a 32-bit CRC using a specified polynomial on a
+ * single byte of data, which is useful for error-checking in data
+ * transmission or storage. It should be called initially with a starting
+ * CRC value, typically `CRC32_START`, and then repeatedly for each byte
+ * of data to be processed. The function is designed to be used
+ * iteratively, updating the CRC value with each call. It is important to
+ * ensure that the initial value and each subsequent call's result are
+ * correctly managed to maintain the integrity of the CRC calculation.
  *
- * @note On some radios or micros, the CRC
- * for error detection on packet data is calculated in hardware.
- *
- * Applies a CRC32 polynomial to a
- * single byte. It should support being called first with an initial
- * value, then repeatedly until all data is processed.
- *
- * @param newByte       The new byte to be run through CRC.
- *
- * @param prevResult    The previous CRC result.
- *
- * @return The new CRC result.
- */
+ * @param newByte The new byte to be processed in the CRC calculation. It is an
+ * 8-bit unsigned integer and should represent the next byte of
+ * data in the sequence.
+ * @param prevResult The previous CRC result, which is a 32-bit unsigned
+ * integer. This value should be the result of the last CRC
+ * calculation or an initial value like `CRC32_START` for the
+ * first call.
+ * @return The function returns a 32-bit unsigned integer representing the
+ * updated CRC result after processing the new byte.
+ ******************************************************************************/
 uint32_t halCommonCrc32(uint8_t newByte, uint32_t prevResult);
 
 // Commonly used initial and expected final CRC32 values

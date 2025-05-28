@@ -41,7 +41,60 @@
  * @brief EFR32MG24 ACMP Register Declaration.
  *****************************************************************************/
 
-/** ACMP Register Declaration. */
+/***************************************************************************//**
+ * @brief The `ACMP_TypeDef` structure represents the register layout for the
+ * Analog Comparator (ACMP) peripheral in the EFR32MG24 microcontroller.
+ * It includes various control and status registers such as enable,
+ * software reset, configuration, control, input control, status,
+ * interrupt flag, and interrupt enable registers. The structure also
+ * provides set, clear, and toggle versions of these registers to
+ * facilitate atomic operations. Reserved fields are included for future
+ * expansion, ensuring compatibility with future hardware revisions.
+ *
+ * @param IPVERSION IP version ID.
+ * @param EN ACMP enable.
+ * @param SWRST Software reset.
+ * @param CFG Configuration register.
+ * @param CTRL Control Register.
+ * @param INPUTCTRL Input Control Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param SYNCBUSY Syncbusy.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param EN_SET ACMP enable.
+ * @param SWRST_SET Software reset.
+ * @param CFG_SET Configuration register.
+ * @param CTRL_SET Control Register.
+ * @param INPUTCTRL_SET Input Control Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param SYNCBUSY_SET Syncbusy.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param EN_CLR ACMP enable.
+ * @param SWRST_CLR Software reset.
+ * @param CFG_CLR Configuration register.
+ * @param CTRL_CLR Control Register.
+ * @param INPUTCTRL_CLR Input Control Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param SYNCBUSY_CLR Syncbusy.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param EN_TGL ACMP enable.
+ * @param SWRST_TGL Software reset.
+ * @param CFG_TGL Configuration register.
+ * @param CTRL_TGL Control Register.
+ * @param INPUTCTRL_TGL Input Control Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param SYNCBUSY_TGL Syncbusy.
+ ******************************************************************************/
 typedef struct acmp_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t EN;                            /**< ACMP enable                                        */

@@ -189,6 +189,13 @@ static inline bool nWAKE_IS_NEGATED(void)
   return (GPIO_PinInGet(BSP_SPINCP_NWAKE_PORT, BSP_SPINCP_NWAKE_PIN) != 0);
 }
 
+/***************************************************************************//**
+ * @brief The `nWAKE_IS_ASSERTED` function checks if the nWAKE pin is asserted
+ * (logic low) by reading its GPIO state.
+ *
+ * @return The function returns a boolean value indicating whether the nWAKE pin
+ * is asserted (logic low).
+ ******************************************************************************/
 static inline bool nWAKE_IS_ASSERTED(void)
 {
   return (GPIO_PinInGet(BSP_SPINCP_NWAKE_PORT, BSP_SPINCP_NWAKE_PIN) == 0);
@@ -198,21 +205,48 @@ static inline bool nWAKE_IS_ASSERTED(void)
 #define nWAKE_IS_ASSERTED() false
 #endif
 
+/***************************************************************************//**
+ * @brief The function `nSSEL_IS_NEGATED` checks if the SPI chip select line is
+ * in a negated state by reading the GPIO pin state.
+ *
+ * @return The function returns a boolean value `true` if the chip select line
+ * is negated (i.e., the GPIO pin state is not `0`), otherwise it
+ * returns `false`.
+ ******************************************************************************/
 static inline bool nSSEL_IS_NEGATED(void)
 {
   return (GPIO_PinInGet(SPI_NCP_CS_PORT, SPI_NCP_CS_PIN) != 0);
 }
 
+/***************************************************************************//**
+ * @brief The `nSSEL_IS_ASSERTED` function checks if the SPI chip select line is
+ * asserted (active low).
+ *
+ * @return The function returns a boolean value: `true` if the chip select line
+ * is asserted (active low), otherwise `false`.
+ ******************************************************************************/
 static inline bool nSSEL_IS_ASSERTED(void)
 {
   return (GPIO_PinInGet(SPI_NCP_CS_PORT, SPI_NCP_CS_PIN) == 0);
 }
 
+/***************************************************************************//**
+ * @brief The `SET_nHOST_INT` function sets a specific GPIO pin high to signal
+ * an interrupt to the host.
+ *
+ * @return The function does not return any value.
+ ******************************************************************************/
 static inline void SET_nHOST_INT(void)
 {
   GPIO_PinOutSet(BSP_SPINCP_NHOSTINT_PORT, BSP_SPINCP_NHOSTINT_PIN);
 }
 
+/***************************************************************************//**
+ * @brief The function `CLR_nHOST_INT` clears the host interrupt pin by setting
+ * it to a low state.
+ *
+ * @return The function does not return any value.
+ ******************************************************************************/
 static inline void CLR_nHOST_INT(void)
 {
   GPIO_PinOutClear(BSP_SPINCP_NHOSTINT_PORT, BSP_SPINCP_NHOSTINT_PIN);

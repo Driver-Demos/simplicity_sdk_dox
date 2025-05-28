@@ -37,6 +37,20 @@
 #include <stdarg.h>
 #include <stdbool.h>
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_drv_capabilities_t` structure is used to define the
+ * capabilities of a CPC driver, specifically whether it can preprocess
+ * HDLC headers and if UART flow control is supported. This structure is
+ * part of the CPC driver interface, which is used to manage
+ * communication protocols in embedded systems. The boolean fields within
+ * this structure allow the driver to specify its capabilities, which can
+ * be queried by other components of the system to ensure compatibility
+ * and proper configuration.
+ *
+ * @param preprocess_hdlc_header Indicates if the HDLC header is validated by
+ * the driver.
+ * @param uart_flowcontrol Indicates if UART flow control is enabled.
+ ******************************************************************************/
 typedef struct {
   bool preprocess_hdlc_header;            ///< Is the HDLC header validated by driver
   bool uart_flowcontrol;                  ///< Is UART flow control enabled
@@ -44,8 +58,55 @@ typedef struct {
 
 /* forward declare sli_cpc_drv_t as it's referenced in the ops structure */
 struct sli_cpc_drv;
+/***************************************************************************//**
+ * @brief The `sli_cpc_drv_t` structure is a key component of the CPC (Co-
+ * Processor Communication) driver interface, encapsulating a set of
+ * operations that define the behavior and capabilities of the driver. It
+ * includes a member `ops` which is a structure of function pointers,
+ * each representing a specific operation such as initialization, data
+ * transmission, and reception, as well as configuration and capability
+ * queries. This structure allows for flexible and modular driver
+ * implementation, enabling different hardware interfaces like UART, SPI,
+ * and SDIO to be managed under a unified interface.
+ *
+ * @param ops A structure containing function pointers for various driver
+ * operations.
+ ******************************************************************************/
 typedef struct sli_cpc_drv sli_cpc_drv_t;
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_drv_ops_t` structure defines a set of function pointers
+ * that represent operations for a CPC (Co-Processor Communication)
+ * driver. These operations include initializing hardware and the driver,
+ * managing data transmission and reception, and handling driver
+ * capabilities and configurations. The structure is designed to provide
+ * a flexible interface for different driver implementations, allowing
+ * for operations such as reading and writing data, checking transmission
+ * readiness, and managing bus bitrate settings. Some functions are
+ * conditionally included based on the presence of specific features,
+ * such as primary CPC catalog support.
+ *
+ * @param hw_init Function pointer to initialize the hardware peripheral for
+ * standalone use.
+ * @param init Function pointer to initialize the driver after hardware
+ * initialization.
+ * @param get_capabilities Function pointer to retrieve the CPC driver
+ * capabilities.
+ * @param start_rx Function pointer to start receiving packets.
+ * @param deinit Function pointer to de-initialize the CPC driver for firmware
+ * upgrades.
+ * @param read Function pointer to read data from the driver.
+ * @param write Function pointer to transmit data through the driver.
+ * @param is_transmit_ready Function pointer to check if the driver is ready to
+ * transmit.
+ * @param get_bus_bitrate Function pointer to get the current bus bitrate.
+ * @param set_bus_bitrate Function pointer to set the bus bitrate.
+ * @param get_bus_max_bitrate Function pointer to get the maximum bus bitrate.
+ * @param on_rx_buffer_handle_free Function pointer for notification when an RX
+ * buffer handle is freed.
+ * @param on_rx_buffer_free Function pointer for notification when an RX buffer
+ * is freed.
+ ******************************************************************************/
 typedef struct {
   /// Initialize only the hardware peripheral to be used in a standalone manner
   /// (during the bootloader poking)
@@ -106,6 +167,19 @@ typedef struct {
   void (*on_rx_buffer_free)(sli_cpc_drv_t *driver);
 } sli_cpc_drv_ops_t;
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_drv` structure is a compound data type that encapsulates
+ * a set of operations for a CPC (Communication Protocol Controller)
+ * driver. It contains a single member, `ops`, which is a structure of
+ * type `sli_cpc_drv_ops_t`. This member holds function pointers to
+ * various driver operations such as initialization, reading, writing,
+ * and capability querying. The structure is designed to provide a
+ * flexible interface for interacting with different hardware peripherals
+ * through a standardized set of operations.
+ *
+ * @param ops A structure containing function pointers for various driver
+ * operations.
+ ******************************************************************************/
 struct sli_cpc_drv {
   sli_cpc_drv_ops_t ops;
 };

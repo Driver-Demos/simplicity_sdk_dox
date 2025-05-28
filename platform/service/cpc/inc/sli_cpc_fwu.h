@@ -46,74 +46,133 @@ extern "C"
 #endif
 
 /***************************************************************************//**
- * The firmware upgrade process action called by the main CPC process action
+ * @brief This function is part of the main CPC process action and is
+ * responsible for managing the firmware upgrade process. It should be
+ * called regularly to ensure the firmware upgrade progresses correctly.
+ * The function checks if a firmware upgrade is in progress and whether
+ * the bootloader is running. If the bootloader is not running and
+ * recovery pins support is not enabled, it attempts to reboot the
+ * secondary into bootloader mode. Once the bootloader is running, it
+ * initializes the firmware upgrade driver and executes the firmware
+ * upgrade state machine. The function stops processing once the firmware
+ * upgrade is complete or fails. It is essential to ensure that the
+ * firmware upgrade process has been started before calling this
+ * function.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_fwu_process_action(void);
 
 /***************************************************************************//**
- * Gets whether or not a firmware upgrade is in progress
+ * @brief This function checks the status of the firmware upgrade process and
+ * returns a boolean indicating whether the upgrade is currently in
+ * progress. It is useful for monitoring the state of the firmware
+ * upgrade and ensuring that other operations do not interfere with the
+ * upgrade process. This function can be called at any time to verify the
+ * upgrade status, and it does not require any prior initialization or
+ * setup.
  *
- * @return bool : Firmware upgrade in progress
+ * @return A boolean value: 'true' if a firmware upgrade is in progress, 'false'
+ * otherwise.
  ******************************************************************************/
 bool sli_cpc_is_fwu_in_progress(void);
 
 /***************************************************************************//**
- * Checks if the bootloader is currently running
+ * @brief Use this function to determine if the bootloader is active by checking
+ * for a response to a specific probe. It should be called when you need
+ * to verify the bootloader's status, typically before initiating
+ * firmware upgrade processes. The function caches the result after the
+ * first call, so subsequent calls will return the cached status without
+ * re-probing. This function is useful in scenarios where knowing the
+ * bootloader state is critical for further operations.
  *
- * @return bool :
- *   true : The bootloader responded to the poke.
- *   false : The bootloader did not respond to the poke.
+ * @return Returns true if the bootloader is running and responded to the probe,
+ * otherwise returns false.
  ******************************************************************************/
 bool sli_cpc_is_bootloader_running(void);
 
 /***************************************************************************//**
- * The main firmware upgrade finite state machine
+ * @brief This function is part of a finite state machine that manages the
+ * firmware upgrade process for a device. It should be called repeatedly
+ * by the main process to progress through the various stages of the
+ * firmware upgrade. The function handles different states such as
+ * waiting for prompts, sending data frames, and acknowledging responses.
+ * It is essential to call this function until it returns a status
+ * indicating that the firmware upgrade is complete. The function assumes
+ * that the firmware upgrade process has been properly initialized and
+ * started.
  *
- * @return sl_status_t :
- *   SL_STATUS_IN_PROGRESS : The firmware upgrade is still and progress.
- *                           This funcion needs do be called again
- *   SL_STATUS_OK          : The firmware update is done
+ * @return Returns an sl_status_t indicating the current status of the firmware
+ * upgrade process: SL_STATUS_IN_PROGRESS if the upgrade is ongoing and
+ * SL_STATUS_OK if the upgrade is complete.
  ******************************************************************************/
 sl_status_t sli_cpc_drv_fwu_step(void);
 
 /***************************************************************************//**
- * Initialize the firmware update driver
+ * @brief This function prepares the firmware update driver for operation by
+ * enabling the UART peripheral. It should be called before any firmware
+ * update operations are performed to ensure that the necessary hardware
+ * interfaces are correctly configured and ready for use. This function
+ * does not take any parameters and does not return any value, indicating
+ * that it is intended to be a straightforward initialization step in the
+ * firmware update process.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_drv_fwu_init();
 
 /***************************************************************************//**
- * Starts the firmware upgrade process of the secondary.
+ * @brief This function is used to start the firmware upgrade process for a
+ * secondary device in a CPC (Co-Processor Communication) system. It
+ * should be called when the user is ready to begin the firmware upgrade.
+ * Before calling this function, ensure that the system is in a state
+ * where a firmware upgrade can be initiated, as determined by the
+ * `sl_cpc_is_fwu_startable` function. If the upgrade process can be
+ * started, the function will activate the firmware upgrade process,
+ * blocking the CPC API and continuously calling the user-implemented
+ * `sl_cpc_get_fwu_chunk` callback until the firmware image is fully
+ * transferred. If the function returns a status other than
+ * `SL_STATUS_OK`, it indicates that the upgrade process could not be
+ * started, and the return value will provide the reason.
  *
- * @return sl_status :
- *   SL_STATUS_OK : The firmware update process has successfuly started. The CPC API will
- *                  now be blocked and the 'sl_cpc_get_fwu_chunk' callback implemented by the
- *                  user will now be continuously called until the firmware image has been
- *                  completely transfered.
- *
- *  If not SL_STATUS_OK, the return value will be the one returned by
- *  sl_cpc_is_firmware_upgrade_startable()
+ * @return Returns `SL_STATUS_OK` if the firmware upgrade process starts
+ * successfully. If not, it returns the status from
+ * `sl_cpc_is_fwu_startable`, indicating why the process could not be
+ * started.
  ******************************************************************************/
 sl_status_t sl_cpc_fwu_start(void);
 
 /***************************************************************************//**
- * Checks if a firmware upgrade can be started
+ * @brief This function determines whether the conditions are met to initiate a
+ * firmware upgrade process. It should be called before attempting to
+ * start a firmware upgrade to ensure that the system is ready and
+ * capable of proceeding. The function checks for ongoing firmware
+ * upgrades, the presence of necessary user-implemented callbacks, and
+ * the initialization state of the system. It also considers the status
+ * of the bootloader and any required reset sequences. This function is
+ * essential for preventing premature or unsupported upgrade attempts.
  *
- * @return sl_status :
- *   SL_STATUS_OK : If a firmware upgrade can be started
- *   SL_STATUS_IN_PROGRESS : If a firmware upgrade is already in progress
- *   SL_STATUS_NOT_READY : If the firmware upgrade cannot yet be started. This
- *     would be because the reset sequence is not yet finished.
- *   SL_STATUS_NOT_AVAILABLE : If the user did not provide an implementation for
- *     "sl_cpc_get_fwu_chunk()"
- *   SL_STATUS_NOT_SUPPORTED : If after the reset sequence, the secondary returned
- *     that is does not have a suitable gecko bootloader.
+ * @return Returns an sl_status_t indicating the readiness for a firmware
+ * upgrade: SL_STATUS_OK if startable, SL_STATUS_IN_PROGRESS if an
+ * upgrade is ongoing, SL_STATUS_NOT_READY if prerequisites are not met,
+ * SL_STATUS_NOT_AVAILABLE if a required callback is missing, and
+ * SL_STATUS_NOT_SUPPORTED if the bootloader is unsuitable.
  ******************************************************************************/
 sl_status_t sl_cpc_is_fwu_startable(void);
 
 #if (SL_CPC_PRIMARY_FIRMWARE_UPGRADE_RECOVERY_PINS_SUPPORT_ENABLED >= 1)
 /***************************************************************************//**
- * Uses the bootloader recovery pins to reset the secondary and force the
- * bootloader to stay in bootloader mode to perform a firmware upgrade
+ * @brief This function is used to reset the secondary device and force it into
+ * bootloader mode by manipulating the bootloader recovery pins. It is
+ * typically called when a firmware upgrade is required, and the device
+ * needs to be in bootloader mode to accept the new firmware. This
+ * function should be used when the system supports bootloader recovery
+ * pins and the firmware upgrade process is initiated. It is important to
+ * ensure that the system is configured to support this operation, as
+ * indicated by the
+ * SL_CPC_PRIMARY_FIRMWARE_UPGRADE_RECOVERY_PINS_SUPPORT_ENABLED macro.
+ *
+ * @return None
  ******************************************************************************/
 void sli_cpc_drv_fwu_enter_bootloader_via_recovery_pins(void);
 #endif

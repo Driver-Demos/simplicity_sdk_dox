@@ -41,17 +41,385 @@
  * @brief EFR32BG22 PRS Register Declaration.
  *****************************************************************************/
 
-/** PRS ASYNC_CH Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `PRS_ASYNC_CH_TypeDef` is a structure that represents an
+ * asynchronous channel control register within the Peripheral Reflex
+ * System (PRS) of the EFR32BG22 microcontroller. It contains a single
+ * member, `CTRL`, which is a 32-bit register used to control the
+ * behavior of an asynchronous channel in the PRS. This structure is part
+ * of a larger system that manages the routing of peripheral signals to
+ * various consumers, allowing for flexible and efficient signal
+ * processing and event handling.
+ *
+ * @param CTRL Async Channel Control Register.
+ ******************************************************************************/
 typedef struct prs_async_ch_typedef{
   __IOM uint32_t CTRL;                               /**< Async Channel Control Register                     */
 } PRS_ASYNC_CH_TypeDef;
 
-/** PRS SYNC_CH Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `PRS_SYNC_CH_TypeDef` is a structure that represents a synchronous
+ * channel control register within the Peripheral Reflex System (PRS) of
+ * the EFR32BG22 microcontroller. It contains a single member, `CTRL`,
+ * which is a 32-bit register used to control the behavior of a
+ * synchronous channel in the PRS. This structure is part of the PRS
+ * register group, which facilitates the routing of signals between
+ * different peripherals in the microcontroller.
+ *
+ * @param CTRL Sync Channel Control Register.
+ ******************************************************************************/
 typedef struct prs_sync_ch_typedef{
   __IOM uint32_t CTRL;                               /**< Sync Channel Control Register                      */
 } PRS_SYNC_CH_TypeDef;
 
-/** PRS Register Declaration. */
+/***************************************************************************//**
+ * @brief The `PRS_TypeDef` is a comprehensive structure used in the EFR32BG22
+ * microcontroller to manage the Peripheral Reflex System (PRS). It
+ * contains numerous registers for controlling asynchronous and
+ * synchronous channels, as well as consumer selection registers for
+ * various peripherals like CMU, IADC, LETIMER, EUART, MODEM, RAC, RTCC,
+ * CORE, TIMER, USART, and WDOG. The structure includes multiple reserved
+ * fields for future use, and it supports operations like setting,
+ * clearing, and toggling of register values. This structure is crucial
+ * for configuring and managing the PRS, which allows peripherals to
+ * communicate with each other without CPU intervention, thereby
+ * optimizing performance and power consumption.
+ *
+ * @param IPVERSION IP version ID.
+ * @param RESERVED0 Reserved for future use.
+ * @param ASYNC_SWPULSE Software Pulse Register.
+ * @param ASYNC_SWLEVEL Software Level Register.
+ * @param ASYNC_PEEK Async Channel Values.
+ * @param SYNC_PEEK Sync Channel Values.
+ * @param ASYNC_CH Async Channel registers.
+ * @param SYNC_CH Sync Channel registers.
+ * @param CONSUMER_CMU_CALDN CMU CALDN Consumer Selection.
+ * @param CONSUMER_CMU_CALUP CMU CALUP Consumer Selection.
+ * @param RESERVED1 Reserved for future use.
+ * @param CONSUMER_IADC0_SCANTRIGGER IADC0 SCANTRIGGER Consumer Selection.
+ * @param CONSUMER_IADC0_SINGLETRIGGER IADC0 SINGLETRIGGER Consumer Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ0 DMAREQ0 Consumer Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ1 DMAREQ1 Consumer Selection.
+ * @param CONSUMER_LETIMER0_CLEAR LETIMER CLEAR Consumer Selection.
+ * @param CONSUMER_LETIMER0_START LETIMER START Consumer Selection.
+ * @param CONSUMER_LETIMER0_STOP LETIMER STOP Consumer Selection.
+ * @param CONSUMER_EUART0_RX EUART0 RX consumer register.
+ * @param CONSUMER_EUART0_TRIGGER EUART0 TRIGGER Consumer register.
+ * @param CONSUMER_MODEM_DIN MODEM DIN Consumer Selection.
+ * @param RESERVED2 Reserved for future use.
+ * @param RESERVED3 Reserved for future use.
+ * @param CONSUMER_RAC_CLR RAC CLR Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN0 RAC CTIIN0 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN1 RAC CTIIN1 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN2 RAC CTIIN2 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN3 RAC CTIIN3 Consumer Selection.
+ * @param CONSUMER_RAC_FORCETX RAC FORCETX Consumer Selection.
+ * @param CONSUMER_RAC_RXDIS RAC RXDIS Consumer Selection.
+ * @param CONSUMER_RAC_RXEN RAC RXEN Consumer Selection.
+ * @param CONSUMER_RAC_SEQ RAC SEQ Consumer Selection.
+ * @param CONSUMER_RAC_TXEN RAC TXEN Consumer Selection.
+ * @param CONSUMER_RTCC_CC0 RTCC CC0 Consumer Selection.
+ * @param CONSUMER_RTCC_CC1 RTCC CC1 Consumer Selection.
+ * @param CONSUMER_RTCC_CC2 RTCC CC2 Consumer Selection.
+ * @param RESERVED4 Reserved for future use.
+ * @param CONSUMER_CORE_CTIIN0 CTI0 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN1 CTI1 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN2 CTI2 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN3 CTI3 Consumer Selection.
+ * @param CONSUMER_CORE_M33RXEV M33 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC0 TIMER0 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC1 TIMER0 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC2 TIMER0 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTI TIMER0 DTI Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS1 TIMER0 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS2 TIMER0 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC0 TIMER1 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC1 TIMER1 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC2 TIMER1 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTI TIMER1 DTI Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS1 TIMER1 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS2 TIMER1 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC0 TIMER2 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC1 TIMER2 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC2 TIMER2 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTI TIMER2 DTI Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS1 TIMER2 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS2 TIMER2 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC0 TIMER3 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC1 TIMER3 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC2 TIMER3 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTI TIMER3 DTI Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS1 TIMER3 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS2 TIMER3 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC0 TIMER4 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC1 TIMER4 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC2 TIMER4 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTI TIMER4 DTI Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS1 TIMER4 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS2 TIMER4 DTIFS2 Consumer Selection.
+ * @param CONSUMER_USART0_CLK USART0 CLK Consumer Selection.
+ * @param CONSUMER_USART0_IR USART0 IR Consumer Selection.
+ * @param CONSUMER_USART0_RX USART0 RX Consumer Selection.
+ * @param CONSUMER_USART0_TRIGGER USART0 TRIGGER Consumer Selection.
+ * @param CONSUMER_USART1_CLK USART1 CLK Consumer Selection.
+ * @param CONSUMER_USART1_IR USART1 IR Consumer Selection.
+ * @param CONSUMER_USART1_RX USART1 RX Consumer Selection.
+ * @param CONSUMER_USART1_TRIGGER USART1 TRIGGER Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC0 WDOG0 SRC0 Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC1 WDOG0 SRC1 Consumer Selection.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param RESERVED6 Reserved for future use.
+ * @param ASYNC_SWPULSE_SET Software Pulse Register.
+ * @param ASYNC_SWLEVEL_SET Software Level Register.
+ * @param ASYNC_PEEK_SET Async Channel Values.
+ * @param SYNC_PEEK_SET Sync Channel Values.
+ * @param ASYNC_CH_SET Async Channel registers.
+ * @param SYNC_CH_SET Sync Channel registers.
+ * @param CONSUMER_CMU_CALDN_SET CMU CALDN Consumer Selection.
+ * @param CONSUMER_CMU_CALUP_SET CMU CALUP Consumer Selection.
+ * @param RESERVED7 Reserved for future use.
+ * @param CONSUMER_IADC0_SCANTRIGGER_SET IADC0 SCANTRIGGER Consumer Selection.
+ * @param CONSUMER_IADC0_SINGLETRIGGER_SET IADC0 SINGLETRIGGER Consumer
+ * Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ0_SET DMAREQ0 Consumer Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ1_SET DMAREQ1 Consumer Selection.
+ * @param CONSUMER_LETIMER0_CLEAR_SET LETIMER CLEAR Consumer Selection.
+ * @param CONSUMER_LETIMER0_START_SET LETIMER START Consumer Selection.
+ * @param CONSUMER_LETIMER0_STOP_SET LETIMER STOP Consumer Selection.
+ * @param CONSUMER_EUART0_RX_SET EUART0 RX consumer register.
+ * @param CONSUMER_EUART0_TRIGGER_SET EUART0 TRIGGER Consumer register.
+ * @param CONSUMER_MODEM_DIN_SET MODEM DIN Consumer Selection.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param CONSUMER_RAC_CLR_SET RAC CLR Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN0_SET RAC CTIIN0 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN1_SET RAC CTIIN1 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN2_SET RAC CTIIN2 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN3_SET RAC CTIIN3 Consumer Selection.
+ * @param CONSUMER_RAC_FORCETX_SET RAC FORCETX Consumer Selection.
+ * @param CONSUMER_RAC_RXDIS_SET RAC RXDIS Consumer Selection.
+ * @param CONSUMER_RAC_RXEN_SET RAC RXEN Consumer Selection.
+ * @param CONSUMER_RAC_SEQ_SET RAC SEQ Consumer Selection.
+ * @param CONSUMER_RAC_TXEN_SET RAC TXEN Consumer Selection.
+ * @param CONSUMER_RTCC_CC0_SET RTCC CC0 Consumer Selection.
+ * @param CONSUMER_RTCC_CC1_SET RTCC CC1 Consumer Selection.
+ * @param CONSUMER_RTCC_CC2_SET RTCC CC2 Consumer Selection.
+ * @param RESERVED10 Reserved for future use.
+ * @param CONSUMER_CORE_CTIIN0_SET CTI0 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN1_SET CTI1 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN2_SET CTI2 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN3_SET CTI3 Consumer Selection.
+ * @param CONSUMER_CORE_M33RXEV_SET M33 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC0_SET TIMER0 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC1_SET TIMER0 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC2_SET TIMER0 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTI_SET TIMER0 DTI Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS1_SET TIMER0 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS2_SET TIMER0 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC0_SET TIMER1 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC1_SET TIMER1 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC2_SET TIMER1 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTI_SET TIMER1 DTI Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS1_SET TIMER1 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS2_SET TIMER1 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC0_SET TIMER2 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC1_SET TIMER2 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC2_SET TIMER2 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTI_SET TIMER2 DTI Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS1_SET TIMER2 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS2_SET TIMER2 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC0_SET TIMER3 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC1_SET TIMER3 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC2_SET TIMER3 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTI_SET TIMER3 DTI Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS1_SET TIMER3 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS2_SET TIMER3 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC0_SET TIMER4 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC1_SET TIMER4 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC2_SET TIMER4 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTI_SET TIMER4 DTI Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS1_SET TIMER4 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS2_SET TIMER4 DTIFS2 Consumer Selection.
+ * @param CONSUMER_USART0_CLK_SET USART0 CLK Consumer Selection.
+ * @param CONSUMER_USART0_IR_SET USART0 IR Consumer Selection.
+ * @param CONSUMER_USART0_RX_SET USART0 RX Consumer Selection.
+ * @param CONSUMER_USART0_TRIGGER_SET USART0 TRIGGER Consumer Selection.
+ * @param CONSUMER_USART1_CLK_SET USART1 CLK Consumer Selection.
+ * @param CONSUMER_USART1_IR_SET USART1 IR Consumer Selection.
+ * @param CONSUMER_USART1_RX_SET USART1 RX Consumer Selection.
+ * @param CONSUMER_USART1_TRIGGER_SET USART1 TRIGGER Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC0_SET WDOG0 SRC0 Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC1_SET WDOG0 SRC1 Consumer Selection.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param RESERVED12 Reserved for future use.
+ * @param ASYNC_SWPULSE_CLR Software Pulse Register.
+ * @param ASYNC_SWLEVEL_CLR Software Level Register.
+ * @param ASYNC_PEEK_CLR Async Channel Values.
+ * @param SYNC_PEEK_CLR Sync Channel Values.
+ * @param ASYNC_CH_CLR Async Channel registers.
+ * @param SYNC_CH_CLR Sync Channel registers.
+ * @param CONSUMER_CMU_CALDN_CLR CMU CALDN Consumer Selection.
+ * @param CONSUMER_CMU_CALUP_CLR CMU CALUP Consumer Selection.
+ * @param RESERVED13 Reserved for future use.
+ * @param CONSUMER_IADC0_SCANTRIGGER_CLR IADC0 SCANTRIGGER Consumer Selection.
+ * @param CONSUMER_IADC0_SINGLETRIGGER_CLR IADC0 SINGLETRIGGER Consumer
+ * Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ0_CLR DMAREQ0 Consumer Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ1_CLR DMAREQ1 Consumer Selection.
+ * @param CONSUMER_LETIMER0_CLEAR_CLR LETIMER CLEAR Consumer Selection.
+ * @param CONSUMER_LETIMER0_START_CLR LETIMER START Consumer Selection.
+ * @param CONSUMER_LETIMER0_STOP_CLR LETIMER STOP Consumer Selection.
+ * @param CONSUMER_EUART0_RX_CLR EUART0 RX consumer register.
+ * @param CONSUMER_EUART0_TRIGGER_CLR EUART0 TRIGGER Consumer register.
+ * @param CONSUMER_MODEM_DIN_CLR MODEM DIN Consumer Selection.
+ * @param RESERVED14 Reserved for future use.
+ * @param RESERVED15 Reserved for future use.
+ * @param CONSUMER_RAC_CLR_CLR RAC CLR Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN0_CLR RAC CTIIN0 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN1_CLR RAC CTIIN1 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN2_CLR RAC CTIIN2 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN3_CLR RAC CTIIN3 Consumer Selection.
+ * @param CONSUMER_RAC_FORCETX_CLR RAC FORCETX Consumer Selection.
+ * @param CONSUMER_RAC_RXDIS_CLR RAC RXDIS Consumer Selection.
+ * @param CONSUMER_RAC_RXEN_CLR RAC RXEN Consumer Selection.
+ * @param CONSUMER_RAC_SEQ_CLR RAC SEQ Consumer Selection.
+ * @param CONSUMER_RAC_TXEN_CLR RAC TXEN Consumer Selection.
+ * @param CONSUMER_RTCC_CC0_CLR RTCC CC0 Consumer Selection.
+ * @param CONSUMER_RTCC_CC1_CLR RTCC CC1 Consumer Selection.
+ * @param CONSUMER_RTCC_CC2_CLR RTCC CC2 Consumer Selection.
+ * @param RESERVED16 Reserved for future use.
+ * @param CONSUMER_CORE_CTIIN0_CLR CTI0 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN1_CLR CTI1 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN2_CLR CTI2 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN3_CLR CTI3 Consumer Selection.
+ * @param CONSUMER_CORE_M33RXEV_CLR M33 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC0_CLR TIMER0 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC1_CLR TIMER0 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC2_CLR TIMER0 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTI_CLR TIMER0 DTI Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS1_CLR TIMER0 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS2_CLR TIMER0 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC0_CLR TIMER1 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC1_CLR TIMER1 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC2_CLR TIMER1 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTI_CLR TIMER1 DTI Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS1_CLR TIMER1 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS2_CLR TIMER1 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC0_CLR TIMER2 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC1_CLR TIMER2 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC2_CLR TIMER2 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTI_CLR TIMER2 DTI Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS1_CLR TIMER2 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS2_CLR TIMER2 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC0_CLR TIMER3 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC1_CLR TIMER3 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC2_CLR TIMER3 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTI_CLR TIMER3 DTI Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS1_CLR TIMER3 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS2_CLR TIMER3 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC0_CLR TIMER4 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC1_CLR TIMER4 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC2_CLR TIMER4 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTI_CLR TIMER4 DTI Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS1_CLR TIMER4 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS2_CLR TIMER4 DTIFS2 Consumer Selection.
+ * @param CONSUMER_USART0_CLK_CLR USART0 CLK Consumer Selection.
+ * @param CONSUMER_USART0_IR_CLR USART0 IR Consumer Selection.
+ * @param CONSUMER_USART0_RX_CLR USART0 RX Consumer Selection.
+ * @param CONSUMER_USART0_TRIGGER_CLR USART0 TRIGGER Consumer Selection.
+ * @param CONSUMER_USART1_CLK_CLR USART1 CLK Consumer Selection.
+ * @param CONSUMER_USART1_IR_CLR USART1 IR Consumer Selection.
+ * @param CONSUMER_USART1_RX_CLR USART1 RX Consumer Selection.
+ * @param CONSUMER_USART1_TRIGGER_CLR USART1 TRIGGER Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC0_CLR WDOG0 SRC0 Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC1_CLR WDOG0 SRC1 Consumer Selection.
+ * @param RESERVED17 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param RESERVED18 Reserved for future use.
+ * @param ASYNC_SWPULSE_TGL Software Pulse Register.
+ * @param ASYNC_SWLEVEL_TGL Software Level Register.
+ * @param ASYNC_PEEK_TGL Async Channel Values.
+ * @param SYNC_PEEK_TGL Sync Channel Values.
+ * @param ASYNC_CH_TGL Async Channel registers.
+ * @param SYNC_CH_TGL Sync Channel registers.
+ * @param CONSUMER_CMU_CALDN_TGL CMU CALDN Consumer Selection.
+ * @param CONSUMER_CMU_CALUP_TGL CMU CALUP Consumer Selection.
+ * @param RESERVED19 Reserved for future use.
+ * @param CONSUMER_IADC0_SCANTRIGGER_TGL IADC0 SCANTRIGGER Consumer Selection.
+ * @param CONSUMER_IADC0_SINGLETRIGGER_TGL IADC0 SINGLETRIGGER Consumer
+ * Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ0_TGL DMAREQ0 Consumer Selection.
+ * @param CONSUMER_LDMAXBAR_DMAREQ1_TGL DMAREQ1 Consumer Selection.
+ * @param CONSUMER_LETIMER0_CLEAR_TGL LETIMER CLEAR Consumer Selection.
+ * @param CONSUMER_LETIMER0_START_TGL LETIMER START Consumer Selection.
+ * @param CONSUMER_LETIMER0_STOP_TGL LETIMER STOP Consumer Selection.
+ * @param CONSUMER_EUART0_RX_TGL EUART0 RX consumer register.
+ * @param CONSUMER_EUART0_TRIGGER_TGL EUART0 TRIGGER Consumer register.
+ * @param CONSUMER_MODEM_DIN_TGL MODEM DIN Consumer Selection.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param CONSUMER_RAC_CLR_TGL RAC CLR Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN0_TGL RAC CTIIN0 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN1_TGL RAC CTIIN1 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN2_TGL RAC CTIIN2 Consumer Selection.
+ * @param CONSUMER_RAC_CTIIN3_TGL RAC CTIIN3 Consumer Selection.
+ * @param CONSUMER_RAC_FORCETX_TGL RAC FORCETX Consumer Selection.
+ * @param CONSUMER_RAC_RXDIS_TGL RAC RXDIS Consumer Selection.
+ * @param CONSUMER_RAC_RXEN_TGL RAC RXEN Consumer Selection.
+ * @param CONSUMER_RAC_SEQ_TGL RAC SEQ Consumer Selection.
+ * @param CONSUMER_RAC_TXEN_TGL RAC TXEN Consumer Selection.
+ * @param CONSUMER_RTCC_CC0_TGL RTCC CC0 Consumer Selection.
+ * @param CONSUMER_RTCC_CC1_TGL RTCC CC1 Consumer Selection.
+ * @param CONSUMER_RTCC_CC2_TGL RTCC CC2 Consumer Selection.
+ * @param RESERVED22 Reserved for future use.
+ * @param CONSUMER_CORE_CTIIN0_TGL CTI0 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN1_TGL CTI1 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN2_TGL CTI2 Consumer Selection.
+ * @param CONSUMER_CORE_CTIIN3_TGL CTI3 Consumer Selection.
+ * @param CONSUMER_CORE_M33RXEV_TGL M33 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC0_TGL TIMER0 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC1_TGL TIMER0 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER0_CC2_TGL TIMER0 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTI_TGL TIMER0 DTI Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS1_TGL TIMER0 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER0_DTIFS2_TGL TIMER0 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC0_TGL TIMER1 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC1_TGL TIMER1 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER1_CC2_TGL TIMER1 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTI_TGL TIMER1 DTI Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS1_TGL TIMER1 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER1_DTIFS2_TGL TIMER1 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC0_TGL TIMER2 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC1_TGL TIMER2 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER2_CC2_TGL TIMER2 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTI_TGL TIMER2 DTI Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS1_TGL TIMER2 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER2_DTIFS2_TGL TIMER2 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC0_TGL TIMER3 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC1_TGL TIMER3 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER3_CC2_TGL TIMER3 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTI_TGL TIMER3 DTI Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS1_TGL TIMER3 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER3_DTIFS2_TGL TIMER3 DTIFS2 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC0_TGL TIMER4 CC0 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC1_TGL TIMER4 CC1 Consumer Selection.
+ * @param CONSUMER_TIMER4_CC2_TGL TIMER4 CC2 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTI_TGL TIMER4 DTI Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS1_TGL TIMER4 DTIFS1 Consumer Selection.
+ * @param CONSUMER_TIMER4_DTIFS2_TGL TIMER4 DTIFS2 Consumer Selection.
+ * @param CONSUMER_USART0_CLK_TGL USART0 CLK Consumer Selection.
+ * @param CONSUMER_USART0_IR_TGL USART0 IR Consumer Selection.
+ * @param CONSUMER_USART0_RX_TGL USART0 RX Consumer Selection.
+ * @param CONSUMER_USART0_TRIGGER_TGL USART0 TRIGGER Consumer Selection.
+ * @param CONSUMER_USART1_CLK_TGL USART1 CLK Consumer Selection.
+ * @param CONSUMER_USART1_IR_TGL USART1 IR Consumer Selection.
+ * @param CONSUMER_USART1_RX_TGL USART1 RX Consumer Selection.
+ * @param CONSUMER_USART1_TRIGGER_TGL USART1 TRIGGER Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC0_TGL WDOG0 SRC0 Consumer Selection.
+ * @param CONSUMER_WDOG0_SRC1_TGL WDOG0 SRC1 Consumer Selection.
+ ******************************************************************************/
 typedef struct prs_typedef{
   __IM uint32_t        IPVERSION;                        /**< IP version ID                                      */
   uint32_t             RESERVED0[1U];                    /**< Reserved for future use                            */

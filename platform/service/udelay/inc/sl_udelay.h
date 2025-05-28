@@ -41,32 +41,23 @@ extern "C" {
  * @{
  ******************************************************************************/
 
-/**
- * @brief
- *   Delay a number of microseconds
+/***************************************************************************//**
+ * @brief This function introduces a delay in code execution for a specified
+ * number of microseconds by using a busy loop, which relies on the core
+ * clock frequency for timing. It is suitable for short delays where high
+ * precision is not critical, as the delay may be affected by interrupts
+ * and context switching. The function does not return earlier than the
+ * specified delay time, but there is some overhead associated with the
+ * function call itself. For delays longer than 1 millisecond, it is
+ * recommended to use a hardware-based timer for better accuracy.
  *
- * @details
- *   This function will use a busy loop to delay code execution by a certain
- *   number of microseconds before returning to the caller. This function will
- *   not return to the caller earlier than the time given as the input parameter.
- *   This function will not use any hardware timing peripherals, it is using
- *   the core clock frequency to calculate the delay.
- *
- *   Note that there will always be some overhead associated with calling this
- *   function in addition to the internal delay loop. This overhead is relatively
- *   small when the delay is large (>= 100us).
- *
- *   The accuracy of this delay loop will be affected by interrupts and context
- *   switching. If accuracy is needed, a hardware timer should be used
- *   to handle delays.
- *
- * @param[in] us
- *   This is the number of microseconds to delay execution. This function will
- *   return after this amount of time has elapsed. Minimum value is 0 us and
- *   maximum value is 100 000 us (100 ms). It is however recommended to use
- *   the sleeptimer api for delays of more than 1 ms as it is using a hardware
- *   counter and will result in better accuracy.
- */
+ * @param us The number of microseconds to delay execution. Valid values range
+ * from 0 to 100,000 microseconds (100 milliseconds). The function
+ * will not return earlier than the specified delay time. For delays
+ * longer than 1 millisecond, using a hardware timer is recommended
+ * for improved accuracy.
+ * @return None
+ ******************************************************************************/
 void sl_udelay_wait(unsigned us);
 
 #ifdef __cplusplus

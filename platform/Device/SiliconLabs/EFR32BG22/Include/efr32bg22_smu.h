@@ -41,7 +41,144 @@
  * @brief EFR32BG22 SMU Register Declaration.
  *****************************************************************************/
 
-/** SMU Register Declaration. */
+/***************************************************************************//**
+ * @brief The `SMU_TypeDef` is a comprehensive structure representing the
+ * Security Management Unit (SMU) for the EFR32BG22 microcontroller. It
+ * includes a variety of registers for managing security features, such
+ * as interrupt flags, lock controls, and fault status indicators. The
+ * structure is designed to handle both secure and non-secure operations,
+ * with multiple reserved fields for future expansion. It supports
+ * operations like setting, clearing, and toggling of various control and
+ * status registers, ensuring robust security management capabilities.
+ *
+ * @param IPVERSION IP Version.
+ * @param STATUS Status.
+ * @param LOCK Lock.
+ * @param IF Interrupt Flag.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED0 Reserved for future use.
+ * @param M33CTRL M33 Control.
+ * @param RESERVED1 Reserved for future use.
+ * @param PPUPATD0 PPU PATD Register 0.
+ * @param PPUPATD1 PPU PATD Register 1.
+ * @param RESERVED2 Reserved for future use.
+ * @param PPUSATD0 PPU SATD Register 0.
+ * @param PPUSATD1 PPU SATD Register 1.
+ * @param RESERVED3 Reserved for future use.
+ * @param PPUFS PPU Fault Status.
+ * @param RESERVED4 Reserved for future use.
+ * @param BMPUPATD0 BMPU PATD Register 0.
+ * @param RESERVED5 Reserved for future use.
+ * @param BMPUSATD0 BMPU SATD Register 0.
+ * @param RESERVED6 Reserved for future use.
+ * @param BMPUFS BMPU Fault Status.
+ * @param BMPUFSADDR BMPU Fault Status Address.
+ * @param RESERVED7 Reserved for future use.
+ * @param ESAURTYPES0 ESAU Region Types Register 0.
+ * @param ESAURTYPES1 ESAU Region Types Register 1.
+ * @param RESERVED8 Reserved for future use.
+ * @param ESAUMRB01 ESAU Movable Region Boundary 0-1.
+ * @param ESAUMRB12 ESAU Movable Region Boundary 1-2.
+ * @param RESERVED9 Reserved for future use.
+ * @param ESAUMRB45 ESAU Movable Region Boundary 4-5.
+ * @param ESAUMRB56 ESAU Movable Region Boundary 5-6.
+ * @param RESERVED10 Reserved for future use.
+ * @param IPVERSION_SET IP Version.
+ * @param STATUS_SET Status.
+ * @param LOCK_SET Lock.
+ * @param IF_SET Interrupt Flag.
+ * @param IEN_SET Interrupt Enable.
+ * @param RESERVED11 Reserved for future use.
+ * @param M33CTRL_SET M33 Control.
+ * @param RESERVED12 Reserved for future use.
+ * @param PPUPATD0_SET PPU PATD Register 0.
+ * @param PPUPATD1_SET PPU PATD Register 1.
+ * @param RESERVED13 Reserved for future use.
+ * @param PPUSATD0_SET PPU SATD Register 0.
+ * @param PPUSATD1_SET PPU SATD Register 1.
+ * @param RESERVED14 Reserved for future use.
+ * @param PPUFS_SET PPU Fault Status.
+ * @param RESERVED15 Reserved for future use.
+ * @param BMPUPATD0_SET BMPU PATD Register 0.
+ * @param RESERVED16 Reserved for future use.
+ * @param BMPUSATD0_SET BMPU SATD Register 0.
+ * @param RESERVED17 Reserved for future use.
+ * @param BMPUFS_SET BMPU Fault Status.
+ * @param BMPUFSADDR_SET BMPU Fault Status Address.
+ * @param RESERVED18 Reserved for future use.
+ * @param ESAURTYPES0_SET ESAU Region Types Register 0.
+ * @param ESAURTYPES1_SET ESAU Region Types Register 1.
+ * @param RESERVED19 Reserved for future use.
+ * @param ESAUMRB01_SET ESAU Movable Region Boundary 0-1.
+ * @param ESAUMRB12_SET ESAU Movable Region Boundary 1-2.
+ * @param RESERVED20 Reserved for future use.
+ * @param ESAUMRB45_SET ESAU Movable Region Boundary 4-5.
+ * @param ESAUMRB56_SET ESAU Movable Region Boundary 5-6.
+ * @param RESERVED21 Reserved for future use.
+ * @param IPVERSION_CLR IP Version.
+ * @param STATUS_CLR Status.
+ * @param LOCK_CLR Lock.
+ * @param IF_CLR Interrupt Flag.
+ * @param IEN_CLR Interrupt Enable.
+ * @param RESERVED22 Reserved for future use.
+ * @param M33CTRL_CLR M33 Control.
+ * @param RESERVED23 Reserved for future use.
+ * @param PPUPATD0_CLR PPU PATD Register 0.
+ * @param PPUPATD1_CLR PPU PATD Register 1.
+ * @param RESERVED24 Reserved for future use.
+ * @param PPUSATD0_CLR PPU SATD Register 0.
+ * @param PPUSATD1_CLR PPU SATD Register 1.
+ * @param RESERVED25 Reserved for future use.
+ * @param PPUFS_CLR PPU Fault Status.
+ * @param RESERVED26 Reserved for future use.
+ * @param BMPUPATD0_CLR BMPU PATD Register 0.
+ * @param RESERVED27 Reserved for future use.
+ * @param BMPUSATD0_CLR BMPU SATD Register 0.
+ * @param RESERVED28 Reserved for future use.
+ * @param BMPUFS_CLR BMPU Fault Status.
+ * @param BMPUFSADDR_CLR BMPU Fault Status Address.
+ * @param RESERVED29 Reserved for future use.
+ * @param ESAURTYPES0_CLR ESAU Region Types Register 0.
+ * @param ESAURTYPES1_CLR ESAU Region Types Register 1.
+ * @param RESERVED30 Reserved for future use.
+ * @param ESAUMRB01_CLR ESAU Movable Region Boundary 0-1.
+ * @param ESAUMRB12_CLR ESAU Movable Region Boundary 1-2.
+ * @param RESERVED31 Reserved for future use.
+ * @param ESAUMRB45_CLR ESAU Movable Region Boundary 4-5.
+ * @param ESAUMRB56_CLR ESAU Movable Region Boundary 5-6.
+ * @param RESERVED32 Reserved for future use.
+ * @param IPVERSION_TGL IP Version.
+ * @param STATUS_TGL Status.
+ * @param LOCK_TGL Lock.
+ * @param IF_TGL Interrupt Flag.
+ * @param IEN_TGL Interrupt Enable.
+ * @param RESERVED33 Reserved for future use.
+ * @param M33CTRL_TGL M33 Control.
+ * @param RESERVED34 Reserved for future use.
+ * @param PPUPATD0_TGL PPU PATD Register 0.
+ * @param PPUPATD1_TGL PPU PATD Register 1.
+ * @param RESERVED35 Reserved for future use.
+ * @param PPUSATD0_TGL PPU SATD Register 0.
+ * @param PPUSATD1_TGL PPU SATD Register 1.
+ * @param RESERVED36 Reserved for future use.
+ * @param PPUFS_TGL PPU Fault Status.
+ * @param RESERVED37 Reserved for future use.
+ * @param BMPUPATD0_TGL BMPU PATD Register 0.
+ * @param RESERVED38 Reserved for future use.
+ * @param BMPUSATD0_TGL BMPU SATD Register 0.
+ * @param RESERVED39 Reserved for future use.
+ * @param BMPUFS_TGL BMPU Fault Status.
+ * @param BMPUFSADDR_TGL BMPU Fault Status Address.
+ * @param RESERVED40 Reserved for future use.
+ * @param ESAURTYPES0_TGL ESAU Region Types Register 0.
+ * @param ESAURTYPES1_TGL ESAU Region Types Register 1.
+ * @param RESERVED41 Reserved for future use.
+ * @param ESAUMRB01_TGL ESAU Movable Region Boundary 0-1.
+ * @param ESAUMRB12_TGL ESAU Movable Region Boundary 1-2.
+ * @param RESERVED42 Reserved for future use.
+ * @param ESAUMRB45_TGL ESAU Movable Region Boundary 4-5.
+ * @param ESAUMRB56_TGL ESAU Movable Region Boundary 5-6.
+ ******************************************************************************/
 typedef struct smu_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version                                         */
   __IM uint32_t  STATUS;                        /**< Status                                             */
@@ -909,7 +1046,77 @@ typedef struct smu_typedef{
  * @brief EFR32BG22 SMU_CFGNS Register Declaration.
  *****************************************************************************/
 
-/** SMU_CFGNS Register Declaration. */
+/***************************************************************************//**
+ * @brief The `SMU_CFGNS_TypeDef` is a structure that defines the configuration
+ * for non-secure settings in a Security Management Unit (SMU) for the
+ * EFR32BG22 microcontroller. It includes various registers for managing
+ * non-secure status, locks, interrupt flags, and enable settings. The
+ * structure also contains multiple reserved fields for future use,
+ * ensuring compatibility with potential future extensions. The structure
+ * provides set, clear, and toggle operations for each of the non-secure
+ * registers, allowing for flexible control over the non-secure
+ * configuration of the SMU.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param NSSTATUS Non-Secure Status.
+ * @param NSLOCK Non-Secure Lock.
+ * @param NSIF Non-Secure Interrupt Flag.
+ * @param NSIEN Non-Secure Interrupt Enable.
+ * @param RESERVED1 Reserved for future use.
+ * @param RESERVED2 Reserved for future use.
+ * @param PPUNSPATD0 PPU Non-secure PATD Register 0.
+ * @param PPUNSPATD1 PPU Non-secure PATD Register 1.
+ * @param RESERVED3 Reserved for future use.
+ * @param PPUNSFS PPU Non-secure Fault Status.
+ * @param RESERVED4 Reserved for future use.
+ * @param BMPUNSPATD0 BMPU Non-Secure PATD Register 0.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param NSSTATUS_SET Non-Secure Status.
+ * @param NSLOCK_SET Non-Secure Lock.
+ * @param NSIF_SET Non-Secure Interrupt Flag.
+ * @param NSIEN_SET Non-Secure Interrupt Enable.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param PPUNSPATD0_SET PPU Non-secure PATD Register 0.
+ * @param PPUNSPATD1_SET PPU Non-secure PATD Register 1.
+ * @param RESERVED10 Reserved for future use.
+ * @param PPUNSFS_SET PPU Non-secure Fault Status.
+ * @param RESERVED11 Reserved for future use.
+ * @param BMPUNSPATD0_SET BMPU Non-Secure PATD Register 0.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param NSSTATUS_CLR Non-Secure Status.
+ * @param NSLOCK_CLR Non-Secure Lock.
+ * @param NSIF_CLR Non-Secure Interrupt Flag.
+ * @param NSIEN_CLR Non-Secure Interrupt Enable.
+ * @param RESERVED15 Reserved for future use.
+ * @param RESERVED16 Reserved for future use.
+ * @param PPUNSPATD0_CLR PPU Non-secure PATD Register 0.
+ * @param PPUNSPATD1_CLR PPU Non-secure PATD Register 1.
+ * @param RESERVED17 Reserved for future use.
+ * @param PPUNSFS_CLR PPU Non-secure Fault Status.
+ * @param RESERVED18 Reserved for future use.
+ * @param BMPUNSPATD0_CLR BMPU Non-Secure PATD Register 0.
+ * @param RESERVED19 Reserved for future use.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param NSSTATUS_TGL Non-Secure Status.
+ * @param NSLOCK_TGL Non-Secure Lock.
+ * @param NSIF_TGL Non-Secure Interrupt Flag.
+ * @param NSIEN_TGL Non-Secure Interrupt Enable.
+ * @param RESERVED22 Reserved for future use.
+ * @param RESERVED23 Reserved for future use.
+ * @param PPUNSPATD0_TGL PPU Non-secure PATD Register 0.
+ * @param PPUNSPATD1_TGL PPU Non-secure PATD Register 1.
+ * @param RESERVED24 Reserved for future use.
+ * @param PPUNSFS_TGL PPU Non-secure Fault Status.
+ * @param RESERVED25 Reserved for future use.
+ * @param BMPUNSPATD0_TGL BMPU Non-Secure PATD Register 0.
+ * @param RESERVED26 Reserved for future use.
+ ******************************************************************************/
 typedef struct smu_cfgns_typedef{
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */
   __IM uint32_t  NSSTATUS;                      /**< Non-Secure Status                                  */

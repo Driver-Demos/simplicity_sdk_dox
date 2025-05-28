@@ -70,13 +70,34 @@
 extern "C" {
 #endif
 
-/*******************************************************************************
- * Hardware Abstraction Layer to perform initialization related to Power Manager.
+/***************************************************************************//**
+ * @brief This function sets up the necessary hardware connections to integrate
+ * the power manager with the sleeptimer, enabling early wakeup
+ * functionality through the HFXO. It should be called during the
+ * initialization phase of the system to ensure that the power management
+ * features are correctly configured. This function does not take any
+ * parameters and does not return any values. It is designed to be used
+ * in systems where power management and precise timing are critical, and
+ * it must be called before any power management operations that depend
+ * on the sleeptimer.
+ *
+ * @return None
  ******************************************************************************/
 __WEAK void sli_sleeptimer_hal_power_manager_integration_init(void);
 
-/*******************************************************************************
- * Hardware Abstraction Layer to perform initialization related to HFXO Manager.
+/***************************************************************************//**
+ * @brief This function sets up the necessary hardware connections and
+ * configurations for integrating the High-Frequency Crystal Oscillator
+ * (HFXO) with the sleeptimer. It should be called during the
+ * initialization phase of the system to ensure that the HFXO is properly
+ * connected to the system real-time clock (SYSRTC) via the Peripheral
+ * Reflex System (PRS). This setup is crucial for systems that rely on
+ * precise timing and clock management. The function does not take any
+ * parameters and does not return a value, indicating that it performs
+ * its operations internally without requiring external input or
+ * providing output.
+ *
+ * @return None
  ******************************************************************************/
 __WEAK void sli_sleeptimer_hal_hfxo_manager_integration_init(void);
 
@@ -98,6 +119,19 @@ bool sli_sleeptimer_hal_is_int_status_set(uint8_t local_flag);
  *         false otherwise.
  *****************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function determines whether the next scheduled timer to expire is
+ * associated with the power manager, specifically if it has the option
+ * flag `SLI_SLEEPTIMER_POWER_MANAGER_EARLY_WAKEUP_TIMER_FLAG`. It should
+ * be used when there is a need to verify if the power manager's timer is
+ * the next one to trigger, which can be crucial for managing power
+ * states effectively. The function returns a boolean indicating the
+ * status, and it ensures that the timer is not only next to expire but
+ * also actually expired.
+ *
+ * @return Returns `true` if the power manager timer is the next to expire and
+ * is actually expired; otherwise, returns `false`.
+ ******************************************************************************/
 bool sli_sleeptimer_is_power_manager_timer_next_to_expire(void);
 
 /***************************************************************************//**
@@ -119,6 +153,21 @@ void sli_sleeptimer_set_pm_em_requirement(void);
  * @param flag Boolean value update_sleep_on_isr_exit will be set to.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function sets the behavior of the system regarding whether it
+ * should enter sleep mode upon exiting an interrupt service routine
+ * (ISR). It is typically used in power management scenarios where the
+ * system's energy mode needs to be controlled based on interrupt
+ * activity. The function should be called whenever there is a need to
+ * change the sleep behavior after ISR execution, ensuring that the
+ * system's power management aligns with the application's requirements.
+ *
+ * @param flag A boolean value indicating the desired behavior. If true, the
+ * system will enter sleep mode upon ISR exit; if false, it will
+ * not. The caller retains ownership of this parameter, and it must
+ * be a valid boolean value.
+ * @return None
+ ******************************************************************************/
 void sli_sleeptimer_update_sleep_on_isr_exit(bool flag);
 
 /*******************************************************************************
@@ -128,12 +177,36 @@ void sli_sleeptimer_update_sleep_on_isr_exit(bool flag);
  *         0 if capture channel is not valid
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to obtain the current capture value from the
+ * associated peripheral's capture channel. It is typically called when
+ * there is a need to read the current state or value captured by the
+ * peripheral. The function should be used in contexts where the capture
+ * channel is valid and properly configured. If the capture channel is
+ * not valid, the function will return 0, indicating an invalid or
+ * uninitialized state. This function is useful in time-critical
+ * applications where precise timing or state capture is required.
+ *
+ * @return Returns the current capture value as a 32-bit unsigned integer, or 0
+ * if the capture channel is not valid.
+ ******************************************************************************/
 uint32_t sli_sleeptimer_get_capture(void);
 
 /*******************************************************************************
  * Resets the PRS signal triggered by the associated peripheral.
  ******************************************************************************/
 SL_CODE_CLASSIFY(SL_CODE_COMPONENT_SLEEPTIMER, SL_CODE_CLASS_TIME_CRITICAL)
+/***************************************************************************//**
+ * @brief This function is used to reset the PRS (Peripheral Reflex System)
+ * signal that is triggered by the associated peripheral. It should be
+ * called when there is a need to clear or reset the PRS signal state,
+ * typically after handling the event that caused the signal. This
+ * function does not require any parameters and does not return any
+ * value. It is expected to be used in contexts where the PRS signal
+ * needs to be managed or controlled as part of the system's operation.
+ *
+ * @return None
+ ******************************************************************************/
 void sli_sleeptimer_reset_prs_signal(void);
 
 #ifdef __cplusplus

@@ -58,6 +58,23 @@ extern "C" {
 typedef uint8_t sl_led_state_t;                 ///< LED state
 
 /// A LED instance
+/***************************************************************************//**
+ * @brief The `sl_led_t` structure is a data type used to represent an LED
+ * instance in a generic LED driver. It contains a context pointer for
+ * storing instance-specific data and function pointers for initializing
+ * the LED, turning it on and off, toggling its state, and retrieving its
+ * current state. This structure allows for flexible and platform-
+ * independent control of LED hardware by abstracting the LED operations
+ * into function pointers that can be implemented for different hardware
+ * configurations.
+ *
+ * @param context The context for this LED instance.
+ * @param init Member function to initialize LED instance.
+ * @param turn_on Member function to turn on LED.
+ * @param turn_off Member function to turn off LED.
+ * @param toggle Member function to toggle LED.
+ * @param get_state Member function to retrieve LED state.
+ ******************************************************************************/
 typedef struct {
   void           *context;                        ///< The context for this LED instance
   sl_status_t    (*init)(void *context);          ///< Member function to initialize LED instance
@@ -72,43 +89,93 @@ typedef struct {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initialize the LED driver. Call this function before any other LED
- * function. Initializes the selected LED GPIO, mode, and polarity.
+ * @brief This function initializes an LED instance, preparing it for subsequent
+ * operations such as turning on, off, or toggling. It must be called
+ * before any other operations on the LED to ensure proper setup of the
+ * LED's GPIO, mode, and polarity. The function requires a valid LED
+ * handle, which should be properly configured and not null. If the
+ * initialization is successful, the function returns a status code
+ * indicating success.
  *
- * @param[in] led_handle    Pointer to instance of sl_led_t to initialize
- *
- * @return    Status Code:
- *              - SL_STATUS_OK
+ * @param led_handle Pointer to an sl_led_t instance representing the LED to
+ * initialize. Must not be null and should be properly
+ * configured before calling this function. The caller retains
+ * ownership of the memory.
+ * @return Returns an sl_status_t status code indicating the success or failure
+ * of the initialization process.
  ******************************************************************************/
 sl_status_t sl_led_init(const sl_led_t *led_handle);
 
 /***************************************************************************//**
- * Turn on the LED.
+ * @brief Use this function to turn on an LED that has been previously
+ * initialized. It is essential to ensure that the LED instance,
+ * represented by the `led_handle`, has been properly initialized using
+ * `sl_led_init` before calling this function. This function does not
+ * return a status code, so it is assumed that the operation will succeed
+ * if the preconditions are met. The function does not handle null
+ * pointers, so the caller must ensure that `led_handle` is not null to
+ * avoid undefined behavior.
  *
- * @param[in] led_handle    Pointer to instance of sl_led_t to turn on
+ * @param led_handle Pointer to an `sl_led_t` instance representing the LED to
+ * be turned on. Must not be null and should point to a valid,
+ * initialized LED instance. The caller retains ownership of
+ * the pointer.
+ * @return None
  ******************************************************************************/
 void sl_led_turn_on(const sl_led_t *led_handle);
 
 /***************************************************************************//**
- * Turn off the LED.
+ * @brief Use this function to turn off an LED that has been previously
+ * initialized. It is essential to ensure that the LED has been properly
+ * initialized using `sl_led_init` before calling this function. This
+ * function is part of a generic LED driver and operates on an LED
+ * instance specified by the `led_handle` parameter. The function does
+ * not return a value and does not provide feedback on the success of the
+ * operation, so it is assumed that the LED will be turned off if the
+ * `led_handle` is valid.
  *
- * @param[in] led_handle    Pointer to instance of sl_led_t to turn off
+ * @param led_handle Pointer to an `sl_led_t` instance representing the LED to
+ * be turned off. This parameter must not be null and should
+ * point to a valid LED instance that has been initialized. If
+ * the pointer is invalid or null, the behavior is undefined.
+ * @return None
  ******************************************************************************/
 void sl_led_turn_off(const sl_led_t *led_handle);
 
 /***************************************************************************//**
- * Toggle the LED. Turn it on if it is off, and off if it is on.
+ * @brief Use this function to change the state of an LED from on to off or from
+ * off to on. It is essential to ensure that the LED has been properly
+ * initialized using `sl_led_init` before calling this function. This
+ * function is useful in scenarios where you need to alternate the LED
+ * state, such as in blinking patterns or status indicators. The function
+ * does not return a value and assumes that the provided LED handle is
+ * valid and correctly configured.
  *
- * @param[in] led_handle    Pointer to instance of sl_led_t to toggle
+ * @param led_handle Pointer to an instance of sl_led_t representing the LED to
+ * toggle. Must not be null and should point to a valid,
+ * initialized LED instance. The function does not perform
+ * null checks, so passing an invalid pointer may result in
+ * undefined behavior.
+ * @return None
  ******************************************************************************/
 void sl_led_toggle(const sl_led_t *led_handle);
 
 /***************************************************************************//**
- * Get the current state of the LED.
+ * @brief Use this function to determine whether a specific LED is currently on
+ * or off. It is essential to ensure that the LED has been properly
+ * initialized using `sl_led_init` before calling this function. This
+ * function is useful in scenarios where the current state of the LED
+ * needs to be checked, such as in conditional logic or status reporting.
+ * The function does not modify the state of the LED or any other system
+ * state.
  *
- * @param[in] led_handle         Pointer to instance of sl_led_t to check
- *
- * @return    sl_led_state_t     Current state of LED. 1 for on, 0 for off
+ * @param led_handle A pointer to an `sl_led_t` instance representing the LED
+ * whose state is to be retrieved. This pointer must not be
+ * null, and the LED must have been initialized prior to
+ * calling this function. If the pointer is invalid, the
+ * behavior is undefined.
+ * @return Returns an `sl_led_state_t` indicating the current state of the LED:
+ * `1` for on and `0` for off.
  ******************************************************************************/
 sl_led_state_t sl_led_get_state(const sl_led_t *led_handle);
 

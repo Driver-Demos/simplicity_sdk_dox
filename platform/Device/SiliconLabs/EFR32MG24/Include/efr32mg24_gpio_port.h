@@ -34,9 +34,24 @@
 * @addtogroup Parts
 * @{
 ******************************************************************************/
-/**************************************************************************//**
- * @brief EFR32MG24 GPIO PORT
- *****************************************************************************/
+/***************************************************************************//**
+ * @brief The GPIO_PORT_TypeDef structure is a representation of a General
+ * Purpose Input/Output (GPIO) port configuration for the EFR32MG24
+ * microcontroller. It includes registers for controlling the port's
+ * behavior, such as setting the mode (low and high), controlling data
+ * output, and reading data input. The structure also includes reserved
+ * fields for potential future enhancements or additional features. This
+ * structure is essential for configuring and managing the GPIO ports in
+ * embedded systems using the EFR32MG24 microcontroller.
+ *
+ * @param CTRL Port control register for configuring GPIO port settings.
+ * @param MODEL Register for setting low mode configurations of the GPIO port.
+ * @param RESERVED0 Reserved space for future use or expansion.
+ * @param MODEH Register for setting high mode configurations of the GPIO port.
+ * @param DOUT Register for setting the data output of the GPIO port.
+ * @param DIN Register for reading the data input from the GPIO port.
+ * @param RESERVED1 Reserved space for future use or expansion.
+ ******************************************************************************/
 typedef struct gpio_port_typedef{
   __IOM uint32_t CTRL;                          /**< Port control            */
   __IOM uint32_t MODEL;                         /**< mode low                */

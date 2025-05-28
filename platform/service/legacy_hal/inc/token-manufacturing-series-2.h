@@ -175,6 +175,23 @@ typedef uint32_t tokTypeLockBitsDlw;
 
 //--- Lock Bits Data ---
 // Smart Energy 1.0 (ECC 163k1 based crypto - 80-bit symmetric equivalent)
+/***************************************************************************//**
+ * @brief The `tokTypeMfgCbkeData` structure is used to store cryptographic
+ * keying material for manufacturing purposes, specifically for Smart
+ * Energy 1.0 applications. It includes a certificate, a CA public key,
+ * and a private key, all stored as byte arrays. The `flags` field is
+ * used to indicate whether the data is initialized, with the least
+ * significant bit serving as the initialization flag. This structure is
+ * part of a larger system for managing manufacturing tokens, which are
+ * stored at fixed memory addresses and are crucial for secure device
+ * operations.
+ *
+ * @param certificate An array of 48 bytes representing a certificate.
+ * @param caPublicKey An array of 22 bytes representing a CA public key.
+ * @param privateKey An array of 21 bytes representing a private key.
+ * @param flags A byte where the bottom bit indicates initialization status,
+ * with 1 for uninitialized and 0 for initialized.
+ ******************************************************************************/
 typedef struct {
   uint8_t certificate[48];
   uint8_t caPublicKey[22];
@@ -184,6 +201,21 @@ typedef struct {
   uint8_t flags;
 } tokTypeMfgCbkeData;
 typedef uint16_t tokTypeMfgSecurityConfig;
+/***************************************************************************//**
+ * @brief The `tokTypeMfgInstallationCode` structure is used to store
+ * manufacturing installation codes, which include a flag field for
+ * initialization and size information, a value array for the
+ * installation code itself, and a CRC for data integrity verification.
+ * The structure is designed to handle different sizes of installation
+ * codes and includes special handling for certain flag bits due to
+ * historical programming bugs.
+ *
+ * @param flags A 16-bit field where the bottom bit indicates initialization
+ * status, bits 1 and 2 indicate the size of the value string, and
+ * other bits are reserved.
+ * @param value A 16-byte array that holds the installation code value.
+ * @param crc A 16-bit field used for storing a cyclic redundancy check value.
+ ******************************************************************************/
 typedef struct {
   // The bottom flag bit is 1 for uninitialized, 0 for initialized.
   // Bits 1 and 2 give the size of the value string:
@@ -196,10 +228,37 @@ typedef struct {
   uint8_t value[16];
   uint16_t crc;
 } tokTypeMfgInstallationCode;
+/***************************************************************************//**
+ * @brief The `tokTypeMfgSecureBootloaderKey` is a data structure designed to
+ * store a 128-bit AES key, which is used in secure bootloader
+ * operations. This key is crucial for ensuring the integrity and
+ * authenticity of the bootloader process, providing a symmetric
+ * encryption mechanism equivalent to the security level of ECC 283k1
+ * based cryptography, as used in Smart Energy 1.2 applications.
+ *
+ * @param data An array of 16 uint8_t elements representing an AES-128 key.
+ ******************************************************************************/
 typedef struct {
   uint8_t data[16];  // AES-128 key
 } tokTypeMfgSecureBootloaderKey;
 // Smart Energy 1.2 (ECC 283k1 based crypto - 128-bit symmetric equivalent)
+/***************************************************************************//**
+ * @brief The `tokTypeMfgCbke283k1Data` structure is designed to store
+ * cryptographic data related to the Smart Energy 1.2 standard, which
+ * uses ECC 283k1 based cryptography. It includes fields for a
+ * certificate, a CA public key, and a private key, all of which are
+ * stored as byte arrays of specific lengths. The `flags` field is used
+ * to indicate the initialization status of the data, with specific bits
+ * reserved for this purpose. This structure is part of a larger system
+ * for managing manufacturing tokens, which are stored at fixed memory
+ * addresses and are used for secure operations in embedded systems.
+ *
+ * @param certificate An array of 74 bytes representing the certificate data.
+ * @param caPublicKey An array of 37 bytes representing the CA public key.
+ * @param privateKey An array of 36 bytes representing the private key.
+ * @param flags A byte where the bottom bit indicates initialization status,
+ * with 1 for uninitialized and 0 for initialized.
+ ******************************************************************************/
 typedef struct {
   uint8_t certificate[74];
   uint8_t caPublicKey[37];
@@ -209,13 +268,49 @@ typedef struct {
   uint8_t flags;
 } tokTypeMfgCbke283k1Data;
 typedef uint8_t tokTypeMfgBootloadAesKey[16];
+/***************************************************************************//**
+ * @brief The `tokTypeMfgSignedBootloaderKeyX` structure is designed to store a
+ * 32-byte ECDSA key point on the P256 curve, which is used in
+ * cryptographic operations for secure bootloader functionality. This
+ * structure is part of a larger system of manufacturing tokens that are
+ * used to store critical security and configuration data in a fixed
+ * memory location, ensuring the integrity and security of the bootloader
+ * process.
+ *
+ * @param data An array of 32 bytes representing an ECDSA key point on the P256
+ * curve.
+ ******************************************************************************/
 typedef struct {
   uint8_t data[32];  // ECDSA key point on P256 curve
 } tokTypeMfgSignedBootloaderKeyX;
+/***************************************************************************//**
+ * @brief The `tokTypeMfgSignedBootloaderKeyY` structure is used to store a
+ * 32-byte ECDSA key point on the P256 curve, which is part of the
+ * cryptographic data used in secure bootloader operations. This
+ * structure is specifically designed to hold the 'Y' component of the
+ * signed bootloader key, ensuring secure and authenticated firmware
+ * updates.
+ *
+ * @param data An array of 32 bytes representing an ECDSA key point on the P256
+ * curve.
+ ******************************************************************************/
 typedef struct {
   uint8_t data[32];  // ECDSA key point on P256 curve
 } tokTypeMfgSignedBootloaderKeyY;
 // Network join key with max length of 32 bytes
+/***************************************************************************//**
+ * @brief The `tokTypeMfgThreadJoinKey` structure is used to store a network
+ * join key for a Thread network, with a maximum length of 32 bytes. It
+ * includes a byte array to hold the key itself and a length field to
+ * specify how many bytes of the array are used. This structure is part
+ * of the manufacturing token definitions, which are used to store fixed
+ * data in specific memory locations for device configuration and
+ * security purposes.
+ *
+ * @param joinKey An array of 32 bytes representing the network join key.
+ * @param joinKeyLength A 16-bit unsigned integer indicating the length of the
+ * join key.
+ ******************************************************************************/
 typedef struct {
   uint8_t joinKey[32];
   uint16_t joinKeyLength;

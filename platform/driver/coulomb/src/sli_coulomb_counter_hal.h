@@ -54,6 +54,46 @@ extern "C" {
 /// @endcond
 
 /// @brief Output's calibration state machine enum.
+/***************************************************************************//**
+ * @brief The `sli_coulomb_counter_calibration_state_t` is an enumeration that
+ * defines the various states of the calibration process for a Coulomb
+ * counter. It includes states for uncalibrated, settings requested for
+ * different energy modes (EM0 and EM2), and stages of the calibration
+ * process such as starting with low or high current loads, and
+ * completion. This enum is used to track and manage the calibration
+ * state within the Coulomb counter driver.
+ *
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_NOT_CALIBRATED Indicates that the
+ * calibration process has
+ * not been started.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_EM0_SETTINGS_REQUESTED Indicates that
+ * settings for
+ * EM0 mode have
+ * been requested
+ * for
+ * calibration.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_EM2_SETTINGS_REQUESTED Indicates that
+ * settings for
+ * EM2 mode have
+ * been requested
+ * for
+ * calibration.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_NREQ_LOW_STARTED Indicates that
+ * calibration with low
+ * nreq value has
+ * started.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_CAL_LOW_STARTED Indicates that
+ * calibration with low
+ * current load has
+ * started.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_CAL_HIGH_STARTED Indicates that
+ * calibration with high
+ * current load has
+ * started.
+ * @param SLI_COULOMB_COUNTER_CALIBRATION_COMPLETE Indicates that the
+ * calibration process is
+ * complete.
+ ******************************************************************************/
 typedef enum {
   SLI_COULOMB_COUNTER_CALIBRATION_NOT_CALIBRATED,
   SLI_COULOMB_COUNTER_CALIBRATION_EM0_SETTINGS_REQUESTED,
@@ -65,6 +105,25 @@ typedef enum {
 } sli_coulomb_counter_calibration_state_t;
 
 /// @brief Structure for storing output state.
+/***************************************************************************//**
+ * @brief The `sli_coulomb_counter_output_t` structure is designed to store the
+ * state and results of a Coulomb counter's output. It includes fields
+ * for tracking the calibration state and mode, the charge per pulse
+ * calculated during calibration, and the total accumulated charge.
+ * Additionally, it contains an output mask and a node for linking in a
+ * list, making it suitable for managing multiple outputs in a linked
+ * list format. This structure is integral to the operation of the
+ * Coulomb counter driver, facilitating the management and calibration of
+ * charge measurements.
+ *
+ * @param calibration_state Represents the current state of the calibration
+ * process.
+ * @param calibration_mode Indicates the mode used during the last calibration.
+ * @param cpp Stores the charge per pulse value calculated during calibration.
+ * @param total_charge Holds the total accumulated charge.
+ * @param mask Defines the output mask for the structure.
+ * @param node A node used for linking this structure in a linked list.
+ ******************************************************************************/
 typedef struct sli_coulomb_counter_output_result {
   sli_coulomb_counter_calibration_state_t   calibration_state;  ///< Calibration state machine.
   uint8_t calibration_mode;                                     ///< Current mode when output was calibrated.
@@ -86,6 +145,31 @@ typedef struct sli_coulomb_counter_output_result {
 /// @endcond
 
 /// @brief Structure for the Coulomb counter driver.
+/***************************************************************************//**
+ * @brief The `sli_coulomb_counter_handle_t` structure is a comprehensive data
+ * structure used to manage and track the state and configuration of a
+ * Coulomb counter driver. It includes fields for managing calibration
+ * parameters, such as the number of pulses and nreq values for both low
+ * and high current calibrations, as well as flags and settings for
+ * different energy modes (EM0 and EM2). The structure also maintains a
+ * linked list of outputs and tracks whether the counters are running,
+ * providing a robust framework for handling the Coulomb counting process
+ * in embedded systems.
+ *
+ * @param prescaler Prescaler value used when the peripheral is EFP.
+ * @param threshold Threshold value for the Coulomb counter.
+ * @param running Flag indicating if the counters are currently started.
+ * @param selected_outputs Outputs selected as per the configuration header.
+ * @param output_head Pointer to the head of the outputs linked list.
+ * @param cal_nreq_low nreq value for calibration with low current.
+ * @param cal_nreq_high nreq value for calibration with high current.
+ * @param cal_count_low Number of pulses counted during low current calibration.
+ * @param cal_count_high Number of pulses counted during high current
+ * calibration.
+ * @param em2_requested Indicates if the last mode requested by the user is EM2.
+ * @param cal_em0_vscale Voltage scaling programmed for EM0 mode.
+ * @param cal_em2_vscale Voltage scaling programmed for EM2 mode.
+ ******************************************************************************/
 typedef struct sli_coulomb_counter_handle {
 #if SL_COULOMB_COUNTER_DRIVER_PERIPHERAL == SL_COULOMB_COUNTER_DRIVER_PERIPHERAL_EFP
   uint8_t                             prescaler;        ///< Prescaler value.
@@ -279,20 +363,24 @@ sl_status_t sli_coulomb_counter_hal_cal_stop(void);
 sl_status_t sli_coulomb_counter_hal_cal_read_result(uint16_t *result);
 
 /***************************************************************************//**
- * @brief
- *   Adjust output's CPP if voltage scaling is different in EM0 and EM2.
+ * @brief This function is used to adjust the Charge-Per-Pulse (CPP) value of a
+ * specified output when there is a difference in voltage scaling between
+ * Energy Modes 0 (EM0) and 2 (EM2). It should be called when the voltage
+ * scaling settings for these modes differ, to ensure accurate charge
+ * measurement. The function requires a valid output structure that
+ * supports EM2, and it modifies the CPP value within this structure. It
+ * returns a status code indicating success or the type of error
+ * encountered.
  *
- * @param[in] output
- *   Output for which the CPP must be adjusted
- *
- * @param[in] em0_vscale
- *   Voltage scaling value for EM0
- *
- * @param[in] em2_vscale
- *   Voltage scaling value for EM2
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param output A pointer to a sli_coulomb_counter_output_t structure
+ * representing the output for which the CPP must be adjusted.
+ * Must not be null and must support EM2.
+ * @param em0_vscale An integer representing the voltage scaling value for EM0.
+ * Must be a valid scaling value.
+ * @param em2_vscale An integer representing the voltage scaling value for EM2.
+ * Must be a valid scaling value.
+ * @return Returns an sl_status_t indicating success (SL_STATUS_OK) or an error
+ * code if the adjustment could not be performed.
  ******************************************************************************/
 sl_status_t sli_coulomb_counter_hal_cal_adjust_em2_cpp(sli_coulomb_counter_output_t *output,
                                                        int em0_vscale, int em2_vscale);
@@ -335,20 +423,20 @@ float sli_coulomb_counter_hal_get_osc_frequency(void);
 float sli_coulomb_counter_hal_compute_cpp(const sli_coulomb_counter_handle_t *handle);
 
 /***************************************************************************//**
- * @brief
- *   Compute the number of PFM pulses (nreq) required to avoid the overflow
- *   of the CCC_MSBY:CCC_LSBY 16-bit register pair during calibration
+ * @brief This function calculates the maximum number of Pulse Frequency
+ * Modulation (PFM) pulses, referred to as 'nreq', that can be used
+ * during calibration without causing an overflow in the 16-bit register
+ * pair CCC_MSBY:CCC_LSBY. It is typically used in the context of
+ * calibrating a Coulomb counter to ensure accurate measurements without
+ * exceeding register limits. The function clamps the result to a maximum
+ * of 7 to ensure safety and asserts that the result is non-negative.
  *
- * @param[in] ccc
- *   Value read in CCC_MSBY and CCC_LSBY.
- *
- * @return
- *   Maximum number of PFM pulses (nreq) that is guaranteed to not generate an overflow.
- *
- * @note
- *   CCC_MSBY:CCC_LSBY 16-bit register pair is retasked to store the number
- *   of 10 MHz clock cycles that were counted during EFP calibration
- *   but do not support overflow protection.
+ * @param ccc An integer value representing the combined value of the CCC_MSBY
+ * and CCC_LSBY registers. It must be a positive integer to avoid
+ * undefined behavior, as negative or zero values could lead to
+ * invalid calculations.
+ * @return Returns an integer representing the maximum number of PFM pulses that
+ * can be used without causing an overflow, clamped to a maximum of 7.
  ******************************************************************************/
 int sli_coulomb_counter_calibrate_compute_nreq(int16_t ccc);
 

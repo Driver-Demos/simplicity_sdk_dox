@@ -41,7 +41,150 @@
  * @brief EFR32MG24 MSC Register Declaration.
  *****************************************************************************/
 
-/** MSC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `MSC_TypeDef` structure represents the Memory System Controller
+ * (MSC) register map for the EFR32MG24 microcontroller. It includes
+ * various control and status registers for managing read and write
+ * operations, power control, and page locking mechanisms. The structure
+ * is designed to facilitate direct memory access to the MSC's registers,
+ * allowing for efficient control of flash memory operations. It includes
+ * multiple reserved fields for future expansion, as well as set, clear,
+ * and toggle variants of the registers to support atomic operations.
+ * This structure is crucial for managing the non-volatile memory of the
+ * microcontroller, ensuring data integrity and system stability.
+ *
+ * @param IPVERSION IP version ID.
+ * @param READCTRL Read Control Register.
+ * @param RDATACTRL Read Data Control Register.
+ * @param WRITECTRL Write Control Register.
+ * @param WRITECMD Write Command Register.
+ * @param ADDRB Page Erase/Write Address Buffer.
+ * @param WDATA Write Data Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param USERDATASIZE User Data Region Size Register.
+ * @param CMD Command Register.
+ * @param LOCK Configuration Lock Register.
+ * @param MISCLOCKWORD Mass erase and User data page lock word.
+ * @param RESERVED1 Reserved for future use.
+ * @param PWRCTRL Power control register.
+ * @param RESERVED2 Reserved for future use.
+ * @param PAGELOCK0 Main space page 0-31 lock word.
+ * @param PAGELOCK1 Main space page 32-63 lock word.
+ * @param PAGELOCK2 Main space page 64-95 lock word.
+ * @param PAGELOCK3 Main space page 96-127 lock word.
+ * @param PAGELOCK4 Main space page 128-159 lock word.
+ * @param PAGELOCK5 Main space page 160-191 lock word.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param RESERVED10 Reserved for future use.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param READCTRL_SET Read Control Register.
+ * @param RDATACTRL_SET Read Data Control Register.
+ * @param WRITECTRL_SET Write Control Register.
+ * @param WRITECMD_SET Write Command Register.
+ * @param ADDRB_SET Page Erase/Write Address Buffer.
+ * @param WDATA_SET Write Data Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED12 Reserved for future use.
+ * @param USERDATASIZE_SET User Data Region Size Register.
+ * @param CMD_SET Command Register.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param MISCLOCKWORD_SET Mass erase and User data page lock word.
+ * @param RESERVED13 Reserved for future use.
+ * @param PWRCTRL_SET Power control register.
+ * @param RESERVED14 Reserved for future use.
+ * @param PAGELOCK0_SET Main space page 0-31 lock word.
+ * @param PAGELOCK1_SET Main space page 32-63 lock word.
+ * @param PAGELOCK2_SET Main space page 64-95 lock word.
+ * @param PAGELOCK3_SET Main space page 96-127 lock word.
+ * @param PAGELOCK4_SET Main space page 128-159 lock word.
+ * @param PAGELOCK5_SET Main space page 160-191 lock word.
+ * @param RESERVED15 Reserved for future use.
+ * @param RESERVED16 Reserved for future use.
+ * @param RESERVED17 Reserved for future use.
+ * @param RESERVED18 Reserved for future use.
+ * @param RESERVED19 Reserved for future use.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param RESERVED22 Reserved for future use.
+ * @param RESERVED23 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param READCTRL_CLR Read Control Register.
+ * @param RDATACTRL_CLR Read Data Control Register.
+ * @param WRITECTRL_CLR Write Control Register.
+ * @param WRITECMD_CLR Write Command Register.
+ * @param ADDRB_CLR Page Erase/Write Address Buffer.
+ * @param WDATA_CLR Write Data Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED24 Reserved for future use.
+ * @param USERDATASIZE_CLR User Data Region Size Register.
+ * @param CMD_CLR Command Register.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param MISCLOCKWORD_CLR Mass erase and User data page lock word.
+ * @param RESERVED25 Reserved for future use.
+ * @param PWRCTRL_CLR Power control register.
+ * @param RESERVED26 Reserved for future use.
+ * @param PAGELOCK0_CLR Main space page 0-31 lock word.
+ * @param PAGELOCK1_CLR Main space page 32-63 lock word.
+ * @param PAGELOCK2_CLR Main space page 64-95 lock word.
+ * @param PAGELOCK3_CLR Main space page 96-127 lock word.
+ * @param PAGELOCK4_CLR Main space page 128-159 lock word.
+ * @param PAGELOCK5_CLR Main space page 160-191 lock word.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param RESERVED29 Reserved for future use.
+ * @param RESERVED30 Reserved for future use.
+ * @param RESERVED31 Reserved for future use.
+ * @param RESERVED32 Reserved for future use.
+ * @param RESERVED33 Reserved for future use.
+ * @param RESERVED34 Reserved for future use.
+ * @param RESERVED35 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param READCTRL_TGL Read Control Register.
+ * @param RDATACTRL_TGL Read Data Control Register.
+ * @param WRITECTRL_TGL Write Control Register.
+ * @param WRITECMD_TGL Write Command Register.
+ * @param ADDRB_TGL Page Erase/Write Address Buffer.
+ * @param WDATA_TGL Write Data Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param RESERVED36 Reserved for future use.
+ * @param USERDATASIZE_TGL User Data Region Size Register.
+ * @param CMD_TGL Command Register.
+ * @param LOCK_TGL Configuration Lock Register.
+ * @param MISCLOCKWORD_TGL Mass erase and User data page lock word.
+ * @param RESERVED37 Reserved for future use.
+ * @param PWRCTRL_TGL Power control register.
+ * @param RESERVED38 Reserved for future use.
+ * @param PAGELOCK0_TGL Main space page 0-31 lock word.
+ * @param PAGELOCK1_TGL Main space page 32-63 lock word.
+ * @param PAGELOCK2_TGL Main space page 64-95 lock word.
+ * @param PAGELOCK3_TGL Main space page 96-127 lock word.
+ * @param PAGELOCK4_TGL Main space page 128-159 lock word.
+ * @param PAGELOCK5_TGL Main space page 160-191 lock word.
+ * @param RESERVED39 Reserved for future use.
+ * @param RESERVED40 Reserved for future use.
+ * @param RESERVED41 Reserved for future use.
+ * @param RESERVED42 Reserved for future use.
+ * @param RESERVED43 Reserved for future use.
+ * @param RESERVED44 Reserved for future use.
+ * @param RESERVED45 Reserved for future use.
+ * @param RESERVED46 Reserved for future use.
+ ******************************************************************************/
 typedef struct msc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t READCTRL;                      /**< Read Control Register                              */

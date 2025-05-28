@@ -49,7 +49,19 @@ extern "C"
  ******************************************************************************/
 
 /***************************************************************************//**
- * @brief Structure to store a callback to be called when the secondary resets
+ * @brief The `sl_cpc_system_event_listener_t` structure is designed to manage
+ * event listeners for system reset events in a CPC (Co-Processor
+ * Communication) system. It contains a linked list node to allow
+ * multiple listeners to be organized in a list, and a callback function
+ * pointer that is triggered when a reset event is detected, providing
+ * the reason for the reset as a parameter. This structure facilitates
+ * the registration and management of callbacks that respond to system-
+ * level events, particularly resets, in a modular and extensible manner.
+ *
+ * @param node A linked list node used to chain event listeners together.
+ * @param on_reset_callback A function pointer to a callback function that is
+ * invoked when a system reset event occurs, taking a
+ * reset reason as an argument.
  ******************************************************************************/
 typedef struct {
   sl_slist_node_t node;
@@ -57,47 +69,77 @@ typedef struct {
 } sl_cpc_system_event_listener_t;
 
 /***************************************************************************//**
- * Callback for when receiving an unsolicited PROP_LAST_STATUS.
+ * @brief This function is a weak stub intended to be overridden by the user to
+ * handle unsolicited PROP_LAST_STATUS messages from the secondary
+ * system. It is invoked when the primary system receives a PROPERTY-IS
+ * command with the PROP_LAST_STATUS property without a registered
+ * callback. This function should be implemented to appropriately respond
+ * to the status received, which indicates various reset reasons. It is
+ * important to ensure that this function is re-implemented as a strong
+ * function to provide the desired behavior in response to these
+ * unsolicited messages.
  *
- * This is a weak stub meant to be re-implemented as a strong function by the
- * user in order to act upon unsolicited PROP_LAST_STATUS.
- *
- * @note
- *   When the PRIMARY issues a property-get/set command, the SECONDARY responds
- *   with the value requested. Upon receiving this reply, the PRIMARY executes
- *   the callback that was registered when issuing the command. If the PRIMARY
- *   receives a PROPERTY-IS command with PROP_LAST_STATUS property when no
- *   callback is registered (ie, the PRIMARY didn't asked anything), then this
- *   callback type will be called if registered.
- *
- * @param
- *   [in] status
- *     The unsolicited PROP_LAST_STATUS value.
- *
+ * @param status The unsolicited PROP_LAST_STATUS value indicating the reset
+ * reason. It must be a valid sl_cpc_system_status_t value,
+ * typically representing different reset conditions such as
+ * power-on or watchdog resets.
+ * @return None
  ******************************************************************************/
 SL_WEAK void sl_cpc_system_unsolicited_last_status_callback(sl_cpc_system_status_t status);
 
 /***************************************************************************//**
- * Initialize an event listener
+ * @brief This function prepares an `sl_cpc_system_event_listener_t` structure
+ * for use by setting all its fields to zero. It must be called before
+ * the listener is used in any other operations, such as subscribing to
+ * events. This ensures that the structure is in a known state and
+ * prevents undefined behavior from uninitialized data. The function does
+ * not perform any dynamic memory allocation or error checking, so the
+ * caller must ensure that the `listener` parameter is a valid, non-null
+ * pointer to a properly allocated `sl_cpc_system_event_listener_t`
+ * structure.
  *
- * @param
- *   [in] listener
+ * @param listener A pointer to an `sl_cpc_system_event_listener_t` structure
+ * that will be initialized. Must not be null. The caller
+ * retains ownership and is responsible for ensuring the
+ * structure is properly allocated before calling this function.
+ * @return None
  ******************************************************************************/
 void sl_cpc_system_event_listener_init(sl_cpc_system_event_listener_t *listener);
 
 /***************************************************************************//**
- * Add an event listener that will be called when the secondary events occur.
+ * @brief This function registers an event listener that will be notified when
+ * specific system events occur on the secondary device. It should be
+ * used to add a listener that has been initialized and is ready to
+ * handle events. The listener must be properly initialized before
+ * calling this function, and it should not be null. This function is
+ * typically called during the setup phase of the application to ensure
+ * that the listener is in place before any relevant events occur.
  *
- * @param
- *   [in] listener
+ * @param listener A pointer to an sl_cpc_system_event_listener_t structure that
+ * has been initialized. The listener must not be null, and the
+ * caller retains ownership of the listener structure. If the
+ * listener is null, the behavior is undefined.
+ * @return Returns SL_STATUS_OK on successful subscription of the event
+ * listener.
  ******************************************************************************/
 sl_status_t sl_cpc_system_event_listener_subscribe(sl_cpc_system_event_listener_t *listener);
 
 /***************************************************************************//**
- * Remove an event listener that was previously added.
+ * @brief Use this function to unsubscribe an event listener that was previously
+ * subscribed to receive system event notifications. This is typically
+ * done when the listener is no longer needed or before the listener is
+ * destroyed to prevent it from being called after it is invalid. The
+ * function must be called with a valid listener that has been previously
+ * subscribed. It is important to ensure that the listener is not null
+ * and has been properly initialized before calling this function.
  *
- * @param
- *   [in] listener
+ * @param listener A pointer to an sl_cpc_system_event_listener_t structure that
+ * represents the event listener to be removed. The listener
+ * must not be null and should have been previously subscribed
+ * using sl_cpc_system_event_listener_subscribe. The caller
+ * retains ownership of the listener.
+ * @return Returns SL_STATUS_OK to indicate successful removal of the listener
+ * from the notification list.
  ******************************************************************************/
 sl_status_t sl_cpc_system_event_listener_unsubscribe(sl_cpc_system_event_listener_t *listener);
 

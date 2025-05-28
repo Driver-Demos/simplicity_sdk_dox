@@ -46,10 +46,16 @@ extern "C" {
 // Prototypes
 
 /***************************************************************************//**
- * Initializes Oscillators and Clock branches.
+ * @brief This function is used to initialize the oscillators and clock branches
+ * within the system. It should be called before any clock-dependent
+ * operations are performed to ensure that the clock system is properly
+ * configured and operational. The function returns a status code
+ * indicating the success or failure of the initialization process. It is
+ * important to check the return value to handle any potential errors
+ * that may occur during initialization.
  *
- * @return  Status code.
- *          SL_STATUS_OK if successful. Error code otherwise.
+ * @return Returns a status code of type sl_status_t, which is SL_STATUS_OK if
+ * the initialization is successful, or an error code if it fails.
  ******************************************************************************/
 sl_status_t sl_clock_manager_init(void);
 

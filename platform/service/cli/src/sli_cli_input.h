@@ -57,6 +57,21 @@ extern "C" {
  *   A handle to a CLI instance.
  ******************************************************************************/
 #if SL_CLI_NUM_HISTORY_BYTES
+/***************************************************************************//**
+ * @brief This function updates the command history buffer with the current
+ * input from the CLI instance. It should be called after a newline
+ * character is detected in the input buffer, but before executing the
+ * command, and only if the input buffer is not empty. The function
+ * ensures that the history buffer has enough space by removing the
+ * oldest entries if necessary, then appends the current input to the
+ * history. This allows users to access previous commands using control
+ * characters or arrow keys.
+ *
+ * @param handle A handle to a CLI instance, which must be valid and
+ * initialized. The function modifies the history buffer and
+ * position within this handle. The handle must not be null.
+ * @return None
+ ******************************************************************************/
 void sli_cli_input_update_history(sl_cli_handle_t handle);
 #else
   #define sli_cli_input_update_history(s)  ((void)0)

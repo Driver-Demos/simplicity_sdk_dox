@@ -82,19 +82,36 @@ extern sl_iostream_instance_info_t sl_iostream_instance_swo_info;   ///< sl_iost
 // Prototypes
 
 /***************************************************************************//**
- * Initialize SWO stream component.
+ * @brief This function sets up the Serial Wire Output (SWO) stream as the
+ * default I/O stream for the system. It should be called during the
+ * initialization phase of your application to enable SWO functionality.
+ * The function configures the necessary hardware and software components
+ * to allow real-time data output via the SWO pin. If the system includes
+ * an operating system kernel, a mutex is created to manage access to the
+ * SWO stream. Additionally, if a power manager is present, the function
+ * subscribes to energy mode transition events. The function must be
+ * called before any SWO data output operations are performed. It returns
+ * a status code indicating success or failure of the initialization
+ * process.
  *
- * @return  Status Code:
- *            - SL_STATUS_OK
- *            - SL_STATUS_FAIL
+ * @return Returns SL_STATUS_OK on successful initialization or SL_STATUS_FAIL
+ * if an error occurs during the process.
  ******************************************************************************/
 sl_status_t sl_iostream_swo_init(void);
 
 /***************************************************************************//**
- * De-initialize SWO stream component.
+ * @brief This function is used to de-initialize the Serial Wire Output (SWO)
+ * stream component, ensuring that any resources allocated during
+ * initialization are properly released. It should be called when the SWO
+ * stream is no longer needed, typically during the shutdown or
+ * reconfiguration of the system. The function handles necessary cleanup
+ * operations, such as releasing mutexes and unsubscribing from power
+ * management events, if applicable. It is important to ensure that no
+ * other operations are being performed on the SWO stream when this
+ * function is called to avoid undefined behavior.
  *
- * @return  Status Code:
- *            - SL_STATUS_OK
+ * @return Returns SL_STATUS_OK if the de-initialization is successful, or
+ * SL_STATUS_FAIL if an error occurs during the process.
  ******************************************************************************/
 sl_status_t sl_iostream_swo_deinit(void);
 

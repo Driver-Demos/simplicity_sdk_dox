@@ -41,7 +41,98 @@
  * @brief EFR32BG22 LETIMER Register Declaration.
  *****************************************************************************/
 
-/** LETIMER Register Declaration. */
+/***************************************************************************//**
+ * @brief The `LETIMER_TypeDef` is a comprehensive structure representing the
+ * Low Energy Timer (LETIMER) peripheral registers for the EFR32BG22
+ * microcontroller. It includes registers for controlling the timer,
+ * managing interrupts, and handling synchronization. The structure
+ * provides multiple sets of registers for setting, clearing, and
+ * toggling values, allowing for flexible control of the timer's
+ * operation. Reserved fields are included for future expansion, ensuring
+ * compatibility with potential updates. This structure is essential for
+ * configuring and operating the LETIMER peripheral in low-energy
+ * applications.
+ *
+ * @param IPVERSION IP version.
+ * @param EN Module enable.
+ * @param CTRL Control register.
+ * @param CMD Command register.
+ * @param STATUS Status register.
+ * @param RESERVED0 Reserved for future use.
+ * @param CNT Counter value register.
+ * @param COMP0 Compare value register 0.
+ * @param COMP1 Compare value register 1.
+ * @param TOP Counter TOP value register.
+ * @param TOPBUFF Buffered counter TOP value.
+ * @param REP0 Repeat counter register 0.
+ * @param REP1 Repeat counter register 1.
+ * @param IF Interrupt flag register.
+ * @param IEN Interrupt enable register.
+ * @param RESERVED1 Reserved for future use.
+ * @param SYNCBUSY Synchronization busy register.
+ * @param RESERVED2 Reserved for future use.
+ * @param PRSMODE PRS input mode select register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_SET IP version set.
+ * @param EN_SET Module enable set.
+ * @param CTRL_SET Control register set.
+ * @param CMD_SET Command register set.
+ * @param STATUS_SET Status register set.
+ * @param RESERVED4 Reserved for future use.
+ * @param CNT_SET Counter value register set.
+ * @param COMP0_SET Compare value register 0 set.
+ * @param COMP1_SET Compare value register 1 set.
+ * @param TOP_SET Counter TOP value register set.
+ * @param TOPBUFF_SET Buffered counter TOP value set.
+ * @param REP0_SET Repeat counter register 0 set.
+ * @param REP1_SET Repeat counter register 1 set.
+ * @param IF_SET Interrupt flag register set.
+ * @param IEN_SET Interrupt enable register set.
+ * @param RESERVED5 Reserved for future use.
+ * @param SYNCBUSY_SET Synchronization busy register set.
+ * @param RESERVED6 Reserved for future use.
+ * @param PRSMODE_SET PRS input mode select register set.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_CLR IP version clear.
+ * @param EN_CLR Module enable clear.
+ * @param CTRL_CLR Control register clear.
+ * @param CMD_CLR Command register clear.
+ * @param STATUS_CLR Status register clear.
+ * @param RESERVED8 Reserved for future use.
+ * @param CNT_CLR Counter value register clear.
+ * @param COMP0_CLR Compare value register 0 clear.
+ * @param COMP1_CLR Compare value register 1 clear.
+ * @param TOP_CLR Counter TOP value register clear.
+ * @param TOPBUFF_CLR Buffered counter TOP value clear.
+ * @param REP0_CLR Repeat counter register 0 clear.
+ * @param REP1_CLR Repeat counter register 1 clear.
+ * @param IF_CLR Interrupt flag register clear.
+ * @param IEN_CLR Interrupt enable register clear.
+ * @param RESERVED9 Reserved for future use.
+ * @param SYNCBUSY_CLR Synchronization busy register clear.
+ * @param RESERVED10 Reserved for future use.
+ * @param PRSMODE_CLR PRS input mode select register clear.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_TGL IP version toggle.
+ * @param EN_TGL Module enable toggle.
+ * @param CTRL_TGL Control register toggle.
+ * @param CMD_TGL Command register toggle.
+ * @param STATUS_TGL Status register toggle.
+ * @param RESERVED12 Reserved for future use.
+ * @param CNT_TGL Counter value register toggle.
+ * @param COMP0_TGL Compare value register 0 toggle.
+ * @param COMP1_TGL Compare value register 1 toggle.
+ * @param TOP_TGL Counter TOP value register toggle.
+ * @param TOPBUFF_TGL Buffered counter TOP value toggle.
+ * @param REP0_TGL Repeat counter register 0 toggle.
+ * @param REP1_TGL Repeat counter register 1 toggle.
+ * @param IF_TGL Interrupt flag register toggle.
+ * @param IEN_TGL Interrupt enable register toggle.
+ * @param RESERVED13 Reserved for future use.
+ * @param SYNCBUSY_TGL Synchronization busy register toggle.
+ * @param RESERVED14 Reserved for future use.
+ * @param PRSMODE_TGL PRS input mode select register toggle.
+ ******************************************************************************/
 typedef struct letimer_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version                                         */
   __IOM uint32_t EN;                            /**< module en                                          */

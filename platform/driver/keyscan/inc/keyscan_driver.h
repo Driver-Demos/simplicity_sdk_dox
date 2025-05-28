@@ -57,6 +57,20 @@ extern "C" {
  ******************************************************************************/
 
 /// KEYSCAN status values.
+/***************************************************************************//**
+ * @brief The `sl_keyscan_driver_status_t` is an enumeration that defines the
+ * possible status values for a keypress event in the KEYSCAN driver. It
+ * includes statuses for valid keypresses, invalid keypresses, and key
+ * releases, which are used to manage and interpret the state of keypress
+ * events within the key scanning process.
+ *
+ * @param SL_KEYSCAN_STATUS_KEYPRESS_VALID Indicates a valid keypress has been
+ * detected.
+ * @param SL_KEYSCAN_STATUS_KEYPRESS_INVALID Indicates an invalid keypress has
+ * been detected.
+ * @param SL_KEYSCAN_STATUS_KEYPRESS_RELEASED Indicates that a key has been
+ * released.
+ ******************************************************************************/
 typedef enum {
   SL_KEYSCAN_STATUS_KEYPRESS_VALID = 0,
   SL_KEYSCAN_STATUS_KEYPRESS_INVALID,
@@ -72,62 +86,99 @@ typedef void (*sl_keyscan_driver_process_keyscan_event)(uint8_t  *p_keyscan_matr
                                                         sl_keyscan_driver_status_t status);
 
 /// An Event Handle
+/***************************************************************************//**
+ * @brief The `sl_keyscan_driver_process_keyscan_event_handle_t` is a structure
+ * used in the KEYSCAN driver to manage event handling. It contains a
+ * list node, `node`, which allows the structure to be part of a linked
+ * list, and a function pointer, `on_event`, which is called when a
+ * keyscan event occurs. This structure is essential for registering and
+ * managing callbacks that respond to keyscan events, enabling the driver
+ * to handle keypresses efficiently.
+ *
+ * @param node List node.
+ * @param on_event Function that must be called when the event occurs.
+ ******************************************************************************/
 typedef struct {
   sl_slist_node_t node;                              ///< List node.
   sl_keyscan_driver_process_keyscan_event on_event;  ///< Function that must be called when the event occurs.
 } sl_keyscan_driver_process_keyscan_event_handle_t;
 
 /***************************************************************************//**
- * @brief
- *   Initializes the keyscan driver.
+ * @brief This function prepares the keyscan driver for operation by setting up
+ * necessary GPIO configurations, initializing hardware components, and
+ * enabling relevant interrupts. It should be called before any other
+ * keyscan operations to ensure the driver is properly configured. This
+ * function does not take any parameters and returns a status code
+ * indicating success or failure. It is essential to call this function
+ * before starting a keyscan or registering event callbacks.
  *
- * @return
- *   0 if successful. Error code otherwise.
+ * @return Returns SL_STATUS_OK if the initialization is successful, otherwise
+ * an error code.
  ******************************************************************************/
 sl_status_t sl_keyscan_driver_init(void);
 
 /***************************************************************************//**
- * @brief
- *   Registers an event callback to be called on Keyscan event.
+ * @brief This function registers an event callback that will be invoked when a
+ * keyscan event occurs. It should be called before initializing the
+ * keyscan driver to ensure that events are captured from the start. The
+ * function requires a valid event handle with a non-null callback
+ * function. It is important to ensure that the event handle is properly
+ * initialized and not null, as the function will assert if these
+ * conditions are not met. This function is typically used in
+ * applications where keyscan events need to be processed asynchronously.
  *
- * @param[in]
- *   event_handle  Event handle to register
- *
- * @note
- *   An EFM_ASSERT is thrown if the handle is NULL.
- * @note
- *   Must be called before init function.
+ * @param event_handle A pointer to an
+ * sl_keyscan_driver_process_keyscan_event_handle_t
+ * structure that contains the event callback function. The
+ * event_handle must not be null, and the on_event member of
+ * the structure must also be non-null. The caller retains
+ * ownership of the event handle.
+ * @return None
  ******************************************************************************/
 void sl_keyscan_driver_subscribe_event(sl_keyscan_driver_process_keyscan_event_handle_t  *event_handle);
 
 /***************************************************************************//**
- * @brief
- *   Unregisters an event callback to be called on Keyscan event.
+ * @brief Use this function to remove an event callback that was previously
+ * registered with the keyscan driver. This is necessary when the
+ * callback is no longer needed or before deinitializing the driver to
+ * prevent further event handling. The function must be called with a
+ * valid event handle that was previously registered; otherwise, an
+ * assertion will be triggered. Ensure that the event handle is not null
+ * before calling this function.
  *
- * @param[in]
- *   event_handle  Event handle which must be unregistered (must have been
- *                      registered previously).
- *
- * @note
- *   An EFM_ASSERT is thrown if the handle is not found or is NULL.
+ * @param event_handle A pointer to the event handle that needs to be
+ * unregistered. It must not be null and should have been
+ * previously registered with the keyscan driver. If the
+ * handle is null or not found, an assertion is triggered.
+ * @return None
  ******************************************************************************/
 void sl_keyscan_driver_unsubscribe_event(sl_keyscan_driver_process_keyscan_event_handle_t  *event_handle);
 
 /***************************************************************************//**
- * @brief
- *   Starts the keyscan scan.
+ * @brief This function initiates the keyscan scanning process if it is not
+ * already running. It is typically called after initializing the keyscan
+ * driver and registering any necessary event callbacks. The function
+ * ensures that a scan is not started if one is already in progress, thus
+ * preventing redundant operations. It is important to ensure that the
+ * keyscan driver has been properly initialized before calling this
+ * function to avoid undefined behavior.
  *
- * @return
- *   0 if successful. Error code otherwise.
+ * @return Returns SL_STATUS_OK if the scan is successfully started or if it was
+ * already running.
  ******************************************************************************/
 sl_status_t sl_keyscan_driver_start_scan(void);
 
 /***************************************************************************//**
- * @brief
- *   Stops the keyscan scan.
+ * @brief Use this function to stop an ongoing keyscan operation if it is
+ * currently running. This function should be called when you need to
+ * halt the key scanning process, such as when shutting down the system
+ * or when the scanning is no longer needed. It checks if a scan is in
+ * progress and stops it if necessary, ensuring that the keyscan matrix
+ * is cleared. This function is safe to call even if no scan is currently
+ * running, in which case it will simply return without making changes.
  *
- * @return
- *   0 if successful. Error code otherwise.
+ * @return Returns SL_STATUS_OK if the operation is successful or if no scan was
+ * running.
  ******************************************************************************/
 sl_status_t sl_keyscan_driver_stop_scan(void);
 

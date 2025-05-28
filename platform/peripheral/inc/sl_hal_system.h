@@ -122,18 +122,18 @@ SL_ENUM_GENERIC(sl_hal_system_part_family_t, uint32_t) {
 };
 
 /***************************************************************************//**
- * @brief
- *   Get the MCU family identifier.
+ * @brief This function is used to obtain the family identifier of the
+ * microcontroller unit (MCU) by accessing the device information
+ * structure stored in flash memory. It is useful for applications that
+ * need to adapt behavior based on the specific family of the MCU. The
+ * function reads the relevant part of the device information and applies
+ * the necessary masks to extract the family identifier. It should be
+ * called when the family information is required, and it assumes that
+ * the device information is correctly programmed and accessible.
  *
- * @return
- *   Family identifier of MCU.
- *
- * @note
- *   This function retrieves family ID by reading the chip's device info
- *   structure in flash memory. Users can retrieve family ID directly
- *   by reading DEVINFO->PART item and decode with mask and shift
- *   \#defines defined in \<part_family\>_devinfo.h (refer to code
- *   below for details).
+ * @return Returns the family identifier of the MCU as a value of type
+ * `sl_hal_system_part_family_t`. If the family ID is missing or the
+ * part is unprogrammed, it returns `SL_HAL_SYSTEM_PART_FAMILY_UNKNOWN`.
  ******************************************************************************/
 sl_hal_system_part_family_t sl_hal_system_get_family(void);
 

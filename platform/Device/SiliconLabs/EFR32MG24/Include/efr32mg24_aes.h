@@ -40,7 +40,41 @@
  * @brief EFR32MG24 AES Register Declaration.
  *****************************************************************************/
 
-/** AES Register Declaration. */
+/***************************************************************************//**
+ * @brief The `AES_TypeDef` structure is a comprehensive representation of the
+ * AES (Advanced Encryption Standard) hardware configuration and control
+ * registers for the EFR32MG24 microcontroller. It includes various
+ * fields for managing data fetching and pushing operations, interrupt
+ * handling, and control commands. The structure also contains several
+ * reserved fields for future use, ensuring compatibility with potential
+ * hardware updates. Additionally, it provides configuration registers
+ * for specific hardware features, such as BA411E, BA413, BA418, and
+ * BA419, which are likely related to different cryptographic
+ * capabilities or modes supported by the AES hardware.
+ *
+ * @param FETCHADDR Fetcher Address.
+ * @param RESERVED0 Reserved for future use.
+ * @param FETCHLEN Fetcher Length.
+ * @param FETCHTAG Fetcher Tag.
+ * @param PUSHADDR Pusher Address.
+ * @param RESERVED1 Reserved for future use.
+ * @param PUSHLEN Pusher Length.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED2 Reserved for future use.
+ * @param IF Interrupt Flags.
+ * @param RESERVED3 Reserved for future use.
+ * @param IF_CLR Interrupt status clear.
+ * @param CTRL Control register.
+ * @param CMD Command register.
+ * @param STATUS Status register.
+ * @param RESERVED4 Reserved for future use.
+ * @param INCL_IPS_HW_CFG INCL_IPS_HW_CFG.
+ * @param BA411E_HW_CFG_1 BA411E_HW_CFG_1.
+ * @param BA411E_HW_CFG_2 BA411E_HW_CFG_2.
+ * @param BA413_HW_CFG BA413_HW_CFG.
+ * @param BA418_HW_CFG BA418_HW_CFG.
+ * @param BA419_HW_CFG BA419_HW_CFG.
+ ******************************************************************************/
 typedef struct aes_typedef{
   __IOM uint32_t FETCHADDR;                     /**< Fetcher Address                                    */
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */

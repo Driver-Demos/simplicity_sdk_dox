@@ -41,7 +41,77 @@
  * @brief EFR32BG22 PDM Register Declaration.
  *****************************************************************************/
 
-/** PDM Register Declaration. */
+/***************************************************************************//**
+ * @brief The `PDM_TypeDef` structure represents the register layout for the
+ * Pulse Density Modulation (PDM) module in the EFR32BG22
+ * microcontroller. It includes various control, status, and
+ * configuration registers, as well as reserved spaces for future use.
+ * The structure provides registers for enabling, controlling, and
+ * monitoring the PDM module, with additional sets of registers for set,
+ * clear, and toggle operations to facilitate bit manipulation. This
+ * design allows for efficient management of the PDM module's
+ * functionality, including handling interrupts and synchronization.
+ *
+ * @param IPVERSION IP Version ID.
+ * @param EN PDM Module enable Register.
+ * @param CTRL PDM Core Control Register.
+ * @param CMD PDM Core Command Register.
+ * @param STATUS PDM Status register.
+ * @param CFG0 PDM Core Configuration Register0.
+ * @param CFG1 PDM Core Configuration Register1.
+ * @param RESERVED0 Reserved for future use.
+ * @param RXDATA PDM Received Data Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_SET IP Version ID for set operations.
+ * @param EN_SET PDM Module enable Register for set operations.
+ * @param CTRL_SET PDM Core Control Register for set operations.
+ * @param CMD_SET PDM Core Command Register for set operations.
+ * @param STATUS_SET PDM Status register for set operations.
+ * @param CFG0_SET PDM Core Configuration Register0 for set operations.
+ * @param CFG1_SET PDM Core Configuration Register1 for set operations.
+ * @param RESERVED4 Reserved for future use.
+ * @param RXDATA_SET PDM Received Data Register for set operations.
+ * @param RESERVED5 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register for set operations.
+ * @param IEN_SET Interrupt Enable Register for set operations.
+ * @param RESERVED6 Reserved for future use.
+ * @param SYNCBUSY_SET Synchronization Busy Register for set operations.
+ * @param RESERVED7 Reserved for future use.
+ * @param IPVERSION_CLR IP Version ID for clear operations.
+ * @param EN_CLR PDM Module enable Register for clear operations.
+ * @param CTRL_CLR PDM Core Control Register for clear operations.
+ * @param CMD_CLR PDM Core Command Register for clear operations.
+ * @param STATUS_CLR PDM Status register for clear operations.
+ * @param CFG0_CLR PDM Core Configuration Register0 for clear operations.
+ * @param CFG1_CLR PDM Core Configuration Register1 for clear operations.
+ * @param RESERVED8 Reserved for future use.
+ * @param RXDATA_CLR PDM Received Data Register for clear operations.
+ * @param RESERVED9 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register for clear operations.
+ * @param IEN_CLR Interrupt Enable Register for clear operations.
+ * @param RESERVED10 Reserved for future use.
+ * @param SYNCBUSY_CLR Synchronization Busy Register for clear operations.
+ * @param RESERVED11 Reserved for future use.
+ * @param IPVERSION_TGL IP Version ID for toggle operations.
+ * @param EN_TGL PDM Module enable Register for toggle operations.
+ * @param CTRL_TGL PDM Core Control Register for toggle operations.
+ * @param CMD_TGL PDM Core Command Register for toggle operations.
+ * @param STATUS_TGL PDM Status register for toggle operations.
+ * @param CFG0_TGL PDM Core Configuration Register0 for toggle operations.
+ * @param CFG1_TGL PDM Core Configuration Register1 for toggle operations.
+ * @param RESERVED12 Reserved for future use.
+ * @param RXDATA_TGL PDM Received Data Register for toggle operations.
+ * @param RESERVED13 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register for toggle operations.
+ * @param IEN_TGL Interrupt Enable Register for toggle operations.
+ * @param RESERVED14 Reserved for future use.
+ * @param SYNCBUSY_TGL Synchronization Busy Register for toggle operations.
+ ******************************************************************************/
 typedef struct pdm_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version ID                                      */
   __IOM uint32_t EN;                            /**< PDM Module enable Register                         */

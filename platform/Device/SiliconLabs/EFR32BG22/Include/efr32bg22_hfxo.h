@@ -41,7 +41,94 @@
  * @brief EFR32BG22 HFXO Register Declaration.
  *****************************************************************************/
 
-/** HFXO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `HFXO_TypeDef` is a complex data structure representing the High-
+ * Frequency Crystal Oscillator (HFXO) registers for the EFR32BG22
+ * microcontroller. It includes various configuration, control, status,
+ * and interrupt registers, each with multiple reserved spaces for future
+ * use. The structure provides multiple versions of each register (SET,
+ * CLR, TGL) to facilitate bit manipulation operations, allowing for
+ * setting, clearing, and toggling specific bits within the registers.
+ * This design supports efficient management of the HFXO's operational
+ * parameters and status monitoring, crucial for maintaining precise
+ * timing and control in embedded systems.
+ *
+ * @param IPVERSION IP version ID.
+ * @param RESERVED0 Reserved for future use.
+ * @param XTALCFG Crystal Configuration Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param XTALCTRL Crystal Control Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param CFG Configuration Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param CTRL Control Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param CMD Command Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param STATUS Status Register.
+ * @param RESERVED6 Reserved for future use.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param RESERVED7 Reserved for future use.
+ * @param LOCK Configuration Lock Register.
+ * @param RESERVED8 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param RESERVED9 Reserved for future use.
+ * @param XTALCFG_SET Crystal Configuration Register.
+ * @param RESERVED10 Reserved for future use.
+ * @param XTALCTRL_SET Crystal Control Register.
+ * @param RESERVED11 Reserved for future use.
+ * @param CFG_SET Configuration Register.
+ * @param RESERVED12 Reserved for future use.
+ * @param CTRL_SET Control Register.
+ * @param RESERVED13 Reserved for future use.
+ * @param CMD_SET Command Register.
+ * @param RESERVED14 Reserved for future use.
+ * @param STATUS_SET Status Register.
+ * @param RESERVED15 Reserved for future use.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param RESERVED16 Reserved for future use.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param RESERVED17 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param RESERVED18 Reserved for future use.
+ * @param XTALCFG_CLR Crystal Configuration Register.
+ * @param RESERVED19 Reserved for future use.
+ * @param XTALCTRL_CLR Crystal Control Register.
+ * @param RESERVED20 Reserved for future use.
+ * @param CFG_CLR Configuration Register.
+ * @param RESERVED21 Reserved for future use.
+ * @param CTRL_CLR Control Register.
+ * @param RESERVED22 Reserved for future use.
+ * @param CMD_CLR Command Register.
+ * @param RESERVED23 Reserved for future use.
+ * @param STATUS_CLR Status Register.
+ * @param RESERVED24 Reserved for future use.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param RESERVED25 Reserved for future use.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param RESERVED26 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param RESERVED27 Reserved for future use.
+ * @param XTALCFG_TGL Crystal Configuration Register.
+ * @param RESERVED28 Reserved for future use.
+ * @param XTALCTRL_TGL Crystal Control Register.
+ * @param RESERVED29 Reserved for future use.
+ * @param CFG_TGL Configuration Register.
+ * @param RESERVED30 Reserved for future use.
+ * @param CTRL_TGL Control Register.
+ * @param RESERVED31 Reserved for future use.
+ * @param CMD_TGL Command Register.
+ * @param RESERVED32 Reserved for future use.
+ * @param STATUS_TGL Status Register.
+ * @param RESERVED33 Reserved for future use.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param RESERVED34 Reserved for future use.
+ * @param LOCK_TGL Configuration Lock Register.
+ ******************************************************************************/
 typedef struct hfxo_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   uint32_t       RESERVED0[3U];                 /**< Reserved for future use                            */

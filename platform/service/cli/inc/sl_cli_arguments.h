@@ -87,6 +87,37 @@
 #define SL_CLI_ARG_END        (0xFFU)
 
 /// @brief Enum of all the argument types
+/***************************************************************************//**
+ * @brief The `sl_cli_arg_t` is an enumeration that defines various argument
+ * types used in a command-line interface (CLI) framework. It includes
+ * both mandatory and optional argument types for different data types
+ * such as UINT8, UINT16, UINT32, INT8, INT16, INT32, STRING, and HEX.
+ * Additionally, it provides special types like ADDITIONAL, WILDCARD,
+ * GROUP, and END to handle more complex argument parsing scenarios. This
+ * enum facilitates the parsing and handling of command-line arguments by
+ * categorizing them into specific types.
+ *
+ * @param sl_cli_arg_uint8 UINT8 argument type.
+ * @param sl_cli_arg_uint16 UINT16 argument type.
+ * @param sl_cli_arg_uint32 UINT32 argument type.
+ * @param sl_cli_arg_int8 INT8 argument type.
+ * @param sl_cli_arg_int16 INT16 argument type.
+ * @param sl_cli_arg_int32 INT32 argument type.
+ * @param sl_cli_arg_string STRING argument type.
+ * @param sl_cli_arg_hex HEX argument type.
+ * @param sl_cli_arg_uint8opt Optional (zero or more) UINT8 argument type.
+ * @param sl_cli_arg_uint16opt Optional (zero or more) UINT16 argument type.
+ * @param sl_cli_arg_uint32opt Optional (zero or more) UINT32 argument type.
+ * @param sl_cli_arg_int8opt Optional (zero or more) INT8 argument type.
+ * @param sl_cli_arg_int16opt Optional (zero or more) INT16 argument type.
+ * @param sl_cli_arg_int32opt Optional (zero or more) INT32 argument type.
+ * @param sl_cli_arg_stringopt Optional (zero or more) STRING argument type.
+ * @param sl_cli_arg_hexopt Optional (zero or more) HEX argument type.
+ * @param sl_cli_arg_additionnal ADDITIONAL argument type.
+ * @param sl_cli_arg_wildcard WILDCARD argument type.
+ * @param sl_cli_arg_group GROUP argument type.
+ * @param sl_cli_arg_end END argument type.
+ ******************************************************************************/
 typedef enum sl_cli_arg{
   sl_cli_arg_uint8       = SL_CLI_ARG_UINT8,      ///< UINT8 argument type
   sl_cli_arg_uint16      = SL_CLI_ARG_UINT16,     ///< UINT16 argument type

@@ -41,7 +41,106 @@
  * @brief EFR32MG24 DCDC Register Declaration.
  *****************************************************************************/
 
-/** DCDC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `DCDC_TypeDef` structure represents the register layout for the
+ * DCDC (DC-DC converter) module in the EFR32MG24 microcontroller. It
+ * includes various control and status registers, such as `CTRL`,
+ * `STATUS`, and `LOCK`, which are used to configure and monitor the DCDC
+ * module's operation. The structure also contains multiple reserved
+ * fields for future use, as well as set, clear, and toggle versions of
+ * the registers to facilitate atomic operations. This design allows for
+ * efficient power management and control of the DCDC module, which is
+ * crucial for optimizing power consumption in embedded systems.
+ *
+ * @param IPVERSION Holds the IP version of the DCDC module.
+ * @param CTRL Control register for configuring the DCDC module.
+ * @param EM01CTRL0 Control register for EM01 energy mode.
+ * @param RESERVED0 Reserved for future use.
+ * @param EM23CTRL0 Control register for EM23 energy mode.
+ * @param RESERVED1 Reserved for future use.
+ * @param PFMXCTRL Control register for PFMX mode.
+ * @param RESERVED2 Reserved for future use.
+ * @param IF Interrupt flags register.
+ * @param IEN Interrupt enable register.
+ * @param STATUS Status register indicating the current state of the DCDC
+ * module.
+ * @param SYNCBUSY Indicates synchronization status of the DCDC module.
+ * @param RESERVED3 Reserved for future use.
+ * @param LOCK Register to lock the DCDC configuration.
+ * @param LOCKSTATUS Indicates the lock status of the DCDC module.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param RESERVED10 Reserved for future use.
+ * @param IPVERSION_SET Set version of the IPVERSION register.
+ * @param CTRL_SET Set version of the CTRL register.
+ * @param EM01CTRL0_SET Set version of the EM01CTRL0 register.
+ * @param RESERVED11 Reserved for future use.
+ * @param EM23CTRL0_SET Set version of the EM23CTRL0 register.
+ * @param RESERVED12 Reserved for future use.
+ * @param PFMXCTRL_SET Set version of the PFMXCTRL register.
+ * @param RESERVED13 Reserved for future use.
+ * @param IF_SET Set version of the IF register.
+ * @param IEN_SET Set version of the IEN register.
+ * @param STATUS_SET Set version of the STATUS register.
+ * @param SYNCBUSY_SET Set version of the SYNCBUSY register.
+ * @param RESERVED14 Reserved for future use.
+ * @param LOCK_SET Set version of the LOCK register.
+ * @param LOCKSTATUS_SET Set version of the LOCKSTATUS register.
+ * @param RESERVED15 Reserved for future use.
+ * @param RESERVED16 Reserved for future use.
+ * @param RESERVED17 Reserved for future use.
+ * @param RESERVED18 Reserved for future use.
+ * @param RESERVED19 Reserved for future use.
+ * @param RESERVED20 Reserved for future use.
+ * @param RESERVED21 Reserved for future use.
+ * @param IPVERSION_CLR Clear version of the IPVERSION register.
+ * @param CTRL_CLR Clear version of the CTRL register.
+ * @param EM01CTRL0_CLR Clear version of the EM01CTRL0 register.
+ * @param RESERVED22 Reserved for future use.
+ * @param EM23CTRL0_CLR Clear version of the EM23CTRL0 register.
+ * @param RESERVED23 Reserved for future use.
+ * @param PFMXCTRL_CLR Clear version of the PFMXCTRL register.
+ * @param RESERVED24 Reserved for future use.
+ * @param IF_CLR Clear version of the IF register.
+ * @param IEN_CLR Clear version of the IEN register.
+ * @param STATUS_CLR Clear version of the STATUS register.
+ * @param SYNCBUSY_CLR Clear version of the SYNCBUSY register.
+ * @param RESERVED25 Reserved for future use.
+ * @param LOCK_CLR Clear version of the LOCK register.
+ * @param LOCKSTATUS_CLR Clear version of the LOCKSTATUS register.
+ * @param RESERVED26 Reserved for future use.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param RESERVED29 Reserved for future use.
+ * @param RESERVED30 Reserved for future use.
+ * @param RESERVED31 Reserved for future use.
+ * @param RESERVED32 Reserved for future use.
+ * @param IPVERSION_TGL Toggle version of the IPVERSION register.
+ * @param CTRL_TGL Toggle version of the CTRL register.
+ * @param EM01CTRL0_TGL Toggle version of the EM01CTRL0 register.
+ * @param RESERVED33 Reserved for future use.
+ * @param EM23CTRL0_TGL Toggle version of the EM23CTRL0 register.
+ * @param RESERVED34 Reserved for future use.
+ * @param PFMXCTRL_TGL Toggle version of the PFMXCTRL register.
+ * @param RESERVED35 Reserved for future use.
+ * @param IF_TGL Toggle version of the IF register.
+ * @param IEN_TGL Toggle version of the IEN register.
+ * @param STATUS_TGL Toggle version of the STATUS register.
+ * @param SYNCBUSY_TGL Toggle version of the SYNCBUSY register.
+ * @param RESERVED36 Reserved for future use.
+ * @param LOCK_TGL Toggle version of the LOCK register.
+ * @param LOCKSTATUS_TGL Toggle version of the LOCKSTATUS register.
+ * @param RESERVED37 Reserved for future use.
+ * @param RESERVED38 Reserved for future use.
+ * @param RESERVED39 Reserved for future use.
+ * @param RESERVED40 Reserved for future use.
+ * @param RESERVED41 Reserved for future use.
+ * @param RESERVED42 Reserved for future use.
+ ******************************************************************************/
 typedef struct dcdc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IPVERSION                                          */
   __IOM uint32_t CTRL;                          /**< Control                                            */

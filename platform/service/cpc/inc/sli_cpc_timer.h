@@ -177,11 +177,13 @@ sl_status_t cpc_timer_delay_millisecond(uint32_t delay_ms);
 #endif
 
 /***************************************************************************//**
- * Initialize the CPC timer
+ * @brief The `sli_cpc_timer_init` function initializes a CPC timer handle,
+ * conditionally using the sleeptimer if available.
  *
- * @param Handle of the CPC timer
- *
- * @return SL_STATUS_OK if successful.
+ * @param handle A pointer to a `sli_cpc_timer_handle_t` structure that
+ * represents the timer handle to be initialized.
+ * @return The function returns `SL_STATUS_OK` if the sleeptimer is present,
+ * otherwise it returns the result of `cpc_timer_init(handle)`.
  ******************************************************************************/
 static inline sl_status_t sli_cpc_timer_init(sli_cpc_timer_handle_t *handle)
 {
@@ -194,9 +196,12 @@ static inline sl_status_t sli_cpc_timer_init(sli_cpc_timer_handle_t *handle)
 }
 
 /***************************************************************************//**
- * Get the CPC timer frequency.
+ * @brief The function `sli_cpc_timer_get_timer_frequency` returns the timer
+ * frequency in hertz, selecting between two different implementations
+ * based on the presence of the sleep timer component.
  *
- * @return Timer frequency in hertz.
+ * @return The function returns a `uint32_t` representing the timer frequency in
+ * hertz.
  ******************************************************************************/
 static inline uint32_t  sli_cpc_timer_get_timer_frequency(void)
 {
@@ -208,15 +213,15 @@ static inline uint32_t  sli_cpc_timer_get_timer_frequency(void)
 }
 
 /***************************************************************************//**
- * Converts milliseconds into ticks.
+ * @brief The function `sli_cpc_timer_ms_to_tick` converts a given time in
+ * milliseconds to the equivalent number of timer ticks, using either the
+ * Sleep Timer or CPC Timer API based on the presence of the Sleep Timer
+ * component.
  *
- * @param time_ms Number of milliseconds.
- *
- * @return Corresponding ticks number.
- *
- * @note The result is "rounded" to the superior tick number.
- *       This function is light and cannot fail so it should be privileged to
- *       perform a millisecond to tick conversion.
+ * @param time_ms A 16-bit unsigned integer representing the time in
+ * milliseconds to be converted to ticks.
+ * @return The function returns a 32-bit unsigned integer representing the
+ * equivalent number of timer ticks for the given milliseconds.
  ******************************************************************************/
 static inline uint32_t sli_cpc_timer_ms_to_tick(uint16_t time_ms)
 {
@@ -228,13 +233,14 @@ static inline uint32_t sli_cpc_timer_ms_to_tick(uint16_t time_ms)
 }
 
 /***************************************************************************//**
- * Converts ticks in milliseconds.
+ * @brief The function `sli_cpc_timer_tick_to_ms` converts a given number of
+ * timer ticks into milliseconds, using either the sleep timer or CPC
+ * timer conversion function based on the presence of the sleep timer
+ * component.
  *
- * @param tick Number of tick.
- *
- * @return Corresponding milliseconds number.
- *
- * @note The result is rounded to the inferior millisecond.
+ * @param tick The number of timer ticks to be converted into milliseconds.
+ * @return The function returns the equivalent number of milliseconds for the
+ * given number of ticks.
  ******************************************************************************/
 static inline uint32_t sli_cpc_timer_tick_to_ms(uint32_t tick)
 {
@@ -246,9 +252,12 @@ static inline uint32_t sli_cpc_timer_tick_to_ms(uint32_t tick)
 }
 
 /***************************************************************************//**
- * Gets current 32 bits global tick count.
+ * @brief The function `sli_cpc_timer_get_tick_count` retrieves the current
+ * 32-bit global tick count using either the sleep timer or CPC timer,
+ * depending on the presence of the sleep timer component.
  *
- * @return Current tick count.
+ * @return The function returns a `uint32_t` representing the current 32-bit
+ * global tick count.
  ******************************************************************************/
 static inline uint32_t sli_cpc_timer_get_tick_count(void)
 {
@@ -260,9 +269,12 @@ static inline uint32_t sli_cpc_timer_get_tick_count(void)
 }
 
 /***************************************************************************//**
- * Gets current 64 bits global tick count.
+ * @brief The function `sli_cpc_timer_get_tick_count64` retrieves the current
+ * 64-bit global tick count using either the sleep timer or CPC timer,
+ * depending on the presence of the sleep timer component.
  *
- * @return Current tick count.
+ * @return The function returns a 64-bit unsigned integer representing the
+ * current global tick count.
  ******************************************************************************/
 static inline uint64_t sli_cpc_timer_get_tick_count64(void)
 {
@@ -274,15 +286,21 @@ static inline uint64_t sli_cpc_timer_get_tick_count64(void)
 }
 
 /***************************************************************************//**
- * Starts a 32 bits timer.
+ * @brief The `sli_cpc_timer_start_timer` function initializes and starts a
+ * timer with a specified timeout and callback function, using either the
+ * sleeptimer or CPC timer implementation based on the presence of the
+ * sleeptimer component.
  *
- * @param handle Pointer to handle to timer.
- * @param timeout Timer timeout, in timer ticks.
- * @param callback Callback function that will be called when
- *        timeout expires.
- * @param callback_data Pointer to user data that will be passed to callback.
- *
- * @return SL_STATUS_OK if successful.
+ * @param handle A pointer to a `sli_cpc_timer_handle_t` structure that
+ * identifies the timer to be started.
+ * @param timeout A `uint32_t` value representing the timer's timeout period in
+ * ticks.
+ * @param callback A function pointer to a callback function that will be
+ * invoked when the timer expires.
+ * @param callback_data A pointer to user-defined data that will be passed to
+ * the callback function when the timer expires.
+ * @return The function returns an `sl_status_t` value indicating the success or
+ * failure of the timer start operation.
  ******************************************************************************/
 static inline sl_status_t sli_cpc_timer_start_timer(sli_cpc_timer_handle_t *handle,
                                                     uint32_t timeout,
@@ -304,17 +322,22 @@ static inline sl_status_t sli_cpc_timer_start_timer(sli_cpc_timer_handle_t *hand
 #endif
 }
 
-/**************************************************************************//**
- * Starts a 32 bits timer.
+/***************************************************************************//**
+ * @brief The function `sli_cpc_timer_start_timer_ms` starts a timer with a
+ * specified timeout in milliseconds and a callback function to be
+ * executed upon timeout.
  *
- * @param handle Pointer to handle to timer.
- * @param timeout_ms Timer timeout, in milliseconds.
- * @param callback Callback function that will be called when
- *        timeout expires.
- * @param callback_data Pointer to user data that will be passed to callback.
- *
- * @return SL_STATUS_OK if successful.
- *****************************************************************************/
+ * @param handle A pointer to a `sli_cpc_timer_handle_t` structure that
+ * identifies the timer to be started.
+ * @param timeout_ms The timeout duration in milliseconds after which the
+ * callback function will be executed.
+ * @param callback A pointer to a callback function that will be called when the
+ * timer expires.
+ * @param callback_data A pointer to user data that will be passed to the
+ * callback function when it is called.
+ * @return The function returns an `sl_status_t` value indicating the success or
+ * failure of starting the timer.
+ ******************************************************************************/
 static inline sl_status_t sli_cpc_timer_start_timer_ms(sli_cpc_timer_handle_t *handle,
                                                        uint32_t timeout_ms,
                                                        void (*callback)(sli_cpc_timer_handle_t *handle, void *data),
@@ -335,15 +358,20 @@ static inline sl_status_t sli_cpc_timer_start_timer_ms(sli_cpc_timer_handle_t *h
 #endif
 }
 /***************************************************************************//**
- * Restarts a 32 bits timer.
+ * @brief The function `sli_cpc_timer_restart_timer` restarts a timer with a
+ * specified timeout and callback function, using either the sleeptimer
+ * or CPC timer implementation based on the presence of the sleeptimer
+ * component.
  *
- * @param handle Pointer to handle to timer.
- * @param timeout Timer timeout, in timer ticks.
- * @param callback Callback function that will be called when
- *        initial/periodic timeout expires.
- * @param callback_data Pointer to user data that will be passed to callback.
-
- * @return SL_STATUS_OK if successful.
+ * @param handle A pointer to the timer handle, which identifies the timer to be
+ * restarted.
+ * @param timeout The timeout duration for the timer, specified in timer ticks.
+ * @param callback A pointer to the callback function that will be called when
+ * the timer expires.
+ * @param callback_data A pointer to user data that will be passed to the
+ * callback function.
+ * @return The function returns an `sl_status_t` status code indicating the
+ * success or failure of the timer restart operation.
  ******************************************************************************/
 static inline sl_status_t sli_cpc_timer_restart_timer(sli_cpc_timer_handle_t *handle,
                                                       uint32_t timeout,
@@ -366,11 +394,14 @@ static inline sl_status_t sli_cpc_timer_restart_timer(sli_cpc_timer_handle_t *ha
 }
 
 /***************************************************************************//**
- * Stops a timer.
+ * @brief The `sli_cpc_timer_stop_timer` function stops a timer using either the
+ * sleeptimer or CPC timer API, depending on the presence of the
+ * sleeptimer component.
  *
- * @param handle Pointer to handle to timer.
- *
- * @return SL_STATUS_OK if successful.
+ * @param handle A pointer to a `sli_cpc_timer_handle_t` structure that
+ * identifies the timer to be stopped.
+ * @return The function returns an `sl_status_t` value indicating the success or
+ * failure of the timer stop operation.
  ******************************************************************************/
 static inline sl_status_t sli_cpc_timer_stop_timer(sli_cpc_timer_handle_t *handle)
 {
@@ -382,9 +413,14 @@ static inline sl_status_t sli_cpc_timer_stop_timer(sli_cpc_timer_handle_t *handl
 }
 
 /***************************************************************************//**
- * Delays for the specified number of milliseconds.
+ * @brief The function `sli_cpc_timer_delay_millisecond` introduces a delay for
+ * a specified number of milliseconds using either the sleeptimer or CPC
+ * timer based on the presence of the sleeptimer component.
  *
- * @param delay_ms Delay in milliseconds.
+ * @param delay_ms A 16-bit unsigned integer representing the delay duration in
+ * milliseconds.
+ * @return The function does not return any value; it performs a delay
+ * operation.
  ******************************************************************************/
 static inline void sli_cpc_timer_delay_millisecond(uint16_t delay_ms)
 {

@@ -422,10 +422,16 @@ SL_ENUM_GENERIC(sli_cpc_system_ep_frame_type_t, uint8_t) {
 };
 
 /***************************************************************************//**
- * Bootloader Information.
+ * @brief The `sli_cpc_system_bootloader_info_t` structure is used to
+ * encapsulate information about the bootloader in a CPC (Co-Processor
+ * Communication) system. It includes details about the bootloader type,
+ * its version, and the capabilities it supports. This structure is
+ * typically used in conjunction with system commands to retrieve or
+ * manage bootloader-related properties within the CPC framework.
  *
- * @note
- *   Used with the value returned by a property-get on PROP_BOOTLOADER_INFO.
+ * @param type Represents the type of bootloader used in the system.
+ * @param version Stores the version number of the bootloader.
+ * @param capabilities Indicates the capabilities supported by the bootloader.
  ******************************************************************************/
 typedef struct {
   sl_cpc_bootloader_t type;
@@ -434,7 +440,16 @@ typedef struct {
 } sli_cpc_system_bootloader_info_t;
 
 /***************************************************************************//**
- * Enter IRQ command parameters
+ * @brief The `sli_cpc_system_enter_irq_cmd_t` structure is used to define the
+ * parameters for an IRQ (Interrupt Request) command within the CPC
+ * (Communication Protocol Controller) system. It contains two members,
+ * `start_in_ms` and `end_in_ms`, which specify the start and end times
+ * in milliseconds for the IRQ command. This structure is likely used to
+ * manage timing for entering and exiting interrupt states in the system.
+ *
+ * @param start_in_ms Represents the start time in milliseconds for the IRQ
+ * command.
+ * @param end_in_ms Represents the end time in milliseconds for the IRQ command.
  ******************************************************************************/
 typedef struct {
   uint32_t start_in_ms;
@@ -442,7 +457,18 @@ typedef struct {
 } sli_cpc_system_enter_irq_cmd_t;
 
 /***************************************************************************//**
- * Primary Set Version parameters
+ * @brief The `sli_cpc_system_primary_version_t` structure is used to define the
+ * versioning information of a system in terms of major, minor, patch,
+ * and tweak numbers. Each field is an 8-bit unsigned integer, allowing
+ * for a detailed and granular representation of the system's version.
+ * This structure is typically used to track and manage different
+ * versions of the system software, ensuring compatibility and proper
+ * functionality across updates.
+ *
+ * @param major Represents the major version number of the system.
+ * @param minor Represents the minor version number of the system.
+ * @param patch Represents the patch version number of the system.
+ * @param tweak Represents the tweak version number of the system.
  ******************************************************************************/
 typedef struct {
   uint8_t major;
@@ -480,6 +506,20 @@ SL_ENUM(sli_cpc_system_cmd_id_t)
  ******************************************************************************/
 #define PAYLOAD_LENGTH_MAX    16
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_system_cmd_t` structure is used to represent a system
+ * command within the CPC (Co-Processor Communication) system endpoint.
+ * It contains a command identifier, a sequence number for tracking
+ * command order, the length of the payload, and the payload itself,
+ * which is an array of bytes with a maximum defined length. This
+ * structure is essential for encapsulating command data that is
+ * transmitted between different components in the CPC system.
+ *
+ * @param command_id Identifier of the command.
+ * @param seq Command sequence number.
+ * @param length Length of the payload in bytes.
+ * @param payload Command payload.
+ ******************************************************************************/
 typedef struct {
   sli_cpc_system_cmd_id_t command_id;                  ///< Identifier of the command.
   uint8_t                 seq;                         ///< Command sequence number.
@@ -498,6 +538,18 @@ typedef struct {
  ******************************************************************************/
 #define SIZEOF_SYSTEM_COMMAND(command) (SIZEOF_SYSTEM_COMMAND_HEADER + command->length)
 
+/***************************************************************************//**
+ * @brief The `sli_cpc_system_property_cmd_t` structure is used to represent a
+ * command related to a system property in the CPC (Co-Processor
+ * Communication) system. It contains a property identifier, which
+ * specifies the particular property being addressed, and a payload,
+ * which holds the value associated with that property. This structure is
+ * essential for handling property-related commands within the CPC
+ * system, allowing for the retrieval or setting of property values.
+ *
+ * @param property_id Identifier of the property.
+ * @param payload Property value.
+ ******************************************************************************/
 typedef struct {
   sli_cpc_property_id_t property_id;        ///< Identifier of the property.
   uint8_t payload[];                        ///< Property value.
@@ -522,6 +574,16 @@ typedef struct {
  * function declarations.
  ******************************************************************************/
 struct sli_cpc_system_endpoint;
+/***************************************************************************//**
+ * @brief The `sli_cpc_system_endpoint_t` is a forward-declared structure in the
+ * provided code, which means its internal members and implementation
+ * details are not defined in the given file. It is used as a handle or
+ * reference to a system endpoint within the CPC (Co-Processor
+ * Communication) framework, allowing various operations such as
+ * initialization, starting, processing commands, and sending
+ * notifications related to the system endpoint.
+ *
+ ******************************************************************************/
 typedef struct sli_cpc_system_endpoint sli_cpc_system_endpoint_t;
 
 /***************************************************************************/ /**
@@ -558,19 +620,68 @@ sl_status_t sli_cpc_system_start(sli_cpc_system_endpoint_t *system_ep);
 void sli_cpc_system_process(sli_cpc_system_endpoint_t *system_ep);
 
 /***************************************************************************//**
- * Endpoint was opened, notify the host.
+ * @brief This function is used to notify the host system that a specific
+ * endpoint has been successfully opened. It should be called after an
+ * endpoint is opened to ensure the host is aware of the new state. This
+ * function is typically used in the context of managing communication
+ * endpoints in a system where multiple endpoints can be opened and
+ * closed dynamically. It is important to ensure that the `system_ep`
+ * parameter is properly initialized and that the `endpoint_id` is valid
+ * before calling this function.
+ *
+ * @param system_ep A pointer to a `sli_cpc_system_endpoint_t` structure
+ * representing the system endpoint. Must not be null and
+ * should be properly initialized before use.
+ * @param endpoint_id An unsigned 8-bit integer representing the ID of the
+ * endpoint that has been opened. Must be a valid endpoint ID
+ * within the system's range.
+ * @return Returns an `sl_status_t` value indicating the success or failure of
+ * the notification operation. Possible return values include success or
+ * various error codes indicating what went wrong.
  ******************************************************************************/
 sl_status_t sli_cpc_system_send_opening_notification(sli_cpc_system_endpoint_t *system_ep,
                                                      uint8_t endpoint_id);
 
 /***************************************************************************//**
- * Endpoint connection was terminated, notify the host.
+ * @brief This function is used to notify the host system that a specific
+ * endpoint connection has been terminated. It should be called when an
+ * endpoint is closed to ensure the host is aware of the change in
+ * connection state. This function requires a valid system endpoint
+ * structure and a valid endpoint identifier. It is important to ensure
+ * that the system endpoint has been properly initialized and started
+ * before calling this function to avoid unexpected behavior.
+ *
+ * @param system_ep A pointer to a sli_cpc_system_endpoint_t structure
+ * representing the system endpoint. Must not be null, and the
+ * system endpoint should be initialized and started before
+ * use.
+ * @param endpoint_id An unsigned 8-bit integer representing the identifier of
+ * the endpoint whose connection has been terminated. Must be
+ * a valid endpoint ID.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * notification operation.
  ******************************************************************************/
 sl_status_t sli_cpc_system_send_terminate_notification(sli_cpc_system_endpoint_t *system_ep,
                                                        uint8_t endpoint_id);
 
 /***************************************************************************//**
- * Endpoint connection shutdown, notify the host.
+ * @brief This function is used to send a shutdown request for a specific
+ * endpoint through the system endpoint. It should be called when an
+ * endpoint needs to be gracefully disconnected. The function requires a
+ * valid system endpoint structure and a valid endpoint identifier. It is
+ * important to ensure that the system endpoint has been properly
+ * initialized and started before calling this function to avoid
+ * unexpected behavior.
+ *
+ * @param system_ep A pointer to a sli_cpc_system_endpoint_t structure
+ * representing the system endpoint. Must not be null, and the
+ * system endpoint should be initialized and started before
+ * use.
+ * @param endpoint_id An unsigned 8-bit integer representing the identifier of
+ * the endpoint to be shut down. Must be a valid endpoint ID
+ * within the range supported by the system.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * shutdown request operation.
  ******************************************************************************/
 sl_status_t sli_cpc_system_send_shutdown_request(sli_cpc_system_endpoint_t *system_ep,
                                                  uint8_t endpoint_id);

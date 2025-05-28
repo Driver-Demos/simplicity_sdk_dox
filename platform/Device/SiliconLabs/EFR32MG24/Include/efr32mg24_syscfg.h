@@ -41,7 +41,150 @@
  * @brief EFR32MG24 SYSCFG Register Declaration.
  *****************************************************************************/
 
-/** SYSCFG Register Declaration. */
+/***************************************************************************//**
+ * @brief The `SYSCFG_TypeDef` is a comprehensive structure representing the
+ * system configuration registers for the EFR32MG24 microcontroller. It
+ * includes a variety of fields for managing system-level configurations
+ * such as interrupt flags, chip revision information, clock sources, and
+ * memory retention controls. The structure is designed with multiple
+ * reserved fields for future use, ensuring compatibility with potential
+ * hardware updates. Additionally, it provides set, clear, and toggle
+ * variants for many of its fields, allowing for flexible and efficient
+ * register manipulation. This structure is crucial for configuring and
+ * managing the system-level operations of the microcontroller.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION IP version ID.
+ * @param IF Interrupt Flag.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED1 Reserved for future use.
+ * @param CHIPREVHW Chip Revision, Hard-wired.
+ * @param CHIPREV Part Family and Revision Values.
+ * @param RESERVED2 Reserved for future use.
+ * @param CFGSYSTIC SysTick clock source.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param RESERVED5 Reserved for future use.
+ * @param CTRL Control.
+ * @param RESERVED6 Reserved for future use.
+ * @param DMEM0RETNCTRL DMEM0 Retention Control.
+ * @param RESERVED7 Reserved for future use.
+ * @param RAMBIASCONF RAM Bias Configuration.
+ * @param RESERVED8 Reserved for future use.
+ * @param RADIORAMRETNCTRL RADIO RAM Retention Control.
+ * @param RESERVED9 Reserved for future use.
+ * @param RADIOECCCTRL RADIO RAM ECC Control Register.
+ * @param RESERVED10 Reserved for future use.
+ * @param SEQRAMECCADDR SEQRAM ECC Address.
+ * @param FRCRAMECCADDR FRCRAM ECC Address.
+ * @param ICACHERAMRETNCTRL HOST ICACHERAM Retention Control.
+ * @param DMEM0PORTMAPSEL DMEM0 port remap selection.
+ * @param RESERVED11 Reserved for future use.
+ * @param ROOTDATA0 Data Register 0.
+ * @param ROOTDATA1 Data Register 1.
+ * @param ROOTLOCKSTATUS Lock Status.
+ * @param ROOTSESWVERSION SE SW Version.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param IF_SET Interrupt Flag.
+ * @param IEN_SET Interrupt Enable.
+ * @param RESERVED15 Reserved for future use.
+ * @param CHIPREVHW_SET Chip Revision, Hard-wired.
+ * @param CHIPREV_SET Part Family and Revision Values.
+ * @param RESERVED16 Reserved for future use.
+ * @param CFGSYSTIC_SET SysTick clock source.
+ * @param RESERVED17 Reserved for future use.
+ * @param RESERVED18 Reserved for future use.
+ * @param RESERVED19 Reserved for future use.
+ * @param CTRL_SET Control.
+ * @param RESERVED20 Reserved for future use.
+ * @param DMEM0RETNCTRL_SET DMEM0 Retention Control.
+ * @param RESERVED21 Reserved for future use.
+ * @param RAMBIASCONF_SET RAM Bias Configuration.
+ * @param RESERVED22 Reserved for future use.
+ * @param RADIORAMRETNCTRL_SET RADIO RAM Retention Control.
+ * @param RESERVED23 Reserved for future use.
+ * @param RADIOECCCTRL_SET RADIO RAM ECC Control Register.
+ * @param RESERVED24 Reserved for future use.
+ * @param SEQRAMECCADDR_SET SEQRAM ECC Address.
+ * @param FRCRAMECCADDR_SET FRCRAM ECC Address.
+ * @param ICACHERAMRETNCTRL_SET HOST ICACHERAM Retention Control.
+ * @param DMEM0PORTMAPSEL_SET DMEM0 port remap selection.
+ * @param RESERVED25 Reserved for future use.
+ * @param ROOTDATA0_SET Data Register 0.
+ * @param ROOTDATA1_SET Data Register 1.
+ * @param ROOTLOCKSTATUS_SET Lock Status.
+ * @param ROOTSESWVERSION_SET SE SW Version.
+ * @param RESERVED26 Reserved for future use.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param IF_CLR Interrupt Flag.
+ * @param IEN_CLR Interrupt Enable.
+ * @param RESERVED29 Reserved for future use.
+ * @param CHIPREVHW_CLR Chip Revision, Hard-wired.
+ * @param CHIPREV_CLR Part Family and Revision Values.
+ * @param RESERVED30 Reserved for future use.
+ * @param CFGSYSTIC_CLR SysTick clock source.
+ * @param RESERVED31 Reserved for future use.
+ * @param RESERVED32 Reserved for future use.
+ * @param RESERVED33 Reserved for future use.
+ * @param CTRL_CLR Control.
+ * @param RESERVED34 Reserved for future use.
+ * @param DMEM0RETNCTRL_CLR DMEM0 Retention Control.
+ * @param RESERVED35 Reserved for future use.
+ * @param RAMBIASCONF_CLR RAM Bias Configuration.
+ * @param RESERVED36 Reserved for future use.
+ * @param RADIORAMRETNCTRL_CLR RADIO RAM Retention Control.
+ * @param RESERVED37 Reserved for future use.
+ * @param RADIOECCCTRL_CLR RADIO RAM ECC Control Register.
+ * @param RESERVED38 Reserved for future use.
+ * @param SEQRAMECCADDR_CLR SEQRAM ECC Address.
+ * @param FRCRAMECCADDR_CLR FRCRAM ECC Address.
+ * @param ICACHERAMRETNCTRL_CLR HOST ICACHERAM Retention Control.
+ * @param DMEM0PORTMAPSEL_CLR DMEM0 port remap selection.
+ * @param RESERVED39 Reserved for future use.
+ * @param ROOTDATA0_CLR Data Register 0.
+ * @param ROOTDATA1_CLR Data Register 1.
+ * @param ROOTLOCKSTATUS_CLR Lock Status.
+ * @param ROOTSESWVERSION_CLR SE SW Version.
+ * @param RESERVED40 Reserved for future use.
+ * @param RESERVED41 Reserved for future use.
+ * @param RESERVED42 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param IF_TGL Interrupt Flag.
+ * @param IEN_TGL Interrupt Enable.
+ * @param RESERVED43 Reserved for future use.
+ * @param CHIPREVHW_TGL Chip Revision, Hard-wired.
+ * @param CHIPREV_TGL Part Family and Revision Values.
+ * @param RESERVED44 Reserved for future use.
+ * @param CFGSYSTIC_TGL SysTick clock source.
+ * @param RESERVED45 Reserved for future use.
+ * @param RESERVED46 Reserved for future use.
+ * @param RESERVED47 Reserved for future use.
+ * @param CTRL_TGL Control.
+ * @param RESERVED48 Reserved for future use.
+ * @param DMEM0RETNCTRL_TGL DMEM0 Retention Control.
+ * @param RESERVED49 Reserved for future use.
+ * @param RAMBIASCONF_TGL RAM Bias Configuration.
+ * @param RESERVED50 Reserved for future use.
+ * @param RADIORAMRETNCTRL_TGL RADIO RAM Retention Control.
+ * @param RESERVED51 Reserved for future use.
+ * @param RADIOECCCTRL_TGL RADIO RAM ECC Control Register.
+ * @param RESERVED52 Reserved for future use.
+ * @param SEQRAMECCADDR_TGL SEQRAM ECC Address.
+ * @param FRCRAMECCADDR_TGL FRCRAM ECC Address.
+ * @param ICACHERAMRETNCTRL_TGL HOST ICACHERAM Retention Control.
+ * @param DMEM0PORTMAPSEL_TGL DMEM0 port remap selection.
+ * @param RESERVED53 Reserved for future use.
+ * @param ROOTDATA0_TGL Data Register 0.
+ * @param ROOTDATA1_TGL Data Register 1.
+ * @param ROOTLOCKSTATUS_TGL Lock Status.
+ * @param ROOTSESWVERSION_TGL SE SW Version.
+ * @param RESERVED54 Reserved for future use.
+ ******************************************************************************/
 typedef struct syscfg_typedef{
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
@@ -692,7 +835,59 @@ typedef struct syscfg_typedef{
  * @brief EFR32MG24 SYSCFG_CFGNS Register Declaration.
  *****************************************************************************/
 
-/** SYSCFG_CFGNS Register Declaration. */
+/***************************************************************************//**
+ * @brief The `SYSCFG_CFGNS_TypeDef` is a structure that defines a set of
+ * registers for configuring and managing non-secure system tick
+ * calibration and root data in a microcontroller. It includes multiple
+ * reserved fields for future use, as well as specific registers for
+ * setting, clearing, and toggling the non-secure Sys-Tick calibration
+ * and root data. This structure is part of the system configuration for
+ * the EFR32MG24 microcontroller, providing a framework for managing non-
+ * secure operations and data.
+ *
+ * @param RESERVED0 An array of 7 reserved 32-bit unsigned integers for future
+ * use.
+ * @param CFGNSTCALIB A 32-bit register to configure the Non-Secure Sys-Tick
+ * calibration.
+ * @param RESERVED1 An array of 376 reserved 32-bit unsigned integers for future
+ * use.
+ * @param ROOTNSDATA0 A 32-bit data register for non-secure root data.
+ * @param ROOTNSDATA1 A 32-bit data register for non-secure root data.
+ * @param RESERVED2 A reserved 32-bit unsigned integer for future use.
+ * @param RESERVED3 An array of 637 reserved 32-bit unsigned integers for future
+ * use.
+ * @param RESERVED4 An array of 7 reserved 32-bit unsigned integers for future
+ * use.
+ * @param CFGNSTCALIB_SET A 32-bit register to set the Non-Secure Sys-Tick
+ * calibration.
+ * @param RESERVED5 An array of 376 reserved 32-bit unsigned integers for future
+ * use.
+ * @param ROOTNSDATA0_SET A 32-bit data register to set non-secure root data.
+ * @param ROOTNSDATA1_SET A 32-bit data register to set non-secure root data.
+ * @param RESERVED6 A reserved 32-bit unsigned integer for future use.
+ * @param RESERVED7 An array of 637 reserved 32-bit unsigned integers for future
+ * use.
+ * @param RESERVED8 An array of 7 reserved 32-bit unsigned integers for future
+ * use.
+ * @param CFGNSTCALIB_CLR A 32-bit register to clear the Non-Secure Sys-Tick
+ * calibration.
+ * @param RESERVED9 An array of 376 reserved 32-bit unsigned integers for future
+ * use.
+ * @param ROOTNSDATA0_CLR A 32-bit data register to clear non-secure root data.
+ * @param ROOTNSDATA1_CLR A 32-bit data register to clear non-secure root data.
+ * @param RESERVED10 A reserved 32-bit unsigned integer for future use.
+ * @param RESERVED11 An array of 637 reserved 32-bit unsigned integers for
+ * future use.
+ * @param RESERVED12 An array of 7 reserved 32-bit unsigned integers for future
+ * use.
+ * @param CFGNSTCALIB_TGL A 32-bit register to toggle the Non-Secure Sys-Tick
+ * calibration.
+ * @param RESERVED13 An array of 376 reserved 32-bit unsigned integers for
+ * future use.
+ * @param ROOTNSDATA0_TGL A 32-bit data register to toggle non-secure root data.
+ * @param ROOTNSDATA1_TGL A 32-bit data register to toggle non-secure root data.
+ * @param RESERVED14 A reserved 32-bit unsigned integer for future use.
+ ******************************************************************************/
 typedef struct syscfg_cfgns_typedef{
   uint32_t       RESERVED0[7U];                 /**< Reserved for future use                            */
   __IOM uint32_t CFGNSTCALIB;                   /**< Configure Non-Secure Sys-Tick cal.                 */

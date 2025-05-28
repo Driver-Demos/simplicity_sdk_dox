@@ -85,9 +85,16 @@ extern sl_iostream_instance_info_t sl_iostream_instance_cpc_info;   ///< sl_iost
 // Prototypes
 
 /***************************************************************************//**
- * CPC Stream init.
+ * @brief This function sets up the I/O stream over a Co-Processor Communication
+ * (CPC) link, specifically using the CLI endpoint. It must be called to
+ * initialize the CPC stream before any communication can occur. The
+ * function configures the stream as the system default, so if multiple
+ * streams are used, the default interface may need to be reconfigured.
+ * It returns a status code indicating success or failure of the
+ * initialization process.
  *
- * @return  Status result
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * initialization process.
  ******************************************************************************/
 sl_status_t sl_iostream_cpc_init(void);
 

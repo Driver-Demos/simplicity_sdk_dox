@@ -77,6 +77,25 @@ SL_ENUM(sl_hal_keyscan_delay_t) {
  ******************************************************************************/
 
 /// KEYSCAN configuration structure.
+/***************************************************************************//**
+ * @brief The `sl_hal_keyscan_config_t` structure is used to configure the
+ * keyscan peripheral in a hardware abstraction layer. It includes
+ * parameters such as the clock divider, the number of columns and rows
+ * for the keyscan matrix, and various delay settings for scanning,
+ * debouncing, and stabilizing. Additionally, it provides options to
+ * enable single press detection and automatic start of the keyscan
+ * process. This structure allows for flexible configuration of the
+ * keyscan hardware to suit different application requirements.
+ *
+ * @param clock_divider Clock divider value.
+ * @param column_number Number of columns to set for keyscan (maximum 8).
+ * @param row_number Number of rows to set for keyscan (maximum 6).
+ * @param scan_delay Scan delay.
+ * @param debounce_delay Debounce delay.
+ * @param stable_delay Stable delay.
+ * @param single_press_enable Enable Single Press feature.
+ * @param auto_start_enable Enable auto-start feature.
+ ******************************************************************************/
 typedef struct {
   uint32_t            clock_divider;       ///< Clock divider value.
   uint8_t             column_number;       ///< Number of columns to set for keyscan (maximum 8).
@@ -114,21 +133,41 @@ typedef struct {
 void sl_hal_keyscan_init(const sl_hal_keyscan_config_t *p_config);
 
 /***************************************************************************//**
- * Enables KEYSCAN module.
+ * @brief This function is used to enable the KEYSCAN module, which is typically
+ * required before starting any key scanning operations. It ensures that
+ * the module is ready by waiting for any ongoing synchronization
+ * processes to complete before enabling it. This function should be
+ * called after the module has been initialized and configured, and
+ * before any scanning operations are initiated. It does not return any
+ * value and does not require any parameters.
+ *
+ * @return None
  ******************************************************************************/
 void sl_hal_keyscan_enable(void);
 
 /***************************************************************************//**
- * Disables KEYSCAN module.
+ * @brief This function is used to disable the KEYSCAN peripheral module. It
+ * should be called when the key scanning functionality is no longer
+ * needed or before reconfiguring the module. The function first checks
+ * if the module is already disabled and exits immediately if so. If the
+ * module is running, it stops the scan and waits for any ongoing
+ * synchronization to complete before disabling the module. Note that the
+ * function does not wait for the disabling process to finish before
+ * returning; use `sl_hal_keyscan_wait_ready` to ensure the module is
+ * fully disabled.
  *
- * @note The disabling of the module could take some time. This function will
- *       not wait for the disabling to finish before returning. Use the function
- *       sl_hal_keyscan_wait_ready to wait for the module to be fully disable.
+ * @return None
  ******************************************************************************/
 void sl_hal_keyscan_disable(void);
 
 /***************************************************************************//**
- * Waits for the KEYSCAN to complete reseting or disabling procedure.
+ * @brief The `sl_hal_keyscan_wait_ready` function waits for the KEYSCAN
+ * peripheral to complete its reset, disable, or synchronization
+ * operations before proceeding.
+ *
+ * @return The function does not return any value; it simply ensures that the
+ * KEYSCAN peripheral is ready by waiting for certain conditions to be
+ * cleared.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_wait_ready(void)
 {
@@ -138,8 +177,12 @@ __STATIC_INLINE void sl_hal_keyscan_wait_ready(void)
 }
 
 /***************************************************************************//**
- * Waits for the KEYSCAN to complete all synchronization of register changes
- * and commands.
+ * @brief The `sl_hal_keyscan_wait_sync` function waits for the KEYSCAN
+ * peripheral to complete all synchronization of register changes and
+ * commands.
+ *
+ * @return The function does not return any value or output; it simply ensures
+ * that the synchronization process is complete before proceeding.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_wait_sync(void)
 {
@@ -149,13 +192,11 @@ __STATIC_INLINE void sl_hal_keyscan_wait_sync(void)
 }
 
 /***************************************************************************//**
- * Starts KEYSCAN scan.
+ * @brief The `sl_hal_keyscan_start_scan` function initiates a key scanning
+ * process by sending a start command to the KEYSCAN peripheral after
+ * ensuring synchronization and readiness.
  *
- * @note This function will send a start command to the KEYSCAN peripheral.
- *       The sl_hal_keyscan_wait_sync function can be used to wait for the start
- *       command to be executed.
- *
- * @note This function requires the KEYSCAN to be enabled.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_start_scan(void)
 {
@@ -165,13 +206,11 @@ __STATIC_INLINE void sl_hal_keyscan_start_scan(void)
 }
 
 /***************************************************************************//**
- * Stops the KEYSCAN scan.
+ * @brief The `sl_hal_keyscan_stop_scan` function stops the key scanning process
+ * by issuing a stop command to the KEYSCAN peripheral after ensuring all
+ * previous operations are synchronized.
  *
- * @note This function will send a stop command to the KEYSCAN peripheral.
- *       The sl_hal_keyscan_wait_sync function can be used to wait for the stop
- *       command to be executed.
- *
- * @note This function requires the KEYSCAN to be enabled.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_stop_scan(void)
 {
@@ -181,18 +220,25 @@ __STATIC_INLINE void sl_hal_keyscan_stop_scan(void)
 }
 
 /***************************************************************************//**
- * Restores KEYSCAN to its reset state.
+ * @brief Use this function to reset the KEYSCAN peripheral, ensuring it is in a
+ * known state. This is useful when you need to reinitialize the
+ * peripheral or recover from an error state. The function stops any
+ * ongoing scan, enables the peripheral, waits for synchronization, and
+ * issues a software reset command. It does not wait for the reset to
+ * complete; use `sl_hal_keyscan_wait_ready` if you need to ensure the
+ * reset has finished before proceeding.
  *
- * @note The resetting of the module could take some time. This function will
- *       not wait for the resetting to finish before returning. Use the function
- *       sl_hal_keyscan_wait_ready to wait for the module to be fully reset.
+ * @return None
  ******************************************************************************/
 void sl_hal_keyscan_reset(void);
 
 /***************************************************************************//**
- * Gets KEYSCAN STATUS register value.
+ * @brief The `sl_hal_keyscan_get_status` function retrieves the current status
+ * of the KEYSCAN peripheral by returning the value of its STATUS
+ * register.
  *
- * @return  Current STATUS register value.
+ * @return The function returns a `uint32_t` value representing the current
+ * contents of the KEYSCAN STATUS register.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_keyscan_get_status(void)
 {
@@ -200,15 +246,14 @@ __STATIC_INLINE uint32_t sl_hal_keyscan_get_status(void)
 }
 
 /***************************************************************************//**
- * Enables one or more KEYSCAN interrupts.
+ * @brief The function `sl_hal_keyscan_enable_interrupts` enables specified
+ * KEYSCAN interrupt sources by setting the corresponding bits in the
+ * KEYSCAN interrupt enable register.
  *
- * @note  Depending on the use, a pending interrupt may already be set prior to
- *        enabling the interrupt. To ignore a pending interrupt, consider using
- *        sl_hal_keyscan_clear_interrupts prior to enabling the interrupt.
- *
- * @param[in] flags   KEYSCAN interrupt sources to enable.
- *                    Use a set of interrupt flags OR-ed together to set
- *                    multiple interrupt sources.
+ * @param flags A 32-bit unsigned integer representing the KEYSCAN interrupt
+ * sources to enable, where each bit corresponds to a specific
+ * interrupt source.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_enable_interrupts(uint32_t flags)
 {
@@ -216,11 +261,15 @@ __STATIC_INLINE void sl_hal_keyscan_enable_interrupts(uint32_t flags)
 }
 
 /***************************************************************************//**
- * Disables one or more KEYSCAN interrupts.
+ * @brief The function `sl_hal_keyscan_disable_interrupts` disables specified
+ * KEYSCAN interrupts by clearing the corresponding interrupt enable
+ * bits.
  *
- * @param[in] flags   KEYSCAN interrupt sources to disable.
- *                    Use a set of interrupt flags OR-ed together to disable
- *                    multiple interrupt sources.
+ * @param flags A 32-bit unsigned integer representing the KEYSCAN interrupt
+ * sources to disable, where each bit corresponds to a specific
+ * interrupt source.
+ * @return The function does not return any value; it performs a hardware
+ * register operation to disable interrupts.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_disable_interrupts(uint32_t flags)
 {
@@ -228,11 +277,15 @@ __STATIC_INLINE void sl_hal_keyscan_disable_interrupts(uint32_t flags)
 }
 
 /***************************************************************************//**
- * Clears one or more pending KEYSCAN interrupts.
+ * @brief The `sl_hal_keyscan_clear_interrupts` function clears specified
+ * pending interrupts for the KEYSCAN peripheral by writing to the
+ * interrupt flag clear register.
  *
- * @param[in] flags   KEYSCAN interrupt sources to clear.
- *                    Use a set of interrupt flags OR-ed together to clear
- *                    multiple interrupt sources.
+ * @param flags A 32-bit unsigned integer representing the KEYSCAN interrupt
+ * sources to clear, typically a set of interrupt flags OR-ed
+ * together.
+ * @return The function does not return any value; it performs a hardware
+ * register operation to clear interrupts.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_clear_interrupts(uint32_t flags)
 {
@@ -240,13 +293,11 @@ __STATIC_INLINE void sl_hal_keyscan_clear_interrupts(uint32_t flags)
 }
 
 /***************************************************************************//**
- * Gets pending KEYSCAN interrupt flags.
+ * @brief The function `sl_hal_keyscan_get_interrupts` retrieves the current
+ * pending interrupt flags from the KEYSCAN peripheral.
  *
- * @note  Event bits are not cleared by using this function.
- *
- * @return  Pending KEYSCAN interrupt sources.
- *          Returns a set of interrupt flags OR-ed together for multiple
- *          interrupt sources.
+ * @return The function returns a `uint32_t` value representing the pending
+ * interrupt flags from the KEYSCAN peripheral.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_keyscan_get_interrupts(void)
 {
@@ -254,15 +305,13 @@ __STATIC_INLINE uint32_t sl_hal_keyscan_get_interrupts(void)
 }
 
 /***************************************************************************//**
- * Gets enabled and pending KEYSCAN interrupt flags.
- * Useful for handling more interrupt sources in the same interrupt handler.
+ * @brief The function `sl_hal_keyscan_get_enabled_interrupts` retrieves the
+ * currently enabled and pending interrupt flags for the KEYSCAN
+ * peripheral.
  *
- * @note  Interrupt flags are not cleared by using this function.
- *
- * @return  Pending and enabled KEYSCAN interrupt sources.
- *          The return value is the bitwise AND of
- *          - the enabled interrupt sources in KEYSCAN_IEN and
- *          - the pending interrupt flags KEYSCAN_IF.
+ * @return The function returns a `uint32_t` value representing the bitwise AND
+ * of the enabled interrupt sources and the pending interrupt flags,
+ * indicating which interrupts are both enabled and pending.
  ******************************************************************************/
 __STATIC_INLINE uint32_t sl_hal_keyscan_get_enabled_interrupts(void)
 {
@@ -270,11 +319,13 @@ __STATIC_INLINE uint32_t sl_hal_keyscan_get_enabled_interrupts(void)
 }
 
 /***************************************************************************//**
- * Sets one or more pending KEYSCAN interrupts from Software.
+ * @brief The function `sl_hal_keyscan_set_interrupts` sets one or more pending
+ * KEYSCAN interrupts using the provided flags.
  *
- * @param[in] flags   KEYSCAN interrupt sources to set to pending.
- *                    Use a set of interrupt flags OR-ed together to set
- *                    multiple interrupt sources.
+ * @param flags A 32-bit unsigned integer representing the KEYSCAN interrupt
+ * sources to set as pending, typically using a set of interrupt
+ * flags OR-ed together.
+ * @return This function does not return any value.
  ******************************************************************************/
 __STATIC_INLINE void sl_hal_keyscan_set_interrupts(uint32_t flags)
 {

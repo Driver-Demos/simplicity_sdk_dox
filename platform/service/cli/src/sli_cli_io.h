@@ -38,35 +38,53 @@ extern "C" {
 #endif
 
 /***************************************************************************//**
- * @brief
- *   Get a character from the standard I/O.
+ * @brief This function is used to read a single character from the standard
+ * input stream. It is typically called when there is a need to process
+ * user input or data from the standard input. The function will return
+ * the character read if successful, or EOF if no character is available
+ * or an error occurs. It is important to check the return value to
+ * handle cases where EOF is returned, indicating that no character could
+ * be read.
  *
- * @return
- *   Returns the input character or EOF if no character is available.
+ * @return Returns the input character as an integer, or EOF if no character is
+ * available or an error occurs.
  ******************************************************************************/
 int sli_cli_io_getchar(void);
 
 /***************************************************************************//**
- * @brief
- *   Put a character to the standard I/O.
+ * @brief This function is used to send a single character to the standard
+ * output stream. It is typically called when there is a need to output
+ * characters individually, such as in low-level I/O operations or when
+ * implementing custom output functions. The function should be used when
+ * the standard output stream is properly initialized and available. It
+ * returns the character on success, allowing the caller to verify the
+ * output operation, or EOF if an error occurs, indicating that the
+ * character could not be output.
  *
- * @param[in] ch
- *   The character that will be output.
- *
- * @return
- *   Returns the character or EOF if an error occurs.
+ * @param ch The character to be output. It is an integer value representing the
+ * character to be sent to the standard output. The function expects a
+ * valid character value and does not perform any validation on the
+ * input.
+ * @return Returns the character if successful, or EOF if an error occurs during
+ * the output operation.
  ******************************************************************************/
 int sli_cli_io_putchar(int ch);
 
 /***************************************************************************//**
- * @brief
- *   Print a string to the standard I./O using printf compatible parameters.
+ * @brief This function is used to output a formatted string to the standard
+ * input/output stream, similar to the standard printf function. It
+ * should be used when you need to display formatted text to the console
+ * or a similar output device. The function takes a format string
+ * followed by a variable number of arguments, which are used to format
+ * the output. It is important to ensure that the format string and the
+ * arguments match in type and number to avoid undefined behavior. The
+ * function always returns 0, indicating successful execution.
  *
- * @param[in] format
- *   A pointer to the string that will be output.
- *
- * @return
- *   Returns 0.
+ * @param format A pointer to a null-terminated string that specifies how
+ * subsequent arguments are converted for output. The format
+ * string must not be null, and it should follow the same rules as
+ * the standard printf format strings.
+ * @return Returns 0, indicating successful execution.
  ******************************************************************************/
 int sli_cli_io_printf(const char *format, ...);
 

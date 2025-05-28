@@ -41,7 +41,94 @@
  * @brief EFR32MG24 VDAC Register Declaration.
  *****************************************************************************/
 
-/** VDAC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `VDAC_TypeDef` structure represents the register layout for a
+ * Voltage Digital-to-Analog Converter (VDAC) in the EFR32MG24
+ * microcontroller. It includes registers for controlling and configuring
+ * the VDAC, such as enabling the module, performing software resets,
+ * configuring channels, and managing interrupts. The structure also
+ * provides set, clear, and toggle versions of these registers to
+ * facilitate bit manipulation. Additionally, it contains reserved spaces
+ * for future expansion, ensuring compatibility with future updates or
+ * enhancements.
+ *
+ * @param IPVERSION Holds the IP version of the VDAC.
+ * @param EN Controls the module enable state.
+ * @param SWRST Software reset register for the VDAC.
+ * @param CFG Configuration register for the VDAC.
+ * @param STATUS Indicates the current status of the VDAC.
+ * @param CH0CFG Configuration register for channel 0.
+ * @param CH1CFG Configuration register for channel 1.
+ * @param CMD Command register for issuing commands to the VDAC.
+ * @param IF Interrupt flag register for the VDAC.
+ * @param IEN Interrupt enable register for the VDAC.
+ * @param CH0F Data write FIFO for channel 0.
+ * @param CH1F Data write FIFO for channel 1.
+ * @param OUTCTRL Controls the DAC output.
+ * @param OUTTIMERCFG Configuration register for the DAC output timer.
+ * @param RESERVED0 Reserved for future use.
+ * @param RESERVED1 Reserved for future use.
+ * @param RESERVED2 Reserved for future use.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param IPVERSION_SET Set version of the IPVERSION register.
+ * @param EN_SET Set version of the module enable register.
+ * @param SWRST_SET Set version of the software reset register.
+ * @param CFG_SET Set version of the configuration register.
+ * @param STATUS_SET Set version of the status register.
+ * @param CH0CFG_SET Set version of the channel 0 config register.
+ * @param CH1CFG_SET Set version of the channel 1 config register.
+ * @param CMD_SET Set version of the command register.
+ * @param IF_SET Set version of the interrupt flag register.
+ * @param IEN_SET Set version of the interrupt enable register.
+ * @param CH0F_SET Set version of the channel 0 data write FIFO.
+ * @param CH1F_SET Set version of the channel 1 data write FIFO.
+ * @param OUTCTRL_SET Set version of the DAC output control.
+ * @param OUTTIMERCFG_SET Set version of the DAC output timer config register.
+ * @param RESERVED5 Reserved for future use.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param IPVERSION_CLR Clear version of the IPVERSION register.
+ * @param EN_CLR Clear version of the module enable register.
+ * @param SWRST_CLR Clear version of the software reset register.
+ * @param CFG_CLR Clear version of the configuration register.
+ * @param STATUS_CLR Clear version of the status register.
+ * @param CH0CFG_CLR Clear version of the channel 0 config register.
+ * @param CH1CFG_CLR Clear version of the channel 1 config register.
+ * @param CMD_CLR Clear version of the command register.
+ * @param IF_CLR Clear version of the interrupt flag register.
+ * @param IEN_CLR Clear version of the interrupt enable register.
+ * @param CH0F_CLR Clear version of the channel 0 data write FIFO.
+ * @param CH1F_CLR Clear version of the channel 1 data write FIFO.
+ * @param OUTCTRL_CLR Clear version of the DAC output control.
+ * @param OUTTIMERCFG_CLR Clear version of the DAC output timer config register.
+ * @param RESERVED10 Reserved for future use.
+ * @param RESERVED11 Reserved for future use.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param IPVERSION_TGL Toggle version of the IPVERSION register.
+ * @param EN_TGL Toggle version of the module enable register.
+ * @param SWRST_TGL Toggle version of the software reset register.
+ * @param CFG_TGL Toggle version of the configuration register.
+ * @param STATUS_TGL Toggle version of the status register.
+ * @param CH0CFG_TGL Toggle version of the channel 0 config register.
+ * @param CH1CFG_TGL Toggle version of the channel 1 config register.
+ * @param CMD_TGL Toggle version of the command register.
+ * @param IF_TGL Toggle version of the interrupt flag register.
+ * @param IEN_TGL Toggle version of the interrupt enable register.
+ * @param CH0F_TGL Toggle version of the channel 0 data write FIFO.
+ * @param CH1F_TGL Toggle version of the channel 1 data write FIFO.
+ * @param OUTCTRL_TGL Toggle version of the DAC output control.
+ * @param OUTTIMERCFG_TGL Toggle version of the DAC output timer config
+ * register.
+ * @param RESERVED15 Reserved for future use.
+ * @param RESERVED16 Reserved for future use.
+ * @param RESERVED17 Reserved for future use.
+ * @param RESERVED18 Reserved for future use.
+ ******************************************************************************/
 typedef struct vdac_typedef{
   __IM uint32_t  IPVERSION;                     /**< IPVERSION                                          */
   __IOM uint32_t EN;                            /**< Module Enable                                      */

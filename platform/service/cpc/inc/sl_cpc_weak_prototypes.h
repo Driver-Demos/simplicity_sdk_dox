@@ -51,8 +51,16 @@ extern "C"
 
 #if defined(SL_CATALOG_CPC_SECONDARY_PRESENT) || defined(DOXYGEN)
 /***************************************************************************//**
- * Called when secondary app version is requested.
- * The format is up to the user. The string should be null terminated.
+ * @brief This function provides the version string of the secondary
+ * application, which is expected to be a null-terminated string. It is
+ * intended to be implemented by the user to return a meaningful version
+ * identifier. If not implemented, it defaults to returning "UNDEFINED".
+ * This function is typically used in systems where version tracking or
+ * compatibility checks between primary and secondary applications are
+ * necessary.
+ *
+ * @return A null-terminated string representing the secondary application's
+ * version, or "UNDEFINED" if not implemented.
  ******************************************************************************/
 const char* sl_cpc_secondary_app_version(void);
 #endif
@@ -60,14 +68,16 @@ const char* sl_cpc_secondary_app_version(void);
 #if defined(SL_CATALOG_CPC_PRIMARY_PRESENT) || defined(DOXYGEN)
 
 /***************************************************************************//**
- * Called when primary app version is requested.
- * The format is up to the user. The string should be null terminated.
+ * @brief Use this function to retrieve the version string of the primary
+ * application in a CPC setup. It is intended to be called when the
+ * primary application version is needed, and the format of the returned
+ * string is determined by the user. By default, if not overridden, it
+ * returns "UNDEFINED". Users should provide their own implementation to
+ * return a meaningful version string, ensuring it is null-terminated and
+ * static.
  *
- * @note : CPC source code contains a weak definition that default to returning
- *         "UNDEFINED". If the user provides a strong definition of this function,
- *         the user shall return a static string.
- *
- * @return : String that represents the application version.
+ * @return A null-terminated string representing the primary application
+ * version.
  ******************************************************************************/
 const char* sl_cpc_primary_app_version(void);
 

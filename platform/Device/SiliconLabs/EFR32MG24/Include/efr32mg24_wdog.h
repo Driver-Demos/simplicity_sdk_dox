@@ -41,7 +41,60 @@
  * @brief EFR32MG24 WDOG Register Declaration.
  *****************************************************************************/
 
-/** WDOG Register Declaration. */
+/***************************************************************************//**
+ * @brief The `WDOG_TypeDef` structure represents the register layout for the
+ * Watchdog Timer (WDOG) in the EFR32MG24 microcontroller. It includes
+ * various registers for controlling and monitoring the watchdog timer,
+ * such as enabling/disabling the timer, configuring its behavior,
+ * issuing commands, and handling interrupts. The structure also includes
+ * reserved spaces for future use and multiple versions of each register
+ * for set, clear, and toggle operations, allowing for flexible
+ * manipulation of the watchdog timer's state.
+ *
+ * @param IPVERSION IP Version Register.
+ * @param EN Enable Register.
+ * @param CFG Configuration Register.
+ * @param CMD Command Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param LOCK Lock Register.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET IP Version Register.
+ * @param EN_SET Enable Register.
+ * @param CFG_SET Configuration Register.
+ * @param CMD_SET Command Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param LOCK_SET Lock Register.
+ * @param SYNCBUSY_SET Synchronization Busy Register.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR IP Version Register.
+ * @param EN_CLR Enable Register.
+ * @param CFG_CLR Configuration Register.
+ * @param CMD_CLR Command Register.
+ * @param RESERVED4 Reserved for future use.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param LOCK_CLR Lock Register.
+ * @param SYNCBUSY_CLR Synchronization Busy Register.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL IP Version Register.
+ * @param EN_TGL Enable Register.
+ * @param CFG_TGL Configuration Register.
+ * @param CMD_TGL Command Register.
+ * @param RESERVED6 Reserved for future use.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param LOCK_TGL Lock Register.
+ * @param SYNCBUSY_TGL Synchronization Busy Register.
+ ******************************************************************************/
 typedef struct wdog_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP Version Register                                */
   __IOM uint32_t EN;                            /**< Enable Register                                    */

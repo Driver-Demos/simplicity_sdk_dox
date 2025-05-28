@@ -73,6 +73,21 @@ extern "C" {
  ******************************************************************************/
 
 /// A Simple BUTTON instance
+/***************************************************************************//**
+ * @brief The `sl_simple_button_context_t` structure is used to represent the
+ * context of a simple button in the Simple Button Driver module. It
+ * contains information about the current state of the button, a history
+ * of its states, the port and pin it is connected to, and the mode of
+ * operation. This structure is essential for managing button
+ * interactions, allowing the driver to track button states and handle
+ * input events appropriately.
+ *
+ * @param state Current button state.
+ * @param history History of button states.
+ * @param port Button port.
+ * @param pin Button pin.
+ * @param mode Mode of operation.
+ ******************************************************************************/
 typedef struct {
   sl_button_state_t     state;          ///< Current button state
   uint16_t              history;        ///< History of button states
@@ -86,49 +101,94 @@ typedef struct {
  ******************************************************************************/
 
 /***************************************************************************//**
- * Initialize the simple button driver.
+ * @brief This function initializes a simple button driver for a specified
+ * button handle. It must be called before any other operations on the
+ * button to ensure proper configuration. The function sets up the GPIO
+ * pin associated with the button and configures it for either polling or
+ * interrupt mode based on the button's mode setting. If the button is
+ * set to interrupt mode, the function attempts to configure the
+ * necessary interrupts. The function returns a status code indicating
+ * success or failure of the initialization process.
  *
- * @param[in] handle           Pointer to button handle:
- *                                - sl_button_t
- *
- * @return    Status Code:
- *              - SL_STATUS_OK
+ * @param handle Pointer to a sl_button_t structure representing the button to
+ * be initialized. The handle must not be null, and it should
+ * point to a valid button configuration. The caller retains
+ * ownership of the handle.
+ * @return Returns an sl_status_t status code indicating the success or failure
+ * of the initialization process. SL_STATUS_OK is returned on successful
+ * initialization.
  ******************************************************************************/
 sl_status_t sl_simple_button_init(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Get the current state of the simple button.
+ * @brief This function is used to obtain the current state of a simple button,
+ * which can be either pressed or released. It is essential to call this
+ * function with a valid button handle, which should have been
+ * initialized using the appropriate initialization function. The
+ * function is useful in scenarios where the button's state needs to be
+ * checked, such as in event-driven applications or polling loops. Ensure
+ * that the handle provided is not null and points to a valid button
+ * instance to avoid undefined behavior.
  *
- * @param[in] handle           Pointer to button handle:
- *                                - sl_button_t
- *
- * @return    Button State:     Current state of the button
- *              - SL_SIMPLE_BUTTON_PRESSED
- *              - SL_SIMPLE_BUTTON_RELEASED
+ * @param handle Pointer to a button handle of type sl_button_t. Must not be
+ * null and should point to a valid, initialized button instance.
+ * If the handle is invalid, the behavior is undefined.
+ * @return Returns the current state of the button, which can be
+ * SL_SIMPLE_BUTTON_PRESSED or SL_SIMPLE_BUTTON_RELEASED.
  ******************************************************************************/
 sl_button_state_t sl_simple_button_get_state(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Poll the simple button. (button mode - poll / poll and debonuce)
+ * @brief This function is used to poll the state of a simple button, updating
+ * its internal state based on the current input from the button's GPIO
+ * pin. It should be called periodically when the button is configured in
+ * polling mode or polling with debounce mode. The function does nothing
+ * if the button is disabled. It is important to ensure that the button
+ * handle provided is valid and properly initialized before calling this
+ * function.
  *
- * @param[in] handle           Pointer to button handle:
- *                                - sl_button_t
+ * @param handle A pointer to a sl_button_t structure representing the button to
+ * be polled. The handle must not be null and should point to a
+ * valid, initialized button instance. If the button is disabled,
+ * the function will return immediately without making any
+ * changes.
+ * @return None
  ******************************************************************************/
 void sl_simple_button_poll_step(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Enable the simple button.
+ * @brief This function is used to enable a simple button that is currently in a
+ * disabled state. It should be called when you want to reactivate a
+ * button that has been previously disabled, allowing it to register
+ * input events again. The function checks the current state of the
+ * button and only performs the enabling process if the button is indeed
+ * disabled. It clears the button's history and reinitializes it to
+ * ensure it is ready for use. This function must be called with a valid
+ * button handle, and it assumes that the button has been properly
+ * initialized before being disabled.
  *
- * @param[in] handle           Pointer to button handle:
- *                                - sl_button_t
+ * @param handle A pointer to an sl_button_t structure representing the button
+ * to be enabled. The handle must not be null and should point to
+ * a valid button instance. If the button is not in a disabled
+ * state, the function will return immediately without making any
+ * changes.
+ * @return None
  ******************************************************************************/
 void sl_simple_button_enable(const sl_button_t *handle);
 
 /***************************************************************************//**
- * Disable the simple button.
+ * @brief Use this function to disable a simple button, preventing it from
+ * generating further input events. This is useful when you want to
+ * temporarily ignore button presses, such as during a critical operation
+ * or when the button is not needed. The function should be called with a
+ * valid button handle, and it will have no effect if the button is
+ * already disabled. If the button is configured to use interrupts, the
+ * function will also deconfigure the associated external interrupt.
  *
- * @param[in] handle           Pointer to button handle:
- *                                - sl_button_t
+ * @param handle Pointer to a valid sl_button_t structure representing the
+ * button to be disabled. Must not be null. The function will not
+ * perform any action if the button is already disabled.
+ * @return None
  ******************************************************************************/
 void sl_simple_button_disable(const sl_button_t *handle);
 

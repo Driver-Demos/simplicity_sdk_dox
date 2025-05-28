@@ -85,12 +85,21 @@ extern "C" {
 /// Bitmask of outputs to operate on.
 typedef uint32_t sl_coulomb_counter_output_mask_t;
 
-/**
- * @brief Coulomb counter prescaler enum.
+/***************************************************************************//**
+ * @brief The `sl_coulomb_counter_prescaler_t` is an enumeration that defines
+ * different prescaler settings for a Coulomb counter. Each enumerator
+ * represents a specific prescaler value, which affects the resolution of
+ * the counter by determining how many pulse-frequency modulation (PFM)
+ * pulses are counted per unit of charge. The prescaler setting is
+ * crucial for calibrating the counter to accurately measure the charge
+ * passing through a system, as it influences the calculation of charge-
+ * per-pulse (CPP) values.
  *
- * Each count in the counter results registers represents
- * 2^(16 - 2 * prescaler).
- */
+ * @param SL_COULOMB_COUNTER_PRESCALER_ZERO Set prescaler to 0.
+ * @param SL_COULOMB_COUNTER_PRESCALER_ONE Set prescaler to 1.
+ * @param SL_COULOMB_COUNTER_PRESCALER_TWO Set prescaler to 2.
+ * @param SL_COULOMB_COUNTER_PRESCALER_THREE Set prescaler to 3.
+ ******************************************************************************/
 typedef enum {
   SL_COULOMB_COUNTER_PRESCALER_ZERO,  ///< Set prescaler to 0.
   SL_COULOMB_COUNTER_PRESCALER_ONE,   ///< Set prescaler to 1.
@@ -98,12 +107,20 @@ typedef enum {
   SL_COULOMB_COUNTER_PRESCALER_THREE, ///< Set prescaler to 3.
 } sl_coulomb_counter_prescaler_t;
 
-/**
- * @brief Coulomb counter threshold for counter full interrupt enum.
+/***************************************************************************//**
+ * @brief The `sl_coulomb_counter_threshold_t` is an enumeration that defines
+ * various threshold levels for the Coulomb counter's full interrupt,
+ * expressed as percentages. These thresholds determine when the
+ * interrupt will be triggered based on the percentage of the counter's
+ * capacity that has been reached. This allows for configurable alerting
+ * when the counter approaches its full capacity, enabling timely actions
+ * to be taken in response to the counter's status.
  *
- * Expressed in percentage, the interrupt full interrupt will be raised (if
- * unmasked) when at least one of the counters reaches that threshold.
- */
+ * @param SL_COULOMB_COUNTER_THRESHOLD_50 Set threshold to 50%.
+ * @param SL_COULOMB_COUNTER_THRESHOLD_62 Set threshold to 62.5%.
+ * @param SL_COULOMB_COUNTER_THRESHOLD_75 Set threshold to 75%.
+ * @param SL_COULOMB_COUNTER_THRESHOLD_87 Set threshold to 87.5%.
+ ******************************************************************************/
 typedef enum {
   SL_COULOMB_COUNTER_THRESHOLD_50,  ///< Set threshold to 50%.
   SL_COULOMB_COUNTER_THRESHOLD_62,  ///< Set threshold to 62.5%.
@@ -112,6 +129,24 @@ typedef enum {
 } sl_coulomb_counter_threshold_t;
 
 /// @brief Coulomb counter calibration status enum.
+/***************************************************************************//**
+ * @brief The `sl_coulomb_counter_calibration_status_t` is an enumeration that
+ * defines the various states of the calibration process for a Coulomb
+ * counter. It includes states for when an error occurs, when calibration
+ * is ongoing, when specific peak current settings are required for
+ * different energy modes (EM0 and EM2), and when the calibration process
+ * is complete. This enum is used to track and manage the calibration
+ * status within the Coulomb counter driver API.
+ *
+ * @param SL_COULOMB_COUNTER_CALIBRATION_ERROR An error occurred during
+ * calibration.
+ * @param SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS Calibration is in progress.
+ * @param SL_COULOMB_COUNTER_CALIBRATION_PEAK_CURRENT_EM0 User must set peak
+ * current to EM0 value.
+ * @param SL_COULOMB_COUNTER_CALIBRATION_PEAK_CURRENT_EM2 User must set peak
+ * current to EM2 value.
+ * @param SL_COULOMB_COUNTER_CALIBRATION_DONE Calibration is done.
+ ******************************************************************************/
 typedef enum {
   SL_COULOMB_COUNTER_CALIBRATION_ERROR,             ///< An error occured during calibration.
   SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS,       ///< Calibration is in progress.
@@ -125,242 +160,265 @@ typedef enum {
  ******************************************************************************/
 
 /***************************************************************************//**
- * @brief
- *   Enable interrupt.
+ * @brief This function is used to enable a specific interrupt flag for the
+ * Coulomb counter, allowing the system to respond to certain events. It
+ * should be called when you want to start monitoring a particular
+ * condition indicated by the interrupt flag. Ensure that the flag
+ * provided is valid and corresponds to a defined interrupt condition.
+ * The function returns a status code indicating success or failure,
+ * which should be checked to ensure the operation was successful.
  *
- * @param[in] flag
- *   Interrupt flag to be enabled.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param flag An 8-bit unsigned integer representing the interrupt flag to be
+ * enabled. Valid values are specific interrupt flags defined in the
+ * API, such as SL_COULOMB_COUNTER_INT_CALIBRATION_DONE or
+ * SL_COULOMB_COUNTER_INT_COUNTER_FULL. Providing an invalid flag
+ * may result in an error status.
+ * @return Returns an sl_status_t value, which is 0 if the operation is
+ * successful or an error code if it fails.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_int_enable(uint8_t flag);
 
 /***************************************************************************//**
- * @brief
- *   Disable interrupt.
+ * @brief Use this function to disable a specific interrupt associated with the
+ * Coulomb counter by providing the appropriate interrupt flag. This is
+ * useful when you want to prevent the interrupt from triggering further
+ * actions in your application. Ensure that the flag provided corresponds
+ * to a valid interrupt type for the Coulomb counter. The function
+ * returns a status code indicating success or failure, which should be
+ * checked to ensure the operation was successful.
  *
- * @param[in] flag
- *   Interrupt flag to be disabled.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param flag An 8-bit unsigned integer representing the interrupt flag to be
+ * disabled. Valid flags are defined in the API, such as
+ * SL_COULOMB_COUNTER_INT_CALIBRATION_DONE or
+ * SL_COULOMB_COUNTER_INT_COUNTER_FULL. Providing an invalid flag
+ * may result in an error status.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * operation. A return value of 0 indicates success, while any other
+ * value indicates an error.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_int_disable(uint8_t flag);
 
 /***************************************************************************//**
- * @brief
- *   Check if interrupt flag is set.
+ * @brief This function checks whether a given interrupt flag is currently set
+ * and stores the result in a boolean variable. It is useful for
+ * determining the status of specific interrupts in the Coulomb Counter
+ * system. The function should be called with a valid interrupt flag and
+ * a non-null pointer to a boolean variable where the result will be
+ * stored. It is important to ensure that the pointer provided for the
+ * result is valid and writable.
  *
- * @param[in] flag
- *   Interrupt flag to be checked.
- *
- * @param[out] is_set
- *   Boolean with result.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param flag An 8-bit unsigned integer representing the interrupt flag to be
+ * checked. Valid values are specific interrupt flags defined in the
+ * API, such as SL_COULOMB_COUNTER_INT_CALIBRATION_DONE or
+ * SL_COULOMB_COUNTER_INT_COUNTER_FULL.
+ * @param is_set A pointer to a boolean variable where the result will be
+ * stored. Must not be null. The function writes 'true' if the
+ * interrupt flag is set, otherwise 'false'.
+ * @return Returns an sl_status_t value indicating success or an error code if
+ * the operation fails.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_int_is_set(uint8_t flag, bool *is_set);
 
 /***************************************************************************//**
- * @brief
- *   Clear interrupt flag.
+ * @brief Use this function to clear a specific interrupt flag associated with
+ * the Coulomb counter. This is typically done after handling an
+ * interrupt to reset the flag and prepare for future interrupts. Ensure
+ * that the flag parameter corresponds to a valid interrupt flag defined
+ * for the Coulomb counter. The function returns a status code indicating
+ * success or an error, which should be checked to ensure the operation
+ * was successful.
  *
- * @param[in] flag
- *   Interrupt flag to be checked.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param flag An 8-bit unsigned integer representing the interrupt flag to be
+ * cleared. Valid values are specific interrupt flags defined for
+ * the Coulomb counter, such as
+ * SL_COULOMB_COUNTER_INT_CALIBRATION_DONE or
+ * SL_COULOMB_COUNTER_INT_COUNTER_FULL. Passing an invalid flag may
+ * result in an error status.
+ * @return Returns an sl_status_t value indicating the success or failure of the
+ * operation. A return value of 0 indicates success, while any other
+ * value indicates an error.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_int_clear(uint8_t flag);
 
 /***************************************************************************//**
- * @brief
- *   Initialize Coulomb counter peripheral.
+ * @brief This function prepares the Coulomb counter peripheral for operation by
+ * setting up necessary configurations and initializing internal
+ * structures. It must be called before any other Coulomb counter
+ * operations to ensure the peripheral is properly configured. The
+ * function checks for available outputs and initializes them for
+ * measurement. If any output initialization fails, the function returns
+ * an error status. This function should be used at the start of any
+ * sequence involving Coulomb counting to ensure the peripheral is ready
+ * for use.
  *
- * @return
- *   0 if successful, error code otherwise.
+ * @return Returns SL_STATUS_OK if initialization is successful, or an error
+ * code if it fails.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_init(void);
 
 /***************************************************************************//**
- * @brief
- *   Start counting coulombs.
+ * @brief This function initiates the Coulomb counting process, provided that
+ * all selected outputs have been calibrated. It should be called after
+ * the initialization and calibration of the Coulomb counter. If any
+ * output is not calibrated, the function will fail and return an error
+ * status. Once started, the counter will begin measuring the charge
+ * passing through the outputs. Calibration is not allowed while the
+ * counter is running, so ensure all necessary calibrations are completed
+ * beforehand.
  *
- * @details
- *   This starts the coulomb counter. Outputs selected for measurements must be
- *   calibrated when this function is called, or it will fail. When counting,
- *   calibration is not permitted.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @return Returns SL_STATUS_OK if the counter starts successfully, or an error
+ * code if it fails, such as when outputs are not calibrated.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_start(void);
 
 /***************************************************************************//**
- * @brief
- *   Stop counting coulombs.
+ * @brief This function halts the operation of the coulomb counter, which is
+ * necessary before performing certain operations like calibration. It
+ * should be called when you need to stop counting coulombs, for
+ * instance, to prepare for recalibration or to conserve power. Ensure
+ * that the counter is running before calling this function to avoid
+ * unnecessary operations.
  *
- * @details
- *   This stops the coulomb counter. Note that the counter must be stopped
- *   before calling @ref sl_coulomb_counter_calibrate().
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @return Returns a status code indicating success or failure of the stop
+ * operation.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_stop(void);
 
 /***************************************************************************//**
- * @brief
- *   Read coulomb counters.
+ * @brief This function reads the coulomb counters for all configured outputs
+ * and identifies which outputs require recalibration. It should be
+ * called periodically to ensure accurate charge measurement, especially
+ * after changes in operating conditions. The function initializes the
+ * outputs_need_calibration_mask to zero and updates it with a mask of
+ * outputs that need recalibration. It returns an error status if reading
+ * any output fails. Ensure that the system is properly initialized and
+ * calibrated before calling this function.
  *
- * @details
- *   Read coulomb counters for all outputs selected via configuration header.
- *   Note that all outputs must be read at once, as counters are automatically
- *   cleared after reading.  Values read are accumulated into internal counters.
- *   Each count in the counters represents 2^(16 - 2 * prescaler) PFM pulses.
- *   This function only reads the counters registers and accumulate these values
- *   with counters stored in the driver, to get the charge, one must call
- *   @ref sl_coulomb_counter_get_charge() or
- *   @ref sl_coulomb_counter_get_total_charge().
- *
- * @warning
- *   Some counters increment slowly, especially when counting in EM2 mode, so if
- *   this function is called in a tight loop, it is possible that it keeps
- *   reading 0 because the number of PFM pulses is never high enough to reach
- *   2^(16 - 2 * prescaler) and because counters are cleared after being read.
- *   That can lead to some PFM cycles not being counted, thus inaccurate
- *   results.
- *
- * @note
- *   Outputs' modes of operation can change between two reads. If that happens,
- *   counters will be accumulated with current calibration settings, and
- *   outputs will be set in the out parameter. Subsequent reads of these
- *   outputs will be skipped until they are recalibrated.
- *
- * @param[out] outputs_need_calibration_mask
- *   Will contain mask of outputs that need to be recalibrated.
- *
- * @return
- *   0 if successful, error code otherwise.
+ * @param outputs_need_calibration_mask A pointer to a variable where the
+ * function will store a bitmask indicating
+ * which outputs need recalibration. Must
+ * not be null, and the caller retains
+ * ownership.
+ * @return Returns an sl_status_t indicating success or an error code if reading
+ * fails. The outputs_need_calibration_mask is updated with outputs that
+ * need recalibration.
  ******************************************************************************/
 sl_status_t sl_coulomb_counter_read(sl_coulomb_counter_output_mask_t *outputs_need_calibration_mask);
 
 /***************************************************************************//**
- * @brief
- *   Return total charge only for selected outputs.
+ * @brief This function calculates and returns the total charge that has passed
+ * through the outputs specified by the provided mask. It should be used
+ * after reading the coulomb counters with the appropriate function to
+ * ensure accurate charge accumulation. The function is useful for
+ * obtaining charge data for specific outputs, especially in systems
+ * where multiple outputs are monitored. Ensure that the outputs have
+ * been properly calibrated and that the counters have been read to
+ * accumulate the necessary data before calling this function.
  *
- * @param[in] outputs_mask
- *   Mask of outputs.
- *
- * @details
- *   Return total charge that has flown through selected outputs. This is
- *   computed using values accumulated via @ref sl_coulomb_counter_read() and
- *   calibration settings.
- *
- * @return
- *   Returns total charge for selected outputs.
+ * @param outputs_mask A bitmask indicating which outputs to include in the
+ * charge calculation. Valid masks are defined in the API
+ * and correspond to specific outputs. The function will sum
+ * the charge for all outputs that match the mask. If an
+ * invalid mask is provided, the function will simply ignore
+ * outputs not represented by the mask.
+ * @return Returns a float representing the total charge for the selected
+ * outputs.
  ******************************************************************************/
 float sl_coulomb_counter_get_charge(sl_coulomb_counter_output_mask_t outputs_mask);
 
 /***************************************************************************//**
- * @brief
- *   Return total charge.
+ * @brief This function retrieves the total charge that has passed through all
+ * outputs selected during the initialization of the Coulomb counter. It
+ * should be used after the Coulomb counter has been properly initialized
+ * and started, and after any necessary calibration has been completed.
+ * This function is useful for obtaining a cumulative charge measurement
+ * across all configured outputs. It is important to ensure that the
+ * Coulomb counter has been reading and accumulating charge data before
+ * calling this function to get meaningful results.
  *
- * @details
- *   Return total charge for all outputs that were selected during initialization.
- *
- * @return
- *   Returns total charge for selected outputs.
+ * @return Returns the total charge for the selected outputs as a floating-point
+ * value.
  ******************************************************************************/
 float sl_coulomb_counter_get_total_charge(void);
 
 /***************************************************************************//**
- * @brief
- *   Return available outputs.
+ * @brief This function provides a bitmask indicating which Coulomb counter
+ * outputs are currently available for use, based on the selected
+ * peripheral configuration. It is useful for determining which outputs
+ * can be monitored or controlled by the Coulomb counter driver. This
+ * function should be called after the peripheral has been initialized to
+ * ensure accurate information about available outputs.
  *
- * @details
- *   Depending on the configuration option, this driver use different
- *   peripherals for Coulomb counting. This function returns outputs that are
- *   available on the selected peripheral.
- *
- * @return
- *   Returns a mask of available outputs for the selected peripheral.
+ * @return Returns a bitmask of type `sl_coulomb_counter_output_mask_t`
+ * representing the available outputs for the selected peripheral.
  ******************************************************************************/
 sl_coulomb_counter_output_mask_t sl_coulomb_counter_outputs_available(void);
 
 /***************************************************************************//**
- * @brief
- *   Return outputs that must be recalibrated.
+ * @brief Use this function to determine which outputs of the Coulomb counter
+ * require recalibration. This is particularly useful after events that
+ * might affect calibration accuracy, such as changes in operating mode
+ * or significant variations in input voltage. The function should be
+ * called when recalibration is suspected to ensure accurate charge
+ * measurements. It returns a bitmask indicating the outputs that need
+ * recalibration, allowing the user to take appropriate action.
  *
- * @details
- *   Some events might require an output to be recalibrated to correctly
- *   measure the charge, for instance, if a DCDC changes its operating mode.
- *
- * @return
- *   Returns a mask of outputs that needs to be recalibrated.
+ * @return Returns a bitmask of outputs that need recalibration.
  ******************************************************************************/
 sl_coulomb_counter_output_mask_t sl_coulomb_counter_outputs_need_calibration(void);
 
 /***************************************************************************//**
- * @brief
- *   Setup calibration for selected outputs.
+ * @brief This function prepares the specified outputs for calibration by
+ * marking them as not calibrated. It must be called when the coulomb
+ * counter is not running, as calibration cannot proceed while the
+ * counter is active. The function checks that the requested outputs were
+ * selected during initialization and returns an error if any unselected
+ * outputs are included. This function is typically used as the first
+ * step in the calibration process to ensure that the outputs are ready
+ * for subsequent calibration steps.
  *
- * @details
- *   Calibrate, or recalibrate, selected outputs. The counter must be off for
- *   calibration to be possible.
- *
- * @warning
- *   During calibration, power consumption of the system must remain stable.
- *
- * @param[in] outputs_mask
- *   A mask of outputs to be calibrated.
- *
- * @return
- *   SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS if successful,
- *   SL_COULOMB_COUNTER_CALIBRATION_ERROR otherwise.
+ * @param outputs_mask A bitmask indicating which outputs to prepare for
+ * calibration. The outputs must have been selected during
+ * initialization, and the function will return an error if
+ * any unselected outputs are included in the mask.
+ * @return Returns SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS if the
+ * initialization is successful, or SL_COULOMB_COUNTER_CALIBRATION_ERROR
+ * if the counter is running or if invalid outputs are specified.
  ******************************************************************************/
 sl_coulomb_counter_calibration_status_t sl_coulomb_counter_calibrate_init(sl_coulomb_counter_output_mask_t outputs_mask);
 
 /***************************************************************************//**
- * @brief
- *   Wait for current step of the calibration routine to complete.
+ * @brief This function is used to wait for the completion of the current step
+ * in the calibration process of the Coulomb counter. It should be called
+ * when the calibration process is in progress, specifically after
+ * `sl_coulomb_counter_calibrate()` returns
+ * `SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS`. This function is
+ * necessary when calibrating in polling mode, as it ensures that the
+ * calibration step is fully completed before proceeding. It is not used
+ * in interrupt mode calibration. The function returns a status
+ * indicating whether the calibration is still in progress or if an error
+ * has occurred.
  *
- * @details
- *   This routine waits for the current calibration step to complete before
- *   returning. When calibrating in polling mode, this function must be called
- *   when @ref sl_coulomb_counter_calibrate() returns
- *   SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS. When calibrating in interrupt
- *   mode, this function is not used.
- *
- * @return
- *   SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS if successful,
- *   SL_COULOMB_COUNTER_CALIBRATION_ERROR otherwise.
+ * @return Returns `SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS` if the
+ * calibration step is successfully completed, or
+ * `SL_COULOMB_COUNTER_CALIBRATION_ERROR` if an error occurs.
  ******************************************************************************/
 sl_coulomb_counter_calibration_status_t sl_coulomb_counter_calibrate_wait(void);
 
 /***************************************************************************//**
- * @brief
- *   Step function for calibration.
+ * @brief This function is used to advance the calibration process of the
+ * coulomb counter. It should be called repeatedly until the calibration
+ * is complete or an error occurs. Calibration cannot be performed while
+ * the counter is running, so ensure the counter is stopped before
+ * calling this function. The function handles different calibration
+ * states and may require the user to adjust peak current settings for
+ * specific energy modes. It returns various status codes to indicate the
+ * current state of the calibration process, including whether it is
+ * complete, in progress, or if an error has occurred.
  *
- * @details
- *   This function is to be called repeatedly either from a loop or from
- *   interrupt handler (when STATUS_G.CCC_ISDONE is set) to iterate over
- *   the calibration process.
- *
- * @warning
- *   During calibration, power consumption of the system must remain stable.
- *
- * @return
- *   SL_COULOMB_COUNTER_CALIBRATION_DONE when calibration is complete; or
- *   SL_COULOMB_COUNTER_CALIBRATION_ERROR in case of error; or
- *   SL_COULOMB_COUNTER_CALIBRATION_PEAK_CURRENT_EM0 or
- *   SL_COULOMB_COUNTER_CALIBRATION_PEAK_CURRENT_EM2 if the peak current must
- *   be changed; or
- *   SL_COULOMB_COUNTER_CALIBRATION_IN_PROGRESS. In last three cases,
- *   @ref sl_coulomb_counter_calibrate() must be called again to
- *   continue the calibration process.
+ * @return Returns a status code indicating the current state of the calibration
+ * process, such as completion, error, or a request to change peak
+ * current settings.
  ******************************************************************************/
 sl_coulomb_counter_calibration_status_t sl_coulomb_counter_calibrate(void);
 

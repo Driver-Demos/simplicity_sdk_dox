@@ -59,18 +59,28 @@ extern "C" {
 void sl_mpu_disable_execute_from_ram(void);
 
 /***************************************************************************//**
- * Configures an address range as non-executable and enable MPU.
+ * @brief This function is used to configure a specified memory address range as
+ * non-executable by setting up a Memory Protection Unit (MPU) region. It
+ * is useful for protecting against code injection attacks by ensuring
+ * that code cannot be executed from the specified memory range. The
+ * function requires the memory region to be at least 32 bytes in size.
+ * It should be called when there is a need to secure a specific memory
+ * region against execution, typically after system initialization. The
+ * function handles overlapping regions and ensures that the MPU is
+ * enabled with the new configuration.
  *
- * @note Configures a MPU region in order to make an address range as
- *       non-executable. The memory region must have a size of at least 32 bytes.
- *
- * @param address_begin Beginning of memory segment.
- *
- * @param address_end   End of memory segment.
- *
- * @param size          Size of memory segment.
- *
- * @return 0 if successful. Error code otherwise.
+ * @param address_begin The starting address of the memory segment to be
+ * configured as non-executable. Must be aligned to 32
+ * bytes.
+ * @param address_end The ending address of the memory segment to be configured
+ * as non-executable. Must be aligned to 32 bytes.
+ * @param size The size of the memory segment. Must be at least 32 bytes. If the
+ * size is less than 32 bytes, the function will not configure the
+ * region.
+ * @return Returns SL_STATUS_OK if the configuration is successful. Returns
+ * SL_STATUS_NO_MORE_RESOURCE if no more MPU regions are available, or
+ * SL_STATUS_INVALID_RANGE if the specified range overlaps with an
+ * existing region.
  ******************************************************************************/
 sl_status_t sl_mpu_disable_execute(uint32_t address_begin,
                                    uint32_t address_end,

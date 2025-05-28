@@ -41,7 +41,74 @@
  * @brief EFR32BG22 BURTC Register Declaration.
  *****************************************************************************/
 
-/** BURTC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `BURTC_TypeDef` is a complex data structure representing the
+ * Backup Real-Time Counter (BURTC) module in the EFR32BG22
+ * microcontroller. It contains multiple registers for controlling and
+ * monitoring the BURTC, including enable, configuration, command,
+ * status, interrupt flags, and counter value registers. The structure
+ * also includes set, clear, and toggle variants of these registers,
+ * allowing for atomic operations. Reserved fields are included for
+ * future expansion. This structure is crucial for managing the BURTC's
+ * functionality, such as enabling the module, configuring its operation,
+ * handling interrupts, and managing counter values.
+ *
+ * @param IPVERSION IP version ID.
+ * @param EN Module Enable Register.
+ * @param CFG Configuration Register.
+ * @param CMD Command Register.
+ * @param STATUS Status Register.
+ * @param IF Interrupt Flag Register.
+ * @param IEN Interrupt Enable Register.
+ * @param PRECNT Pre-Counter Value Register.
+ * @param CNT Counter Value Register.
+ * @param EM4WUEN EM4 wakeup request Enable Register.
+ * @param SYNCBUSY Synchronization Busy Register.
+ * @param LOCK Configuration Lock Register.
+ * @param COMP Compare Value Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param IPVERSION_SET IP version ID.
+ * @param EN_SET Module Enable Register.
+ * @param CFG_SET Configuration Register.
+ * @param CMD_SET Command Register.
+ * @param STATUS_SET Status Register.
+ * @param IF_SET Interrupt Flag Register.
+ * @param IEN_SET Interrupt Enable Register.
+ * @param PRECNT_SET Pre-Counter Value Register.
+ * @param CNT_SET Counter Value Register.
+ * @param EM4WUEN_SET EM4 wakeup request Enable Register.
+ * @param SYNCBUSY_SET Synchronization Busy Register.
+ * @param LOCK_SET Configuration Lock Register.
+ * @param COMP_SET Compare Value Register.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_CLR IP version ID.
+ * @param EN_CLR Module Enable Register.
+ * @param CFG_CLR Configuration Register.
+ * @param CMD_CLR Command Register.
+ * @param STATUS_CLR Status Register.
+ * @param IF_CLR Interrupt Flag Register.
+ * @param IEN_CLR Interrupt Enable Register.
+ * @param PRECNT_CLR Pre-Counter Value Register.
+ * @param CNT_CLR Counter Value Register.
+ * @param EM4WUEN_CLR EM4 wakeup request Enable Register.
+ * @param SYNCBUSY_CLR Synchronization Busy Register.
+ * @param LOCK_CLR Configuration Lock Register.
+ * @param COMP_CLR Compare Value Register.
+ * @param RESERVED2 Reserved for future use.
+ * @param IPVERSION_TGL IP version ID.
+ * @param EN_TGL Module Enable Register.
+ * @param CFG_TGL Configuration Register.
+ * @param CMD_TGL Command Register.
+ * @param STATUS_TGL Status Register.
+ * @param IF_TGL Interrupt Flag Register.
+ * @param IEN_TGL Interrupt Enable Register.
+ * @param PRECNT_TGL Pre-Counter Value Register.
+ * @param CNT_TGL Counter Value Register.
+ * @param EM4WUEN_TGL EM4 wakeup request Enable Register.
+ * @param SYNCBUSY_TGL Synchronization Busy Register.
+ * @param LOCK_TGL Configuration Lock Register.
+ * @param COMP_TGL Compare Value Register.
+ ******************************************************************************/
 typedef struct burtc_typedef{
   __IM uint32_t  IPVERSION;                     /**< IP version ID                                      */
   __IOM uint32_t EN;                            /**< Module Enable Register                             */

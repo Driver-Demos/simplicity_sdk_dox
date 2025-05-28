@@ -139,9 +139,19 @@
 extern "C" {
 #endif
 
-/**
- * Initialize Silicon Labs products
- */
+/***************************************************************************//**
+ * @brief This function initializes the system and various components required
+ * for Silicon Labs products, including platform, drivers, services,
+ * stack, and internal applications. It should be called at the beginning
+ * of the program to ensure all necessary components are set up before
+ * any other operations are performed. This function is typically used in
+ * the main function of an application to prepare the system for further
+ * processing or kernel start. It is essential to call this function
+ * before any other system or application initialization to ensure proper
+ * setup.
+ *
+ * @return None
+ ******************************************************************************/
 void sl_system_init(void);
 
 #ifdef __cplusplus

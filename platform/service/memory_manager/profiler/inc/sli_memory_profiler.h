@@ -205,13 +205,17 @@ typedef const void* sli_memory_tracker_handle_t;
  */
 #define SLI_INVALID_MEMORY_TRACKER_HANDLE ((sli_memory_tracker_handle_t) NULL)
 
-/**
- * @brief Initialize the memory profiler
+/***************************************************************************//**
+ * @brief This function ensures that the memory profiler is initialized, which
+ * is necessary for tracking and reporting system RAM usage. It should
+ * not be called directly by applications, as the platform initialization
+ * process handles it automatically. The function is safe to call
+ * multiple times, as it will only perform initialization if it has not
+ * already been done. This function is typically used internally within
+ * the platform to set up memory profiling capabilities.
  *
- * Memory Profiler initialization is handled internally by the Platform
- * initialization. Applications do not need to and should not call this function
- * directly.
- */
+ * @return None
+ ******************************************************************************/
 void sli_memory_profiler_init();
 
 /**
@@ -238,6 +242,13 @@ _Pragma("inline=forced") static inline void * sli_memory_profiler_get_pc(void)
   return pc;
 }
 #else
+/***************************************************************************//**
+ * @brief The function `sli_memory_profiler_get_pc` returns the current program
+ * counter if the GCC or IAR compiler is used, otherwise it returns NULL.
+ *
+ * @return The function returns a pointer to the current program counter or NULL
+ * if the compiler is not GCC or IAR.
+ ******************************************************************************/
 static inline void * sli_memory_profiler_get_pc(void)
 {
   // Memory Profiler supports ownership tracking only with the GCC or IAR compiler
@@ -276,6 +287,14 @@ _Pragma("inline=forced") static inline void * sli_memory_profiler_get_return_add
   return (void *)lr;
 }
 #else
+/***************************************************************************//**
+ * @brief The function `sli_memory_profiler_get_return_address` returns the
+ * return address of the current function, but only if compiled with GCC
+ * or IAR compilers; otherwise, it returns NULL.
+ *
+ * @return The function returns a pointer to the return address of the current
+ * function if supported by the compiler, otherwise it returns NULL.
+ ******************************************************************************/
 static inline void * sli_memory_profiler_get_return_address(void)
 {
   // Memory Profiler supports ownership tracking only with the GCC or IAR compiler
@@ -375,30 +394,28 @@ void sli_memory_profiler_track_alloc(sli_memory_tracker_handle_t tracker_handle,
                                      void * ptr,
                                      size_t size);
 
-/**
- * @brief Track the reallocation of a previously allocated memory block
+/***************************************************************************//**
+ * @brief This function is used to track the reallocation of a memory block
+ * within a memory profiling system. It should be called when a memory
+ * block is reallocated, providing both the original and the reallocated
+ * pointers, along with the new size. This function is intended for use
+ * by the underlying heap allocator in the Memory Manager, ensuring that
+ * both the original and reallocated pointers are valid and owned by the
+ * calling thread at the time of tracking. It is crucial for maintaining
+ * accurate memory usage statistics in systems where memory profiling is
+ * enabled.
  *
- * NOTE: This function is intended to be called via the @ref
- * SLI_MEMORY_PROFILER_TRACK_REALLOC() macro.
- *
- * NOTE: Reallocation is a special operation that is intended to be tracked only
- * by the underlying heap allocator in the Memory Manager. Any
- * higher-level allocations that are tracked within the reallocated block are
- * automatically moved and resized without any tracking calls from the
- * higher-level trackers.
- *
- * If the realloc operation involves allocating a new block and freeing the
- * previous block, the Memory Manager heap must track the realloc when
- * the allocation of the new memory has been tracked but the old memory block
- * has not been freed yet. This is needed to guarantee that both @p ptr and @p
- * realloced_ptr are valid and owned by the calling thread when the realloc is
- * tracked.
- *
- * @param[in] tracker_handle The handle of the lowest-layer heap memory tracker
- * @param[in] ptr Pointer to the original memory block
- * @param[in] realloced_ptr Pointer to the resized or allocated memory
- * @param[in] size The size that the block was reallocated to
- */
+ * @param tracker_handle A handle identifying the lowest-layer heap memory
+ * tracker. It must be unique and valid for the duration
+ * of the tracker's lifetime.
+ * @param ptr Pointer to the original memory block before reallocation. It must
+ * be valid and owned by the calling thread.
+ * @param realloced_ptr Pointer to the newly allocated or resized memory block.
+ * It must be valid and owned by the calling thread.
+ * @param size The size in bytes to which the memory block was reallocated. It
+ * must be a non-negative value.
+ * @return None
+ ******************************************************************************/
 void sli_memory_profiler_track_realloc(sli_memory_tracker_handle_t tracker_handle,
                                        void * ptr,
                                        void * realloced_ptr,

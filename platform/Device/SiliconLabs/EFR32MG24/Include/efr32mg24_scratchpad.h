@@ -41,7 +41,29 @@
  * @brief EFR32MG24 SCRATCHPAD Register Declaration.
  *****************************************************************************/
 
-/** SCRATCHPAD Register Declaration. */
+/***************************************************************************//**
+ * @brief The SCRATCHPAD_TypeDef is a structure that defines a set of registers
+ * used for scratchpad operations in the EFR32MG24 microcontroller. It
+ * includes two primary scratchpad registers (SREG0 and SREG1) and their
+ * corresponding set, clear, and toggle operations. The structure also
+ * reserves space for future use, ensuring compatibility with potential
+ * future extensions or modifications. This design allows for efficient
+ * manipulation of the scratchpad registers, which are typically used for
+ * temporary data storage or intermediate calculations in embedded
+ * systems.
+ *
+ * @param SREG0 Scratchpad Register 0.
+ * @param SREG1 Scratchpad Register 1.
+ * @param RESERVED0 Reserved for future use.
+ * @param SREG0_SET Scratchpad Register 0 set operation.
+ * @param SREG1_SET Scratchpad Register 1 set operation.
+ * @param RESERVED1 Reserved for future use.
+ * @param SREG0_CLR Scratchpad Register 0 clear operation.
+ * @param SREG1_CLR Scratchpad Register 1 clear operation.
+ * @param RESERVED2 Reserved for future use.
+ * @param SREG0_TGL Scratchpad Register 0 toggle operation.
+ * @param SREG1_TGL Scratchpad Register 1 toggle operation.
+ ******************************************************************************/
 typedef struct scratchpad_typedef{
   __IOM uint32_t SREG0;                         /**< Scratchpad Register 0                              */
   __IOM uint32_t SREG1;                         /**< Scratchpad Register 1                              */

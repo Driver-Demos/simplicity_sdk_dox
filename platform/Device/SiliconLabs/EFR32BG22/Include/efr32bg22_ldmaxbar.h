@@ -41,12 +41,36 @@
  * @brief EFR32BG22 LDMAXBAR Register Declaration.
  *****************************************************************************/
 
-/** LDMAXBAR CH Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `LDMAXBAR_CH_TypeDef` is a structure representing a channel in the
+ * LDMAXBAR (Linked Direct Memory Access Crossbar) system for the
+ * EFR32BG22 microcontroller. It contains a single member, `REQSEL`,
+ * which is a 32-bit register used to select the peripheral request for
+ * the DMA channel. This structure is part of a larger system that
+ * manages DMA channel configurations, allowing for efficient data
+ * transfers between peripherals and memory.
+ *
+ * @param REQSEL Channel Peripheral Request Select Register.
+ ******************************************************************************/
 typedef struct ldmaxbar_ch_typedef{
   __IOM uint32_t REQSEL;                             /**< Channel Peripheral Request Select Reg...           */
 } LDMAXBAR_CH_TypeDef;
 
-/** LDMAXBAR Register Declaration. */
+/***************************************************************************//**
+ * @brief The LDMAXBAR_TypeDef is a structure representing the DMA channel
+ * registers for the EFR32BG22 microcontroller. It includes arrays for
+ * channel operations such as setting, clearing, and toggling, each with
+ * 8 channels. The structure also reserves space for future use, ensuring
+ * compatibility with potential future extensions or modifications.
+ *
+ * @param CH An array of 8 DMA Channel Registers.
+ * @param RESERVED0 An array of 1016 reserved uint32_t for future use.
+ * @param CH_SET An array of 8 DMA Channel Registers for setting operations.
+ * @param RESERVED1 An array of 1016 reserved uint32_t for future use.
+ * @param CH_CLR An array of 8 DMA Channel Registers for clearing operations.
+ * @param RESERVED2 An array of 1016 reserved uint32_t for future use.
+ * @param CH_TGL An array of 8 DMA Channel Registers for toggling operations.
+ ******************************************************************************/
 typedef struct ldmaxbar_typedef{
   LDMAXBAR_CH_TypeDef CH[8U];                   /**< DMA Channel Registers                              */
   uint32_t            RESERVED0[1016U];         /**< Reserved for future use                            */

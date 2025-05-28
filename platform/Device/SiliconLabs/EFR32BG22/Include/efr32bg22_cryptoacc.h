@@ -40,7 +40,40 @@
  * @brief EFR32BG22 CRYPTOACC Register Declaration.
  *****************************************************************************/
 
-/** CRYPTOACC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_TypeDef` is a structure that defines the register
+ * layout for the CRYPTOACC hardware accelerator in the EFR32BG22
+ * microcontroller. It includes various registers for configuring and
+ * controlling the fetcher and pusher operations, managing interrupts,
+ * and accessing hardware configurations for different cryptographic
+ * modules. The structure also reserves space for future use, ensuring
+ * compatibility with potential hardware updates. This layout facilitates
+ * efficient data handling and processing for cryptographic operations,
+ * making it integral to the device's security features.
+ *
+ * @param FETCHADDR Fetcher Address.
+ * @param RESERVED0 Reserved for future use.
+ * @param FETCHLEN Fetcher Length.
+ * @param FETCHTAG Fetcher Tag.
+ * @param PUSHADDR Pusher Address.
+ * @param RESERVED1 Reserved for future use.
+ * @param PUSHLEN Pusher Length.
+ * @param IEN Interrupt Enable.
+ * @param RESERVED2 Reserved for future use.
+ * @param IF Interrupt Flags.
+ * @param RESERVED3 Reserved for future use.
+ * @param IF_CLR Interrupt status clear.
+ * @param CTRL Control register.
+ * @param CMD Command register.
+ * @param STATUS Status register.
+ * @param RESERVED4 Reserved for future use.
+ * @param INCL_IPS_HW_CFG General CRYPTOACC Hardware Configuration.
+ * @param BA411E_HW_CFG_1 BA411E Hardware Configuration 1.
+ * @param BA411E_HW_CFG_2 BA411E Hardware Configuration 2.
+ * @param BA413_HW_CFG BA413 Hardware Configuration.
+ * @param BA418_HW_CFG BA418 Hardware Configuration.
+ * @param BA419_HW_CFG BA419 Hardware Configuration.
+ ******************************************************************************/
 typedef struct cryptoacc_typedef{
   __IOM uint32_t FETCHADDR;                     /**< Fetcher Address                                    */
   uint32_t       RESERVED0[1U];                 /**< Reserved for future use                            */
@@ -454,7 +487,23 @@ typedef struct cryptoacc_typedef{
  * @brief EFR32BG22 CRYPTOACC_PKCTRL Register Declaration.
  *****************************************************************************/
 
-/** CRYPTOACC_PKCTRL Register Declaration. */
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_PKCTRL_TypeDef` is a structure that defines the
+ * register layout for controlling and monitoring cryptographic
+ * operations in the EFR32BG22 series of microcontrollers. It includes
+ * fields for setting pointers, issuing commands, controlling operations,
+ * checking status, and obtaining version and timing information. This
+ * structure is essential for managing public key cryptographic
+ * operations within the hardware accelerator, providing a low-level
+ * interface to the cryptographic engine.
+ *
+ * @param POINTER Holds pointers for cryptographic operations.
+ * @param COMMAND Stores command instructions for cryptographic operations.
+ * @param PKCTRL Contains control settings for cryptographic operations.
+ * @param PKSTATUS Provides status information about cryptographic operations.
+ * @param VERSION Indicates the version of the cryptographic hardware.
+ * @param TIMER Tracks timing information for cryptographic operations.
+ ******************************************************************************/
 typedef struct cryptoacc_pkctrl_typedef{
   __IOM uint32_t POINTER;                            /**< Pointers                                           */
   __IOM uint32_t COMMAND;                            /**< Command                                            */
@@ -677,12 +726,47 @@ typedef struct cryptoacc_pkctrl_typedef{
  * @brief EFR32BG22 CRYPTOACC_RNGCTRL Register Declaration.
  *****************************************************************************/
 
-/** CRYPTOACC_RNGCTRL KEYS Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_KEYS_TypeDef` is a simple data structure that
+ * represents a cryptographic key register within the EFR32BG22 CRYPTOACC
+ * module. It contains a single 32-bit member, `KEY`, which is used to
+ * store cryptographic keys for secure operations. This structure is part
+ * of the cryptographic accelerator's key management system, facilitating
+ * secure storage and access to cryptographic keys.
+ *
+ * @param KEY A 32-bit register used to store cryptographic keys.
+ ******************************************************************************/
 typedef struct cryptoacc_keys_typedef{
   __IOM uint32_t KEY;                                /**< Key Register                                       */
 } CRYPTOACC_KEYS_TypeDef;
 
-/** CRYPTOACC_RNGCTRL Register Declaration. */
+/***************************************************************************//**
+ * @brief The `CRYPTOACC_RNGCTRL_TypeDef` is a structure that defines the
+ * registers associated with the Random Number Generator (RNG) control in
+ * the EFR32BG22 CRYPTOACC module. It includes control and status
+ * registers for managing the RNG, as well as configuration registers for
+ * AIS31 tests. The structure also contains an array of key registers and
+ * several reserved fields for future use. This data structure is crucial
+ * for configuring and monitoring the RNG operations, ensuring secure and
+ * efficient random number generation.
+ *
+ * @param RNGCTRL RNG Control Register.
+ * @param FIFOLEVEL FIFO Level Register.
+ * @param FIFOTHRESH FIFO Threshold Register.
+ * @param FIFODEPTH FIFO Depth Register.
+ * @param KEYS Array of key registers.
+ * @param TESTDATA Test Data Register.
+ * @param RESERVED0 Reserved for future use.
+ * @param RNGSTATUS RNG Status Register.
+ * @param INITWAITVAL Initial Wait Counter.
+ * @param RESERVED1 Reserved for future use.
+ * @param SWOFFTMRVAL Switch off timer value.
+ * @param CLKDIV Sample clock divider.
+ * @param AIS31CONF0 AIS31 configuration 0 register.
+ * @param AIS31CONF1 AIS31 configuration 1 register.
+ * @param AIS31CONF2 AIS31 configuration 2 register.
+ * @param AIS31STATUS AIS31 status register.
+ ******************************************************************************/
 typedef struct cryptoacc_rngctrl_typedef{
   __IOM uint32_t         RNGCTRL;                 /**< RNG Control Register                               */
   __IM uint32_t          FIFOLEVEL;               /**< FIFO Level Register                                */

@@ -513,6 +513,18 @@ SL_ENUM(sl_gpio_interrupt_flag_t) {
  ******************************************************************************/
 
 /// Structure for GPIO Port and Pin.
+/***************************************************************************//**
+ * @brief The `sl_gpio_t` structure is a simple data structure used to represent
+ * a specific GPIO (General Purpose Input/Output) pin on a
+ * microcontroller. It contains two members: `port` and `pin`, both of
+ * which are 8-bit unsigned integers. The `port` member identifies the
+ * GPIO port, while the `pin` member specifies the pin number within that
+ * port. This structure is typically used in embedded systems to manage
+ * and configure GPIO pins for various input and output operations.
+ *
+ * @param port Represents the GPIO port number as an 8-bit unsigned integer.
+ * @param pin Represents the GPIO pin number as an 8-bit unsigned integer.
+ ******************************************************************************/
 typedef struct {
   uint8_t port;
   uint8_t pin;

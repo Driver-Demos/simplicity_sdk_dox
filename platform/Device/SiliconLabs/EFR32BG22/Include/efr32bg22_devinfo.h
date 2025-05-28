@@ -40,22 +40,105 @@
  * @brief EFR32BG22 DEVINFO Register Declaration.
  *****************************************************************************/
 
-/** DEVINFO HFRCODPLLCAL Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `DEVINFO_HFRCODPLLCAL_TypeDef` is a structure that contains a
+ * single member, `HFRCODPLLCAL`, which is a read-only 32-bit unsigned
+ * integer used for HFRCODPLL calibration purposes. This structure is
+ * part of the device information (DEVINFO) register group for the
+ * EFR32BG22 microcontroller, providing calibration data necessary for
+ * the proper functioning of the high-frequency RC oscillator with PLL.
+ *
+ * @param HFRCODPLLCAL HFRCODPLL Calibration
+ ******************************************************************************/
 typedef struct devinfo_hfrcodpllcal_typedef{
   __IM uint32_t HFRCODPLLCAL;                        /**< HFRCODPLL Calibration                              */
 } DEVINFO_HFRCODPLLCAL_TypeDef;
 
-/** DEVINFO HFRCOEM23CAL Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `DEVINFO_HFRCOEM23CAL_TypeDef` is a simple data structure that
+ * contains a single member, `RESERVED0`, which is an array of one 32-bit
+ * unsigned integer. This member is reserved for future use, indicating
+ * that the structure is likely intended for future expansion or
+ * compatibility purposes within the device information context of the
+ * EFR32BG22 series.
+ *
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct devinfo_hfrcoem23cal_typedef{
   uint32_t RESERVED0[1U];                            /**< Reserved for future use                            */
 } DEVINFO_HFRCOEM23CAL_TypeDef;
 
-/** DEVINFO HFRCOSECAL Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `DEVINFO_HFRCOSECAL_TypeDef` is a simple data structure that
+ * contains a single member, `RESERVED0`, which is an array of one 32-bit
+ * unsigned integer. This member is reserved for future use, indicating
+ * that the structure is likely intended for future expansion or
+ * compatibility purposes within the device information context of the
+ * EFR32BG22 series.
+ *
+ * @param RESERVED0 Reserved for future use.
+ ******************************************************************************/
 typedef struct devinfo_hfrcosecal_typedef{
   uint32_t RESERVED0[1U];                            /**< Reserved for future use                            */
 } DEVINFO_HFRCOSECAL_TypeDef;
 
-/** DEVINFO Register Declaration. */
+/***************************************************************************//**
+ * @brief The `DEVINFO_TypeDef` structure is a comprehensive data structure used
+ * to store various device information and calibration data for the
+ * EFR32BG22 microcontroller. It includes fields for device
+ * identification, memory information, package details, and calibration
+ * data for various components such as oscillators and ADCs. The
+ * structure also contains several reserved fields for future use,
+ * ensuring compatibility with potential future updates. This structure
+ * is crucial for accessing device-specific information and performing
+ * necessary calibrations to ensure optimal device performance.
+ *
+ * @param INFO DI Information.
+ * @param PART Part Info.
+ * @param MEMINFO Memory Info.
+ * @param MSIZE Memory Size.
+ * @param PKGINFO Misc Device Info.
+ * @param CUSTOMINFO Custom Part Info.
+ * @param SWFIX SW Fix Register.
+ * @param SWCAPA0 Software Restriction.
+ * @param SWCAPA1 Software Restriction.
+ * @param RESERVED0 Reserved for future use.
+ * @param EXTINFO External Component Info.
+ * @param RESERVED1 Reserved for future use.
+ * @param RESERVED2 Reserved for future use.
+ * @param EUI48L EUI 48 Low.
+ * @param EUI48H EUI 48 High.
+ * @param EUI64L EUI64 Low.
+ * @param EUI64H EUI64 High.
+ * @param CALTEMP Calibration temperature Information.
+ * @param EMUTEMP EMU Temperature Sensor Calibration Information.
+ * @param HFRCODPLLCAL HFRCODPLL Calibration.
+ * @param HFRCOEM23CAL Reserved for future use.
+ * @param HFRCOSECAL Reserved for future use.
+ * @param MODULENAME0 Module Name Information.
+ * @param MODULENAME1 Module Name Information.
+ * @param MODULENAME2 Module Name Information.
+ * @param MODULENAME3 Module Name Information.
+ * @param MODULENAME4 Module Name Information.
+ * @param MODULENAME5 Module Name Information.
+ * @param MODULENAME6 Module Name Information.
+ * @param MODULEINFO Module Information.
+ * @param MODXOCAL Module External Oscillator Calibration Information.
+ * @param RESERVED3 Reserved for future use.
+ * @param IADC0GAIN0 IADC Gain Calibration.
+ * @param IADC0GAIN1 IADC Gain Calibration.
+ * @param IADC0OFFSETCAL0 IADC Offset Calibration.
+ * @param IADC0NORMALOFFSETCAL0 IADC Offset Calibration.
+ * @param IADC0NORMALOFFSETCAL1 IADC Offset Calibration.
+ * @param IADC0HISPDOFFSETCAL0 IADC Offset Calibration.
+ * @param IADC0HISPDOFFSETCAL1 IADC Offset Calibration.
+ * @param RESERVED4 Reserved for future use.
+ * @param LEGACY Legacy Device Info.
+ * @param RESERVED5 Reserved for future use.
+ * @param RTHERM Thermistor Calibration.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ ******************************************************************************/
 typedef struct devinfo_typedef{
   __IM uint32_t                INFO;                  /**< DI Information                                     */
   __IM uint32_t                PART;                  /**< Part Info                                          */

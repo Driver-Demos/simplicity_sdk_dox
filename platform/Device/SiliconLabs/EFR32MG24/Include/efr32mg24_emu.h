@@ -41,7 +41,161 @@
  * @brief EFR32MG24 EMU Register Declaration.
  *****************************************************************************/
 
-/** EMU Register Declaration. */
+/***************************************************************************//**
+ * @brief The `EMU_TypeDef` structure is a comprehensive representation of the
+ * Energy Management Unit (EMU) registers for the EFR32MG24
+ * microcontroller. It includes a variety of control and status registers
+ * for managing power, voltage, and temperature thresholds, as well as
+ * interrupt flags and enables. The structure is designed to facilitate
+ * the configuration and monitoring of the EMU's behavior, with numerous
+ * reserved fields for future expansion. The structure also supports set,
+ * clear, and toggle operations for many of its registers, allowing for
+ * flexible and efficient control of the EMU's functionality.
+ *
+ * @param RESERVED0 Reserved for future use.
+ * @param DECBOD DECOUPLE LVBOD Control register.
+ * @param RESERVED1 Reserved for future use.
+ * @param BOD3SENSE BOD3SENSE Control register.
+ * @param RESERVED2 Reserved for future use.
+ * @param VREGVDDCMPCTRL DC-DC VREGVDD Comparator Control Register.
+ * @param PD1PARETCTRL PD1 Partial Retention Control.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION IP Version.
+ * @param LOCK EMU Configuration lock register.
+ * @param IF Interrupt Flags.
+ * @param IEN Interrupt Enables.
+ * @param EM4CTRL EM4 Control.
+ * @param CMD EMU Command register.
+ * @param CTRL EMU Control register.
+ * @param TEMPLIMITS EMU Temperature thresholds.
+ * @param RESERVED4 Reserved for future use.
+ * @param STATUS EMU Status register.
+ * @param TEMP Temperature.
+ * @param RESERVED5 Reserved for future use.
+ * @param RSTCTRL Reset Management Control register.
+ * @param RSTCAUSE Reset cause.
+ * @param TAMPERRSTCAUSE Tamper Reset cause.
+ * @param RESERVED6 Reserved for future use.
+ * @param DGIF Interrupt Flags Debug.
+ * @param DGIEN Interrupt Enables Debug.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param RESERVED9 Reserved for future use.
+ * @param EFPIF EFP Interrupt Register.
+ * @param EFPIEN EFP Interrupt Enable Register.
+ * @param RESERVED10 Reserved for future use.
+ * @param RESERVED11 Reserved for future use.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param RESERVED14 Reserved for future use.
+ * @param RESERVED15 Reserved for future use.
+ * @param DECBOD_SET DECOUPLE LVBOD Control register.
+ * @param RESERVED16 Reserved for future use.
+ * @param BOD3SENSE_SET BOD3SENSE Control register.
+ * @param RESERVED17 Reserved for future use.
+ * @param VREGVDDCMPCTRL_SET DC-DC VREGVDD Comparator Control Register.
+ * @param PD1PARETCTRL_SET PD1 Partial Retention Control.
+ * @param RESERVED18 Reserved for future use.
+ * @param IPVERSION_SET IP Version.
+ * @param LOCK_SET EMU Configuration lock register.
+ * @param IF_SET Interrupt Flags.
+ * @param IEN_SET Interrupt Enables.
+ * @param EM4CTRL_SET EM4 Control.
+ * @param CMD_SET EMU Command register.
+ * @param CTRL_SET EMU Control register.
+ * @param TEMPLIMITS_SET EMU Temperature thresholds.
+ * @param RESERVED19 Reserved for future use.
+ * @param STATUS_SET EMU Status register.
+ * @param TEMP_SET Temperature.
+ * @param RESERVED20 Reserved for future use.
+ * @param RSTCTRL_SET Reset Management Control register.
+ * @param RSTCAUSE_SET Reset cause.
+ * @param TAMPERRSTCAUSE_SET Tamper Reset cause.
+ * @param RESERVED21 Reserved for future use.
+ * @param DGIF_SET Interrupt Flags Debug.
+ * @param DGIEN_SET Interrupt Enables Debug.
+ * @param RESERVED22 Reserved for future use.
+ * @param RESERVED23 Reserved for future use.
+ * @param RESERVED24 Reserved for future use.
+ * @param EFPIF_SET EFP Interrupt Register.
+ * @param EFPIEN_SET EFP Interrupt Enable Register.
+ * @param RESERVED25 Reserved for future use.
+ * @param RESERVED26 Reserved for future use.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param RESERVED29 Reserved for future use.
+ * @param RESERVED30 Reserved for future use.
+ * @param DECBOD_CLR DECOUPLE LVBOD Control register.
+ * @param RESERVED31 Reserved for future use.
+ * @param BOD3SENSE_CLR BOD3SENSE Control register.
+ * @param RESERVED32 Reserved for future use.
+ * @param VREGVDDCMPCTRL_CLR DC-DC VREGVDD Comparator Control Register.
+ * @param PD1PARETCTRL_CLR PD1 Partial Retention Control.
+ * @param RESERVED33 Reserved for future use.
+ * @param IPVERSION_CLR IP Version.
+ * @param LOCK_CLR EMU Configuration lock register.
+ * @param IF_CLR Interrupt Flags.
+ * @param IEN_CLR Interrupt Enables.
+ * @param EM4CTRL_CLR EM4 Control.
+ * @param CMD_CLR EMU Command register.
+ * @param CTRL_CLR EMU Control register.
+ * @param TEMPLIMITS_CLR EMU Temperature thresholds.
+ * @param RESERVED34 Reserved for future use.
+ * @param STATUS_CLR EMU Status register.
+ * @param TEMP_CLR Temperature.
+ * @param RESERVED35 Reserved for future use.
+ * @param RSTCTRL_CLR Reset Management Control register.
+ * @param RSTCAUSE_CLR Reset cause.
+ * @param TAMPERRSTCAUSE_CLR Tamper Reset cause.
+ * @param RESERVED36 Reserved for future use.
+ * @param DGIF_CLR Interrupt Flags Debug.
+ * @param DGIEN_CLR Interrupt Enables Debug.
+ * @param RESERVED37 Reserved for future use.
+ * @param RESERVED38 Reserved for future use.
+ * @param RESERVED39 Reserved for future use.
+ * @param EFPIF_CLR EFP Interrupt Register.
+ * @param EFPIEN_CLR EFP Interrupt Enable Register.
+ * @param RESERVED40 Reserved for future use.
+ * @param RESERVED41 Reserved for future use.
+ * @param RESERVED42 Reserved for future use.
+ * @param RESERVED43 Reserved for future use.
+ * @param RESERVED44 Reserved for future use.
+ * @param RESERVED45 Reserved for future use.
+ * @param DECBOD_TGL DECOUPLE LVBOD Control register.
+ * @param RESERVED46 Reserved for future use.
+ * @param BOD3SENSE_TGL BOD3SENSE Control register.
+ * @param RESERVED47 Reserved for future use.
+ * @param VREGVDDCMPCTRL_TGL DC-DC VREGVDD Comparator Control Register.
+ * @param PD1PARETCTRL_TGL PD1 Partial Retention Control.
+ * @param RESERVED48 Reserved for future use.
+ * @param IPVERSION_TGL IP Version.
+ * @param LOCK_TGL EMU Configuration lock register.
+ * @param IF_TGL Interrupt Flags.
+ * @param IEN_TGL Interrupt Enables.
+ * @param EM4CTRL_TGL EM4 Control.
+ * @param CMD_TGL EMU Command register.
+ * @param CTRL_TGL EMU Control register.
+ * @param TEMPLIMITS_TGL EMU Temperature thresholds.
+ * @param RESERVED49 Reserved for future use.
+ * @param STATUS_TGL EMU Status register.
+ * @param TEMP_TGL Temperature.
+ * @param RESERVED50 Reserved for future use.
+ * @param RSTCTRL_TGL Reset Management Control register.
+ * @param RSTCAUSE_TGL Reset cause.
+ * @param TAMPERRSTCAUSE_TGL Tamper Reset cause.
+ * @param RESERVED51 Reserved for future use.
+ * @param DGIF_TGL Interrupt Flags Debug.
+ * @param DGIEN_TGL Interrupt Enables Debug.
+ * @param RESERVED52 Reserved for future use.
+ * @param RESERVED53 Reserved for future use.
+ * @param RESERVED54 Reserved for future use.
+ * @param EFPIF_TGL EFP Interrupt Register.
+ * @param EFPIEN_TGL EFP Interrupt Enable Register.
+ * @param RESERVED55 Reserved for future use.
+ * @param RESERVED56 Reserved for future use.
+ * @param RESERVED57 Reserved for future use.
+ * @param RESERVED58 Reserved for future use.
+ ******************************************************************************/
 typedef struct emu_typedef{
   uint32_t       RESERVED0[4U];                 /**< Reserved for future use                            */
   __IOM uint32_t DECBOD;                        /**< DECOUPLE LVBOD  Control register                   */

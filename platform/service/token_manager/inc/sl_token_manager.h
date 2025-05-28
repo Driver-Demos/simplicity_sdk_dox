@@ -45,24 +45,41 @@ extern "C" {
 #endif
 
 /***************************************************************************//**
- * Initialize the Token Manager.
+ * @brief This function prepares the Token Manager for operation by initializing
+ * the necessary NVM3 structures and ensuring that all tokens are
+ * correctly set up. It must be called before any other token-related
+ * functions to ensure proper functionality. If the initialization fails,
+ * subsequent token operations will not work. The function handles the
+ * creation of token objects in NVM3 if they do not exist or if their
+ * type or size is incorrect. It also checks for cache overflow, which
+ * may indicate that the cache size needs adjustment.
  *
- * @note This function must be called before any other sl_token functions. If
- * it does not return success, the other sl_token functions will not work.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @return Returns SL_STATUS_OK if the initialization is successful, or an error
+ * code if it fails.
  ******************************************************************************/
 sl_status_t sl_token_init(void);
 
 /***************************************************************************//**
- * Read the data stored in the specified data or manufacturing token.
+ * @brief This function retrieves data from a specified token, which can be
+ * either a data token or a manufacturing token, based on the provided
+ * NVM3 key. It should be called after the token manager has been
+ * initialized successfully. The function handles both basic and indexed
+ * tokens, and it supports reading from manufacturing tokens when NVM3
+ * override is active. It returns a status code indicating success or the
+ * type of error encountered.
  *
- * @param token The NVM3KEY for the token.
- * @param index The index to access in the indexed token.
- * @param data A pointer to where the token data should be placed.
- * @param length The size of the token data in number of bytes.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3 key identifying the token to read from. It must be a
+ * valid key, and if it falls within the manufacturing token range,
+ * NVM3 override must be active.
+ * @param index The index to access within an indexed token. For non-indexed
+ * tokens, this should typically be zero.
+ * @param data A pointer to a buffer where the retrieved token data will be
+ * stored. Must not be null, and the buffer should be large enough
+ * to hold the specified length of data.
+ * @param length The number of bytes to read from the token. Must be a positive
+ * value and should not exceed the size of the token data.
+ * @return Returns an sl_status_t value indicating SL_STATUS_OK on success or an
+ * error code if the operation fails.
  ******************************************************************************/
 sl_status_t sl_token_get_data(uint32_t token,
                               uint32_t index,
@@ -70,14 +87,26 @@ sl_status_t sl_token_get_data(uint32_t token,
                               uint32_t length);
 
 /***************************************************************************//**
- * Writes the data to the specified token.
+ * @brief This function is used to write data to a specified token identified by
+ * its NVM3 key. It supports both basic and indexed tokens, and can
+ * handle manufacturing tokens if the NVM3 override is active. The
+ * function must be called after the token manager has been initialized.
+ * It returns a status code indicating success or the type of error
+ * encountered. The function does not support writing to counter tokens
+ * directly, and the data length must match the expected size for the
+ * token.
  *
- * @param token The NVM3KEY for the token.
- * @param index The index to access in the indexed token.
- * @param data A pointer to the data being written.
- * @param length The size of the token data in number of bytes.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3 key for the token. It must be a valid key, and if it
+ * represents a manufacturing token, the NVM3 override must be
+ * active.
+ * @param index The index to access in the indexed token. For non-indexed
+ * tokens, this should be set to 0.
+ * @param data A pointer to the data being written. Must not be null and should
+ * point to a buffer of at least 'length' bytes.
+ * @param length The size of the token data in number of bytes. Must match the
+ * expected size for the token.
+ * @return Returns SL_STATUS_OK if the operation is successful, or an error code
+ * if it fails.
  ******************************************************************************/
 sl_status_t sl_token_set_data(uint32_t token,
                               uint32_t index,
@@ -85,36 +114,65 @@ sl_status_t sl_token_set_data(uint32_t token,
                               uint32_t length);
 
 /***************************************************************************//**
- * Increments the value of a counter token.  This call does not support
- * manufacturing tokens.
+ * @brief This function is used to increment the value of a counter token
+ * identified by the given NVM3 key. It is important to note that this
+ * function does not support manufacturing tokens. The function should be
+ * called only when the token system is active, as indicated by the
+ * initialization of the token manager. If the token system is not
+ * active, the increment operation will be suppressed. The function
+ * returns a status code indicating the success or failure of the
+ * operation, and any errors encountered will trigger a callback for
+ * handling.
  *
- * @param token The NVM3KEY for the token.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3KEY for the token to be incremented. It must correspond
+ * to a valid counter token and not a manufacturing token. The
+ * function will handle invalid tokens by returning an error
+ * status.
+ * @return Returns SL_STATUS_OK if the increment operation is successful, or an
+ * error code if it fails.
  ******************************************************************************/
 sl_status_t sl_token_increment_counter(uint32_t token);
 
 /***************************************************************************//**
- * This call support deleting manufacturing tokens from NVM3 region only
- * when NVM3 override is enabled.
+ * @brief This function deletes a specified manufacturing token from the NVM3
+ * region, but only if the NVM3 override is enabled. It is used when
+ * there is a need to remove a manufacturing token, which is typically
+ * stored in a dedicated non-volatile memory region. The function should
+ * be called only when the NVM3 override is active, as it will return an
+ * error if this condition is not met. This function is useful in
+ * scenarios where manufacturing tokens need to be managed dynamically.
  *
- * @note This call support deleting manufacturing tokens from NVM3 region.
- *
- * @param token - The NVM3 key for the mfg token.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3 key for the manufacturing token to be deleted. It must
+ * be a valid key that identifies a manufacturing token in the NVM3
+ * region. If the key is invalid or if the NVM3 override is not
+ * active, the function will return an error.
+ * @return Returns SL_STATUS_OK if the token is successfully deleted, or an
+ * error code if the operation fails, such as when the NVM3 override is
+ * not active.
  ******************************************************************************/
 sl_status_t sl_token_delete_token(uint32_t token);
 
 /***************************************************************************//**
- * Read the data associated with the specified manufacturing token.
+ * @brief This function retrieves data associated with a specified manufacturing
+ * token, which is identified by a unique token key. It is used to access
+ * non-volatile manufacturing data stored in the system. The function
+ * requires a valid token key and a non-zero length to operate. If the
+ * length is zero, the function returns an error. The data is copied into
+ * the provided buffer, and the function returns a status indicating
+ * success or the type of error encountered. This function should be
+ * called after the token manager has been initialized.
  *
- * @param token The NVM3KEY for the token.
- * @param index The index to access in the indexed token.
- * @param data A pointer to where the token data should be placed.
- * @param length The size of the token data in number of bytes.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3KEY for the token, identifying the specific
+ * manufacturing data to be accessed. Must be a valid key.
+ * @param index The index to access in the indexed token. Used for tokens that
+ * support indexing.
+ * @param data A pointer to a buffer where the token data will be placed. Must
+ * not be null and should be large enough to hold the data specified
+ * by length.
+ * @param length The size of the token data in bytes. Must be greater than zero;
+ * otherwise, the function returns an error.
+ * @return Returns SL_STATUS_OK if the data is successfully read, or an error
+ * code if the operation fails.
  ******************************************************************************/
 sl_status_t sl_token_get_manufacturing_data(uint32_t token,
                                             uint32_t index,
@@ -122,17 +180,26 @@ sl_status_t sl_token_get_manufacturing_data(uint32_t token,
                                             uint32_t length);
 
 /***************************************************************************//**
- * Writes data to a manufacturing token.
+ * @brief This function is used to write data to a manufacturing token, which is
+ * a specific type of non-volatile memory token. It should be used when
+ * you need to store data that is intended to be persistent across device
+ * power cycles. The function requires that the token and data length are
+ * aligned to 16-bit boundaries, and it only allows writing to tokens
+ * that have not been previously written since the last erase. This
+ * ensures that the data is not partially overwritten. The function must
+ * be called with valid token addresses, and it will return an error if
+ * the token address is illegal or if the data cannot be written.
  *
- * @note Only manufacturing token values that have not been written since
- * the last erase can be written.  For areas of flash that cannot be erased
- * by user code, those manufacturing tokens are effectively write-once.
- *
- * @param token The NVM3KEY for the token.
- * @param data A pointer to the data being written.
- * @param length The size of the token data in number of bytes.
- *
- * @return SL_STATUS_OK if successful, an error code otherwise.
+ * @param token The NVM3KEY for the token, which must be a valid address for a
+ * manufacturing token. The token must be aligned to a 16-bit
+ * boundary.
+ * @param data A pointer to the data being written. The caller retains ownership
+ * of the data, and it must not be null.
+ * @param length The size of the token data in number of bytes. It must be
+ * aligned to a 16-bit boundary and must not exceed the size of
+ * the token.
+ * @return Returns SL_STATUS_OK if the operation is successful, or an error code
+ * if it fails.
  ******************************************************************************/
 sl_status_t sl_token_set_manufacturing_data(uint32_t token,
                                             void *data,
@@ -155,15 +222,15 @@ sl_status_t sl_token_set_manufacturing_data(uint32_t token,
 void halInternalAssertFailed(const char * filename, int linenumber);
 
 /***************************************************************************//**
- * During initialisation of token system using sl_token_init, the NVM cache is checked for overflow by NVM3 system.
- * If the cache is not set to appropriate size with rest of the NVM3 configuration,
- * the overflow will indicate that and NVM3 operations will be slower.
- * This callback allows user to assert to indicate the adjustment to cache to appropriate size.
- * The assert is useful during in development but it may be supressed in production if needed.
+ * @brief This function is a callback that indicates whether an assertion should
+ * occur when the NVM3 cache overflows. It is intended for use during
+ * development to help identify and adjust cache size issues. The default
+ * behavior is to assert, but users can redefine this callback to change
+ * the behavior, such as suppressing the assertion in production
+ * environments.
  *
- * @note See AN1135: Using Third Generation Non-Volatile Memory (NVM3) Data Storage for more information on NVM3 caching.
- *
- * @return True if assert, false otherwise.
+ * @return Returns true if an assertion should occur on cache overflow, false
+ * otherwise.
  ******************************************************************************/
 __WEAK bool sl_token_assert_on_cache_overflow_callback(void);
 

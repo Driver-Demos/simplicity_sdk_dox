@@ -73,6 +73,32 @@ extern "C" {
  ******************************************************************************/
 // Note: doxygen syntax for '\' in output is '\\'. Escape sequences are only
 // prefixed with one backslash, as '\"' or '\\'
+/***************************************************************************//**
+ * @brief This function is used to tokenize a given C-string by splitting it at
+ * spaces, while ignoring sections enclosed in curly braces '{}' or
+ * double quotes '""'. It modifies the input string in place and
+ * populates an array with pointers to the start of each token. The
+ * function is useful for parsing command-line inputs or similar text
+ * processing tasks where quoted or bracketed sections should remain
+ * intact. It must be called with a null-terminated string, and the input
+ * string will be altered even if an error occurs. The function handles
+ * escape sequences for quotes and braces, and returns a status
+ * indicating success or specific errors like invalid parameters or
+ * overflow of the token array.
+ *
+ * @param input The C-string to be split, which must be null-terminated. The
+ * caller retains ownership, and the string will be modified in
+ * place.
+ * @param token_c A pointer to an integer where the function will store the
+ * number of tokens found. Must not be null.
+ * @param token_v An array of character pointers where the function will store
+ * pointers to the start of each token in the input string. The
+ * array must be large enough to hold all tokens, up to a maximum
+ * defined by SL_CLI_MAX_INPUT_ARGUMENTS.
+ * @return Returns an sl_status_t indicating the result of the operation:
+ * SL_STATUS_OK on success, SL_STATUS_INVALID_PARAMETER for malformed
+ * input, or SL_STATUS_HAS_OVERFLOWED if the token array is too small.
+ ******************************************************************************/
 sl_status_t sl_cli_tokenize(char input[],
                             int *token_c,
                             char *token_v[]);

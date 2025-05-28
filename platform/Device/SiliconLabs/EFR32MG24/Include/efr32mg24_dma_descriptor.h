@@ -44,7 +44,23 @@
  * @defgroup DMA_DESCRIPTOR DMA Descriptor
  * @{
  *****************************************************************************/
-/** DMA_DESCRIPTOR Register Declaration */
+/***************************************************************************//**
+ * @brief The `DMA_DESCRIPTOR_TypeDef` is a structure used to define a Direct
+ * Memory Access (DMA) descriptor, which includes control and address
+ * information necessary for DMA operations. It contains four members:
+ * `CTRL`, which is a control register for DMA operations; `SRC`, which
+ * holds the source address for the DMA transfer; `DST`, which holds the
+ * destination address for the DMA transfer; and `LINK`, which is used to
+ * chain DMA descriptors for linked transfers. The use of the `__IOM`
+ * qualifier ensures that both the pointer and the referenced memory are
+ * treated as volatile, which is crucial for hardware register
+ * manipulation.
+ *
+ * @param CTRL DMA control register.
+ * @param SRC DMA source address.
+ * @param DST DMA destination address.
+ * @param LINK DMA link address.
+ ******************************************************************************/
 typedef struct {
   /* Note! Use of double __IOM (volatile) qualifier to ensure that both */
   /* pointer and referenced memory are declared volatile. */

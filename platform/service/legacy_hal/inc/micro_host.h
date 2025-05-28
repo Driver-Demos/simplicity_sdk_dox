@@ -44,6 +44,22 @@
 #define RESET_FLASH_WRITE_INHIBIT 14
 #define RESET_BOOTLOADER_IMG_BAD  15
 
+/***************************************************************************//**
+ * @brief Use this function to specify a custom handler function that will be
+ * called during a micro reboot event. This is useful for executing
+ * specific actions or cleanup tasks when a micro reboot occurs. The
+ * handler function must be provided by the caller and should match the
+ * expected signature. Ensure that the handler is set before any micro
+ * reboot events are expected to occur to guarantee it is called
+ * appropriately.
+ *
+ * @param handler A pointer to a function with no parameters and no return
+ * value. This function will be called during a micro reboot. The
+ * handler must not be null, and the caller is responsible for
+ * ensuring the function remains valid for the duration it is set
+ * as the handler.
+ * @return None
+ ******************************************************************************/
 void setMicroRebootHandler(void (*handler)(void));
 
 // the number of ticks (as returned from halCommonGetInt32uMillisecondTick)

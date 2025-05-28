@@ -41,27 +41,74 @@
  * @brief EFR32MG24 MVP Register Declaration.
  *****************************************************************************/
 
-/** MVP PERF Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_PERF_TypeDef` is a structure that encapsulates a performance
+ * counter for the MVP (Multi-Vector Processor) system. It contains a
+ * single member, `CNT`, which is a read-only counter used to track the
+ * number of operations or cycles executed by the MVP. This structure is
+ * part of a larger set of register definitions for managing and
+ * monitoring the performance of the MVP hardware.
+ *
+ * @param CNT A read-only 32-bit unsigned integer representing the run counter.
+ ******************************************************************************/
 typedef struct mvp_perf_typedef{
   __IM uint32_t CNT;                                 /**< Run Counter                                        */
 } MVP_PERF_TypeDef;
 
-/** MVP ARRAYST Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_ARRAYST_TypeDef` is a structure that defines a register group
+ * for managing the index state of an array in the MVP (Multi-Vector
+ * Processor) system. It contains a single member, `INDEXSTATE`, which is
+ * a 32-bit register used to store the current state of the array index,
+ * allowing for efficient tracking and manipulation of array indices
+ * within the MVP's operations.
+ *
+ * @param INDEXSTATE Represents the index state of the array.
+ ******************************************************************************/
 typedef struct mvp_arrayst_typedef{
   __IOM uint32_t INDEXSTATE;                         /**< Index State                                        */
 } MVP_ARRAYST_TypeDef;
 
-/** MVP LOOPST Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_LOOPST_TypeDef` is a structure that defines a register group
+ * for managing the state of loops in the MVP (Multi-Vector Processor) of
+ * the EFR32MG24 microcontroller. It contains a single member, `STATE`,
+ * which is a 32-bit register used to store the current state of a loop,
+ * allowing for control and monitoring of loop execution within the MVP.
+ *
+ * @param STATE Represents the current state of the loop.
+ ******************************************************************************/
 typedef struct mvp_loopst_typedef{
   __IOM uint32_t STATE;                              /**< Loop State                                         */
 } MVP_LOOPST_TypeDef;
 
-/** MVP ALU Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_ALU_TypeDef` is a structure representing a register group for
+ * the Arithmetic Logic Unit (ALU) in the MVP (Multi-Vector Processor) of
+ * the EFR32MG24 microcontroller. It contains a single member,
+ * `REGSTATE`, which is a 32-bit register used to store the state of the
+ * ALU's Rn register. This structure is part of a larger set of register
+ * definitions used to configure and control the MVP's operations.
+ *
+ * @param REGSTATE ALU Rn Register
+ ******************************************************************************/
 typedef struct mvp_alu_typedef{
   __IOM uint32_t REGSTATE;                           /**< ALU Rn Register                                    */
 } MVP_ALU_TypeDef;
 
-/** MVP ARRAY Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_ARRAY_TypeDef` is a structure that defines the configuration
+ * for an array in the MVP (Multi-Vector Processor) system. It includes
+ * fields for specifying the base address of the array and configuration
+ * settings for up to three dimensions, allowing for flexible and
+ * detailed control over how the array is accessed and manipulated within
+ * the MVP architecture.
+ *
+ * @param ADDRCFG Array Base Address.
+ * @param DIM0CFG Dimension 0 Configuration.
+ * @param DIM1CFG Dimension 1 Configuration.
+ * @param DIM2CFG Dimension 2 Configuration.
+ ******************************************************************************/
 typedef struct mvp_array_typedef{
   __IOM uint32_t ADDRCFG;                            /**< Array Base Address                                 */
   __IOM uint32_t DIM0CFG;                            /**< Dimension 0 Configuration                          */
@@ -69,20 +116,143 @@ typedef struct mvp_array_typedef{
   __IOM uint32_t DIM2CFG;                            /**< Dimension 2 Configuration                          */
 } MVP_ARRAY_TypeDef;
 
-/** MVP LOOP Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_LOOP_TypeDef` is a structure used to define the configuration
+ * and reset parameters for a loop in the MVP (Multi-Vector Processor)
+ * system. It contains two members: `CFG`, which is used to configure the
+ * loop settings, and `RST`, which is used to reset the loop. This
+ * structure is part of a larger set of register group declarations for
+ * managing various aspects of the MVP, such as performance, array
+ * states, and instruction configurations.
+ *
+ * @param CFG Loop Configuration.
+ * @param RST Loop Reset.
+ ******************************************************************************/
 typedef struct mvp_loop_typedef{
   __IOM uint32_t CFG;                                /**< Loop Configuration                                 */
   __IOM uint32_t RST;                                /**< Loop Reset                                         */
 } MVP_LOOP_TypeDef;
 
-/** MVP INSTR Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_INSTR_TypeDef` is a structure that represents a group of
+ * configuration words used for defining instructions in the MVP (Multi-
+ * Vector Processor) of the EFR32MG24 microcontroller. Each member of the
+ * structure, `CFG0`, `CFG1`, and `CFG2`, is a 32-bit word that holds
+ * specific configuration settings for an instruction, allowing for
+ * detailed control over the instruction's behavior and execution within
+ * the MVP.
+ *
+ * @param CFG0 Instruction Configuration Word 0.
+ * @param CFG1 Instruction Configuration Word 1.
+ * @param CFG2 Instruction Configuration Word 2.
+ ******************************************************************************/
 typedef struct mvp_instr_typedef{
   __IOM uint32_t CFG0;                               /**< Instruction Configuration Word 0                   */
   __IOM uint32_t CFG1;                               /**< Instruction Configuration Word 1                   */
   __IOM uint32_t CFG2;                               /**< Instruction Configuration Word 2                   */
 } MVP_INSTR_TypeDef;
 
-/** MVP Register Declaration. */
+/***************************************************************************//**
+ * @brief The `MVP_TypeDef` is a comprehensive structure representing the MVP
+ * (Multi-Vector Processor) register set for the EFR32MG24
+ * microcontroller. It includes a variety of fields for controlling and
+ * monitoring the MVP's operation, such as enabling/disabling the
+ * processor, resetting it, configuring its settings, and handling
+ * interrupts. The structure also contains arrays of sub-structures for
+ * performance counters, array states, loop states, ALU states, and
+ * instruction configurations, allowing for detailed control and
+ * monitoring of the MVP's functionality. Additionally, it provides set,
+ * clear, and toggle versions of many fields to facilitate atomic
+ * operations. Reserved fields are included for future expansion.
+ *
+ * @param IPVERSION Indicates the IP version.
+ * @param EN Controls the enable state of the MVP.
+ * @param SWRST Triggers a software reset.
+ * @param CFG Holds configuration settings.
+ * @param STATUS Reflects the current status of the MVP.
+ * @param PERF Array of performance counters.
+ * @param IF Holds interrupt flags.
+ * @param IEN Enables specific interrupts.
+ * @param FAULTSTATUS Indicates fault status.
+ * @param FAULTADDR Holds the address where a fault occurred.
+ * @param PROGRAMSTATE Indicates the current program state.
+ * @param ARRAYST Array of index states for arrays.
+ * @param LOOPST Array of loop states.
+ * @param ALU Array of ALU register states.
+ * @param ARRAY Array of array configurations.
+ * @param LOOP Array of loop configurations.
+ * @param INSTR Array of instruction configurations.
+ * @param CMD Holds command register settings.
+ * @param RESERVED0 Reserved for future use.
+ * @param DEBUGEN Controls debug enable settings.
+ * @param DEBUGSTEPCNT Holds debug step count.
+ * @param RESERVED1 Reserved for future use.
+ * @param IPVERSION_SET Set version of the IP.
+ * @param EN_SET Set version of the enable control.
+ * @param SWRST_SET Set version of the software reset.
+ * @param CFG_SET Set version of the configuration.
+ * @param STATUS_SET Set version of the status.
+ * @param PERF_SET Set version of the performance counters.
+ * @param IF_SET Set version of the interrupt flags.
+ * @param IEN_SET Set version of the interrupt enables.
+ * @param FAULTSTATUS_SET Set version of the fault status.
+ * @param FAULTADDR_SET Set version of the fault address.
+ * @param PROGRAMSTATE_SET Set version of the program state.
+ * @param ARRAYST_SET Set version of the array index states.
+ * @param LOOPST_SET Set version of the loop states.
+ * @param ALU_SET Set version of the ALU register states.
+ * @param ARRAY_SET Set version of the array configurations.
+ * @param LOOP_SET Set version of the loop configurations.
+ * @param INSTR_SET Set version of the instruction configurations.
+ * @param CMD_SET Set version of the command register.
+ * @param RESERVED2 Reserved for future use.
+ * @param DEBUGEN_SET Set version of the debug enable settings.
+ * @param DEBUGSTEPCNT_SET Set version of the debug step count.
+ * @param RESERVED3 Reserved for future use.
+ * @param IPVERSION_CLR Clear version of the IP.
+ * @param EN_CLR Clear version of the enable control.
+ * @param SWRST_CLR Clear version of the software reset.
+ * @param CFG_CLR Clear version of the configuration.
+ * @param STATUS_CLR Clear version of the status.
+ * @param PERF_CLR Clear version of the performance counters.
+ * @param IF_CLR Clear version of the interrupt flags.
+ * @param IEN_CLR Clear version of the interrupt enables.
+ * @param FAULTSTATUS_CLR Clear version of the fault status.
+ * @param FAULTADDR_CLR Clear version of the fault address.
+ * @param PROGRAMSTATE_CLR Clear version of the program state.
+ * @param ARRAYST_CLR Clear version of the array index states.
+ * @param LOOPST_CLR Clear version of the loop states.
+ * @param ALU_CLR Clear version of the ALU register states.
+ * @param ARRAY_CLR Clear version of the array configurations.
+ * @param LOOP_CLR Clear version of the loop configurations.
+ * @param INSTR_CLR Clear version of the instruction configurations.
+ * @param CMD_CLR Clear version of the command register.
+ * @param RESERVED4 Reserved for future use.
+ * @param DEBUGEN_CLR Clear version of the debug enable settings.
+ * @param DEBUGSTEPCNT_CLR Clear version of the debug step count.
+ * @param RESERVED5 Reserved for future use.
+ * @param IPVERSION_TGL Toggle version of the IP.
+ * @param EN_TGL Toggle version of the enable control.
+ * @param SWRST_TGL Toggle version of the software reset.
+ * @param CFG_TGL Toggle version of the configuration.
+ * @param STATUS_TGL Toggle version of the status.
+ * @param PERF_TGL Toggle version of the performance counters.
+ * @param IF_TGL Toggle version of the interrupt flags.
+ * @param IEN_TGL Toggle version of the interrupt enables.
+ * @param FAULTSTATUS_TGL Toggle version of the fault status.
+ * @param FAULTADDR_TGL Toggle version of the fault address.
+ * @param PROGRAMSTATE_TGL Toggle version of the program state.
+ * @param ARRAYST_TGL Toggle version of the array index states.
+ * @param LOOPST_TGL Toggle version of the loop states.
+ * @param ALU_TGL Toggle version of the ALU register states.
+ * @param ARRAY_TGL Toggle version of the array configurations.
+ * @param LOOP_TGL Toggle version of the loop configurations.
+ * @param INSTR_TGL Toggle version of the instruction configurations.
+ * @param CMD_TGL Toggle version of the command register.
+ * @param RESERVED6 Reserved for future use.
+ * @param DEBUGEN_TGL Toggle version of the debug enable settings.
+ * @param DEBUGSTEPCNT_TGL Toggle version of the debug step count.
+ ******************************************************************************/
 typedef struct mvp_typedef{
   __IM uint32_t       IPVERSION;                /**< IP Version                                         */
   __IOM uint32_t      EN;                       /**< Enable                                             */

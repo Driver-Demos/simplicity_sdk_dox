@@ -41,7 +41,20 @@
  * @brief EFR32BG22 IADC Register Declaration.
  *****************************************************************************/
 
-/** IADC CFG Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `IADC_CFG_TypeDef` is a structure used to define the configuration
+ * settings for the IADC (Integrated Analog-to-Digital Converter) in the
+ * EFR32BG22 microcontroller. It includes registers for configuration
+ * (`CFG`), scaling (`SCALE`), and scheduling (`SCHED`), along with a
+ * reserved field for future use. This structure is essential for setting
+ * up the IADC's operational parameters, such as how it scales input
+ * signals and schedules conversions.
+ *
+ * @param CFG Configuration register for the IADC.
+ * @param RESERVED0 Reserved space for future use.
+ * @param SCALE Scaling register for the IADC.
+ * @param SCHED Scheduling register for the IADC.
+ ******************************************************************************/
 typedef struct iadc_cfg_typedef{
   __IOM uint32_t CFG;                                /**< Configuration                                      */
   uint32_t       RESERVED0[1U];                      /**< Reserved for future use                            */
@@ -49,12 +62,191 @@ typedef struct iadc_cfg_typedef{
   __IOM uint32_t SCHED;                              /**< Scheduling                                         */
 } IADC_CFG_TypeDef;
 
-/** IADC SCANTABLE Register Group Declaration. */
+/***************************************************************************//**
+ * @brief The `IADC_SCANTABLE_TypeDef` is a structure that defines a single
+ * entry in the IADC (Integrated Analog-to-Digital Converter) scan table.
+ * It contains a single member, `SCAN`, which is a 32-bit register used
+ * to configure and manage individual scan entries for the IADC. This
+ * structure is part of the IADC register group and is used to facilitate
+ * the configuration of multiple scan channels in a sequential manner.
+ *
+ * @param SCAN Represents a scan entry in the IADC scan table.
+ ******************************************************************************/
 typedef struct iadc_scantable_typedef{
   __IOM uint32_t SCAN;                               /**< SCAN Entry                                         */
 } IADC_SCANTABLE_TypeDef;
 
-/** IADC Register Declaration. */
+/***************************************************************************//**
+ * @brief The `IADC_TypeDef` structure represents the configuration and control
+ * registers for the Integrated Analog-to-Digital Converter (IADC) in the
+ * EFR32BG22 microcontroller. It includes various fields for managing the
+ * IADC's operational state, such as enabling the module, setting control
+ * parameters, issuing commands, and configuring timers. The structure
+ * also contains fields for handling interrupts, managing FIFO
+ * configurations, and accessing data from single and scan operations.
+ * Additionally, it provides reserved fields for future use and supports
+ * set, clear, and toggle operations for many of its registers, allowing
+ * for flexible control and configuration of the IADC.
+ *
+ * @param IPVERSION Holds the IP version of the IADC.
+ * @param EN Controls the enable state of the IADC.
+ * @param CTRL Contains control settings for the IADC.
+ * @param CMD Issues commands to the IADC.
+ * @param TIMER Configures the timer for the IADC.
+ * @param STATUS Provides the current status of the IADC.
+ * @param MASKREQ Handles mask requests for the IADC.
+ * @param STMASK Represents the scan table mask.
+ * @param CMPTHR Sets the digital window comparator threshold.
+ * @param IF Holds interrupt flags for the IADC.
+ * @param IEN Enables or disables interrupts for the IADC.
+ * @param TRIGGER Configures the trigger settings for the IADC.
+ * @param RESERVED0 Reserved for future use.
+ * @param RESERVED1 Reserved for future use.
+ * @param CFG Array of configuration settings for the IADC.
+ * @param RESERVED2 Reserved for future use.
+ * @param SINGLEFIFOCFG Configures the single FIFO settings.
+ * @param SINGLEFIFODATA Holds data read from the single FIFO.
+ * @param SINGLEFIFOSTAT Provides the status of the single FIFO.
+ * @param SINGLEDATA Contains single data readings.
+ * @param SCANFIFOCFG Configures the scan FIFO settings.
+ * @param SCANFIFODATA Holds data read from the scan FIFO.
+ * @param SCANFIFOSTAT Provides the status of the scan FIFO.
+ * @param SCANDATA Contains scan data readings.
+ * @param RESERVED3 Reserved for future use.
+ * @param RESERVED4 Reserved for future use.
+ * @param SINGLE Selects the single queue port.
+ * @param RESERVED5 Reserved for future use.
+ * @param SCANTABLE Array of scan table entries.
+ * @param RESERVED6 Reserved for future use.
+ * @param RESERVED7 Reserved for future use.
+ * @param RESERVED8 Reserved for future use.
+ * @param IPVERSION_SET Holds the IP version of the IADC for set operations.
+ * @param EN_SET Controls the enable state of the IADC for set operations.
+ * @param CTRL_SET Contains control settings for the IADC for set operations.
+ * @param CMD_SET Issues commands to the IADC for set operations.
+ * @param TIMER_SET Configures the timer for the IADC for set operations.
+ * @param STATUS_SET Provides the current status of the IADC for set operations.
+ * @param MASKREQ_SET Handles mask requests for the IADC for set operations.
+ * @param STMASK_SET Represents the scan table mask for set operations.
+ * @param CMPTHR_SET Sets the digital window comparator threshold for set
+ * operations.
+ * @param IF_SET Holds interrupt flags for the IADC for set operations.
+ * @param IEN_SET Enables or disables interrupts for the IADC for set
+ * operations.
+ * @param TRIGGER_SET Configures the trigger settings for the IADC for set
+ * operations.
+ * @param RESERVED9 Reserved for future use.
+ * @param RESERVED10 Reserved for future use.
+ * @param CFG_SET Array of configuration settings for the IADC for set
+ * operations.
+ * @param RESERVED11 Reserved for future use.
+ * @param SINGLEFIFOCFG_SET Configures the single FIFO settings for set
+ * operations.
+ * @param SINGLEFIFODATA_SET Holds data read from the single FIFO for set
+ * operations.
+ * @param SINGLEFIFOSTAT_SET Provides the status of the single FIFO for set
+ * operations.
+ * @param SINGLEDATA_SET Contains single data readings for set operations.
+ * @param SCANFIFOCFG_SET Configures the scan FIFO settings for set operations.
+ * @param SCANFIFODATA_SET Holds data read from the scan FIFO for set
+ * operations.
+ * @param SCANFIFOSTAT_SET Provides the status of the scan FIFO for set
+ * operations.
+ * @param SCANDATA_SET Contains scan data readings for set operations.
+ * @param RESERVED12 Reserved for future use.
+ * @param RESERVED13 Reserved for future use.
+ * @param SINGLE_SET Selects the single queue port for set operations.
+ * @param RESERVED14 Reserved for future use.
+ * @param SCANTABLE_SET Array of scan table entries for set operations.
+ * @param RESERVED15 Reserved for future use.
+ * @param RESERVED16 Reserved for future use.
+ * @param RESERVED17 Reserved for future use.
+ * @param IPVERSION_CLR Holds the IP version of the IADC for clear operations.
+ * @param EN_CLR Controls the enable state of the IADC for clear operations.
+ * @param CTRL_CLR Contains control settings for the IADC for clear operations.
+ * @param CMD_CLR Issues commands to the IADC for clear operations.
+ * @param TIMER_CLR Configures the timer for the IADC for clear operations.
+ * @param STATUS_CLR Provides the current status of the IADC for clear
+ * operations.
+ * @param MASKREQ_CLR Handles mask requests for the IADC for clear operations.
+ * @param STMASK_CLR Represents the scan table mask for clear operations.
+ * @param CMPTHR_CLR Sets the digital window comparator threshold for clear
+ * operations.
+ * @param IF_CLR Holds interrupt flags for the IADC for clear operations.
+ * @param IEN_CLR Enables or disables interrupts for the IADC for clear
+ * operations.
+ * @param TRIGGER_CLR Configures the trigger settings for the IADC for clear
+ * operations.
+ * @param RESERVED18 Reserved for future use.
+ * @param RESERVED19 Reserved for future use.
+ * @param CFG_CLR Array of configuration settings for the IADC for clear
+ * operations.
+ * @param RESERVED20 Reserved for future use.
+ * @param SINGLEFIFOCFG_CLR Configures the single FIFO settings for clear
+ * operations.
+ * @param SINGLEFIFODATA_CLR Holds data read from the single FIFO for clear
+ * operations.
+ * @param SINGLEFIFOSTAT_CLR Provides the status of the single FIFO for clear
+ * operations.
+ * @param SINGLEDATA_CLR Contains single data readings for clear operations.
+ * @param SCANFIFOCFG_CLR Configures the scan FIFO settings for clear
+ * operations.
+ * @param SCANFIFODATA_CLR Holds data read from the scan FIFO for clear
+ * operations.
+ * @param SCANFIFOSTAT_CLR Provides the status of the scan FIFO for clear
+ * operations.
+ * @param SCANDATA_CLR Contains scan data readings for clear operations.
+ * @param RESERVED21 Reserved for future use.
+ * @param RESERVED22 Reserved for future use.
+ * @param SINGLE_CLR Selects the single queue port for clear operations.
+ * @param RESERVED23 Reserved for future use.
+ * @param SCANTABLE_CLR Array of scan table entries for clear operations.
+ * @param RESERVED24 Reserved for future use.
+ * @param RESERVED25 Reserved for future use.
+ * @param RESERVED26 Reserved for future use.
+ * @param IPVERSION_TGL Holds the IP version of the IADC for toggle operations.
+ * @param EN_TGL Controls the enable state of the IADC for toggle operations.
+ * @param CTRL_TGL Contains control settings for the IADC for toggle operations.
+ * @param CMD_TGL Issues commands to the IADC for toggle operations.
+ * @param TIMER_TGL Configures the timer for the IADC for toggle operations.
+ * @param STATUS_TGL Provides the current status of the IADC for toggle
+ * operations.
+ * @param MASKREQ_TGL Handles mask requests for the IADC for toggle operations.
+ * @param STMASK_TGL Represents the scan table mask for toggle operations.
+ * @param CMPTHR_TGL Sets the digital window comparator threshold for toggle
+ * operations.
+ * @param IF_TGL Holds interrupt flags for the IADC for toggle operations.
+ * @param IEN_TGL Enables or disables interrupts for the IADC for toggle
+ * operations.
+ * @param TRIGGER_TGL Configures the trigger settings for the IADC for toggle
+ * operations.
+ * @param RESERVED27 Reserved for future use.
+ * @param RESERVED28 Reserved for future use.
+ * @param CFG_TGL Array of configuration settings for the IADC for toggle
+ * operations.
+ * @param RESERVED29 Reserved for future use.
+ * @param SINGLEFIFOCFG_TGL Configures the single FIFO settings for toggle
+ * operations.
+ * @param SINGLEFIFODATA_TGL Holds data read from the single FIFO for toggle
+ * operations.
+ * @param SINGLEFIFOSTAT_TGL Provides the status of the single FIFO for toggle
+ * operations.
+ * @param SINGLEDATA_TGL Contains single data readings for toggle operations.
+ * @param SCANFIFOCFG_TGL Configures the scan FIFO settings for toggle
+ * operations.
+ * @param SCANFIFODATA_TGL Holds data read from the scan FIFO for toggle
+ * operations.
+ * @param SCANFIFOSTAT_TGL Provides the status of the scan FIFO for toggle
+ * operations.
+ * @param SCANDATA_TGL Contains scan data readings for toggle operations.
+ * @param RESERVED30 Reserved for future use.
+ * @param RESERVED31 Reserved for future use.
+ * @param SINGLE_TGL Selects the single queue port for toggle operations.
+ * @param RESERVED32 Reserved for future use.
+ * @param SCANTABLE_TGL Array of scan table entries for toggle operations.
+ * @param RESERVED33 Reserved for future use.
+ * @param RESERVED34 Reserved for future use.
+ ******************************************************************************/
 typedef struct iadc_typedef{
   __IM uint32_t          IPVERSION;             /**< IPVERSION                                          */
   __IOM uint32_t         EN;                    /**< Enable                                             */
